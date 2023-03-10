@@ -1,0 +1,113 @@
+<div class="text-center">
+    <!-- title -->
+    <h3>Create priority</h3>
+    <hr width="510px">
+</div>
+
+<!-- {{priorityForm.value | json}} -->
+
+<div class="container">
+
+    <!-- call the function createPriority() when user clicks on the "Save" button -->
+    <form [formGroup]="priorityForm" (ngSubmit)="createPriority()">
+        <div class="row mt-5">
+
+            <!-- move column to central -->
+            <div class="col-md-6 offset-md-3">
+                <div class="container">
+
+                    <!-- Name -->
+                    <div class="row mb-3">
+
+                        <!-- label -->
+                        <div class="col-4">
+                            <label class="col-form-label" for="name">Name<small class="text-danger">*</small></label>
+                        </div>
+
+                        <!-- textbox -->
+                        <div class="col-8">
+                            <input class="form-control" type="text" formControlName="name" placeholder="Priority name"
+                                id="name" title="Priority name">
+                            <!-- error messages -->
+                            <div class="text-danger" *ngFor="let e of errorMessages.name">
+                                <!-- errors on the "name" field -->
+                                <div *ngIf="priorityForm.get('name').hasError(e.type) && 
+                                    (priorityForm.get('name').dirty || priorityForm.get('name').touched)">
+                                    <small>{{e.message}}</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Resolve In(hours) -->
+                    <div class="row mb-3">
+
+                        <!-- label -->
+                        <div class="col-4">
+                            <label class="col-form-label" for="resolveIn">Resolve in(hours)<small
+                                    class="text-danger">*</small></label>
+                        </div>
+
+                        <!-- textbox -->
+                        <div class="col-8">
+                            <input class="form-control" type="number" formControlName="resolveIn"
+                                placeholder="Number of hours to resolve a ticket" id="resolveIn"
+                                title="Number of hours to resolve a ticket. =0 means do not care about the resolve time(it means all tickets are on time)">
+                            <!-- error messages -->
+                            <div class="text-danger" *ngFor="let e of errorMessages.resolveIn">
+                                <!-- errors on the "resolveIn" field -->
+                                <div
+                                    *ngIf="priorityForm.get('resolveIn').hasError(e.type) && 
+                                                        (priorityForm.get('resolveIn').dirty || priorityForm.get('resolveIn').touched)">
+                                    <small>{{e.message}}</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Status -->
+                    <div class="row mb-3">
+
+                        <!-- label -->
+                        <div class="col-4">
+                            <label class="col-form-label" for="status">Status<small
+                                    class="text-danger">*</small></label>
+                        </div>
+
+                        <!-- dropdown -->
+                        <div class="col-8">
+                            <!-- default value = "Active"(is set in the typescript code) -->
+                            <select id="status" class="form-control" formControlName="status" title="Priority status">
+                                <option value="Active">Active</option>
+                                <option value="Inactive">Inactive</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- buttons -->
+        <div class="d-flex justify-content-center">
+            <div>
+                <!-- the "Save" button -->
+                <!-- if the form values are invalid then disable the "Save" button -->
+                <button type="submit" [disabled]="priorityForm.invalid" style="width: 150px"
+                    class="btn btn-primary mr-2">
+
+                    <!-- display the spinner icon when press the "Save" button -->
+                    <i *ngIf="showSpinner" class="fas fa-spinner fa-spin"></i>
+                    <!-- Change label button "Save" to "Saving.." -->
+                    <span *ngIf="showSpinner">Saving...</span>
+                    <!-- after save the priority then re-changes button name to "Save" -->
+                    <span *ngIf="!showSpinner">Save</span>
+
+                </button>
+
+                <!-- the "Cancel" button -->
+                <!-- re-direct to the "priority-list" page -->
+                <button class="btn btn-dark" routerLink="/priority-list" style="width: 150px">Cancel</button>
+            </div>
+        </div>
+    </form>
+</div>

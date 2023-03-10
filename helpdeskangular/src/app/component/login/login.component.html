@@ -1,0 +1,72 @@
+<div class="container">
+
+    <!-- {{loginForm.value | json}} -->
+
+    <div class="row">
+        <div class="col-sm-9 col-md-7 col-lg-5 mx-auto">
+            <div class="card card-signin my-5">
+                <div class="card-body">
+
+                    <!-- title -->
+                    <h5 class="card-title">Login</h5>
+
+                    <!-- the "loginForm" -->
+                    <form class="form-signin" [formGroup]="loginForm" (ngSubmit)="login()">
+
+                        <!-- Email -->
+                        <div class="form-label-group">
+                            <!-- label -->
+                            <label for="email">Email</label>
+                            <!-- textbox -->
+                            <input formControlName="email" type="email" id="email" class="form-control"
+                                placeholder="Email" title="Email">
+                            <!-- error messages -->
+                            <div class="text-danger" *ngFor="let e of errorMessages.email">
+                                <div *ngIf="loginForm.get('email').hasError(e.type) && 
+                                    (loginForm.get('email').dirty || loginForm.get('email').touched)">
+                                    <small>{{e.message}}</small>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- password -->
+                        <div class="form-label-group">
+                            <!-- label -->
+                            <label for="password">Password</label>
+                            <!-- textbox -->
+                            <input formControlName="password" type="password" id="password" class="form-control"
+                                placeholder="Password" title="Password" required>
+                            <!-- error messages -->
+                            <div class="text-danger" *ngFor="let e of errorMessages.password">
+                                <div
+                                    *ngIf="loginForm.get('password').hasError(e.type) && (loginForm.get('password').dirty || loginForm.get('password').touched)">
+                                    <small>{{e.message}}</small>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Forgot password -->
+                        <div>
+                            <p><a routerLink="/reset-password">Forgot password?</a></p>
+                        </div>
+
+                        <!-- The "Login" button -->
+                        <!-- <button class="btn btn-lg btn-primary" type="submit"
+                            [disabled]="loginForm.invalid || showLoading"> -->
+                        <button class="btn btn-lg btn-primary" type="submit">
+
+                            <!-- display the spinner icon when press the "Login" button -->
+                            <i *ngIf="showSpinner" class="fas fa-spinner fa-spin"></i>
+
+                            <!-- Change label button from "Login" to "Loading.." -->
+                            <span *ngIf="showSpinner">Loading...</span>
+
+                            <!-- after finish loading then re-changes button name to "Login" -->
+                            <span *ngIf="!showSpinner">Login</span>
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

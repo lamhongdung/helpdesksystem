@@ -1,14 +1,8 @@
 package com.ez.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
@@ -16,6 +10,7 @@ import javax.validation.constraints.Size;
 
 @AllArgsConstructor
 @NoArgsConstructor
+@ToString
 @Getter
 @Setter
 @Entity
@@ -30,11 +25,11 @@ public class Team {
     @Size(min = 1, max = 50, message = "Length of the team name must be between 1 and 50 characters")
     private String name;
 
-    @Pattern(regexp = "^[AM]$", message = "Value of assignment method must be 'A' or 'M'")
-//    @Pattern(regexp = "^[0-9]{10}$", message="Phone number must be 10 digits length")
+    @Pattern(regexp = "A|M", message = "Value of assignment method must be 'A' or 'M'")
     private String assignmentMethod;
 
-    @NotBlank(message = "Status must have value")
+//    @NotBlank(message = "Status must have value")
+    @Pattern(regexp = "Active|Inactive", message = "Value of status must be 'Active' or 'Inactive'")
     private String status;
 
     public Team(String name, String assignmentMethod, String status) {

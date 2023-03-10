@@ -11,7 +11,7 @@ import java.util.List;
 public interface UserService {
 
     // find user by user id
-    public User findById(Long id) throws IDNotFoundException;
+    public User findById(Long id) throws ResourceNotFoundException;
 
     // search users by pageNumber and based on the search criteria.
     // parameters:
@@ -39,15 +39,15 @@ public interface UserService {
     public User createUser(User user) throws MessagingException, EmailExistException;
 
     // update existing user
-    public User updateUser(User user) throws MessagingException, EmailExistException, IDNotFoundException;
+    public User updateUser(User user) throws MessagingException, EmailExistException, ResourceNotFoundException;
 
     // update user profile
-    public User updateProfile(EditProfile editProfile) throws MessagingException, IDNotFoundException;
+    public User updateProfile(EditProfile editProfile) throws MessagingException, ResourceNotFoundException;
 
     // reset password in case user forgot his/her password
-    public void resetPassword(String email) throws MessagingException, EmailNotFoundException;
+    public void resetPassword(String email) throws MessagingException, ResourceNotFoundException;
 
     // change password
-    public void changePassword(ChangePassword changePassword) throws MessagingException, EmailNotFoundException, OldPasswordIsNotMatchException, NewPasswordIsNotMatchException;
+    public void changePassword(ChangePassword changePassword) throws MessagingException, ResourceNotFoundException, OldPasswordIsNotMatchException, NewPasswordIsNotMatchException;
 
 }

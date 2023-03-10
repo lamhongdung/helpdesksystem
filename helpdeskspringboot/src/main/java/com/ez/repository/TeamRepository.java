@@ -1,13 +1,17 @@
 package com.ez.repository;
 
+import com.ez.dto.Supporter;
 import com.ez.entity.Team;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 @Repository
+@Transactional
 public interface TeamRepository extends JpaRepository<Team, Long> {
 
     // search teams based on pageNumber, pageSize, searchTerm(id, name), assignmentMethod and status
@@ -58,5 +62,21 @@ public interface TeamRepository extends JpaRepository<Team, Long> {
             , nativeQuery = true)
     public long getTotalOfTeams(String searchTerm, String assignmentMethod, String status);
 
+    // get active supporters
+    @Query(value = "" +
+            " select a.id as id, " +
+            "        concat(a.lastName, ' ', a.firstName, ' - ', a.email) as fullnameEmail " +
+            " from user a " +
+            " where a.role = 'ROLE_SUPPORTER' and a.status = 'Active' "
+            , nativeQuery = true)
+    public List<Supporter> getActiveSupporters();
+
+    // save teamid and supporterid into the "teamSupporter" table
+    @Modifying
+    @Query(value = "" +
+            " insert into teamSupporter(teamid, supporterid) " +
+            " values(?1, ?2) "
+            , nativeQuery = true)
+    void saveTeamSupporter(long teamid, long supporterid);
 
 }

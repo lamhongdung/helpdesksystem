@@ -1,7 +1,7 @@
 package com.ez.service;
 
 import com.ez.entity.Priority;
-import com.ez.exception.IDNotFoundException;
+import com.ez.exception.ResourceNotFoundException;
 import com.ez.repository.PriorityRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -59,23 +59,23 @@ public class PriorityService {
 
     // find priority by priority id.
     // if has not found the id in database then throws an exception and display notification to user
-    public Priority findById(Long id) throws IDNotFoundException {
+    public Priority findById(Long id) throws ResourceNotFoundException {
 
         LOGGER.info("find priority by id");
 
         // find priority by priority id
-        return priorityRepository.findById(id).orElseThrow(() -> new IDNotFoundException(NO_PRIORITY_FOUND_BY_ID + id));
+        return priorityRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(NO_PRIORITY_FOUND_BY_ID + id));
     }
 
     // update existing priority.
     // if has not found the id in database then throws an exception and display notification to user
-    public Priority updatePriority(Priority priority) throws IDNotFoundException {
+    public Priority updatePriority(Priority priority) throws ResourceNotFoundException {
 
         LOGGER.info("Update priority");
 
         // get existing priority(persistent)
         Priority existingPriority = priorityRepository.findById(priority.getId())
-                .orElseThrow(() -> new IDNotFoundException(NO_PRIORITY_FOUND_BY_ID + priority.getId()));
+                .orElseThrow(() -> new ResourceNotFoundException(NO_PRIORITY_FOUND_BY_ID + priority.getId()));
 
         // set new values to existing priority
         existingPriority.setName(priority.getName());

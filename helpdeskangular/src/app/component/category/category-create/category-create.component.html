@@ -1,0 +1,87 @@
+<div class="text-center">
+    <!-- title -->
+    <h3>Create category</h3>
+    <hr width="510px">
+</div>
+
+<!-- {{categoryForm.value | json}} -->
+
+<div class="container">
+
+    <!-- call the function createCategory() when user clicks on the "Save" button -->
+    <form [formGroup]="categoryForm" (ngSubmit)="createCategory()">
+        <div class="row mt-5">
+
+            <!-- move column to central -->
+            <div class="col-md-6 offset-md-3">
+                <div class="container">
+
+                    <!-- Name -->
+                    <div class="row mb-3">
+
+                        <!-- label -->
+                        <div class="col-3">
+                            <label class="col-form-label" for="name">Name<small class="text-danger">*</small></label>
+                        </div>
+
+                        <!-- textbox -->
+                        <div class="col-9">
+                            <input class="form-control" type="text" formControlName="name" placeholder="Category name"
+                                id="name" title="Category name">
+                            <!-- error messages -->
+                            <div class="text-danger" *ngFor="let e of errorMessages.name">
+                                <!-- errors on the "name" field -->
+                                <div *ngIf="categoryForm.get('name').hasError(e.type) && 
+                                    (categoryForm.get('name').dirty || categoryForm.get('name').touched)">
+                                    <small>{{e.message}}</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Status -->
+                    <div class="row mb-3">
+
+                        <!-- label -->
+                        <div class="col-3">
+                            <label class="col-form-label" for="status">Status<small
+                                    class="text-danger">*</small></label>
+                        </div>
+
+                        <!-- dropdown -->
+                        <div class="col-9">
+                            <!-- default value = "Active"(is set in the typescript code) -->
+                            <select id="status" class="form-control" formControlName="status" title="Category status">
+                                <option value="Active">Active</option>
+                                <option value="Inactive">Inactive</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- buttons -->
+        <div class="d-flex justify-content-center">
+            <div>
+                <!-- the "Save" button -->
+                <!-- if the form values are invalid then disable the "Save" button -->
+                <button type="submit" [disabled]="categoryForm.invalid" style="width: 150px"
+                    class="btn btn-primary mr-2">
+
+                    <!-- display the spinner icon when press the "Save" button -->
+                    <i *ngIf="showSpinner" class="fas fa-spinner fa-spin"></i>
+                    <!-- Change label button "Save" to "Saving.." -->
+                    <span *ngIf="showSpinner">Saving...</span>
+                    <!-- after save the category then re-changes button name to "Save" -->
+                    <span *ngIf="!showSpinner">Save</span>
+
+                </button>
+
+                <!-- the "Cancel" button -->
+                <!-- re-direct to the "category-list" page -->
+                <button class="btn btn-dark" routerLink="/category-list" style="width: 150px">Cancel</button>
+            </div>
+        </div>
+    </form>
+</div>

@@ -1,1 +1,124 @@
 /* You can add global styles to this file, and also import other style files */
+@import 'https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css';
+@import 'https://use.fontawesome.com/releases/v5.8.1/css/all.css';
+/* @import "~angular-notifier/styles"; */
+@import "node_modules/angular-notifier/styles";
+
+/* background color of the table header */
+.bg-table-header {
+    text-align: center;
+    background-color: rgb(158, 207, 251) !important;
+}
+
+/* change color of a row when hover on a row of the table */
+tbody tr:hover {
+    background-color: lightcyan !important;
+}
+
+/* display the pointer hand when hover mouse in the table */
+.pointer-link {
+    cursor: pointer;
+}
+
+/* navbar is always fixed a top 0 */
+.navbar {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 9;
+}
+
+/* logo HelpDesk occupies 30px */
+.navbar .logo {
+    margin-right: 30px;
+}
+
+
+/*@media (min-width: 768px) {*/
+/*    .user {*/
+/*     position: relative;*/
+/*        left: 40%;*/
+/*    }*/
+/*}*/
+
+
+@media (min-width: 992px) {
+    .user {
+        position: relative;
+        left: 45%;
+        padding-left: 5%;
+    }
+}
+
+
+@media (min-width: 1200px) {
+    .user {
+        position: relative;
+        left: 48%;
+        padding-left: 7%;
+    }
+}
+
+
+@media (min-width: 1400px) {
+    .user {
+        position: relative;
+        left: 45%;
+        padding-left: 1%;
+    }
+}
+
+/* login and reset password */
+.card-title {
+    font-weight: bolder !important;
+}
+
+.card-signin {
+    border: 0;
+    box-shadow: 0 2rem 3rem 0 rgba(0, 0, 0, 0.5);
+}
+
+.card-signin .card-title {
+    margin-bottom: 1rem;
+    font-weight: 300;
+    font-size: 1.5rem;
+}
+
+.card-signin .card-body {
+    padding: 1rem;
+}
+
+.form-signin {
+    width: 100%;
+}
+
+.form-signin .btn {
+    margin-top: 10px;
+    font-size: 80%;
+    letter-spacing: .1rem;
+    font-weight: bold;
+    padding: 1rem;
+    transition: all 0.2s;
+    width: 100%;
+}
+
+.form-label-group {
+    position: relative;
+    margin-bottom: 1rem;
+}
+
+.form-label-group input {
+    height: 50px;
+}
+
+@media screen and (min-width: 320px) {
+    .map {
+        width: 300px;
+    }
+}
+
+@media screen and (min-width: 1280px) {
+    .map {
+        width: 600px;
+    }
+}

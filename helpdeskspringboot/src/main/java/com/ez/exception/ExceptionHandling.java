@@ -80,13 +80,8 @@ public class ExceptionHandling implements ErrorController {
         return createHttpResponse(BAD_REQUEST, exception.getMessage());
     }
 
-    @ExceptionHandler(EmailNotFoundException.class)
-    public ResponseEntity<HttpResponse> emailNotFoundException(EmailNotFoundException exception) {
-        return createHttpResponse(BAD_REQUEST, exception.getMessage());
-    }
-
-    @ExceptionHandler(IDNotFoundException.class)
-    public ResponseEntity<HttpResponse> idNotFoundException(IDNotFoundException exception) {
+    @ExceptionHandler(ResourceNotFoundException.class)
+    public ResponseEntity<HttpResponse> resourceNotFoundException(ResourceNotFoundException exception) {
         return createHttpResponse(BAD_REQUEST, exception.getMessage());
     }
 

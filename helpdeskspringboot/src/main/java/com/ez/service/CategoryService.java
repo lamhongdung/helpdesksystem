@@ -1,7 +1,7 @@
 package com.ez.service;
 
 import com.ez.entity.Category;
-import com.ez.exception.IDNotFoundException;
+import com.ez.exception.ResourceNotFoundException;
 import com.ez.repository.CategoryRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -55,22 +55,22 @@ public class CategoryService{
     }
 
     // find category by category id
-    public Category findById(Long id) throws IDNotFoundException {
+    public Category findById(Long id) throws ResourceNotFoundException {
 
         LOGGER.info("find category by id");
 
         // find category by category id
-        return categoryRepository.findById(id).orElseThrow(() -> new IDNotFoundException(NO_CATEGORY_FOUND_BY_ID + id));
+        return categoryRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(NO_CATEGORY_FOUND_BY_ID + id));
     }
 
     // update existing category
-    public Category updateCategory(Category category) throws IDNotFoundException {
+    public Category updateCategory(Category category) throws ResourceNotFoundException {
 
         LOGGER.info("Update category");
 
         // get existing category(persistent)
         Category existingCategory = categoryRepository.findById(category.getId())
-                .orElseThrow(() -> new IDNotFoundException(NO_CATEGORY_FOUND_BY_ID + category.getId()));
+                .orElseThrow(() -> new ResourceNotFoundException(NO_CATEGORY_FOUND_BY_ID + category.getId()));
 
         // set new values to existing category
         existingCategory.setName(category.getName());

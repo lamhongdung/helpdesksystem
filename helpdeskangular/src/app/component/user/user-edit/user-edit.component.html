@@ -1,0 +1,189 @@
+<div class="text-center">
+    <h3>Edit user</h3>
+    <hr width="1080px">
+</div>
+
+<!-- userForm.value: {{userForm.value | json}} -->
+<!-- <br> -->
+<!-- userForm.valid: {{userForm.valid}} -->
+
+<div class="container">
+
+    <!-- user form -->
+    <form [formGroup]="userForm" (ngSubmit)="editUser()">
+
+        <div class="row mt-5">
+
+            <!-- the "Left" column -->
+            <div class="col-lg-6">
+                <div class="container">
+
+                    <!-- ID -->
+                    <div class="row mb-3">
+                        <!-- label -->
+                        <div class="col-4">
+                            <label class="col-form-label" for="id">ID<small>*</small></label>
+                        </div>
+                        <!-- textbox -->
+                        <div class="col-8">
+                            <input class="form-control" type="id" formControlName="id" id="id" title="Identity"
+                                readonly>
+                        </div>
+                    </div>
+
+                    <!-- Email -->
+                    <div class="row mb-3">
+                        <!-- label -->
+                        <div class="col-4">
+                            <label class="col-form-label" for="email">Email*</label>
+                        </div>
+                        <!-- textbox -->
+                        <div class="col-8">
+                            <input class="form-control" type="email" formControlName="email" id="email" title="Email"
+                                readonly>
+                        </div>
+                    </div>
+
+                    <!-- First name -->
+                    <div class="row mb-3">
+                        <!-- label -->
+                        <div class="col-4">
+                            <label class="col-form-label" for="firstName">First name<small
+                                    class="text-danger">*</small></label>
+                        </div>
+                        <!-- textbox -->
+                        <div class="col-8">
+                            <input class="form-control" type="text" formControlName="firstName" placeholder="First name"
+                                id="firstName" title="First name">
+                            <div class="text-danger" *ngFor="let e of errorMessages.firstName">
+                                <div *ngIf="userForm.get('firstName').hasError(e.type) && 
+                                    (userForm.get('firstName').dirty || userForm.get('firstName').touched)">
+                                    <small>{{e.message}}</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Last name -->
+                    <div class="row mb-3">
+                        <!-- label -->
+                        <div class="col-4">
+                            <label class="col-form-label" for="lastName">Last name<small
+                                    class="text-danger">*</small></label>
+                        </div>
+                        <!-- textbox -->
+                        <div class="col-8">
+                            <input class="form-control" type="text" formControlName="lastName" placeholder="Last name"
+                                id="lastName" title="Last name">
+                            <div class="text-danger" *ngFor="let e of errorMessages.lastName">
+                                <div
+                                    *ngIf="userForm.get('lastName').hasError(e.type) && (userForm.get('lastName').dirty || userForm.get('lastName').touched)">
+                                    <small>{{e.message}}</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- the "Right" column -->
+            <div class="col-lg-6">
+                <div class="container">
+
+                    <!-- Phone -->
+                    <div class="row mb-3">
+                        <!-- label -->
+                        <div class="col-4">
+                            <label class="col-form-label" for="phone">Phone<small class="text-danger">*</small></label>
+                        </div>
+                        <!-- textbox -->
+                        <div class="col-8">
+                            <input class="form-control" type="text" formControlName="phone"
+                                placeholder="ex: 0986111222(10 digits)" id="phone" title="Phone number(10 digits)">
+                            <div class="text-danger" *ngFor="let e of errorMessages.phone">
+                                <div
+                                    *ngIf="userForm.get('phone').hasError(e.type) && (userForm.get('phone').dirty || userForm.get('phone').touched)">
+                                    <small>{{e.message}}</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Address -->
+                    <div class="row mb-3">
+                        <!-- label -->
+                        <div class="col-4">
+                            <label class="col-form-label" for="address">Address</label>
+                        </div>
+                        <!-- textbox -->
+                        <div class="col-8">
+                            <input class="form-control" type="text" formControlName="address" id="address"
+                                placeholder="Address" title="Address">
+                            <div class="text-danger" *ngFor="let e of errorMessages.address">
+                                <div
+                                    *ngIf="userForm.get('address').hasError(e.type) && (userForm.get('address').dirty || userForm.get('address').touched)">
+                                    <small>{{e.message}}</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Role -->
+                    <div class="row mb-3">
+                        <!-- label -->
+                        <div class="col-4">
+                            <label class="col-form-label" for="role">Role<small class="text-danger">*</small></label>
+                        </div>
+                        <!-- dropdown -->
+                        <div class="col-8">
+                            <select id="role" class="form-control" formControlName="role" placeholder="Role"
+                                title="User role">
+                                <option value="ROLE_CUSTOMER">ROLE_CUSTOMER</option>
+                                <option value="ROLE_SUPPORTER">ROLE_SUPPORTER</option>
+                                <option value="ROLE_ADMIN">ROLE_ADMIN</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Status -->
+                    <div class="row mb-3">
+                        <!-- label -->
+                        <div class="col-4">
+                            <label class="col-form-label" for="status">Status<small
+                                    class="text-danger">*</small></label>
+                        </div>
+                        <!-- dropdown -->
+                        <div class="col-8">
+                            <select id="status" class="form-control" formControlName="status" placeholder="Status"
+                                title="User status">
+                                <option value="Active">Active</option>
+                                <option value="Inactive">Inactive</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- buttons: "Save" and "Cancel" -->
+        <div class="d-flex justify-content-center">
+            <div>
+
+                <!-- the "Save" button -->
+                <!-- if userForm is invalid then disabled the button "Save" -->
+                <button type="submit" [disabled]="userForm.invalid" style="width: 150px" class="btn btn-primary mr-2">
+                    <!-- show the spinner icon in the "Save" button -->
+                    <i *ngIf="showSpinner" class="fas fa-spinner fa-spin"></i>
+                    <!-- Change label button "Save" to "Saving.." -->
+                    <span *ngIf="showSpinner">Saving...</span>
+                    <!-- after save finished then re-changes the button to "Save"  -->
+                    <span *ngIf="!showSpinner">Save</span>
+                </button>
+
+                <!-- the "Cancel" button -->
+                <!-- re-directs to the "user-list" page -->
+                <button class="btn btn-dark" routerLink="/user-list" style="width: 150px">Cancel</button>
+            </div>
+        </div>
+    </form>
+</div>

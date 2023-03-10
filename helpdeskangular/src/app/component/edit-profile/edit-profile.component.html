@@ -1,0 +1,149 @@
+<div class="text-center">
+    <!-- title -->
+    <h3>Edit profile</h3>
+    <hr width="510px">
+</div>
+
+<!-- {{editProfileForm.value | json}} -->
+
+<div class="container">
+
+    <!-- call the function editProfile() when user clicks the "Save" button -->
+    <form [formGroup]="editProfileForm" (ngSubmit)="updateProfile()">
+        <div class="row mt-5">
+
+            <!-- move column to central -->
+            <div class="col-md-6 offset-md-3">
+                <div class="container">
+
+                    <!-- Email -->
+                    <div class="row mb-3">
+                        <!-- label -->
+                        <div class="col-3">
+                            <label class="col-form-label" for="email">Email<small>*</small></label>
+                        </div>
+                        <!-- textbox -->
+                        <div class="col-9">
+                            <input class="form-control" type="email" formControlName="email" id="email" title="Email"
+                                readonly>
+                        </div>
+                    </div>
+
+                    <!-- First name -->
+                    <div class="row mb-3">
+                        <!-- label -->
+                        <div class="col-3">
+                            <label class="col-form-label" for="firstName">First name<small
+                                    class="text-danger">*</small></label>
+                        </div>
+                        <!-- textbox -->
+                        <div class="col-9">
+                            <input class="form-control" type="text" formControlName="firstName" placeholder="First name"
+                                id="firstName" title="First name">
+                            <!-- error messages -->
+                            <div class="text-danger" *ngFor="let e of errorMessages.firstName">
+                                <!-- errors on the "firstName" field -->
+                                <div
+                                    *ngIf="editProfileForm.get('firstName').hasError(e.type) && 
+                                    (editProfileForm.get('firstName').dirty || editProfileForm.get('firstName').touched)">
+                                    <small>{{e.message}}</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- LastName -->
+                    <div class="row mb-3">
+                        <!-- label -->
+                        <div class="col-3">
+                            <label class="col-form-label" for="lastName">Last name<small
+                                    class="text-danger">*</small></label>
+                        </div>
+                        <!-- textbox -->
+                        <div class="col-9">
+                            <input class="form-control" type="text" formControlName="lastName" placeholder="Last name"
+                                id="lastName" title="Last name">
+                            <!-- error messages -->
+                            <div class="text-danger" *ngFor="let e of errorMessages.lastName">
+                                <!-- errors on the "lastName" field -->
+                                <div
+                                    *ngIf="editProfileForm.get('lastName').hasError(e.type) && 
+                                    (editProfileForm.get('lastName').dirty || editProfileForm.get('lastName').touched)">
+                                    <small>{{e.message}}</small>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <!-- Phone -->
+                    <div class="row mb-3">
+                        <!-- label -->
+                        <div class="col-3">
+                            <label class="col-form-label" for="phone">Phone<small class="text-danger">*</small></label>
+                        </div>
+                        <!-- textbox -->
+                        <div class="col-9">
+                            <input class="form-control" type="text" formControlName="phone" placeholder="Phone"
+                                id="phone" title="Phone number(10 digits)">
+                            <!-- error messages -->
+                            <div class="text-danger" *ngFor="let e of errorMessages.phone">
+                                <!-- errors on the "phone" field -->
+                                <div
+                                    *ngIf="editProfileForm.get('phone').hasError(e.type) && 
+                                                        (editProfileForm.get('phone').dirty || editProfileForm.get('phone').touched)">
+                                    <small>{{e.message}}</small>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <!-- Address -->
+                    <div class="row mb-3">
+                        <!-- label -->
+                        <div class="col-3">
+                            <label class="col-form-label" for="address">Address</label>
+                        </div>
+                        <!-- textbox -->
+                        <div class="col-9">
+                            <input class="form-control" type="text" formControlName="address" placeholder="Address"
+                                id="address" title="Address">
+                            <!-- error messages -->
+                            <div class="text-danger" *ngFor="let e of errorMessages.address">
+                                <!-- errors on the "address" field -->
+                                <div *ngIf="editProfileForm.get('address').hasError(e.type) && 
+                                    (editProfileForm.get('address').dirty || editProfileForm.get('address').touched)">
+                                    <small>{{e.message}}</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- buttons -->
+        <div class="d-flex justify-content-center">
+            <div>
+                <!-- the "Save" button -->
+                <!-- if the form values are invalid then disable the "Save" button -->
+                <button type="submit" [disabled]="editProfileForm.invalid" style="width: 150px"
+                    class="btn btn-primary mr-2">
+
+                    <!-- display the spinner icon when press the "Save" button -->
+                    <i *ngIf="showSpinner" class="fas fa-spinner fa-spin"></i>
+                    <!-- Change label button "Save" to "Saving.." -->
+                    <span *ngIf="showSpinner">Saving...</span>
+                    <!-- after save the new password then re-changes button name to "Save" -->
+                    <span *ngIf="!showSpinner">Save</span>
+
+                </button>
+
+                <!-- the "Cancel" button -->
+                <!-- re-direct to the "ticket-list" page -->
+                <button class="btn btn-dark" routerLink="/ticket-list" style="width: 150px">Cancel</button>
+            </div>
+        </div>
+    </form>
+</div>

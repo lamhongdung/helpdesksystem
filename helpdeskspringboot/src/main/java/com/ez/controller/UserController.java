@@ -143,7 +143,7 @@ public class UserController extends ExceptionHandling {
     // this method is used for Edit User, Edit Profile
     @GetMapping("/user-list/{id}")
     @PreAuthorize("hasAnyRole('ROLE_CUSTOMER','ROLE_SUPPORTER','ROLE_ADMIN')")
-    public ResponseEntity<User> findById(@PathVariable Long id) throws IDNotFoundException {
+    public ResponseEntity<User> findById(@PathVariable Long id) throws ResourceNotFoundException {
 
         LOGGER.info("find user by id: " + id);
 
@@ -157,7 +157,7 @@ public class UserController extends ExceptionHandling {
     // only the ROLE_ADMIN can access this address
     @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
     public ResponseEntity<User> editUser(@RequestBody @Valid User user, BindingResult bindingResult)
-            throws EmailExistException, MessagingException, IDNotFoundException, BindException {
+            throws EmailExistException, MessagingException, ResourceNotFoundException, BindException {
 
         LOGGER.info("validate data");
 
@@ -178,7 +178,7 @@ public class UserController extends ExceptionHandling {
     @PutMapping("/edit-profile")
     @PreAuthorize("hasAnyRole('ROLE_CUSTOMER','ROLE_SUPPORTER','ROLE_ADMIN')")
     public ResponseEntity<User> updateProfile(@RequestBody @Valid EditProfile editProfile, BindingResult bindingResult)
-            throws MessagingException, IDNotFoundException, BindException {
+            throws MessagingException, ResourceNotFoundException, BindException {
 
         LOGGER.info("validate data");
 
@@ -198,7 +198,7 @@ public class UserController extends ExceptionHandling {
     // reset password in case user forgot his/her password
     @PutMapping("/reset-password")
     public ResponseEntity<HttpResponse> resetPassword(@RequestBody @Valid ResetPassword resetPassword, BindingResult bindingResult)
-            throws MessagingException, EmailNotFoundException, BindException {
+            throws MessagingException, ResourceNotFoundException, BindException {
 
         LOGGER.info("validate data");
 
@@ -219,7 +219,7 @@ public class UserController extends ExceptionHandling {
     @PutMapping("/change-password")
     @PreAuthorize("hasAnyRole('ROLE_CUSTOMER','ROLE_SUPPORTER','ROLE_ADMIN')")
     public ResponseEntity<HttpResponse> changePassword(@RequestBody @Valid ChangePassword changePassword, BindingResult bindingResult)
-            throws MessagingException, EmailNotFoundException, OldPasswordIsNotMatchException, NewPasswordIsNotMatchException, BindException {
+            throws MessagingException, ResourceNotFoundException, OldPasswordIsNotMatchException, NewPasswordIsNotMatchException, BindException {
 
         LOGGER.info("validate data");
 

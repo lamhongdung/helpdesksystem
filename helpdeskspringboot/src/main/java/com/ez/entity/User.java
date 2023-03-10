@@ -34,23 +34,25 @@ public class User implements Serializable {
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
 
-    @Size(min = 1, max = 50, message="Length of the first name must be between 1 and 50 characters")
+    @Size(min = 1, max = 50, message = "Length of the first name must be between 1 and 50 characters")
     private String firstName;
 
-    @Size(min = 1, max = 50, message="Length of last name must be between 1 and 50 characters")
+    @Size(min = 1, max = 50, message = "Length of last name must be between 1 and 50 characters")
     private String lastName;
 
-    @Pattern(regexp = "^[0-9]{10}$", message="Phone number must be 10 digits length")
+    @Pattern(regexp = "^[0-9]{10}$", message = "Phone number must be 10 digits length")
     private String phone;
-    @Size(max = 300, message="Address cannot be longer than 300 characters")
+    @Size(max = 300, message = "Address cannot be longer than 300 characters")
     private String address;
 
     // ROLE_CUSTOMER, ROLE_SUPPORTER, ROLE_ADMIN
-    @NotBlank(message="Role must have value")
+//    @NotBlank(message = "Role must have value")
+    @Pattern(regexp = "ROLE_CUSTOMER|ROLE_SUPPORTER|ROLE_ADMIN", message = "Role value must be 1 of 3 values: ROLE_CUSTOMER, ROLE_SUPPORTER, ROLE_ADMIN")
     private String role;
 
     // Active or Inactive
-    @NotBlank(message="Status must have value")
+//    @NotBlank(message="Status must have value")
+    @Pattern(regexp = "Active|Inactive", message = "Value of status must be 'Active' or 'Inactive'")
     private String status;
 
 }

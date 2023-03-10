@@ -18,7 +18,6 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import javax.mail.MessagingException;
 import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
@@ -54,8 +53,8 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         if (user == null) {
             LOGGER.error(NO_USER_FOUND_BY_EMAIL + email);
             try {
-                throw new EmailNotFoundException(NO_USER_FOUND_BY_EMAIL + email);
-            } catch (EmailNotFoundException e) {
+                throw new ResourceNotFoundException(NO_USER_FOUND_BY_EMAIL + email);
+            } catch (ResourceNotFoundException e) {
                 throw new RuntimeException(e);
             }
         } else { // found user by email
@@ -69,17 +68,17 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     // find user by id
     @Override
-    public User findById(Long id) throws IDNotFoundException {
+    public User findById(Long id) throws ResourceNotFoundException {
 
         LOGGER.info("find user by id");
 
         // find user by user id
-        return userRepository.findById(id).orElseThrow(() -> new IDNotFoundException(NO_USER_FOUND_BY_ID + id));
+        return userRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(NO_USER_FOUND_BY_ID + id));
     }
 
     // reset password in case user forgot his/her password
     @Override
-    public void resetPassword(String email) throws EmailNotFoundException {
+    public void resetPassword(String email) throws ResourceNotFoundException {
 
         LOGGER.info("Reset password");
 
@@ -100,7 +99,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
             LOGGER.info("No user found for email: " + email);
 
-            throw new EmailNotFoundException(NO_USER_FOUND_BY_EMAIL + email);
+            throw new ResourceNotFoundException(NO_USER_FOUND_BY_EMAIL + email);
         }
 
         //
@@ -137,7 +136,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     // change password
     @Override
-    public void changePassword(ChangePassword changePassword) throws EmailNotFoundException, OldPasswordIsNotMatchException, NewPasswordIsNotMatchException {
+    public void changePassword(ChangePassword changePassword) throws ResourceNotFoundException, OldPasswordIsNotMatchException, NewPasswordIsNotMatchException {
 
         // find user by email
         LOGGER.info("find user by email.");
@@ -148,7 +147,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
             LOGGER.error("No user found for email: " + changePassword.getEmail());
 
-            throw new EmailNotFoundException(NO_USER_FOUND_BY_EMAIL + changePassword.getEmail());
+            throw new ResourceNotFoundException(NO_USER_FOUND_BY_EMAIL + changePassword.getEmail());
         }
 
         // if old password is not match then throw an exception
@@ -277,13 +276,13 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     // update existing user
     @Override
-    public User updateUser(User user) throws IDNotFoundException {
+    public User updateUser(User user) throws ResourceNotFoundException {
 
         LOGGER.info("Update user");
 
         // get existing user(persistent)
         User existingUser = userRepository.findById(user.getId())
-                .orElseThrow(() -> new IDNotFoundException(NO_USER_FOUND_BY_ID + user.getId()));
+                .orElseThrow(() -> new ResourceNotFoundException(NO_USER_FOUND_BY_ID + user.getId()));
 
         // set new values to existing user
         existingUser.setFirstName(user.getFirstName());
@@ -301,13 +300,13 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     // update user profile
     @Override
-    public User updateProfile(EditProfile editProfile) throws IDNotFoundException {
+    public User updateProfile(EditProfile editProfile) throws ResourceNotFoundException {
 
         LOGGER.info("Update profile");
 
         // get existing user(persistent)
         User existingUser = userRepository.findById(editProfile.getId())
-                .orElseThrow(() -> new IDNotFoundException(NO_USER_FOUND_BY_ID + editProfile.getId()));
+                .orElseThrow(() -> new ResourceNotFoundException(NO_USER_FOUND_BY_ID + editProfile.getId()));
 
         // set new values to existing user
         existingUser.setFirstName(editProfile.getFirstName());

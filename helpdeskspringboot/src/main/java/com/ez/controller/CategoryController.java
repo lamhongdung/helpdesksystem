@@ -1,7 +1,7 @@
 package com.ez.controller;
 
 import com.ez.entity.Category;
-import com.ez.exception.IDNotFoundException;
+import com.ez.exception.ResourceNotFoundException;
 import com.ez.service.CategoryService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -91,7 +91,7 @@ public class CategoryController {
     // this method is used for Edit Category
     @GetMapping("/category-list/{id}")
     @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
-    public ResponseEntity<Category> findById(@PathVariable Long id) throws IDNotFoundException {
+    public ResponseEntity<Category> findById(@PathVariable Long id) throws ResourceNotFoundException {
 
         LOGGER.info("find category by id: " + id);
 
@@ -105,7 +105,7 @@ public class CategoryController {
     // only the ROLE_ADMIN can access this address
     @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
     public ResponseEntity<Category> editCategory(@RequestBody @Valid Category category, BindingResult bindingResult)
-            throws IDNotFoundException, BindException {
+            throws ResourceNotFoundException, BindException {
 
         LOGGER.info("validate data");
 

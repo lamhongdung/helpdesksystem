@@ -1,7 +1,8 @@
 package com.ez.service;
 
+import com.ez.dto.Supporter;
+import com.ez.dto.TeamDTO;
 import com.ez.entity.Team;
-import com.ez.exception.IDNotFoundException;
 import com.ez.repository.TeamRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -41,19 +42,33 @@ public class TeamService {
         return teamRepository.getTotalOfTeams(searchTerm, assignmentMethod, status);
     }
 
-//    // create new category
-//    public Category createCategory(Category category){
-//
-//        LOGGER.info("create new category");
-//
-//        // new user
-//        Category newCategory = new Category(category.getName(), category.getStatus());
-//
-//        // save new category into database
-//        categoryRepository.save(newCategory);
-//
-//        return newCategory;
-//    }
+    // get active supporters
+    public List<Supporter> getActiveSupporters() {
+
+        LOGGER.info("get active supporters");
+
+        return teamRepository.getActiveSupporters();
+    }
+
+    // create new team
+    public Team createTeam(TeamDTO teamDto) {
+
+        LOGGER.info("create new team");
+        LOGGER.info("team is sent from client: " + teamDto.toString());
+
+        // new team
+        Team newTeam = new Team(teamDto.getName(), teamDto.getAssignmentMethod(), teamDto.getStatus());
+
+        // save new team into the "team" table in database.
+        // after save successful then the newTeam will have its id
+        teamRepository.save(newTeam);
+        LOGGER.info("new team after saved: " + newTeam.toString());
+
+        // save (teamid and supporterid) in the "teamSupporter" table in database
+        teamDto.getSupporters().forEach(s -> teamRepository.saveTeamSupporter(newTeam.getId(), s.getId()));
+
+        return newTeam;
+    }
 //
 //    // find category by category id
 //    public Category findById(Long id) throws IDNotFoundException {

@@ -1,0 +1,140 @@
+<div class="text-center">
+    <h3>View user</h3>
+    <hr width="1080px">
+</div>
+
+<div class="container">
+
+    <form [formGroup]="userForm">
+        <div class="row mt-5">
+
+            <!-- the "Left" column -->
+            <div class="col-lg-6">
+                <div class="container">
+
+                    <!-- ID -->
+                    <div class="row mb-3">
+                        <!-- label -->
+                        <div class="col-4">
+                            <label class="col-form-label" for="id">ID<small>*</small></label>
+                        </div>
+                        <!-- textbox -->
+                        <div class="col-8">
+                            <input class="form-control" type="id" formControlName="id" id="id" title="Identity" readonly>
+                        </div>
+                    </div>
+
+                    <!-- Email -->
+                    <div class="row mb-3">
+                        <!-- label -->
+                        <div class="col-4">
+                            <label class="col-form-label" for="email">Email*</label>
+                        </div>
+                        <!-- textbox -->
+                        <div class="col-8">
+                            <input class="form-control" type="email" formControlName="email" id="email" title="Email" readonly>
+                        </div>
+                    </div>
+
+                    <!-- First name -->
+                    <div class="row mb-3">
+                        <!-- label -->
+                        <div class="col-4">
+                            <label class="col-form-label" for="firstName">First name<small>*</small></label>
+                        </div>
+                        <!-- textbox -->
+                        <div class="col-8">
+                            <input class="form-control" type="text" formControlName="firstName" placeholder="First name"
+                                id="firstName" title="First name" readonly>
+                        </div>
+                    </div>
+
+                    <!-- Last name -->
+                    <div class="row mb-3">
+                        <!-- label -->
+                        <div class="col-4">
+                            <label class="col-form-label" for="lastName">Last name<small>*</small></label>
+                        </div>
+                        <!-- textbox -->
+                        <div class="col-8">
+                            <input class="form-control" type="text" formControlName="lastName" placeholder="Last name"
+                                id="lastName" title="Last name" readonly>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- the "Right" column -->
+            <div class="col-lg-6">
+                <div class="container">
+
+                    <!-- Phone -->
+                    <div class="row mb-3">
+                        <!-- label -->
+                        <div class="col-4">
+                            <label class="col-form-label" for="phone">Phone<small>*</small></label>
+                        </div>
+                        <!-- textbox -->
+                        <div class="col-8">
+                            <input class="form-control" type="text" formControlName="phone"
+                                placeholder="ex: 0986111222(10 digits)" id="phone" title="Phone number" readonly>
+                        </div>
+                    </div>
+
+                    <!-- Address -->
+                    <div class="row mb-3">
+                        <!-- label -->
+                        <div class="col-4">
+                            <label class="col-form-label" for="address">Address</label>
+                        </div>
+                        <!-- textbox -->
+                        <div class="col-8">
+                            <input class="form-control" type="text" formControlName="address" id="address"
+                                placeholder="Address" title="Address" readonly>
+                        </div>
+                    </div>
+
+                    <!-- Role -->
+                    <div class="row mb-3">
+                        <!-- label -->
+                        <div class="col-4">
+                            <label class="col-form-label" for="role">Role<small>*</small></label>
+                        </div>
+                        <!-- dropdown -->
+                        <div class="col-8">
+                            <select id="role" class="form-control" formControlName="role" placeholder="Role" title="User role">
+                                <option value="ROLE_CUSTOMER">ROLE_CUSTOMER</option>
+                                <option value="ROLE_SUPPORTER">ROLE_SUPPORTER</option>
+                                <option value="ROLE_ADMIN">ROLE_ADMIN</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Status -->
+                    <div class="row mb-3">
+                        <!-- label -->
+                        <div class="col-4">
+                            <label class="col-form-label" for="status">Status<small>*</small></label>
+                        </div>
+                        <!-- dropdown -->
+                        <div class="col-8">
+                            <select id="status" class="form-control" formControlName="status" placeholder="Status" title="User status">
+                                <option value="Active">Active</option>
+                                <option value="Inactive">Inactive</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- the "Close" button -->
+        <div class="d-flex justify-content-center">
+            <div>
+                <!-- the "Close" button -->
+                <button class="btn btn-primary" routerLink="/user-list" style="width: 150px">Close</button>
+            </div>
+        </div>
+    </form>
+</div>

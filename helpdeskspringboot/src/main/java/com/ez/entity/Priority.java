@@ -11,6 +11,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
 @AllArgsConstructor
@@ -32,7 +33,8 @@ public class Priority {
     @Min(value = 0, message = "Value of the 'resolve in(hours)' must be greater than or equal to 0")
     private Long resolveIn;
 
-    @NotBlank(message = "Status must have value")
+    //    @NotBlank(message = "Status must have value")
+    @Pattern(regexp = "Active|Inactive", message = "Value of status must be 'Active' or 'Inactive'")
     private String status;
 
     public Priority(String name, long resolveIn, String status) {

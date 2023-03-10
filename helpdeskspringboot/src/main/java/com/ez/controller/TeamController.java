@@ -1,7 +1,8 @@
 package com.ez.controller;
 
+import com.ez.dto.Supporter;
+import com.ez.dto.TeamDTO;
 import com.ez.entity.Team;
-import com.ez.exception.IDNotFoundException;
 import com.ez.service.TeamService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -69,28 +70,44 @@ public class TeamController {
     }
 
     //
-    // create new a priority
+    // get active supporters
     //
-//    @PostMapping("/priority-create")
-//    // only the ROLE_ADMIN can access this address
-//    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
-//    public ResponseEntity<Priority> createPriority(@RequestBody @Valid Priority priority, BindingResult bindingResult)
-//            throws BindException {
-//
-//        LOGGER.info("validate data");
-//
-//        // if priority data is invalid then throw exception
-//        if (bindingResult.hasErrors()) {
-//
-//            LOGGER.error("Priority data is invalid");
-//
-//            throw new BindException(bindingResult);
-//        }
-//
-//        Priority newCategory = priorityService.createPriority(priority);
-//
-//        return new ResponseEntity<>(newCategory, OK);
-//    }
+    @GetMapping("/active-supporters")
+    // only the ROLE_ADMIN can access this address
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
+    public ResponseEntity<List<Supporter>> getActiveSupporters() {
+
+        // get active supporters
+        List<Supporter> supporters = teamService.getActiveSupporters();
+
+        return new ResponseEntity<>(supporters, OK);
+    }
+
+    //
+    // create new a team
+    //
+    @PostMapping("/team-create")
+    // only the ROLE_ADMIN can access this address
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
+    public ResponseEntity<Team> createTeam(@RequestBody @Valid TeamDTO teamDto, BindingResult bindingResult)
+            throws BindException {
+
+        LOGGER.info("validate data");
+
+        // if teamDto data is invalid then throw exception
+        if (bindingResult.hasErrors()) {
+
+            LOGGER.error("TeamDTO data is invalid");
+
+            throw new BindException(bindingResult);
+        }
+
+        Team newTeam = teamService.createTeam(teamDto);
+
+        LOGGER.info(newTeam.toString());
+
+        return new ResponseEntity<>(newTeam, OK);
+    }
 //
 //    // find priority by id.
 //    // this method is used for Edit priority, View priority
