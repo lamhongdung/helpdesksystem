@@ -68,9 +68,11 @@ export class TeamListComponent implements OnInit {
       this.teamService.searchTeams(pageNumber, searchTerm, assignmentMethod, status)
 
         .subscribe({
+
           next: (data: Team[]) => {
             return this.teams = data
           }
+          
         })
     );
 

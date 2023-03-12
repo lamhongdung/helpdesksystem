@@ -3,10 +3,9 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { IDropdownSettings } from 'ng-multiselect-dropdown';
-import { map, of, Subscription } from 'rxjs';
+import { Subscription } from 'rxjs';
 import { Supporter } from 'src/app/entity/Supporter';
 import { Team } from 'src/app/entity/Team';
-import { User } from 'src/app/entity/User';
 import { NotificationType } from 'src/app/enum/NotificationType.enum';
 import { NotificationService } from 'src/app/service/notification.service';
 import { TeamService } from 'src/app/service/team.service';
@@ -37,7 +36,6 @@ export class TeamCreateComponent implements OnInit {
   team: Team;
 
   // active supporters
-  // activeSupporters: Supporter[] = [];
   activeSupporters: Supporter[] = [];
 
   errorMessages = {
@@ -74,8 +72,8 @@ export class TeamCreateComponent implements OnInit {
       singleSelection: false,
       // id field
       idField: 'id',
-      // textField: fullname(lastName + firstName) + email
-      textField: 'fullnameEmail',
+      // textField: id + fullname(lastName + firstName) + email
+      textField: 'idFullnameEmail',
       // allow to choose 'Select all'
       selectAllText: 'Select All',
       // allow to choose 'Unselect all'
@@ -118,8 +116,10 @@ export class TeamCreateComponent implements OnInit {
 
           // get active supporters successful
           next: (data: Supporter[]) => {
+
             // active supporters
             this.activeSupporters = data;
+
           },
 
           // there are some errors when get active supporters
@@ -153,7 +153,13 @@ export class TeamCreateComponent implements OnInit {
       //  - status
       this.teamService.createTeam(this.teamForm.value).subscribe({
 
-        // create team successful
+        // create team successful.
+        // class Team: includes fields:
+        //  - id
+        //  - name
+        //  - assignment method
+        //  - supporters
+        //  - status
         next: (data: Team) => {
 
           this.team = data;

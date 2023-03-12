@@ -6,7 +6,6 @@ import { IDropdownSettings } from 'ng-multiselect-dropdown';
 import { Subscription } from 'rxjs';
 import { Supporter } from 'src/app/entity/Supporter';
 import { Team } from 'src/app/entity/Team';
-import { User } from 'src/app/entity/User';
 import { NotificationType } from 'src/app/enum/NotificationType.enum';
 import { NotificationService } from 'src/app/service/notification.service';
 import { TeamService } from 'src/app/service/team.service';
@@ -84,8 +83,8 @@ export class TeamEditComponent {
       singleSelection: false,
       // id field
       idField: 'id',
-      // textField: fullname(lastName + firstName) + email
-      textField: 'fullnameEmail',
+      // textField: id + fullname(lastName + firstName) + email
+      textField: 'idFullnameEmail',
       // naming of 'Select all'
       selectAllText: 'Select All',
       // naming of 'Unselect all'
@@ -173,7 +172,7 @@ export class TeamEditComponent {
   } // end of ngOnInit()
 
   // edit team.
-  // when user clicks the "Save" button in the "Edit team" screen
+  // when user clicks on the "Save" button in the "Edit team" screen
   editTeam() {
 
     // allow to show spinner(circle)

@@ -72,7 +72,7 @@ public interface TeamRepository extends JpaRepository<Team, Long> {
     // get active supporters
     @Query(value = "" +
             " select a.id as id, " +
-            "        concat(a.lastName, ' ', a.firstName, ' - ', a.email) as fullnameEmail " +
+            "        concat(a.id, ' - ', a.lastName, ' ', a.firstName, ' - ', a.email) as idFullnameEmail " +
             " from user a " +
             " where a.role = 'ROLE_SUPPORTER' and a.status = 'Active' "
             , nativeQuery = true)
@@ -90,7 +90,7 @@ public interface TeamRepository extends JpaRepository<Team, Long> {
     // get selected supporters
     @Query(value = "" +
             " select a.supporterid as id, " +
-            "        concat(b.lastName, ' ', b.firstName, ' - ', b.email) as fullnameEmail " +
+            "        concat(b.id,' - ', b.lastName, ' ', b.firstName, ' - ', b.email) as idFullnameEmail " +
             " from teamSupporter a " +
             "   left join user b on a.supporterid = b.id " +
             " where a.teamid = :teamid "

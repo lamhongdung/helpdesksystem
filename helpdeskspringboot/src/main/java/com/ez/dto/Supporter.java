@@ -13,8 +13,8 @@ public interface Supporter {
     // spring boot auto understand as the "id" column
     Long getId();
 
-    // spring boot auto understand as the "fullnameEmail" column
-    // (fullname(lastName + firstName) + email)
-    String getFullnameEmail();
+    // spring boot auto understand as the "idFullnameEmail" column
+    // id + fullname(lastName + firstName) + email
+    String getIdFullnameEmail();
 
 }

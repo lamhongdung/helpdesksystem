@@ -14,7 +14,7 @@ import javax.validation.constraints.Size;
 @Getter
 @Setter
 @Entity
-// use this class Team(entity) is for save "team"(without supporters) into database(use TeamRepository)
+// use this class Team(entity) is for saving "team"(without supporters) into database(use TeamRepository)
 public class Team {
 
     @Id

@@ -54,7 +54,7 @@ public class TeamService {
 
     // get active supporters.
     // note:
-    //  - interface Supporter: contains 2 fields: id and fullnameEmail
+    //  - interface Supporter: contains 2 fields: id and idFullnameEmail
     public List<Supporter> getActiveSupporters() {
 
         LOGGER.info("get active supporters");
@@ -70,13 +70,13 @@ public class TeamService {
     public Team createTeam(TeamDTO teamDto) {
 
         LOGGER.info("create new team");
-        LOGGER.info("team is sent from client: " + teamDto.toString());
+        LOGGER.info("Team is sent from client: " + teamDto.toString());
 
         // new team
         Team newTeam = new Team(teamDto.getName(), teamDto.getAssignmentMethod(), teamDto.getStatus());
 
         // save new team into the "team" table in database.
-        // after save successful then the newTeam will have its id
+        // after saving successful then the newTeam will have its id
         teamRepository.save(newTeam);
         LOGGER.info("new team after saved: " + newTeam.toString());
 
@@ -92,8 +92,8 @@ public class TeamService {
     // note:
     //  - class Team: not include supporters
     //  - class TeamDTO: include supporters
-    //  - interface Supporter: include 2 columns: id(getId()) and fullnameEmail(getFullnameEmail())
-    //  - class SupporterDTO: include 2 columns: id and fullnameEmail
+    //  - interface Supporter: include 2 columns: id(getId()) and idFullnameEmail(getIdFullnameEmail())
+    //  - class SupporterDTO: include 2 columns: id and idFullnameEmail
     public TeamDTO findById(Long id) throws ResourceNotFoundException {
 
         // team without supporters
@@ -102,10 +102,11 @@ public class TeamService {
         // team includes supporters
         TeamDTO teamDto = new TeamDTO();
 
-        //  interface Supporter: include 2 columns: id(getId()) and fullnameEmail(getFullnameEmail())
+        //  interface Supporter: include 2 columns: id(getId()) and idFullnameEmail(getIdFullnameEmail()).
+        //  selected(assigned) supporters
         List<Supporter> selectedSupporters;
 
-        // class SupporterDTO: include 2 columns: id and fullnameEmail
+        // class SupporterDTO: include 2 columns: id and idFullnameEmail
         List<SupporterDTO> supporterDTOs = new ArrayList<>();
 
         LOGGER.info("find team by id");
@@ -122,7 +123,7 @@ public class TeamService {
 
         // convert selectedSupporters to supporterDTOs
         selectedSupporters.forEach(selectedSupporter ->
-                supporterDTOs.add(new SupporterDTO(selectedSupporter.getId(), selectedSupporter.getFullnameEmail())));
+                supporterDTOs.add(new SupporterDTO(selectedSupporter.getId(), selectedSupporter.getIdFullnameEmail())));
 
         //
         // convert "team(without supporters) + supporters" to teamDto(includes supporters)
@@ -145,7 +146,7 @@ public class TeamService {
     public Team updateTeam(TeamDTO teamDto) throws ResourceNotFoundException {
 
         LOGGER.info("Update team");
-        LOGGER.info("team is sent from client: " + teamDto.toString());
+        LOGGER.info("Team is sent from client: " + teamDto.toString());
 
         // get existing team(persistent)
         Team existingTeam = teamRepository.findById(teamDto.getId())

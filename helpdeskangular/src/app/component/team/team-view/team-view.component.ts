@@ -4,7 +4,6 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { ActivatedRoute, ParamMap } from '@angular/router';
 import { IDropdownSettings } from 'ng-multiselect-dropdown';
 import { Subscription } from 'rxjs';
-import { Supporter } from 'src/app/entity/Supporter';
 import { Team } from 'src/app/entity/Team';
 import { NotificationType } from 'src/app/enum/NotificationType.enum';
 import { NotificationService } from 'src/app/service/notification.service';
@@ -36,9 +35,6 @@ export class TeamViewComponent {
   //  - status
   team: Team;
 
-  // active supporters
-  // activeSupporters: Supporter[] = [];
-
   // team id
   id: number;
 
@@ -66,8 +62,8 @@ export class TeamViewComponent {
       singleSelection: false,
       // id field
       idField: 'id',
-      // textField: fullname(lastName + firstName) + email
-      textField: 'fullnameEmail',
+      // textField: id + fullname(lastName + firstName) + email
+      textField: 'idFullnameEmail',
       // naming of 'Select all'
       selectAllText: 'Select All',
       // naming of 'Unselect all'

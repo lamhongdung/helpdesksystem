@@ -1,10 +1,8 @@
 package com.ez.controller;
 
 import com.ez.dto.Supporter;
-import com.ez.dto.SupporterDTO;
 import com.ez.dto.TeamDTO;
 import com.ez.entity.Team;
-import com.ez.entity.User;
 import com.ez.exception.ResourceNotFoundException;
 import com.ez.service.TeamService;
 import org.slf4j.Logger;
