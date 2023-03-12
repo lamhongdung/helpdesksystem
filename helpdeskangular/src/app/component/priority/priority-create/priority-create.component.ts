@@ -72,10 +72,10 @@ export class PriorityCreateComponent implements OnInit {
     this.subscriptions.push(
 
       // create priority
-      this.priorityService.createPriority(this.priorityForm.value).subscribe(
+      this.priorityService.createPriority(this.priorityForm.value).subscribe({
 
         // create priority successful
-        (data: Priority) => {
+        next: (data: Priority) => {
 
           this.priority = data;
 
@@ -90,7 +90,7 @@ export class PriorityCreateComponent implements OnInit {
         },
 
         // create priority failure
-        (errorResponse: HttpErrorResponse) => {
+        error: (errorResponse: HttpErrorResponse) => {
 
           // show the error message to user
           this.sendNotification(NotificationType.ERROR, errorResponse.error.message);
@@ -98,7 +98,7 @@ export class PriorityCreateComponent implements OnInit {
           // hide spinner(circle)
           this.showSpinner = false;
         }
-      )
+      })
     );
 
   } // end of createPriority()

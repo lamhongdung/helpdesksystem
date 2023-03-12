@@ -66,10 +66,10 @@ export class ResetPasswordComponent implements OnInit {
     this.subscriptions.push(
 
       // this.resetPasswordForm.value = { "email": "nguoiquantri@proton.me" }
-      this.userService.resetPassword(this.resetPasswordForm.value).subscribe(
+      this.userService.resetPassword(this.resetPasswordForm.value).subscribe({
 
         // reset password success
-        (response: CustomHttpRespone) => {
+        next: (response: CustomHttpRespone) => {
 
           this.showSpinner = false;
           this.sendNotification(NotificationType.SUCCESS, response.message);
@@ -79,12 +79,12 @@ export class ResetPasswordComponent implements OnInit {
 
         },
         // there is error when reset password
-        (error: HttpErrorResponse) => {
+        error: (error: HttpErrorResponse) => {
 
           this.showSpinner = false;
           this.sendNotification(NotificationType.WARNING, error.error.message);
         }
-      )
+      })
 
     )
   } // end of resetPassword()
@@ -103,7 +103,7 @@ export class ResetPasswordComponent implements OnInit {
 
     // unsubscribe all subscriptions to avoid memeory leaks.
     this.subscriptions.forEach(sub => sub.unsubscribe());
-    
+
   }
 
 }

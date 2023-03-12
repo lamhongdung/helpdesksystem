@@ -17,14 +17,14 @@ export class HeaderComponent implements OnInit {
   loggedInRole: string;
 
   constructor(private router: Router, private authenticationService: AuthService,
-              private shareService : ShareService,
-              private notificationService: NotificationService) { 
+    private shareService: ShareService,
+    private notificationService: NotificationService) {
 
-    this.shareService.getClickEvent().subscribe(
-      () => {
+    this.shareService.getClickEvent().subscribe({
+      next: () => {
         this.loadHeader();
       }
-    )
+    })
   }
 
   loadHeader() {
@@ -38,7 +38,7 @@ export class HeaderComponent implements OnInit {
     this.loadHeader();
   }
 
-  logOut(){
+  logOut() {
     this.authenticationService.logOut();
     this.router.navigate(['/login']);
   }

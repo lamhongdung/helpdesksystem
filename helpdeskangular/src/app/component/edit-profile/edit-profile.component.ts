@@ -103,9 +103,9 @@ export class EditProfileComponent implements OnInit {
     );
 
     // get user by user id
-    this.userService.findById(this.userId).subscribe(
+    this.userService.findById(this.userId).subscribe({
 
-      (data: User) => {
+      next: (data: User) => {
 
         // create new editProfile
         this.editProfile = new EditProfile(+data.id, data.email, data.firstName, data.lastName, data.phone, data.address);
@@ -115,12 +115,11 @@ export class EditProfileComponent implements OnInit {
         // this.editProfileForm.patchValue(data);
 
       },
-
-
-      (errorResponse: HttpErrorResponse) => {
+      // there are some errors when get user from database 
+      error: (errorResponse: HttpErrorResponse) => {
         this.sendNotification(NotificationType.ERROR, errorResponse.error.message);
       }
-    );
+    });
 
   } // end of ngOnInit()
 
@@ -135,10 +134,10 @@ export class EditProfileComponent implements OnInit {
     this.subscriptions.push(
 
       // update profile
-      this.userService.updateProfile(this.editProfileForm.value).subscribe(
+      this.userService.updateProfile(this.editProfileForm.value).subscribe({
 
         // update profile successful
-        (user: User) => {
+        next: (user: User) => {
 
           // show successful message to user 
           this.sendNotification(NotificationType.SUCCESS, `${user.lastName} ${user.firstName} is updated successfully`);
@@ -158,7 +157,7 @@ export class EditProfileComponent implements OnInit {
         },
 
         // update profile failure
-        (errorResponse: HttpErrorResponse) => {
+        error: (errorResponse: HttpErrorResponse) => {
 
           // show the error message to user
           this.sendNotification(NotificationType.ERROR, errorResponse.error.message);
@@ -166,7 +165,7 @@ export class EditProfileComponent implements OnInit {
           // hide spinner(circle)
           this.showSpinner = false;
         }
-      )
+      })
     );
 
   } // end of updateProfile()

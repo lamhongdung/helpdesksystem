@@ -64,7 +64,7 @@ export class UserEditComponent implements OnInit {
 
       // do not need validate id because this "id" field is read only
       id: [''],
-      
+
       // do not need validate email because this "email" field is read only.
       // email: ['', [Validators.required, Validators.pattern('^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$')]],
       email: [''],
@@ -79,19 +79,19 @@ export class UserEditComponent implements OnInit {
 
     // get user id from params of active route(from address path).
     // and then get user based on user id from database
-    this.activatedRoute.paramMap.subscribe(
-      
-      (params: ParamMap) => {
+    this.activatedRoute.paramMap.subscribe({
+
+      next: (params: ParamMap) => {
 
         // get id from param of active route.
         // The "+"" sign: convert string to number. 
         this.id = +params.get('id');
 
         // get user by user id
-        this.userService.findById(this.id).subscribe(
+        this.userService.findById(this.id).subscribe({
 
           // get data successful from database
-          (data: User) => {
+          next: (data: User) => {
 
             this.user = data;
 
@@ -100,10 +100,11 @@ export class UserEditComponent implements OnInit {
 
           },
           // there are some errors when get data from database
-          (errorResponse: HttpErrorResponse) => {
+          error: (errorResponse: HttpErrorResponse) => {
             this.sendNotification(NotificationType.ERROR, errorResponse.error.message);
           }
-        );
+        });
+      }
     });
 
   } // end of ngOnInit()
@@ -119,10 +120,10 @@ export class UserEditComponent implements OnInit {
     this.subscriptions.push(
 
       // edit exsting user
-      this.userService.editUser(this.userForm.value).subscribe(
+      this.userService.editUser(this.userForm.value).subscribe({
 
         // update user successful
-        (data: User) => {
+        next: (data: User) => {
 
           this.user = data;
 
@@ -136,7 +137,7 @@ export class UserEditComponent implements OnInit {
           this.router.navigateByUrl("/user-list");
         },
         // there are some errors when update user
-        (errorResponse: HttpErrorResponse) => {
+        error: (errorResponse: HttpErrorResponse) => {
 
           // send failure message to user
           this.sendNotification(NotificationType.ERROR, errorResponse.error.message);
@@ -144,7 +145,7 @@ export class UserEditComponent implements OnInit {
           // hide spinner(circle)
           this.showSpinner = false;
         }
-      )
+      })
     );
 
   } // end of editUser()

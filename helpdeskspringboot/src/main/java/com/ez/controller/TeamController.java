@@ -1,8 +1,11 @@
 package com.ez.controller;
 
 import com.ez.dto.Supporter;
+import com.ez.dto.SupporterDTO;
 import com.ez.dto.TeamDTO;
 import com.ez.entity.Team;
+import com.ez.entity.User;
+import com.ez.exception.ResourceNotFoundException;
 import com.ez.service.TeamService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -84,8 +87,9 @@ public class TeamController {
     }
 
     //
-    // create new a team
-    //
+    // create new a team.
+    // parameters:
+    //  - TeamDTO: team + supporters
     @PostMapping("/team-create")
     // only the ROLE_ADMIN can access this address
     @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
@@ -108,40 +112,46 @@ public class TeamController {
 
         return new ResponseEntity<>(newTeam, OK);
     }
-//
-//    // find priority by id.
-//    // this method is used for Edit priority, View priority
-//    @GetMapping("/priority-list/{id}")
-//    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
-//    public ResponseEntity<Priority> findById(@PathVariable Long id) throws IDNotFoundException {
-//
-//        LOGGER.info("find priority by id: " + id);
-//
-//        Priority priority = priorityService.findById(id);
-//
-//        return new ResponseEntity<>(priority, OK);
-//    }
-//
-//    // edit existing priority
-//    @PutMapping("/priority-edit")
-//    // only the ROLE_ADMIN can access this address
-//    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
-//    public ResponseEntity<Priority> editPriority(@RequestBody @Valid Priority priority, BindingResult bindingResult)
-//            throws IDNotFoundException, BindException {
-//
-//        LOGGER.info("validate data");
-//
-//        // if priority data is invalid then throw exception
-//        if (bindingResult.hasErrors()) {
-//
-//            LOGGER.error("Priority data is invalid");
-//
-//            throw new BindException(bindingResult);
-//        }
-//
-//        Priority currentPriority = priorityService.updatePriority(priority);
-//
-//        return new ResponseEntity<>(currentPriority, OK);
-//    }
+
+    // find team by id.
+    // this method is used for Edit team, View team.
+    //
+    // return:
+    //  - TeamDTO: team + supporters
+    @GetMapping("/team-list/{id}")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
+    public ResponseEntity<TeamDTO> findById(@PathVariable Long id) throws ResourceNotFoundException {
+
+        LOGGER.info("find team by id: " + id);
+
+        TeamDTO teamDto = teamService.findById(id);
+
+        return new ResponseEntity<>(teamDto, OK);
+    }
+
+    // edit existing team.
+    //
+    // parameters:
+    //  - TeamDTO: team + supporters
+    @PutMapping("/team-edit")
+    // only the ROLE_ADMIN can access this address
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
+    public ResponseEntity<Team> editTeam(@RequestBody @Valid TeamDTO teamDto, BindingResult bindingResult)
+            throws ResourceNotFoundException, BindException {
+
+        LOGGER.info("validate data");
+
+        // if teamDto data is invalid then throw exception
+        if (bindingResult.hasErrors()) {
+
+            LOGGER.error("TeamDTO data is invalid");
+
+            throw new BindException(bindingResult);
+        }
+
+        Team currentTeam = teamService.updateTeam(teamDto);
+
+        return new ResponseEntity<>(currentTeam, OK);
+    }
 
 }

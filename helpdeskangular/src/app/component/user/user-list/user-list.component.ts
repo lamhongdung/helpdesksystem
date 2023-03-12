@@ -78,11 +78,11 @@ export class UserListComponent implements OnInit {
 
       // get users
       this.userService.searchUsers(pageNumber, searchTerm, role, status)
-        .subscribe(
-          (data: User[]) => {
+        .subscribe({
+          next: (data: User[]) => {
             return this.users = data
           }
-        )
+        })
     );
 
     // push to list of subscriptions for easily unsubscribes all subscriptions of the UserListComponent
@@ -90,14 +90,14 @@ export class UserListComponent implements OnInit {
 
       // get total of users and total pages
       this.userService.getTotalOfUsers(searchTerm, role, status)
-        .subscribe(
-          (data: number) => {
+        .subscribe({
+          next: (data: number) => {
             // total of users
             this.totalOfUsers = data;
             // total of pages
             this.totalPages = this.calculateTotalOfPages(this.totalOfUsers, this.pageSize);
           }
-        )
+        })
     )
   }
 

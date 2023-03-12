@@ -48,9 +48,9 @@ export class CategoryViewComponent implements OnInit {
 
     // get category id from params of the active route.
     // and then get category based on category id from database
-    this.activatedRoute.paramMap.subscribe(
+    this.activatedRoute.paramMap.subscribe({
 
-      (params: ParamMap) => {
+      next: (params: ParamMap) => {
 
         // get id from param of active route.
         // ex: http://localhost:4200/category-view/:id
@@ -59,10 +59,10 @@ export class CategoryViewComponent implements OnInit {
         this.id = +params.get('id');
 
         // get category by category id
-        this.categoryService.findById(this.id).subscribe(
+        this.categoryService.findById(this.id).subscribe({
 
           // if there is no error when get data from database
-          (data: Category) => {
+          next: (data: Category) => {
 
             this.category = data;
 
@@ -72,13 +72,13 @@ export class CategoryViewComponent implements OnInit {
           },
 
           // if there is error when get data from database
-          (errorResponse: HttpErrorResponse) => {
+          error: (errorResponse: HttpErrorResponse) => {
             this.sendNotification(NotificationType.ERROR, errorResponse.error.message);
           }
-          
-        );
+
+        });
       } // end of (params: ParamMap)
-    ); // end of this.activatedRoute.paramMap.subscribe()
+    }); // end of this.activatedRoute.paramMap.subscribe()
 
   } // end of ngOnInit()
 

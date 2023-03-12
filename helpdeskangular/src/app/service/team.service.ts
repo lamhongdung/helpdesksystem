@@ -1,9 +1,10 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { map, Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { Supporter } from '../entity/Supporter';
 import { Team } from '../entity/Team';
+import { User } from '../entity/User';
 
 @Injectable({
   providedIn: 'root'
@@ -38,6 +39,7 @@ export class TeamService {
   }
 
   // get active supporters
+
   getActiveSupporters(): Observable<Supporter[]> {
 
     // console.log(`${this.host}/active-supporters`);
@@ -62,4 +64,4 @@ export class TeamService {
     return this.http.get<Team>(`${this.host}/team-list/${id}`);
   }
 
-}
+} // end of class TeamService

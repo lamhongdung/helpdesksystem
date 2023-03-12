@@ -1,5 +1,7 @@
 package com.ez.repository;
 
+import com.ez.dto.Supporter;
+import com.ez.dto.SupporterDTO;
 import com.ez.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;

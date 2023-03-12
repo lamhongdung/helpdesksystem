@@ -49,9 +49,9 @@ export class PriorityViewComponent implements OnInit {
 
     // get priority id from params of the active route.
     // and then get priority based on priority id from database
-    this.activatedRoute.paramMap.subscribe(
+    this.activatedRoute.paramMap.subscribe({
 
-      (params: ParamMap) => {
+      next: (params: ParamMap) => {
 
         // get id from param of active route.
         // ex: http://localhost:4200/priority-view/:id
@@ -60,10 +60,10 @@ export class PriorityViewComponent implements OnInit {
         this.id = +params.get('id');
 
         // get priority by priority id
-        this.priorityService.findById(this.id).subscribe(
+        this.priorityService.findById(this.id).subscribe({
 
           // if there is no error when get data from database
-          (data: Priority) => {
+          next: (data: Priority) => {
 
             this.priority = data;
 
@@ -72,12 +72,12 @@ export class PriorityViewComponent implements OnInit {
 
           },
           // if there is error when get data from database
-          (errorResponse: HttpErrorResponse) => {
+          error: (errorResponse: HttpErrorResponse) => {
             this.sendNotification(NotificationType.ERROR, errorResponse.error.message);
           }
-        );
+        });
       } // end of (params: ParamMap)
-    ); // end of this.activatedRoute.paramMap.subscribe()
+    }); // end of this.activatedRoute.paramMap.subscribe()
 
   } // end of ngOnInit()
 

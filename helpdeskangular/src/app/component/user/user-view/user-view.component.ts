@@ -54,9 +54,9 @@ export class UserViewComponent implements OnInit {
 
     // get user id from params of the active route.
     // and then get user based on user id from database
-    this.activatedRoute.paramMap.subscribe(
+    this.activatedRoute.paramMap.subscribe({
 
-      (params: ParamMap) => {
+      next: (params: ParamMap) => {
 
         // get id from param of active route.
         // ex: http://localhost:4200/user-view/:id
@@ -65,10 +65,10 @@ export class UserViewComponent implements OnInit {
         this.id = +params.get('id');
 
         // get user by user id
-        this.userService.findById(this.id).subscribe(
+        this.userService.findById(this.id).subscribe({
 
           // if there is no error when get data from backend
-          (data: User) => {
+          next: (data: User) => {
 
             this.user = data;
 
@@ -77,12 +77,12 @@ export class UserViewComponent implements OnInit {
 
           },
           // if there is error when get data from backend
-          (errorResponse: HttpErrorResponse) => {
+          error: (errorResponse: HttpErrorResponse) => {
             this.sendNotification(NotificationType.ERROR, errorResponse.error.message);
           }
-        );
+        });
       } // end of (params: ParamMap)
-    ); // end of this.activatedRoute.paramMap.subscribe()
+    }); // end of this.activatedRoute.paramMap.subscribe()
 
   } // end of ngOnInit()
 

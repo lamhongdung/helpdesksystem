@@ -69,10 +69,10 @@ export class CategoryEditComponent implements OnInit {
         this.id = +params.get('id');
 
         // get category by category id
-        this.categoryService.findById(this.id).subscribe(
+        this.categoryService.findById(this.id).subscribe({
 
           // get category from database
-          (data: Category) => {
+          next: (data: Category) => {
 
             this.category = data;
 
@@ -80,12 +80,12 @@ export class CategoryEditComponent implements OnInit {
             this.categoryForm.patchValue(data);
 
           },
-          
+
           // there is error when get category from database
-          (errorResponse: HttpErrorResponse) => {
+          error: (errorResponse: HttpErrorResponse) => {
             this.sendNotification(NotificationType.ERROR, errorResponse.error.message);
           }
-        );
+        });
       });
 
   } // end of ngOnInit()
@@ -101,10 +101,10 @@ export class CategoryEditComponent implements OnInit {
     this.subscriptions.push(
 
       // edit exsting category
-      this.categoryService.editCategory(this.categoryForm.value).subscribe(
+      this.categoryService.editCategory(this.categoryForm.value).subscribe({
 
         // update category successful
-        (data: Category) => {
+        next: (data: Category) => {
 
           this.category = data;
 
@@ -117,9 +117,9 @@ export class CategoryEditComponent implements OnInit {
           // after update category successful then navigate to the "category-list" page
           this.router.navigateByUrl("/category-list");
         },
-        
+
         // there are some errors when update category
-        (errorResponse: HttpErrorResponse) => {
+        error: (errorResponse: HttpErrorResponse) => {
 
           // send failure message to user
           this.sendNotification(NotificationType.ERROR, errorResponse.error.message);
@@ -127,7 +127,7 @@ export class CategoryEditComponent implements OnInit {
           // hide spinner(circle)
           this.showSpinner = false;
         }
-      )
+      })
     );
 
   } // end of editCategory()

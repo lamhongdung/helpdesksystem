@@ -67,11 +67,11 @@ export class TeamListComponent implements OnInit {
       // get teams
       this.teamService.searchTeams(pageNumber, searchTerm, assignmentMethod, status)
 
-        .subscribe(
-          (data: Team[]) => {
+        .subscribe({
+          next: (data: Team[]) => {
             return this.teams = data
           }
-        )
+        })
     );
 
     // push to list of subscriptions for easily unsubscribes all subscriptions of the TeamListComponent
@@ -80,14 +80,14 @@ export class TeamListComponent implements OnInit {
       // get total of teams and total pages
       this.teamService.getTotalOfTeams(searchTerm, assignmentMethod, status)
 
-        .subscribe(
-          (data: number) => {
+        .subscribe({
+          next: (data: number) => {
             // total of teams
             this.totalOfTeams = data;
             // total pages
             this.totalPages = this.calculateTotalPages(this.totalOfTeams, this.pageSize);
           }
-        )
+        })
     )
   } // end of searchTeams()
 

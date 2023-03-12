@@ -92,10 +92,10 @@ export class ChangePasswordComponent implements OnInit {
     this.subscriptions.push(
 
       // change password
-      this.userService.changePassword(this.changePasswordForm.value).subscribe(
+      this.userService.changePassword(this.changePasswordForm.value).subscribe({
 
         // change password successful
-        (response: CustomHttpRespone) => {
+        next: (response: CustomHttpRespone) => {
 
           this.response = response;
 
@@ -110,7 +110,7 @@ export class ChangePasswordComponent implements OnInit {
         },
 
         // change password failure
-        (errorResponse: HttpErrorResponse) => {
+        error: (errorResponse: HttpErrorResponse) => {
 
           // show the error message to user
           this.sendNotification(NotificationType.ERROR, errorResponse.error.message);
@@ -118,7 +118,7 @@ export class ChangePasswordComponent implements OnInit {
           // hide spinner(circle)
           this.showSpinner = false;
         }
-      )
+      })
     );
 
   } // end of changePassword()

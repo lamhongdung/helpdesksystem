@@ -15,7 +15,7 @@ import { NotificationService } from 'src/app/service/notification.service';
 })
 export class CategoryCreateComponent {
 
- // allow display spinner icon or not
+  // allow display spinner icon or not
   // =true: allow to display spinner in the "Save" button
   // =false: do not allow to display spinner in the "Save" button
   showSpinner: boolean;
@@ -65,10 +65,10 @@ export class CategoryCreateComponent {
     this.subscriptions.push(
 
       // create category
-      this.categoryService.createCategory(this.categoryForm.value).subscribe(
+      this.categoryService.createCategory(this.categoryForm.value).subscribe({
 
         // create category successful
-        (data: Category) => {
+        next: (data: Category) => {
 
           this.category = data;
 
@@ -83,7 +83,7 @@ export class CategoryCreateComponent {
         },
 
         // create category failure
-        (errorResponse: HttpErrorResponse) => {
+        error: (errorResponse: HttpErrorResponse) => {
 
           // show the error message to user
           this.sendNotification(NotificationType.ERROR, errorResponse.error.message);
@@ -91,7 +91,7 @@ export class CategoryCreateComponent {
           // hide spinner(circle)
           this.showSpinner = false;
         }
-      )
+      })
     );
 
   } // end of createCategory()

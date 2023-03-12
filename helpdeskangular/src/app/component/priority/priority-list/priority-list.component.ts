@@ -100,11 +100,11 @@ export class PriorityListComponent implements OnInit {
       // get priorities
       this.priorityService.searchPriorities(pageNumber, searchTerm, resolveInOpt, resolveIn, status)
 
-        .subscribe(
-          (data: Priority[]) => {
+        .subscribe({
+          next: (data: Priority[]) => {
             return this.priorities = data
           }
-        )
+        })
     );
 
     // push to list of subscriptions for easily unsubscribes all subscriptions of the PriorityListComponent
@@ -113,14 +113,14 @@ export class PriorityListComponent implements OnInit {
       // get total of priorities and total pages
       this.priorityService.getTotalOfPriorities(searchTerm, resolveInOpt, resolveIn, status)
 
-        .subscribe(
-          (data: number) => {
+        .subscribe({
+          next: (data: number) => {
             // total of priorities
             this.totalOfPriorities = data;
             // total pages
             this.totalPages = this.calculateTotalPages(this.totalOfPriorities, this.pageSize);
           }
-        )
+        })
     )
   } // end of searchPriorities()
 

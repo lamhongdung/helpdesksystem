@@ -61,7 +61,7 @@ export class UserCreateComponent implements OnInit {
 
       // required and must be in correct format 
       email: ['', [Validators.required, Validators.pattern('^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$')]],
-      
+
       // required and max length = 50 characters
       firstName: ['', [Validators.required, Validators.maxLength(50)]],
 
@@ -94,10 +94,10 @@ export class UserCreateComponent implements OnInit {
     this.subscriptions.push(
 
       // create user
-      this.userService.createUser(this.userForm.value).subscribe(
+      this.userService.createUser(this.userForm.value).subscribe({
 
         // create user successful
-        (data: User) => {
+        next: (data: User) => {
 
           this.user = data;
 
@@ -110,9 +110,9 @@ export class UserCreateComponent implements OnInit {
           // navigate to the "user-list" page
           this.router.navigateByUrl("/user-list");
         },
-        
+
         // create user failure(ex: email already existed,...)
-        (errorResponse: HttpErrorResponse) => {
+        error: (errorResponse: HttpErrorResponse) => {
 
           // show the error message to user
           this.sendNotification(NotificationType.ERROR, errorResponse.error.message);
@@ -120,7 +120,7 @@ export class UserCreateComponent implements OnInit {
           // hide spinner(circle)
           this.showSpinner = false;
         }
-      )
+      })
     );
 
   } // end of createUser()

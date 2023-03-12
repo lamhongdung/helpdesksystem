@@ -71,9 +71,9 @@ export class PriorityEditComponent implements OnInit {
 
     // get priority id from params of the active route(from address path).
     // and then get priority based on priority id from database
-    this.activatedRoute.paramMap.subscribe(
+    this.activatedRoute.paramMap.subscribe({
 
-      (params: ParamMap) => {
+      next: (params: ParamMap) => {
 
         // get id from param of active route.
         // The "+"" sign: convert string to number. 
@@ -97,7 +97,8 @@ export class PriorityEditComponent implements OnInit {
             this.sendNotification(NotificationType.ERROR, errorResponse.error.message);
           }
         );
-      });
+      }
+    });
 
   } // end of ngOnInit()
 
@@ -112,10 +113,10 @@ export class PriorityEditComponent implements OnInit {
     this.subscriptions.push(
 
       // edit exsting priority
-      this.priorityService.editPriority(this.priorityForm.value).subscribe(
+      this.priorityService.editPriority(this.priorityForm.value).subscribe({
 
         // update priority successful
-        (data: Priority) => {
+        next: (data: Priority) => {
 
           this.priority = data;
 
@@ -128,9 +129,9 @@ export class PriorityEditComponent implements OnInit {
           // after update priority successful then navigate to the "priority-list" page
           this.router.navigateByUrl("/priority-list");
         },
-        
+
         // there are some errors when update priority
-        (errorResponse: HttpErrorResponse) => {
+        error: (errorResponse: HttpErrorResponse) => {
 
           // send failure message to user
           this.sendNotification(NotificationType.ERROR, errorResponse.error.message);
@@ -138,7 +139,7 @@ export class PriorityEditComponent implements OnInit {
           // hide spinner(circle)
           this.showSpinner = false;
         }
-      )
+      })
     );
 
   } // end of editPriority()

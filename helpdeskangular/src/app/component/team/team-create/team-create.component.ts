@@ -3,9 +3,10 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { IDropdownSettings } from 'ng-multiselect-dropdown';
-import { Subscription } from 'rxjs';
+import { map, of, Subscription } from 'rxjs';
 import { Supporter } from 'src/app/entity/Supporter';
 import { Team } from 'src/app/entity/Team';
+import { User } from 'src/app/entity/User';
 import { NotificationType } from 'src/app/enum/NotificationType.enum';
 import { NotificationService } from 'src/app/service/notification.service';
 import { TeamService } from 'src/app/service/team.service';
@@ -36,6 +37,7 @@ export class TeamCreateComponent implements OnInit {
   team: Team;
 
   // active supporters
+  // activeSupporters: Supporter[] = [];
   activeSupporters: Supporter[] = [];
 
   errorMessages = {
@@ -112,22 +114,22 @@ export class TeamCreateComponent implements OnInit {
       // get active supporters
       this.teamService.getActiveSupporters()
 
-        .subscribe(
+        .subscribe({
 
           // get active supporters successful
-          (data: Supporter[]) => {
+          next: (data: Supporter[]) => {
             // active supporters
             this.activeSupporters = data;
           },
 
           // there are some errors when get active supporters
-          (errorResponse: HttpErrorResponse) => {
+          error: (errorResponse: HttpErrorResponse) => {
 
             // show the error message to user
             this.sendNotification(NotificationType.ERROR, errorResponse.error.message);
 
           }
-        )
+        })
 
     );
 
@@ -149,10 +151,10 @@ export class TeamCreateComponent implements OnInit {
       //  - assignment method
       //  - supporters
       //  - status
-      this.teamService.createTeam(this.teamForm.value).subscribe(
+      this.teamService.createTeam(this.teamForm.value).subscribe({
 
         // create team successful
-        (data: Team) => {
+        next: (data: Team) => {
 
           this.team = data;
 
@@ -167,7 +169,7 @@ export class TeamCreateComponent implements OnInit {
         },
 
         // create team failure
-        (errorResponse: HttpErrorResponse) => {
+        error: (errorResponse: HttpErrorResponse) => {
 
           // show the error message to user
           this.sendNotification(NotificationType.ERROR, errorResponse.error.message);
@@ -175,7 +177,7 @@ export class TeamCreateComponent implements OnInit {
           // hide spinner(circle)
           this.showSpinner = false;
         }
-      )
+      })
     );
 
   } // end of createTeam()

@@ -65,11 +65,11 @@ export class CategoryListComponent implements OnInit {
       // get categories
       this.categoryService.searchCategories(pageNumber, searchTerm, status)
 
-        .subscribe(
-          (data: Category[]) => {
+        .subscribe({
+          next: (data: Category[]) => {
             return this.categories = data
           }
-        )
+        })
     );
 
     // push to list of subscriptions for easily unsubscribes all subscriptions of the CategoryListComponent
@@ -78,14 +78,14 @@ export class CategoryListComponent implements OnInit {
       // get total of categories and total pages
       this.categoryService.getTotalOfCategories(searchTerm, status)
 
-        .subscribe(
-          (data: number) => {
+        .subscribe({
+          next: (data: number) => {
             // total of categories
             this.totalOfCategories = data;
             // total pages
             this.totalPages = this.calculateTotalPages(this.totalOfCategories, this.pageSize);
           }
-        )
+        })
     )
   } // end of searchCategories()
 

@@ -85,11 +85,11 @@ export class LoginComponent implements OnInit, OnDestroy {
       // get data from server
 
       // this.loginForm.value = { "email": "nguoiquantri01@gmail.com", "password": "abcxyz" }
-      this.authenticationService.login(this.loginForm.value).subscribe(
+      this.authenticationService.login(this.loginForm.value).subscribe({
 
         // login success.
         // return: User and token
-        (response: HttpResponse<User>) => {
+        next: (response: HttpResponse<User>) => {
 
           // get token from the header response
           const token = response.headers.get(HeaderType.JWT_TOKEN);
@@ -112,7 +112,7 @@ export class LoginComponent implements OnInit, OnDestroy {
 
         },
         // login failed
-        (errorResponse: HttpErrorResponse) => {
+        error: (errorResponse: HttpErrorResponse) => {
 
           // show error message
           this.sendErrorNotification(NotificationType.ERROR, errorResponse.error.message);
@@ -120,7 +120,7 @@ export class LoginComponent implements OnInit, OnDestroy {
           // hide spinner icon(circle)
           this.showSpinner = false;
         }
-      )
+      })
     );
   }
 

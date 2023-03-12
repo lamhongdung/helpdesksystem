@@ -1,15 +1,22 @@
 package com.ez.service;
 
 import com.ez.dto.Supporter;
+import com.ez.dto.SupporterDTO;
 import com.ez.dto.TeamDTO;
 import com.ez.entity.Team;
+import com.ez.entity.User;
+import com.ez.exception.ResourceNotFoundException;
 import com.ez.repository.TeamRepository;
+import com.ez.repository.UserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
+
+import static com.ez.constant.Constant.*;
 
 
 @Service
@@ -19,6 +26,9 @@ public class TeamService {
 
     @Autowired
     private TeamRepository teamRepository;
+
+    @Autowired
+    private UserRepository userRepository;
 
     // search teams by pageNumber and based on the search criteria.
     // parameters:
@@ -42,7 +52,9 @@ public class TeamService {
         return teamRepository.getTotalOfTeams(searchTerm, assignmentMethod, status);
     }
 
-    // get active supporters
+    // get active supporters.
+    // note:
+    //  - interface Supporter: contains 2 fields: id and fullnameEmail
     public List<Supporter> getActiveSupporters() {
 
         LOGGER.info("get active supporters");
@@ -50,7 +62,11 @@ public class TeamService {
         return teamRepository.getActiveSupporters();
     }
 
-    // create new team
+    // create new team.
+    // save team in both tables: team and teamSupporter
+    // note:
+    //  - class Team: not include supporters
+    //  - class TeamDTO: include supporters
     public Team createTeam(TeamDTO teamDto) {
 
         LOGGER.info("create new team");
@@ -64,38 +80,97 @@ public class TeamService {
         teamRepository.save(newTeam);
         LOGGER.info("new team after saved: " + newTeam.toString());
 
-        // save (teamid and supporterid) in the "teamSupporter" table in database
-        teamDto.getSupporters().forEach(s -> teamRepository.saveTeamSupporter(newTeam.getId(), s.getId()));
+        // save (teamid and supporterid) in the "teamSupporter" table in database.
+        // loop through all supporters in the teamDto
+        teamDto.getSupporters().forEach(supporter -> teamRepository.saveTeamSupporter(newTeam.getId(), supporter.getId()));
 
+        // return team without supporters
         return newTeam;
     }
-//
-//    // find category by category id
-//    public Category findById(Long id) throws IDNotFoundException {
-//
-//        LOGGER.info("find category by id");
-//
-//        // find category by category id
-//        return categoryRepository.findById(id).orElseThrow(() -> new IDNotFoundException(NO_CATEGORY_FOUND_BY_ID + id));
-//    }
-//
-//    // update existing category
-//    public Category updateCategory(Category category) throws IDNotFoundException {
-//
-//        LOGGER.info("Update category");
-//
-//        // get existing category(persistent)
-//        Category existingCategory = categoryRepository.findById(category.getId())
-//                .orElseThrow(() -> new IDNotFoundException(NO_CATEGORY_FOUND_BY_ID + category.getId()));
-//
-//        // set new values to existing category
-//        existingCategory.setName(category.getName());
-//        existingCategory.setStatus(category.getStatus());
-//
-//        // update existing category(persistent)
-//        categoryRepository.save(existingCategory);
-//
-//        return existingCategory;
-//    }
+
+    // find team by team id.
+    // note:
+    //  - class Team: not include supporters
+    //  - class TeamDTO: include supporters
+    //  - interface Supporter: include 2 columns: id(getId()) and fullnameEmail(getFullnameEmail())
+    //  - class SupporterDTO: include 2 columns: id and fullnameEmail
+    public TeamDTO findById(Long id) throws ResourceNotFoundException {
+
+        // team without supporters
+        Team team;
+
+        // team includes supporters
+        TeamDTO teamDto = new TeamDTO();
+
+        //  interface Supporter: include 2 columns: id(getId()) and fullnameEmail(getFullnameEmail())
+        List<Supporter> selectedSupporters;
+
+        // class SupporterDTO: include 2 columns: id and fullnameEmail
+        List<SupporterDTO> supporterDTOs = new ArrayList<>();
+
+        LOGGER.info("find team by id");
+
+        // return team without supporters
+        team = teamRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(NO_TEAM_FOUND_BY_ID + id));
+
+        //
+        // convert selectedSupporters to supporterDTOs
+        //
+
+        // get selected supporters
+        selectedSupporters = teamRepository.getSelectedSupporters(id);
+
+        // convert selectedSupporters to supporterDTOs
+        selectedSupporters.forEach(selectedSupporter ->
+                supporterDTOs.add(new SupporterDTO(selectedSupporter.getId(), selectedSupporter.getFullnameEmail())));
+
+        //
+        // convert "team(without supporters) + supporters" to teamDto(includes supporters)
+        //
+        teamDto.setId(team.getId());
+        teamDto.setName(team.getName());
+        teamDto.setAssignmentMethod(team.getAssignmentMethod());
+        teamDto.setSupporters(supporterDTOs);
+        teamDto.setStatus(team.getStatus());
+
+        // return teamDto(include supporters)
+        return teamDto;
+    }
+
+    // update existing team.
+    // save team in both tables: team and teamSupporter
+    // note:
+    //  - class Team: not include supporters
+    //  - class TeamDTO: include supporters
+    public Team updateTeam(TeamDTO teamDto) throws ResourceNotFoundException {
+
+        LOGGER.info("Update team");
+        LOGGER.info("team is sent from client: " + teamDto.toString());
+
+        // get existing team(persistent)
+        Team existingTeam = teamRepository.findById(teamDto.getId())
+                .orElseThrow(() -> new ResourceNotFoundException(NO_TEAM_FOUND_BY_ID + teamDto.getId()));
+
+        // set new values to existing team
+        existingTeam.setName(teamDto.getName());
+        existingTeam.setAssignmentMethod(teamDto.getAssignmentMethod());
+        existingTeam.setStatus(teamDto.getStatus());
+
+        // update existing team(persistent)
+        teamRepository.save(existingTeam);
+
+        //
+        // update (teamid and supporterid) in the "teamSupporter" table in database.
+        //
+
+        // delete old data by teamid in the teamSupporter table
+        teamRepository.deleteTeamSupporter(teamDto.getId());
+
+        // loop through all supporters in the teamDto
+        teamDto.getSupporters().forEach(supporter -> teamRepository.saveTeamSupporter(teamDto.getId(), supporter.getId()));
+
+
+        return existingTeam;
+    }
 
 }

@@ -1,1 +1,137 @@
-<p>team-edit works!</p>
+<div class="text-center">
+    <!-- title -->
+    <h3>Edit team</h3>
+    <hr width="700px">
+</div>
+
+{{teamForm.value | json}}
+
+<div class="container">
+
+    <!-- call the function editTeam() when user clicks the "Save" button -->
+    <form [formGroup]="teamForm" (ngSubmit)="editTeam()">
+        <div class="row mt-5">
+
+            <!-- move column to central -->
+            <div class="col-lg-8 col-md-8 offset-lg-2">
+                <div class="container">
+
+                    <!-- id -->
+                    <div class="row mb-3">
+                        <!-- label -->
+                        <div class="col-4">
+                            <label class="col-form-label" for="id">ID<small>*</small></label>
+                        </div>
+                        <!-- textbox -->
+                        <div class="col-8">
+                            <input class="form-control" type="text" formControlName="id" id="id" title="Identity"
+                                readonly>
+                        </div>
+                    </div>
+
+                    <!-- Name -->
+                    <div class="row mb-3">
+                        <!-- label -->
+                        <div class="col-4">
+                            <label class="col-form-label" for="name">Name<small class="text-danger">*</small></label>
+                        </div>
+                        <!-- textbox -->
+                        <div class="col-8">
+                            <input class="form-control" type="text" formControlName="name" placeholder="Team name"
+                                id="name" title="Team name">
+                            <!-- error messages -->
+                            <div class="text-danger" *ngFor="let e of errorMessages.name">
+                                <!-- errors on the "name" field -->
+                                <div *ngIf="teamForm.get('name').hasError(e.type) && 
+                                    (teamForm.get('name').dirty || teamForm.get('name').touched)">
+                                    <small>{{e.message}}</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Assignment method -->
+                    <div class="row mb-3">
+                        <!-- label -->
+                        <div class="col-4">
+                            <label class="col-form-label" for="assignmentMethod">Assignment method<small
+                                    class="text-danger">*</small></label>
+                        </div>
+                        <!-- dropdown -->
+                        <div class="col-8">
+                            <select id="assignmentMethod" class="form-control" formControlName="assignmentMethod"
+                                title="Assignment method">
+                                <option value="A">Auto</option>
+                                <option value="M">Manual</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Supporters -->
+                    <div class="row mb-3">
+
+                        <!-- label -->
+                        <div class="col-4">
+                            <label class="col-form-label" for="supporters">Supporters<small
+                                    class="text-danger">*</small></label>
+                        </div>
+
+                        <!--  -->
+                        <div class="col-8" title="Active supporters">
+                            <!-- dropdown(multi selection) -->
+                            <ng-multiselect-dropdown placeholder="Active supporters" [settings]="supporterSetting"
+                                [data]="activeSupporters" formControlName="supporters" id="supporters">
+                            </ng-multiselect-dropdown>
+                            <!-- error messages -->
+                            <div class="text-danger" *ngFor="let e of errorMessages.supporters">
+                                <!-- errors on the "supporters" field -->
+                                <div *ngIf="teamForm.get('supporters').hasError(e.type) && 
+                                            (teamForm.get('supporters').dirty || teamForm.get('supporters').touched) ">
+                                    <small>{{e.message}}</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Status -->
+                    <div class="row mb-3">
+                        <!-- label -->
+                        <div class="col-4">
+                            <label class="col-form-label" for="status">Status<small
+                                    class="text-danger">*</small></label>
+                        </div>
+                        <!-- dropdown -->
+                        <div class="col-8">
+                            <select id="status" class="form-control" formControlName="status" title="Team status">
+                                <option value="Active">Active</option>
+                                <option value="Inactive">Inactive</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- buttons -->
+        <div class="d-flex justify-content-center">
+            <div>
+                <!-- the "Save" button -->
+                <!-- if the form values are invalid then disable the "Save" button -->
+                <button type="submit" [disabled]="teamForm.invalid" style="width: 150px" class="btn btn-primary mr-2">
+
+                    <!-- display the spinner icon when press the "Save" button -->
+                    <i *ngIf="showSpinner" class="fas fa-spinner fa-spin"></i>
+                    <!-- Change label button "Save" to "Saving.." -->
+                    <span *ngIf="showSpinner">Saving...</span>
+                    <!-- after save the team then re-changes button name to "Save" -->
+                    <span *ngIf="!showSpinner">Save</span>
+
+                </button>
+
+                <!-- the "Cancel" button -->
+                <!-- re-direct to the "team-list" page -->
+                <button class="btn btn-dark" routerLink="/team-list" style="width: 150px">Cancel</button>
+            </div>
+        </div>
+    </form>
+</div>
