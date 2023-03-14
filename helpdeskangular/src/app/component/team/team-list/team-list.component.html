@@ -1,210 +1,230 @@
 <!-- the "Team list" screen -->
 <div class="container">
 
-    <!-- title -->
-    <div>
-      <h2 style="text-align: center">Team list</h2>
-      <hr width="1080px">
-    </div>
-  
-    <!-- search -->
-    <div class="container">
-  
-      <!-- Search Form -->
-      <form [formGroup]="searchTeam" (ngSubmit)="ngOnInit()">
-  
-        <!--  -->
-        <div class="search row d-flex justify-content-md-end mb-4">
-  
-          <!-- SearchTerm -->
-          <!-- search for: ID, name -->
-          <div class="col-lg-3 col-md-3 form-group" style="text-align: center">
-  
-            <!-- label -->
-            <label for="searchTerm">Search term</label>
-  
-            <!-- textbox -->
-            <input id="searchTerm" class="form-control" type="search" formControlName="searchTerm"
-              placeholder="Search term(id, name)" title="Search term(id, name). Blank means search all IDs, names">
-          </div>
-  
-          <!-- Assignment method -->
-          <div class="col-lg-3 col-md-3 form-group" style="text-align: center">
-  
-            <!-- label -->
-            <label for="assignmentMethod">Assignment method</label>
-  
-            <!-- dropdown -->
-            <select id="assignmentMethod" class="form-control" formControlName="assignmentMethod"
-              title="Assignment method">
-  
-              <option value="">All</option>
-              <!-- Auto -->
-              <option value="A">Auto</option>
-              <!-- Manual -->
-              <option value="M">Manual</option>
-  
-            </select>
-  
-          </div>
-  
-          <!-- Status -->
-          <div class="col-lg-3 col-md-3 form-group" style="text-align: center">
-  
-            <!-- label -->
-            <label for="status">Status</label>
-  
-            <!-- dropdown -->
-            <select id="status" class="form-control" formControlName="status" title="Team status">
-              <option value="">All</option>
-              <option value="Active">Active</option>
-              <option value="Inactive">Inactive</option>
-            </select>
-          </div>
-  
-          <!-- the "Search" button -->
-          <div class="col-lg-3 col-md-3">
-            <!-- break a line(insert a line break(carriage-return)) -->
-            <br>
-            <!-- "Search button" -->
-            <button id="searchButton" class="btn btn-primary mt-xl-2" style="width: 100%">
-              <i class="fa fa-search"></i>
-              Search
-            </button>
-          </div>
+  <!-- title -->
+  <div>
+    <h2 style="text-align: center">Team list</h2>
+    <hr width="1080px">
+  </div>
+
+  <!-- search -->
+  <div class="container">
+
+    <!-- Search Form -->
+    <form [formGroup]="searchTeam" (ngSubmit)="ngOnInit()">
+
+      <!--  -->
+      <div class="search row d-flex justify-content-md-end mb-4">
+
+        <!-- SearchTerm -->
+        <!-- search for: ID, name -->
+        <div class="col-lg-3 col-md-3 form-group" style="text-align: center">
+
+          <!-- label -->
+          <label for="searchTerm">Search term</label>
+
+          <!-- textbox -->
+          <input id="searchTerm" class="form-control" type="search" formControlName="searchTerm"
+            placeholder="Search term(id, name)" tooltip="Search term(id, name).<br> Blank means search all IDs, names"
+            theme="light" placement="bottom" [autoPlacement]="true">
         </div>
-      </form>
-    </div>
-  
-    <!-- the "Create team" button and "There are x teams" message -->
-    <div class="container">
-  
-      <div class="d-flex">
-  
-        <!-- mr-auto: push the "There are x teams" to the right-end -->
-        <div class="mr-auto">
-  
-          <!-- the "Create team" button. -->
-          <!-- when user clicks on the "Create team" button -->
-          <button class="btn btn-primary" routerLink="/team-create"><i class="fa fa-plus"></i>
-            Create team
+
+        <!-- Assignment method -->
+        <div class="col-lg-3 col-md-3 form-group" style="text-align: center">
+
+          <!-- label -->
+          <label for="assignmentMethod">Assignment method</label>
+
+          <!-- dropdown -->
+          <select id="assignmentMethod" class="form-control" formControlName="assignmentMethod"
+            tooltip="Assignment method.<br> 'All' means both 'Auto' and 'Manual'" theme="light" placement="bottom"
+            [autoPlacement]="true">
+
+            <option value="">All</option>
+            <!-- Auto -->
+            <option value="A">Auto</option>
+            <!-- Manual -->
+            <option value="M">Manual</option>
+
+          </select>
+
+        </div>
+
+        <!-- Status -->
+        <div class="col-lg-3 col-md-3 form-group" style="text-align: center">
+
+          <!-- label -->
+          <label for="status">Status</label>
+
+          <!-- dropdown -->
+          <select id="status" class="form-control" formControlName="status"
+            tooltip="Team status.<br> 'All' means both 'Active' and 'Inactive'" theme="light" placement="bottom"
+            [autoPlacement]="true">>
+            <option value="">All</option>
+            <option value="Active">Active</option>
+            <option value="Inactive">Inactive</option>
+          </select>
+        </div>
+
+        <!-- the "Search" button -->
+        <div class="col-lg-3 col-md-3">
+          <!-- break a line(insert a line break(carriage-return)) -->
+          <br>
+          <!-- "Search button" -->
+          <button id="searchButton" class="btn btn-primary mt-xl-2" style="width: 100%" tooltip="Search teams"
+            theme="light" placement="bottom" [autoPlacement]="true">
+            <i class="fa fa-search"></i>
+            Search
           </button>
-  
         </div>
-  
-        <!-- display the number of found teams. -->
-  
-        <!-- if (number of teams) > 1 -->
-        <div *ngIf="totalOfTeams > 1">There are {{totalOfTeams}} teams</div>
-        <!-- if (number of teams) == 1 -->
-        <div *ngIf="totalOfTeams == 1">There is {{totalOfTeams}} team</div>
-        <!-- there is no team -->
-        <div *ngIf="totalOfTeams == 0">There is no team</div>
-  
       </div>
-    </div>
-  
-    <!-- table -->
-    <div class="container">
-  
-      <!-- table -->
-      <table class="table table-hover table-striped table-bordered">
-        <thead>
-          <!-- table header -->
-          <tr class="bg-table-header">
-  
-            <!-- Order -->
-            <!-- scope="col": specifies that the cell is a header for a column -->
-            <th scope="col" style="width: 7%">Ord</th>
-  
-            <th scope="col" style="width: 8%">ID</th>
-            <th scope="col" style="width: 40%">Name</th>
-  
-            <th scope="col" style="width: 20%">Assignment method</th>
-            <th scope="col" style="width: 15%">Status</th>
-            <th scope="col" style="width: 10%">Action</th>
-          </tr>
-        </thead>
-        <tbody style="text-align: center">
-  
-          <tr *ngFor="let team of teams, index as i">
-  
-            <!-- column: order(line number) -->
-            <!-- navigate to the "/team-view/{id}" when user clicks on the table(except the column "Action") -->
-            <td style="text-align: right" class="pointer-link" (click)="viewTeam(team.id)">
-              {{indexBasedPage(currentPage, i)}}</td>
-  
-            <!-- column: ID -->
-            <!-- navigate to the "/team-view/{id}" when user clicks on the table(except the column "Action") -->
-            <td style="text-align: right" class="pointer-link" (click)="viewTeam(team.id)">{{team.id}}</td>
-  
-            <!-- column: Name -->
-            <!-- navigate to the "/team-view/{id}" when user clicks on the table(except the column "Action") -->
-            <td class="pointer-link" (click)="viewTeam(team.id)">{{team.name}}</td>
-  
-            <!-- column: Assignment method -->
-            <!-- navigate to the "/team-view/{id}" when user clicks on the table(except the column "Action") -->
-            <td class="pointer-link" (click)="viewTeam(team.id)">{{team.assignmentMethod}}</td>
-  
-            <!-- column: Status -->
-            <!-- navigate to the "/team-view/{id}" when user clicks on the table(except the column "Action") -->
-            <td class="pointer-link" (click)="viewTeam(team.id)">{{team.status}}</td>
-  
-            <!-- the "Edit" button -->
-            <td class="text-center">
-              <a class="btn btn-primary mr-1" [routerLink]="['/team-edit', team.id]"><i class="fa fa-edit"></i></a>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-  
-    <!-- pagination -->
-  
-    <!-- only display the pagination when totalPages > 0 -->
-    <div class="container mt-3" *ngIf="totalPages > 0">
-      <nav aria-label="Page navigation">
-        <ul class="pagination d-flex justify-content-md-end justify-content-center">
-  
-          <!-- move to the "first page" -->
-          <li class="page-item"><button class="page-link" (click)="moveFirst()" [disabled]="currentPage==1">First</button>
-          </li>
-  
-          <!-- move to the "previous page" -->
-          <li class="page-item"><button class="page-link" (click)="movePrevious()"
-              [disabled]="currentPage==1">Previous</button></li>
-  
-          <!--  -->
-          <li class="page-item col-md-1 col-2 px-0">
-            <div class="input-group">
-              <!-- textbox to input the Page number -->
-              <!-- rounded-0: have no round at corners -->
-              <input type="number" min="1" [max]="totalPages" class="form-control rounded-0"
-                aria-describedby="basic-addon1" [value]="currentPage" (change)="changePageNumber($any($event.target).value)"
-                title="Current page">
-              <!-- total pages -->
-              <div class="input-group-prepend">
-                <span class="input-group-text" id="basic-addon1" title="Total pages">/{{totalPages}}</span>
-              </div>
-            </div>
-          </li>
-  
-          <!-- the "Go" button -->
-          <!-- rounded-0: have no round at corners -->
-          <li class="page-item">
-            <button class="btn btn-primary rounded-0" (click)="goPage()"
-              onmouseover="this.style.cursor='pointer'">Go</button>
-          </li>
-  
-          <!-- the "Next" button -->
-          <li class="page-item"><button class="page-link" (click)="moveNext()"
-              [disabled]="currentPage==totalPages">Next</button></li>
-  
-          <!-- the "Last" button -->
-          <li class="page-item"><button class="page-link" (click)="moveLast()"
-              [disabled]="currentPage==totalPages">Last</button></li>
-  
-        </ul>
-      </nav>
+    </form>
+  </div>
+
+  <!-- the "Create team" button and "There are x teams" message -->
+  <div class="container">
+
+    <div class="d-flex">
+
+      <!-- mr-auto: push the "There are x teams" to the right-end -->
+      <div class="mr-auto">
+
+        <!-- the "Create team" button. -->
+        <!-- when user clicks on the "Create team" button -->
+        <button class="btn btn-primary" routerLink="/team-create" tooltip="Navigate to the 'Create team' screen"
+          theme="light" placement="right" [autoPlacement]="true"><i class="fa fa-plus"></i>
+          Create team
+        </button>
+
+      </div>
+
+      <!-- display the number of found teams. -->
+
+      <!-- if (number of teams) > 1 -->
+      <div *ngIf="totalOfTeams > 1" tooltip="Number of teams found" theme="light" placement="left"
+        [autoPlacement]="true">There
+        are {{totalOfTeams}} teams</div>
+      <!-- if (number of teams) == 1 -->
+      <div *ngIf="totalOfTeams == 1" tooltip="Number of teams found" theme="light" placement="left"
+        [autoPlacement]="true">There is {{totalOfTeams}} team</div>
+      <!-- there is no team -->
+      <div *ngIf="totalOfTeams == 0" tooltip="There is no team found" theme="light" placement="left"
+        [autoPlacement]="true">There is no team</div>
+
     </div>
   </div>
+
+  <!-- table -->
+  <div class="container">
+
+    <!-- table -->
+    <table class="table table-hover table-striped table-bordered">
+      <thead>
+        <!-- table header -->
+        <tr class="bg-table-header">
+
+          <!-- Order -->
+          <!-- scope="col": specifies that the cell is a header for a column -->
+          <th scope="col" style="width: 7%" tooltip="Order" theme="light" placement="bottom" [autoPlacement]="true">Ord
+          </th>
+
+          <th scope="col" style="width: 8%" tooltip="Identity" theme="light" placement="bottom" [autoPlacement]="true">
+            ID</th>
+          <th scope="col" style="width: 40%" tooltip="Team name" theme="light" placement="bottom"
+            [autoPlacement]="true">Name</th>
+
+          <th scope="col" style="width: 20%" tooltip="Assignment method" theme="light" placement="bottom"
+            [autoPlacement]="true">Assignment method</th>
+          <th scope="col" style="width: 15%" tooltip="Team status" theme="light" placement="bottom"
+            [autoPlacement]="true">Status</th>
+          <th scope="col" style="width: 10%" tooltip="Edit team" theme="light" placement="bottom"
+            [autoPlacement]="true">Action</th>
+        </tr>
+      </thead>
+      <tbody style="text-align: center">
+
+        <tr *ngFor="let team of teams, index as i">
+
+          <!-- column: order(line number) -->
+          <!-- navigate to the "/team-view/{id}" when user clicks on the table(except the column "Action") -->
+          <td style="text-align: right" class="pointer-link" (click)="viewTeam(team.id)">
+            {{indexBasedPage(currentPage, i)}}</td>
+
+          <!-- column: ID -->
+          <!-- navigate to the "/team-view/{id}" when user clicks on the table(except the column "Action") -->
+          <td style="text-align: right" class="pointer-link" (click)="viewTeam(team.id)">{{team.id}}</td>
+
+          <!-- column: Name -->
+          <!-- navigate to the "/team-view/{id}" when user clicks on the table(except the column "Action") -->
+          <td class="pointer-link" (click)="viewTeam(team.id)">{{team.name}}</td>
+
+          <!-- column: Assignment method -->
+          <!-- navigate to the "/team-view/{id}" when user clicks on the table(except the column "Action") -->
+          <td class="pointer-link" (click)="viewTeam(team.id)">{{team.assignmentMethod}}</td>
+
+          <!-- column: Status -->
+          <!-- navigate to the "/team-view/{id}" when user clicks on the table(except the column "Action") -->
+          <td class="pointer-link" (click)="viewTeam(team.id)">{{team.status}}</td>
+
+          <!-- the "Edit" button -->
+          <td class="text-center">
+            <a class="btn btn-primary mr-1" [routerLink]="['/team-edit', team.id]" tooltip="Edit team" theme="light"
+              placement="right" [autoPlacement]="true"><i class="fa fa-edit"></i></a>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- pagination -->
+
+  <!-- only display the pagination when totalPages > 0 -->
+  <div class="container mt-3" *ngIf="totalPages > 0">
+    <nav aria-label="Page navigation">
+      <ul class="pagination d-flex justify-content-md-end justify-content-center">
+
+        <!-- move to the "first page" -->
+        <li class="page-item"><button class="page-link" (click)="moveFirst()" [disabled]="currentPage==1"
+            tooltip="Go to the first page" theme="light" placement="bottom" [autoPlacement]="true">First</button>
+        </li>
+
+        <!-- move to the "previous page" -->
+        <li class="page-item"><button class="page-link" (click)="movePrevious()" [disabled]="currentPage==1"
+            tooltip="Go to previous page" theme="light" placement="bottom" [autoPlacement]="true">Previous</button></li>
+
+        <!--  -->
+        <li class="page-item col-md-1 col-2 px-0">
+          <div class="input-group">
+            <!-- textbox to input the Page number -->
+            <!-- rounded-0: have no round at corners -->
+            <input type="number" min="1" [max]="totalPages" class="form-control rounded-0"
+              aria-describedby="basic-addon1" [value]="currentPage"
+              (change)="changePageNumber($any($event.target).value)" tooltip="Current page" theme="light"
+              placement="bottom" [autoPlacement]="true">
+            <!-- total pages -->
+            <div class="input-group-prepend">
+              <span class="input-group-text" id="basic-addon1" tooltip="Total pages" theme="light" placement="bottom"
+                [autoPlacement]="true">/{{totalPages}}</span>
+            </div>
+          </div>
+        </li>
+
+        <!-- the "Go" button -->
+        <!-- rounded-0: have no round at corners -->
+        <li class="page-item">
+          <button class="btn btn-primary rounded-0" (click)="goPage()" onmouseover="this.style.cursor='pointer'"
+            tooltip="Go to specific page" theme="light" placement="bottom" [autoPlacement]="true">Go</button>
+        </li>
+
+        <!-- the "Next" button -->
+        <li class="page-item"><button class="page-link" (click)="moveNext()" [disabled]="currentPage==totalPages"
+            tooltip="Go to next page" theme="light" placement="bottom" [autoPlacement]="true">Next</button></li>
+
+        <!-- the "Last" button -->
+        <li class="page-item"><button class="page-link" (click)="moveLast()" [disabled]="currentPage==totalPages"
+            tooltip="Go to the last page" theme="light" placement="bottom" [autoPlacement]="true">Last</button></li>
+
+      </ul>
+    </nav>
+  </div>
+</div>

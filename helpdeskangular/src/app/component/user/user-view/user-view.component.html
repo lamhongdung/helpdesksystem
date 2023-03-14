@@ -20,7 +20,8 @@
                         </div>
                         <!-- textbox -->
                         <div class="col-8">
-                            <input class="form-control" type="id" formControlName="id" id="id" title="Identity" readonly>
+                            <input class="form-control" type="id" formControlName="id" id="id" tooltip="Identity"
+                                theme="light" placement="bottom" [autoPlacement]="true" readonly>
                         </div>
                     </div>
 
@@ -32,7 +33,8 @@
                         </div>
                         <!-- textbox -->
                         <div class="col-8">
-                            <input class="form-control" type="email" formControlName="email" id="email" title="Email" readonly>
+                            <input class="form-control" type="email" formControlName="email" id="email" tooltip="Email"
+                                theme="light" placement="bottom" [autoPlacement]="true" readonly>
                         </div>
                     </div>
 
@@ -45,7 +47,8 @@
                         <!-- textbox -->
                         <div class="col-8">
                             <input class="form-control" type="text" formControlName="firstName" placeholder="First name"
-                                id="firstName" title="First name" readonly>
+                                id="firstName" tooltip="First name" theme="light" placement="bottom"
+                                [autoPlacement]="true" readonly>
                         </div>
                     </div>
 
@@ -58,7 +61,8 @@
                         <!-- textbox -->
                         <div class="col-8">
                             <input class="form-control" type="text" formControlName="lastName" placeholder="Last name"
-                                id="lastName" title="Last name" readonly>
+                                id="lastName" tooltip="Last name" theme="light" placement="bottom"
+                                [autoPlacement]="true" readonly>
                         </div>
                     </div>
 
@@ -78,7 +82,8 @@
                         <!-- textbox -->
                         <div class="col-8">
                             <input class="form-control" type="text" formControlName="phone"
-                                placeholder="ex: 0986111222(10 digits)" id="phone" title="Phone number" readonly>
+                                placeholder="ex: 0986111222(10 digits)" id="phone" tooltip="Phone number" theme="light"
+                                placement="bottom" [autoPlacement]="true" readonly>
                         </div>
                     </div>
 
@@ -91,7 +96,8 @@
                         <!-- textbox -->
                         <div class="col-8">
                             <input class="form-control" type="text" formControlName="address" id="address"
-                                placeholder="Address" title="Address" readonly>
+                                placeholder="Address" tooltip="Address" theme="light" placement="bottom"
+                                [autoPlacement]="true" readonly>
                         </div>
                     </div>
 
@@ -102,8 +108,8 @@
                             <label class="col-form-label" for="role">Role<small>*</small></label>
                         </div>
                         <!-- dropdown -->
-                        <div class="col-8">
-                            <select id="role" class="form-control" formControlName="role" placeholder="Role" title="User role">
+                        <div class="col-8" tooltip="User role" theme="light" placement="bottom" [autoPlacement]="true">
+                            <select id="role" class="form-control" formControlName="role" placeholder="Role">
                                 <option value="ROLE_CUSTOMER">ROLE_CUSTOMER</option>
                                 <option value="ROLE_SUPPORTER">ROLE_SUPPORTER</option>
                                 <option value="ROLE_ADMIN">ROLE_ADMIN</option>
@@ -118,8 +124,9 @@
                             <label class="col-form-label" for="status">Status<small>*</small></label>
                         </div>
                         <!-- dropdown -->
-                        <div class="col-8">
-                            <select id="status" class="form-control" formControlName="status" placeholder="Status" title="User status">
+                        <div class="col-8" tooltip="User status" theme="light" placement="bottom"
+                            [autoPlacement]="true">
+                            <select id="status" class="form-control" formControlName="status" placeholder="Status">
                                 <option value="Active">Active</option>
                                 <option value="Inactive">Inactive</option>
                             </select>
@@ -133,7 +140,9 @@
         <div class="d-flex justify-content-center">
             <div>
                 <!-- the "Close" button -->
-                <button class="btn btn-primary" routerLink="/user-list" style="width: 150px">Close</button>
+                <button class="btn btn-primary" routerLink="/user-list" style="width: 150px"
+                    tooltip="Close and redirect to the 'User list' screen" theme="light" placement="bottom"
+                    [autoPlacement]="true">Close</button>
             </div>
         </div>
     </form>

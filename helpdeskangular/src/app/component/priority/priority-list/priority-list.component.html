@@ -25,7 +25,9 @@
                     <label for="searchTerm">Search term</label>
                     <!-- textbox -->
                     <input id="searchTerm" class="form-control" type="search" formControlName="searchTerm"
-                        placeholder="Search term(id, name)" title="Search term(id, name). Blank is search all IDs and names">
+                        placeholder="Search term(id, name)"
+                        tooltip="Search term(id, name).<br> Blank is search all IDs and names" theme="light"
+                        placement="bottom" [autoPlacement]="true">
                 </div>
 
                 <!-- ResolveIn -->
@@ -36,7 +38,8 @@
                     <!-- input group -->
                     <div class="input-group-prepend">
                         <!-- dropdown: ResolveInOpt(Resolve In Operator) -->
-                        <select class="custom-select rounded-0" formControlName="resolveInOpt" title="Operator">
+                        <select class="custom-select rounded-0" formControlName="resolveInOpt" tooltip="Operator"
+                            theme="light" placement="bottom" [autoPlacement]="true">
                             <!-- >=(greater than or equal to) -->
                             <option value="gt">&gt;=</option>
                             <!-- =(equal) -->
@@ -46,7 +49,8 @@
                         </select>
                         <!-- textbox: ResolveIn -->
                         <input type="number" min="0" class="form-control rounded-0" formControlName="resolveIn"
-                            id="resolveIn" title="Number of hours to resolve a ticket">
+                            id="resolveIn" tooltip="Number of hours to resolve a ticket" theme="light"
+                            placement="bottom" [autoPlacement]="true">
                     </div>
                     <!-- error messages -->
                     <div class="text-danger" *ngFor="let e of errorMessages.resolveIn">
@@ -65,7 +69,8 @@
                     <label for="status">Status</label>
                     <!-- dropdown -->
                     <select id="status" class="form-control" formControlName="status"
-                        title="Priority status">
+                        tooltip="Priority status. <br> 'All' means both 'Active' and 'Inactive'" theme="light"
+                        placement="bottom" [autoPlacement]="true">
                         <option value="">All</option>
                         <option value="Active">Active</option>
                         <option value="Inactive">Inactive</option>
@@ -78,7 +83,8 @@
                     <br>
                     <!-- "Search button" -->
                     <button id="searchButton" class="btn btn-primary mt-xl-2" style="width: 100%"
-                        [disabled]="searchPriority.invalid">
+                        [disabled]="searchPriority.invalid" tooltip="Search priorities" theme="light" placement="bottom"
+                        [autoPlacement]="true">
                         <i class="fa fa-search"></i>
                         Search
                     </button>
@@ -97,7 +103,9 @@
 
                 <!-- the "Create priority" button. -->
                 <!-- when user clicks on the "Create priority" button -->
-                <button class="btn btn-primary" routerLink="/priority-create"><i class="fa fa-plus"></i>
+                <button class="btn btn-primary" routerLink="/priority-create"
+                    tooltip="Navigate to the 'Create priority' screen" theme="light" placement="right"
+                    [autoPlacement]="true"><i class="fa fa-plus"></i>
                     Create priority
                 </button>
 
@@ -106,12 +114,15 @@
             <!-- display the number of priorities found -->
 
             <!-- if (number of priorities) > 1 -->
-            <div *ngIf="totalOfPriorities > 1">There are {{totalOfPriorities}} priorities</div>
+            <div *ngIf="totalOfPriorities > 1" tooltip="Number of priorities found" theme="light" placement="left"
+                [autoPlacement]="true">There are {{totalOfPriorities}} priorities</div>
             <!-- if (number of priorities) == 1 -->
-            <div *ngIf="totalOfPriorities == 1">There is {{totalOfPriorities}} priority
+            <div *ngIf="totalOfPriorities == 1" tooltip="Number of priorities found" theme="light" placement="left"
+                [autoPlacement]="true">There is {{totalOfPriorities}} priority
             </div>
             <!-- there is no priority -->
-            <div *ngIf="totalOfPriorities == 0">There is no priority</div>
+            <div *ngIf="totalOfPriorities == 0" tooltip="There is no priority found" theme="light" placement="left"
+                [autoPlacement]="true">There is no priority</div>
         </div>
 
     </div>
@@ -127,14 +138,20 @@
 
                     <!-- Order -->
                     <!-- scope="col": specifies that the cell is a header for a column -->
-                    <th scope="col" style="width: 10%">Ord</th>
+                    <th scope="col" style="width: 10%" tooltip="Order" theme="light" placement="bottom"
+                        [autoPlacement]="true">Ord</th>
 
-                    <th scope="col" style="width: 10%">ID</th>
-                    <th scope="col" style="width: 40%">Name</th>
+                    <th scope="col" style="width: 10%" tooltip="Identity" theme="light" placement="bottom"
+                        [autoPlacement]="true">ID</th>
+                    <th scope="col" style="width: 40%" tooltip="Priority name" theme="light" placement="bottom"
+                        [autoPlacement]="true">Name</th>
 
-                    <th scope="col" style="width: 20%">Resolve In(hours)</th>
-                    <th scope="col" style="width: 10%">Status</th>
-                    <th scope="col" style="width: 10%">Action</th>
+                    <th scope="col" style="width: 20%" tooltip="Number of hours to resolve a ticket" theme="light"
+                        placement="bottom" [autoPlacement]="true">Resolve In(hours)</th>
+                    <th scope="col" style="width: 10%" tooltip="Priority status" theme="light" placement="bottom"
+                        [autoPlacement]="true">Status</th>
+                    <th scope="col" style="width: 10%" tooltip="Edit priority" theme="light" placement="bottom"
+                        [autoPlacement]="true">Action</th>
                 </tr>
             </thead>
 
@@ -167,7 +184,8 @@
 
                     <!-- the "Edit" button -->
                     <td class="text-center">
-                        <a class="btn btn-primary mr-1" [routerLink]="['/priority-edit', priority.id]"><i
+                        <a class="btn btn-primary mr-1" [routerLink]="['/priority-edit', priority.id]"
+                            tooltip="Edit priority" theme="light" placement="right" [autoPlacement]="true"><i
                                 class="fa fa-edit"></i></a>
                     </td>
                 </tr>
@@ -184,13 +202,15 @@
             <ul class="pagination d-flex justify-content-md-end justify-content-center">
 
                 <!-- move to the "first page" -->
-                <li class="page-item"><button class="page-link" (click)="moveFirst()"
-                        [disabled]="currentPage==1">First</button>
+                <li class="page-item"><button class="page-link" (click)="moveFirst()" [disabled]="currentPage==1"
+                        tooltip="Go to the first page" theme="light" placement="bottom"
+                        [autoPlacement]="true">First</button>
                 </li>
 
                 <!-- move to the "previous page" -->
-                <li class="page-item"><button class="page-link" (click)="movePrevious()"
-                        [disabled]="currentPage==1">Previous</button></li>
+                <li class="page-item"><button class="page-link" (click)="movePrevious()" [disabled]="currentPage==1"
+                        tooltip="Go to previous page" theme="light" placement="bottom"
+                        [autoPlacement]="true">Previous</button></li>
 
                 <!--  -->
                 <li class="page-item col-md-1 col-2 px-0">
@@ -199,10 +219,12 @@
                         <!-- rounded-0: have no round at corners -->
                         <input type="number" min="1" [max]="totalPages" class="form-control rounded-0"
                             aria-describedby="basic-addon1" [value]="currentPage"
-                            (change)="changePageNumber($any($event.target).value)" title="current page">
+                            (change)="changePageNumber($any($event.target).value)" tooltip="Current page" theme="light"
+                            placement="bottom" [autoPlacement]="true">
                         <!-- total pages -->
                         <div class="input-group-prepend">
-                            <span class="input-group-text" id="basic-addon1" title="Total pages">/{{totalPages}}</span>
+                            <span class="input-group-text" id="basic-addon1" tooltip="Total pages" theme="light"
+                                placement="bottom" [autoPlacement]="true">/{{totalPages}}</span>
                         </div>
                     </div>
                 </li>
@@ -211,16 +233,19 @@
                 <!-- rounded-0: have no round at corners -->
                 <li class="page-item">
                     <button class="btn btn-primary rounded-0" (click)="goPage()"
-                        onmouseover="this.style.cursor='pointer'">Go</button>
+                        onmouseover="this.style.cursor='pointer'" tooltip="Go to specific page" theme="light"
+                        placement="bottom" [autoPlacement]="true">Go</button>
                 </li>
 
                 <!-- the "Next" button -->
                 <li class="page-item"><button class="page-link" (click)="moveNext()"
-                        [disabled]="currentPage==totalPages">Next</button></li>
+                        [disabled]="currentPage==totalPages" tooltip="Go to next page" theme="light" placement="bottom"
+                        [autoPlacement]="true">Next</button></li>
 
                 <!-- the "Last" button -->
                 <li class="page-item"><button class="page-link" (click)="moveLast()"
-                        [disabled]="currentPage==totalPages">Last</button></li>
+                        [disabled]="currentPage==totalPages" tooltip="Go to the last page" theme="light"
+                        placement="bottom" [autoPlacement]="true">Last</button></li>
 
             </ul>
         </nav>

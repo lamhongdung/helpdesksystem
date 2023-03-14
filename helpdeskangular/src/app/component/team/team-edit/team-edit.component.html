@@ -24,8 +24,8 @@
                         </div>
                         <!-- textbox -->
                         <div class="col-9">
-                            <input class="form-control" type="text" formControlName="id" id="id" title="Identity"
-                                readonly>
+                            <input class="form-control" type="text" formControlName="id" id="id" tooltip="Identity"
+                                theme="light" placement="right" [autoPlacement]="true" readonly>
                         </div>
                     </div>
 
@@ -38,7 +38,7 @@
                         <!-- textbox -->
                         <div class="col-9">
                             <input class="form-control" type="text" formControlName="name" placeholder="Team name"
-                                id="name" title="Team name">
+                                id="name" tooltip="Team name" theme="light" placement="right" [autoPlacement]="true">
                             <!-- error messages -->
                             <div class="text-danger" *ngFor="let e of errorMessages.name">
                                 <!-- errors on the "name" field -->
@@ -60,7 +60,8 @@
                         <!-- dropdown -->
                         <div class="col-9">
                             <select id="assignmentMethod" class="form-control" formControlName="assignmentMethod"
-                                title="Assignment method">
+                                tooltip="Assignment method. <br>- <b>Auto</b>: auto assign supporter to ticket. <br>-<b>Manual</b>: assign ticket to supporter manually"
+                                theme="light" placement="right" [autoPlacement]="true">
                                 <option value="A">Auto</option>
                                 <option value="M">Manual</option>
                             </select>
@@ -80,7 +81,9 @@
                         <div class="col-9" title="Active supporters">
                             <!-- dropdown(multi selection) -->
                             <ng-multiselect-dropdown placeholder="Active supporters" [settings]="supporterSetting"
-                                [data]="activeSupporters" formControlName="supporters" id="supporters">
+                                [data]="activeSupporters" formControlName="supporters" id="supporters"
+                                tooltip="Assign active supporters to team.<br> Values includes 'id' + 'last name' + 'first name' + 'email'"
+                                theme="light" placement="right" [autoPlacement]="true">
                             </ng-multiselect-dropdown>
                             <!-- error messages -->
                             <div class="text-danger" *ngFor="let e of errorMessages.supporters">
@@ -102,7 +105,8 @@
                         </div>
                         <!-- dropdown -->
                         <div class="col-9">
-                            <select id="status" class="form-control" formControlName="status" title="Team status">
+                            <select id="status" class="form-control" formControlName="status" tooltip="Team status"
+                                theme="light" placement="right" [autoPlacement]="true">
                                 <option value="Active">Active</option>
                                 <option value="Inactive">Inactive</option>
                             </select>
@@ -117,7 +121,8 @@
             <div>
                 <!-- the "Save" button -->
                 <!-- if the form values are invalid then disable the "Save" button -->
-                <button type="submit" [disabled]="teamForm.invalid" style="width: 150px" class="btn btn-primary mr-2">
+                <button type="submit" [disabled]="teamForm.invalid" style="width: 150px" class="btn btn-primary mr-2"
+                    tooltip="Save team" theme="light" placement="bottom" [autoPlacement]="true">
 
                     <!-- display the spinner icon when press the "Save" button -->
                     <i *ngIf="showSpinner" class="fas fa-spinner fa-spin"></i>
@@ -130,7 +135,9 @@
 
                 <!-- the "Cancel" button -->
                 <!-- re-direct to the "team-list" page -->
-                <button class="btn btn-dark" routerLink="/team-list" style="width: 150px">Cancel</button>
+                <button class="btn btn-dark" routerLink="/team-list" style="width: 150px"
+                    tooltip="Cancel and redirect to the 'Team list' screen" theme="light" placement="bottom"
+                    [autoPlacement]="true">Cancel</button>
             </div>
         </div>
     </form>

@@ -27,7 +27,8 @@
                         <!-- textbox -->
                         <div class="col-9">
                             <input class="form-control" type="text" formControlName="name" placeholder="Category name"
-                                id="name" title="Category name">
+                                id="name" tooltip="Category name" theme="light" placement="right"
+                                [autoPlacement]="true">
                             <!-- error messages -->
                             <div class="text-danger" *ngFor="let e of errorMessages.name">
                                 <!-- errors on the "name" field -->
@@ -51,7 +52,8 @@
                         <!-- dropdown -->
                         <div class="col-9">
                             <!-- default value = "Active"(is set in the typescript code) -->
-                            <select id="status" class="form-control" formControlName="status" title="Category status">
+                            <select id="status" class="form-control" formControlName="status" tooltip="Category status"
+                                theme="light" placement="right" [autoPlacement]="true">
                                 <option value="Active">Active</option>
                                 <option value="Inactive">Inactive</option>
                             </select>
@@ -67,7 +69,8 @@
                 <!-- the "Save" button -->
                 <!-- if the form values are invalid then disable the "Save" button -->
                 <button type="submit" [disabled]="categoryForm.invalid" style="width: 150px"
-                    class="btn btn-primary mr-2">
+                    class="btn btn-primary mr-2" tooltip="Save category" theme="light" placement="bottom"
+                    [autoPlacement]="true">
 
                     <!-- display the spinner icon when press the "Save" button -->
                     <i *ngIf="showSpinner" class="fas fa-spinner fa-spin"></i>
@@ -80,7 +83,9 @@
 
                 <!-- the "Cancel" button -->
                 <!-- re-direct to the "category-list" page -->
-                <button class="btn btn-dark" routerLink="/category-list" style="width: 150px">Cancel</button>
+                <button class="btn btn-dark" routerLink="/category-list" style="width: 150px"
+                    tooltip="Cancel and redirect to the 'Category list' screen" theme="light" placement="bottom"
+                    [autoPlacement]="true">Cancel</button>
             </div>
         </div>
     </form>

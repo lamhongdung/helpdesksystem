@@ -1,219 +1,240 @@
 <!-- the" User list" screen -->
 <div class="container">
-    <!-- title -->
-    <div>
-      <h2 style="text-align: center">User list</h2>
-      <hr width="1080px">
-    </div>
-  
-    <!-- Search -->
-    <div class="container">
-  
-      <!-- Search form -->
-      <form [formGroup]="searchUser" (ngSubmit)="ngOnInit()">
-  
-        <!--  -->
-        <div class="search row d-flex justify-content-md-end mb-4">
-  
-          <!-- SearchTerm -->
-          <!-- search for: ID, email, firstName, lastName and phone -->
-          <div class="col-lg-5 col-md-5 form-group" style="text-align: center">
-            <!-- label -->
-            <label for="searchTerm">Search term</label>
-            <!-- textbox -->
-            <input id="searchTerm" class="form-control" type="search" formControlName="searchTerm"
-              placeholder="Search term(id, email, first name, last name, phone)"
-              title="Search term(id, email, first name, last name, phone)">
-          </div>
-  
-          <!-- Role -->
-          <div class="col-xl-3 col-md-3 form-group" style="text-align: center">
-            <!-- label -->
-            <label for="role">Role</label>
-            <!-- dropdown -->
-            <select id="role" class="form-control" formControlName="role" placeholder="Role" title="User role">
-              <option value="">All</option>
-              <option value="ROLE_CUSTOMER">ROLE_CUSTOMER</option>
-              <option value="ROLE_SUPPORTER">ROLE_SUPPORTER</option>
-              <option value="ROLE_ADMIN">ROLE_ADMIN</option>
-            </select>
-          </div>
-  
-          <!-- Status -->
-          <div class="col-lg-2 col-md-2 form-group" style="text-align: center">
-            <!-- label -->
-            <label for="status">Status</label>
-            <!-- dropdown -->
-            <select id="status" class="form-control" formControlName="status" title="User status">
-              <option value="">All</option>
-              <option value="Active">Active</option>
-              <option value="Inactive">Inactive</option>
-            </select>
-          </div>
-  
-          <!-- the "Search" button -->
-          <div class="col-lg-2 col-md-2">
-            <!-- break a line(insert a line break(carriage-return)) -->
-            <br>
-            <!-- "Search button" -->
-            <button id="searchButton" class="btn btn-primary mt-xl-2" style="width: 100%">
-              <i class="fa fa-search"></i>
-              Search
-            </button>
-          </div>
-        </div>
-      </form>
-    </div>
-  
-    <!-- the "Create user" button and "There are x users" message -->
-    <div class="container">
-  
-      <div class="d-flex">
-  
-        <!-- mr-auto: push the "There are x users" to the right-end -->
-        <div class="mr-auto">
-  
-          <!-- the "Create user" button. -->
-          <!-- when user clicks on the "Create user" button -->
-          <button class="btn btn-primary" routerLink="/user-create"><i class="fa fa-plus"></i>
-            Create user
-          </button>
-  
-        </div>
-  
-        <!-- display the number of users found -->
-  
-        <!-- if (number of users) > 1 -->
-        <div *ngIf="totalOfUsers > 1">There are {{totalOfUsers}} users</div>
-        <!-- if (number of users) == 1 -->
-        <div *ngIf="totalOfUsers == 1">There is {{totalOfUsers}} user</div>
-        <!-- there is no user -->
-        <div *ngIf="totalOfUsers == 0">There is no user</div>
-  
-      </div>
-  
-    </div>
-  
-    <!-- table -->
-    <div class="container">
-  
-      <!-- <table class="table table-hover table-bordered"> -->
-      <table class="table table-hover table-striped table-bordered">
-        <!-- table header -->
-        <thead>
-          <tr class="bg-table-header">
-  
-            <!-- Order -->
-            <!-- scope="col": specifies that the cell is a header for a column -->
-            <th scope="col" style="width: 5%">Ord</th>
-            <th scope="col" style="width: 5%">ID</th>
-            <th scope="col" style="width: 20%">Email</th>
-            <th scope="col" style="width: 20%">First name</th>
-  
-            <th scope="col" style="width: 13%">Last name</th>
-            <th scope="col" style="width: 10%">Phone</th>
-            <th scope="col" style="width: 10%">Role</th>
-            <th scope="col" style="width: 7%">Status</th>
-            <th scope="col" style="width: 10%">Action</th>
-          </tr>
-        </thead>
-  
-        <!-- table body -->
-        <tbody style="text-align: center">
-  
-          <tr *ngFor="let user of users,index as i">
-  
-            <!-- column: order(line number) -->
-            <!-- if user clicks on the table(except the Action) then  -->
-            <!-- navigate to the "/user-view/{id}" when user clicks on the table(except the column "Action") -->
-            <td style="text-align: right" class="pointer-link" (click)="viewUser(user.id)">{{indexBasedPage(currentPage,
-              i)}}</td>
-  
-            <!-- column: ID -->
-            <!-- navigate to the "/user-view/{id}" when user clicks on the table(except the column "Action") -->
-            <td style="text-align: right" class="pointer-link" (click)="viewUser(user.id)">{{user.id}}</td>
-  
-            <!-- column: Email -->
-            <!-- navigate to the "/user-view/{id}" when user clicks on the table(except the column "Action") -->
-            <td class="pointer-link" (click)="viewUser(user.id)">{{user.email}}</td>
-  
-            <!-- column: First name -->
-            <!-- navigate to the "/user-view/{id}" when user clicks on the table(except the column "Action") -->
-            <td class="pointer-link" (click)="viewUser(user.id)">{{user.firstName}}</td>
-  
-            <!-- column: Last name -->
-            <!-- navigate to the "/user-view/{id}" when user clicks on the table(except the column "Action") -->
-            <td class="pointer-link" (click)="viewUser(user.id)">{{user.lastName}}</td>
-  
-            <!-- column: Phone -->
-            <!-- navigate to the "/user-view/{id}" when user clicks on the table(except the column "Action") -->
-            <td class="pointer-link" (click)="viewUser(user.id)">{{user.phone}}</td>
-  
-            <!-- column: Role -->
-            <!-- navigate to the "/user-view/{id}" when user clicks on the table(except the column "Action") -->
-            <td class="pointer-link" (click)="viewUser(user.id)">{{user.role}}</td>
-  
-            <!-- column: Status -->
-            <!-- navigate to the "/user-view/{id}" when user clicks on the table(except the column "Action") -->
-            <td class="pointer-link" (click)="viewUser(user.id)">{{user.status}}</td>
-  
-            <!-- the "Edit" button -->
-            <td class="text-center">
-              <a class="btn btn-primary mr-1" [routerLink]="['/user-edit', user.id]"><i class="fa fa-edit"></i></a>
-            </td>
-  
-          </tr>
-        </tbody>
-      </table>
-    </div>
-  
-    <!-- pagination -->
-    <!-- only display the pagination when totalPages > 0 -->
-    <div class="container mt-3" *ngIf="totalPages > 0">
-  
-      <nav aria-label="Page navigation">
-        <ul class="pagination d-flex justify-content-md-end justify-content-center">
-  
-          <!-- move to the "first page" -->
-          <li class="page-item"><button class="page-link" (click)="moveFirst()" [disabled]="currentPage==1">First</button>
-          </li>
-  
-          <!-- move to the "previous page" -->
-          <li class="page-item"><button class="page-link" (click)="movePrevious()"
-              [disabled]="currentPage==1">Previous</button></li>
-  
-          <!--  -->
-          <li class="page-item col-md-1 col-2 px-0">
-            <div class="input-group">
-  
-              <!-- textbox to input the Page number -->
-              <!-- rounded-0: have no round at corners -->
-              <input type="number" min="1" [max]="totalPages" class="form-control rounded-0"
-                aria-describedby="basic-addon1" [value]="currentPage"
-                (change)="indexPaginationChange($any($event.target).value)" title="Current page">
-  
-              <!-- total pages -->
-              <div class="input-group-prepend">
-                <span class="input-group-text" id="basic-addon1" title="Total pages">/{{totalPages}}</span>
-              </div>
-            </div>
-          </li>
-  
-          <!-- the "Go" button -->
-          <!-- rounded-0: have no round at corners -->
-          <li class="page-item">
-            <button class="btn btn-primary rounded-0" (click)="goPage()"
-              onmouseover="this.style.cursor='pointer'">Go</button>
-          </li>
-  
-          <!-- the "Next" button -->
-          <li class="page-item"><button class="page-link" (click)="moveNext()"
-              [disabled]="currentPage==totalPages">Next</button></li>
-  
-          <!-- the "Last" button -->
-          <li class="page-item"><button class="page-link" (click)="moveLast()"
-              [disabled]="currentPage==totalPages">Last</button></li>
-        </ul>
-      </nav>
-    </div>
+  <!-- title -->
+  <div>
+    <h2 style="text-align: center">User list</h2>
+    <hr width="1080px">
   </div>
+
+  <!-- Search -->
+  <div class="container">
+
+    <!-- Search form -->
+    <form [formGroup]="searchUser" (ngSubmit)="ngOnInit()">
+
+      <!--  -->
+      <div class="search row d-flex justify-content-md-end mb-4">
+
+        <!-- SearchTerm -->
+        <!-- search for: ID, email, firstName, lastName and phone -->
+        <div class="col-lg-5 col-md-5 form-group" style="text-align: center">
+          <!-- label -->
+          <label for="searchTerm">Search term</label>
+          <!-- textbox -->
+          <input id="searchTerm" class="form-control" type="search" formControlName="searchTerm"
+            placeholder="Search term(id, email, first name, last name, phone)"
+            tooltip="Search term(id, email, first name, last name, phone)" theme="light" placement="bottom"
+            [autoPlacement]="true">
+        </div>
+
+        <!-- Role -->
+        <div class="col-xl-3 col-md-3 form-group" style="text-align: center">
+          <!-- label -->
+          <label for="role">Role</label>
+          <!-- dropdown -->
+          <select id="role" class="form-control" formControlName="role" placeholder="Role"
+            tooltip="User role. <br> 'All' means all roles." theme="light" placement="bottom" [autoPlacement]="true">
+            <option value="">All</option>
+            <option value="ROLE_CUSTOMER">ROLE_CUSTOMER</option>
+            <option value="ROLE_SUPPORTER">ROLE_SUPPORTER</option>
+            <option value="ROLE_ADMIN">ROLE_ADMIN</option>
+          </select>
+        </div>
+
+        <!-- Status -->
+        <div class="col-lg-2 col-md-2 form-group" style="text-align: center">
+          <!-- label -->
+          <label for="status">Status</label>
+          <!-- dropdown -->
+          <select id="status" class="form-control" formControlName="status"
+            tooltip="User status. <br> 'All' means all status" theme="light" placement="bottom" [autoPlacement]="true">
+            <option value="">All</option>
+            <option value="Active">Active</option>
+            <option value="Inactive">Inactive</option>
+          </select>
+        </div>
+
+        <!-- the "Search" button -->
+        <div class="col-lg-2 col-md-2">
+          <!-- break a line(insert a line break(carriage-return)) -->
+          <br>
+          <!-- "Search button" -->
+          <button id="searchButton" class="btn btn-primary mt-xl-2" style="width: 100%" tooltip="Search users"
+            theme="light" placement="bottom" [autoPlacement]="true">
+            <i class="fa fa-search"></i>
+            Search
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+
+  <!-- the "Create user" button and "There are x users" message -->
+  <div class="container">
+
+    <div class="d-flex">
+
+      <!-- mr-auto: push the "There are x users" to the right-end -->
+      <div class="mr-auto">
+
+        <!-- the "Create user" button. -->
+        <!-- when user clicks on the "Create user" button -->
+        <button class="btn btn-primary" routerLink="/user-create" tooltip="Navigate to the 'Create user' screen"
+          theme="light" placement="right" [autoPlacement]="true"><i class="fa fa-plus"></i>
+          Create user
+        </button>
+
+      </div>
+
+      <!-- display the number of users found -->
+
+      <!-- if (number of users) > 1 -->
+      <div *ngIf="totalOfUsers > 1" tooltip="Number of users found" theme="light" placement="left"
+        [autoPlacement]="true">There are {{totalOfUsers}} users</div>
+      <!-- if (number of users) == 1 -->
+      <div *ngIf="totalOfUsers == 1" tooltip="Number of users found" theme="light" placement="left"
+        [autoPlacement]="true">There is {{totalOfUsers}} user</div>
+      <!-- there is no user -->
+      <div *ngIf="totalOfUsers == 0" tooltip="There is no user found" theme="light" placement="left"
+        [autoPlacement]="true">There is no user</div>
+
+    </div>
+
+  </div>
+
+  <!-- table -->
+  <div class="container">
+
+    <!-- <table class="table table-hover table-bordered"> -->
+    <table class="table table-hover table-striped table-bordered">
+      <!-- table header -->
+      <thead>
+        <tr class="bg-table-header">
+
+          <!-- Order -->
+          <!-- scope="col": specifies that the cell is a header for a column -->
+          <th scope="col" style="width: 5%" tooltip="Order" theme="light" placement="bottom" [autoPlacement]="true">Ord
+          </th>
+          <th scope="col" style="width: 5%" tooltip="Identity" theme="light" placement="bottom" [autoPlacement]="true">
+            ID</th>
+          <th scope="col" style="width: 20%" tooltip="Email" theme="light" placement="bottom" [autoPlacement]="true">
+            Email</th>
+          <th scope="col" style="width: 20%" tooltip="First name" theme="light" placement="bottom"
+            [autoPlacement]="true">First name</th>
+
+          <th scope="col" style="width: 13%" tooltip="Last name" theme="light" placement="bottom"
+            [autoPlacement]="true">Last name</th>
+          <th scope="col" style="width: 10%" tooltip="Phone number" theme="light" placement="bottom"
+            [autoPlacement]="true">Phone</th>
+          <th scope="col" style="width: 10%" tooltip="User role" theme="light" placement="bottom"
+            [autoPlacement]="true">Role</th>
+          <th scope="col" style="width: 7%" tooltip="User status" theme="light" placement="bottom"
+            [autoPlacement]="true">Status</th>
+          <th scope="col" style="width: 10%" tooltip="Edit user" theme="light" placement="bottom"
+            [autoPlacement]="true">Action</th>
+        </tr>
+      </thead>
+
+      <!-- table body -->
+      <tbody style="text-align: center">
+
+        <tr *ngFor="let user of users,index as i">
+
+          <!-- column: order(line number) -->
+          <!-- if user clicks on the table(except the Action) then  -->
+          <!-- navigate to the "/user-view/{id}" when user clicks on the table(except the column "Action") -->
+          <td style="text-align: right" class="pointer-link" (click)="viewUser(user.id)">{{indexBasedPage(currentPage,
+            i)}}</td>
+
+          <!-- column: ID -->
+          <!-- navigate to the "/user-view/{id}" when user clicks on the table(except the column "Action") -->
+          <td style="text-align: right" class="pointer-link" (click)="viewUser(user.id)">{{user.id}}</td>
+
+          <!-- column: Email -->
+          <!-- navigate to the "/user-view/{id}" when user clicks on the table(except the column "Action") -->
+          <td class="pointer-link" (click)="viewUser(user.id)">{{user.email}}</td>
+
+          <!-- column: First name -->
+          <!-- navigate to the "/user-view/{id}" when user clicks on the table(except the column "Action") -->
+          <td class="pointer-link" (click)="viewUser(user.id)">{{user.firstName}}</td>
+
+          <!-- column: Last name -->
+          <!-- navigate to the "/user-view/{id}" when user clicks on the table(except the column "Action") -->
+          <td class="pointer-link" (click)="viewUser(user.id)">{{user.lastName}}</td>
+
+          <!-- column: Phone -->
+          <!-- navigate to the "/user-view/{id}" when user clicks on the table(except the column "Action") -->
+          <td class="pointer-link" (click)="viewUser(user.id)">{{user.phone}}</td>
+
+          <!-- column: Role -->
+          <!-- navigate to the "/user-view/{id}" when user clicks on the table(except the column "Action") -->
+          <td class="pointer-link" (click)="viewUser(user.id)">{{user.role}}</td>
+
+          <!-- column: Status -->
+          <!-- navigate to the "/user-view/{id}" when user clicks on the table(except the column "Action") -->
+          <td class="pointer-link" (click)="viewUser(user.id)">{{user.status}}</td>
+
+          <!-- the "Edit" button -->
+          <td class="text-center">
+            <a class="btn btn-primary mr-1" [routerLink]="['/user-edit', user.id]" tooltip="Edit user" theme="light"
+              placement="right" [autoPlacement]="true"><i class="fa fa-edit"></i></a>
+          </td>
+
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- pagination -->
+  <!-- only display the pagination when totalPages > 0 -->
+  <div class="container mt-3" *ngIf="totalPages > 0">
+
+    <nav aria-label="Page navigation">
+      <ul class="pagination d-flex justify-content-md-end justify-content-center">
+
+        <!-- move to the "first page" -->
+        <li class="page-item"><button class="page-link" (click)="moveFirst()" [disabled]="currentPage==1"
+            tooltip="Go to the first page" theme="light" placement="bottom" [autoPlacement]="true">First</button>
+        </li>
+
+        <!-- move to the "previous page" -->
+        <li class="page-item"><button class="page-link" (click)="movePrevious()" [disabled]="currentPage==1"
+            tooltip="Go to previous page" theme="light" placement="bottom" [autoPlacement]="true">Previous</button></li>
+
+        <!--  -->
+        <li class="page-item col-md-1 col-2 px-0">
+          <div class="input-group">
+
+            <!-- textbox to input the Page number -->
+            <!-- rounded-0: have no round at corners -->
+            <input type="number" min="1" [max]="totalPages" class="form-control rounded-0"
+              aria-describedby="basic-addon1" [value]="currentPage"
+              (change)="indexPaginationChange($any($event.target).value)" tooltip="Current page" theme="light"
+              placement="bottom" [autoPlacement]="true">
+
+            <!-- total pages -->
+            <div class="input-group-prepend">
+              <span class="input-group-text" id="basic-addon1" tooltip="Total pages" theme="light" placement="bottom"
+                [autoPlacement]="true">/{{totalPages}}</span>
+            </div>
+          </div>
+        </li>
+
+        <!-- the "Go" button -->
+        <!-- rounded-0: have no round at corners -->
+        <li class="page-item">
+          <button class="btn btn-primary rounded-0" (click)="goPage()" onmouseover="this.style.cursor='pointer'"
+            tooltip="Go to specific page" theme="light" placement="bottom" [autoPlacement]="true">Go</button>
+        </li>
+
+        <!-- the "Next" button -->
+        <li class="page-item"><button class="page-link" (click)="moveNext()" [disabled]="currentPage==totalPages"
+            tooltip="Go to next page" theme="light" placement="bottom" [autoPlacement]="true">Next</button></li>
+
+        <!-- the "Last" button -->
+        <li class="page-item"><button class="page-link" (click)="moveLast()" [disabled]="currentPage==totalPages"
+            tooltip="Go to the last page" theme="light" placement="bottom" [autoPlacement]="true">Last</button></li>
+      </ul>
+    </nav>
+  </div>
+</div>

@@ -24,8 +24,8 @@
                         </div>
                         <!-- textbox -->
                         <div class="col-8">
-                            <input class="form-control" type="text" formControlName="id" id="id" title="Identity"
-                                readonly>
+                            <input class="form-control" type="text" formControlName="id" id="id" tooltip="Identity"
+                                theme="light" placement="right" [autoPlacement]="true" readonly>
                         </div>
                     </div>
 
@@ -38,7 +38,8 @@
                         <!-- textbox -->
                         <div class="col-8">
                             <input class="form-control" type="text" formControlName="name" placeholder="Priority name"
-                                id="name" title="Priority name">
+                                id="name" tooltip="Priority name" theme="light" placement="right"
+                                [autoPlacement]="true">
                             <!-- error messages -->
                             <div class="text-danger" *ngFor="let e of errorMessages.name">
                                 <!-- errors on the "name" field -->
@@ -61,7 +62,8 @@
                         <div class="col-8">
                             <input class="form-control" type="number" formControlName="resolveIn"
                                 placeholder="Number of hours to resolve a ticket" id="resolveIn"
-                                title="Number of hours to resolve a ticket. =0 means do not care about the resolve time(It means all tickets are on time)">
+                                tooltip="Number of hours to resolve a ticket.<br> =0 means do not care about the resolve time(It means all tickets are on time)"
+                                theme="light" placement="right" [autoPlacement]="true">
                             <!-- error messages -->
                             <div class="text-danger" *ngFor="let e of errorMessages.resolveIn">
                                 <!-- errors on the "resolveIn" field -->
@@ -82,7 +84,8 @@
                         </div>
                         <!-- dropdown -->
                         <div class="col-8">
-                            <select id="status" class="form-control" formControlName="status" title="Priority status">
+                            <select id="status" class="form-control" formControlName="status" tooltip="Priority status"
+                                theme="light" placement="right" [autoPlacement]="true">
                                 <option value="Active">Active</option>
                                 <option value="Inactive">Inactive</option>
                             </select>
@@ -98,7 +101,8 @@
                 <!-- the "Save" button -->
                 <!-- if the form values are invalid then disable the "Save" button -->
                 <button type="submit" [disabled]="priorityForm.invalid" style="width: 150px"
-                    class="btn btn-primary mr-2">
+                    class="btn btn-primary mr-2" tooltip="Save priority" theme="light" placement="bottom"
+                    [autoPlacement]="true">
 
                     <!-- display the spinner icon when press the "Save" button -->
                     <i *ngIf="showSpinner" class="fas fa-spinner fa-spin"></i>
@@ -111,7 +115,9 @@
 
                 <!-- the "Cancel" button -->
                 <!-- re-direct to the "priority-list" page -->
-                <button class="btn btn-dark" routerLink="/priority-list" style="width: 150px">Cancel</button>
+                <button class="btn btn-dark" routerLink="/priority-list" style="width: 150px"
+                    tooltip="Cancel and redirect to the 'Priority list' screen" theme="light" placement="bottom"
+                    [autoPlacement]="true">Cancel</button>
             </div>
         </div>
     </form>

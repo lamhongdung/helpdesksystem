@@ -53,7 +53,7 @@ export class PriorityCreateComponent implements OnInit {
       name: ['', [Validators.required, Validators.maxLength(50)]],
 
       // required and must be a positive number(>=0)
-      resolveIn: ['', [Validators.required, Validators.pattern("^[0-9]+$")]],
+      resolveIn: [0, [Validators.required, Validators.pattern("^[0-9]+$")]],
 
       // initial value = 'Active'
       status: ['Active']
