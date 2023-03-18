@@ -1,9 +1,11 @@
 package com.ez.repository;
 
 import com.ez.entity.Category;
+import com.ez.entity.Team;
 import com.ez.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -15,29 +17,33 @@ public interface CategoryRepository extends JpaRepository<Category, Long> {
     @Query(value = "" +
             " select a.* " +
             " from category a " +
-            " where concat(a.id,' ', a.name) like %?3% and " + // searchTerm
+            " where concat(a.id,' ', a.name) like %:searchTerm% and " + // searchTerm
             "       ( " +
-            "         case ?4 " + // status
+            "         case :status " + // status
             "           when '' then status like '%%' " +
-            "           else status = ?4 " +
+            "           else status = :status " +
             "         end " +
             "       ) " +
-            " limit ?1,?2 " // pageNumber and pageSize
+            " limit :pageNumber,:pageSize " // pageNumber and pageSize
             , nativeQuery = true)
-    public List<Category> searchCategories(int pageNumber, int pageSize, String searchTerm, String status);
+    public List<Category> searchCategories(@Param("pageNumber") int pageNumber,
+                                           @Param("pageSize") int pageSize,
+                                           @Param("searchTerm") String searchTerm,
+                                           @Param("status") String status);
 
     // calculate total of categories for pagination
     @Query(value = "" +
             " select count(a.id) as totalOfCategories " +
             " from category a " +
-            " where concat(a.id,' ', a.name) like %?1% and " + // searchTerm
+            " where concat(a.id,' ', a.name) like %:searchTerm% and " + // searchTerm
             "       ( " +
-            "         case ?2 " + // status
+            "         case :status " + // status
             "           when '' then status like '%%' " +
-            "           else status = ?2 " +
+            "           else status = :status " +
             "         end " +
             "       ) "
             , nativeQuery = true)
-    public long getTotalOfCategories(String searchTerm, String status);
+    public long getTotalOfCategories(@Param("searchTerm") String searchTerm,
+                                     @Param("status") String status);
 
 }

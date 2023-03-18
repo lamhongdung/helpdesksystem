@@ -1,7 +1,6 @@
 package com.ez.controller;
 
 import com.ez.entity.Priority;
-import com.ez.exception.ResourceNotFoundException;
 import com.ez.service.PriorityService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,6 +12,7 @@ import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import javax.persistence.EntityNotFoundException;
 import javax.validation.Valid;
 import java.util.List;
 
@@ -100,7 +100,7 @@ public class PriorityController {
     // this method is used for Edit priority, View priority
     @GetMapping("/priority-list/{id}")
     @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
-    public ResponseEntity<Priority> findById(@PathVariable Long id) throws ResourceNotFoundException {
+    public ResponseEntity<Priority> findById(@PathVariable Long id) throws EntityNotFoundException {
 
         LOGGER.info("find priority by id: " + id);
 
@@ -114,7 +114,7 @@ public class PriorityController {
     // only the ROLE_ADMIN can access this address
     @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
     public ResponseEntity<Priority> editPriority(@RequestBody @Valid Priority priority, BindingResult bindingResult)
-            throws ResourceNotFoundException, BindException {
+            throws EntityNotFoundException, BindException {
 
         LOGGER.info("validate data");
 

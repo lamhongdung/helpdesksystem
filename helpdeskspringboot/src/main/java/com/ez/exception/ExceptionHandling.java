@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import javax.persistence.EntityNotFoundException;
 import javax.persistence.NoResultException;
 import java.util.Objects;
 
@@ -80,8 +81,8 @@ public class ExceptionHandling implements ErrorController {
         return createHttpResponse(BAD_REQUEST, exception.getMessage());
     }
 
-    @ExceptionHandler(ResourceNotFoundException.class)
-    public ResponseEntity<HttpResponse> resourceNotFoundException(ResourceNotFoundException exception) {
+    @ExceptionHandler(EntityNotFoundException.class)
+    public ResponseEntity<HttpResponse> entityNotFoundException(EntityNotFoundException exception) {
         return createHttpResponse(BAD_REQUEST, exception.getMessage());
     }
 

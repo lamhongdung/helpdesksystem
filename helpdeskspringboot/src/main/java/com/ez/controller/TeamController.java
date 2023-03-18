@@ -1,9 +1,9 @@
 package com.ez.controller;
 
-import com.ez.dto.Supporter;
-import com.ez.dto.TeamDTO;
+import com.ez.dto.SupporterResponse;
+import com.ez.dto.TeamRequest;
+import com.ez.dto.TeamResponse;
 import com.ez.entity.Team;
-import com.ez.exception.ResourceNotFoundException;
 import com.ez.service.TeamService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,6 +15,7 @@ import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import javax.persistence.EntityNotFoundException;
 import javax.validation.Valid;
 import java.util.List;
 
@@ -34,20 +35,20 @@ public class TeamController {
     // parameters:
     //  - pageNumber: page number
     //  - pageSize: page size(default = 5)
-    //  - searchTerm: word to search(ID, name). '' is for search all
+    //  - searchTerm: word to search(ID, team name, calendar name). '' is for search all
     //  - assignmentMethod: ''(all), 'A'(Auto), 'M'(Manual)
     //  - status: ''(all), 'Active', 'Inactive'
     @GetMapping("/team-search")
     // only the ROLE_ADMIN can access this address
     @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
-    public ResponseEntity<List<Team>> searchTeams(@RequestParam int pageNumber,
-                                                  @RequestParam int pageSize,
-                                                  @RequestParam(required = false, defaultValue = "") String searchTerm,
-                                                  @RequestParam(required = false, defaultValue = "") String assignmentMethod,
-                                                  @RequestParam(required = false, defaultValue = "") String status) {
+    public ResponseEntity<List<TeamResponse>> searchTeams(@RequestParam int pageNumber,
+                                                          @RequestParam int pageSize,
+                                                          @RequestParam(required = false, defaultValue = "") String searchTerm,
+                                                          @RequestParam(required = false, defaultValue = "") String assignmentMethod,
+                                                          @RequestParam(required = false, defaultValue = "") String status) {
 
         // get all teams of 1 page
-        List<Team> teams = teamService.searchTeams(pageNumber, pageSize, searchTerm, assignmentMethod, status);
+        List<TeamResponse> teams = teamService.searchTeams(pageNumber, pageSize, searchTerm, assignmentMethod, status);
 
         return new ResponseEntity<>(teams, OK);
     }
@@ -76,35 +77,37 @@ public class TeamController {
     @GetMapping("/active-supporters")
     // only the ROLE_ADMIN can access this address
     @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
-    public ResponseEntity<List<Supporter>> getActiveSupporters() {
+    public ResponseEntity<List<SupporterResponse>> getActiveSupporters() {
 
         // get active supporters
-        List<Supporter> supporters = teamService.getActiveSupporters();
+        List<SupporterResponse> supporters = teamService.getActiveSupporters();
 
         return new ResponseEntity<>(supporters, OK);
     }
 
     //
-    // create new a team.
+    // create a new team.
     // parameters:
-    //  - TeamDTO: team + supporters
+    //  - TeamRequest: team + supporters
     @PostMapping("/team-create")
     // only the ROLE_ADMIN can access this address
     @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
-    public ResponseEntity<Team> createTeam(@RequestBody @Valid TeamDTO teamDto, BindingResult bindingResult)
+    public ResponseEntity<Team> createTeam(@RequestBody @Valid TeamRequest teamRequest, BindingResult bindingResult)
             throws BindException {
 
         LOGGER.info("validate data");
 
-        // if teamDto data is invalid then throw exception
+        // if teamRequest data is invalid then throw exception
         if (bindingResult.hasErrors()) {
 
-            LOGGER.error("TeamDTO data is invalid");
+            LOGGER.error("TeamRequest data is invalid");
 
             throw new BindException(bindingResult);
         }
 
-        Team newTeam = teamService.createTeam(teamDto);
+        // save teamRequest(includes supporters)
+        // and return team(not includes supporters)
+        Team newTeam = teamService.createTeam(teamRequest);
 
         LOGGER.info(newTeam.toString());
 
@@ -112,42 +115,44 @@ public class TeamController {
     }
 
     // find team by id.
-    // this method is used for Edit team, View team.
+    // this method is used for "Edit team" and "View team".
     //
     // return:
-    //  - TeamDTO: team + supporters
+    //  - TeamRequest: team + supporters
     @GetMapping("/team-list/{id}")
     @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
-    public ResponseEntity<TeamDTO> findById(@PathVariable Long id) throws ResourceNotFoundException {
+    public ResponseEntity<TeamRequest> findById(@PathVariable Long id) throws EntityNotFoundException {
 
         LOGGER.info("find team by id: " + id);
 
-        TeamDTO teamDto = teamService.findById(id);
+        TeamRequest teamRequest = teamService.findById(id);
 
-        return new ResponseEntity<>(teamDto, OK);
+        return new ResponseEntity<>(teamRequest, OK);
     }
 
     // edit existing team.
     //
     // parameters:
-    //  - TeamDTO: team + supporters
+    //  - TeamRequest: team + supporters
     @PutMapping("/team-edit")
     // only the ROLE_ADMIN can access this address
     @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
-    public ResponseEntity<Team> editTeam(@RequestBody @Valid TeamDTO teamDto, BindingResult bindingResult)
-            throws ResourceNotFoundException, BindException {
+    public ResponseEntity<Team> editTeam(@RequestBody @Valid TeamRequest teamRequest, BindingResult bindingResult)
+            throws EntityNotFoundException, BindException {
 
         LOGGER.info("validate data");
 
-        // if teamDto data is invalid then throw exception
+        // if teamRequest data is invalid then throw exception
         if (bindingResult.hasErrors()) {
 
-            LOGGER.error("TeamDTO data is invalid");
+            LOGGER.error("TeamRequest data is invalid");
 
             throw new BindException(bindingResult);
         }
 
-        Team currentTeam = teamService.updateTeam(teamDto);
+        // save teamRequest(includes supporters)
+        // and return team(not includes supporters)
+        Team currentTeam = teamService.updateTeam(teamRequest);
 
         return new ResponseEntity<>(currentTeam, OK);
     }

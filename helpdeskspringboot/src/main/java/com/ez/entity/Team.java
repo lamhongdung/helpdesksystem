@@ -4,7 +4,6 @@ import lombok.*;
 
 import javax.persistence.*;
 import javax.validation.constraints.Min;
-import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
@@ -14,7 +13,8 @@ import javax.validation.constraints.Size;
 @Getter
 @Setter
 @Entity
-// use this class Team(entity) is for saving "team"(without supporters) into database(use TeamRepository)
+// use this class Team(entity) is for save "team"(without supporters) into database
+// via TeamRepository
 public class Team {
 
     @Id
@@ -29,13 +29,17 @@ public class Team {
     @Pattern(regexp = "A|M", message = "Value of the assignment method must be 'A' or 'M'")
     private String assignmentMethod;
 
+    @Min(value = 1, message = "Value of calendarid must be greater than or equal to 1")
+    private long calendarid;
+
     @Pattern(regexp = "Active|Inactive", message = "Value of the status must be 'Active' or 'Inactive'")
     private String status;
 
-    public Team(String name, String assignmentMethod, String status) {
+    public Team(String name, String assignmentMethod, long calendarid, String status) {
 
         this.name = name;
         this.assignmentMethod = assignmentMethod;
+        this.calendarid = calendarid;
         this.status = status;
 
     }

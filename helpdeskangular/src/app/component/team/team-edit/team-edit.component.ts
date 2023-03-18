@@ -3,10 +3,12 @@ import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 import { IDropdownSettings } from 'ng-multiselect-dropdown';
-import { Subscription } from 'rxjs';
+import { concat, Subscription } from 'rxjs';
+import { Calendar } from 'src/app/entity/Calendar';
 import { Supporter } from 'src/app/entity/Supporter';
-import { Team } from 'src/app/entity/Team';
+import { TeamRequest } from 'src/app/entity/TeamRequest';
 import { NotificationType } from 'src/app/enum/NotificationType.enum';
+import { CalendarService } from 'src/app/service/calendar.service';
 import { NotificationService } from 'src/app/service/notification.service';
 import { TeamService } from 'src/app/service/team.service';
 
@@ -29,6 +31,7 @@ export class TeamEditComponent {
   //  - id
   //  - name
   //  - assignment method
+  //  - calendarid
   //  - supporters
   //  - status
   teamForm: FormGroup;
@@ -37,9 +40,16 @@ export class TeamEditComponent {
   //  - id
   //  - name
   //  - assignment method
+  //  - calendarid
   //  - supporters
   //  - status
-  team: Team;
+  team: TeamRequest;
+
+  // Calendar includes:
+  //  - id
+  //  - name
+  //  - status
+  calendars: Calendar[] = [];
 
   // active supporters
   activeSupporters: Supporter[] = [];
@@ -52,6 +62,9 @@ export class TeamEditComponent {
     name: [
       { type: 'required', message: 'Please input team name' },
       { type: 'maxlength', message: 'Name cannot be longer than 50 characters' }
+    ],
+    calendarid: [
+      { type: 'required', message: 'Please choose at least 1 active calendar' }
     ],
     supporters: [
       { type: 'required', message: 'Please choose at least 1 active supporter' }
@@ -67,10 +80,34 @@ export class TeamEditComponent {
 
   constructor(private router: Router,
     private teamService: TeamService,
+    private calendarService: CalendarService,
     private notificationService: NotificationService,
     private formBuilder: FormBuilder,
-    private activatedRoute: ActivatedRoute) {
+    private activatedRoute: ActivatedRoute
+  ) {
+    this.subscriptions.push(
 
+      // get active) calendars
+      this.calendarService.getAllCalendars("Active")
+
+        .subscribe({
+
+          // get all calendars successful
+          next: (data: Calendar[]) => {
+
+            // all calendars
+            this.calendars = data;
+          },
+
+          // there are some errors when get all calendars
+          error: (errorResponse: HttpErrorResponse) => {
+
+            // show the error message to user
+            this.sendNotification(NotificationType.ERROR, errorResponse.error.message);
+
+          }
+        })
+    );
   }
 
   // initial values
@@ -83,8 +120,8 @@ export class TeamEditComponent {
       singleSelection: false,
       // id field
       idField: 'id',
-      // textField: id + fullname(lastName + firstName) + email
-      textField: 'idFullnameEmail',
+      // textField: id + fullname(lastName + firstName) + email + status
+      textField: 'description',
       // naming of 'Select all'
       selectAllText: 'Select All',
       // naming of 'Unselect all'
@@ -106,6 +143,9 @@ export class TeamEditComponent {
       // assignment method
       assignmentMethod: [''],
 
+      //calendar id
+      calendarid: ['', [Validators.required]],
+
       // active supporters
       supporters: ['', [Validators.required]],
 
@@ -123,7 +163,6 @@ export class TeamEditComponent {
 
       // get active supporters
       this.teamService.getActiveSupporters().subscribe({
-
 
         // get active supporters successful
         next: (data: Supporter[]) => {
@@ -153,7 +192,7 @@ export class TeamEditComponent {
         this.teamService.findById(this.id).subscribe({
 
           // get team successful from database
-          next: (data: Team) => {
+          next: (data: TeamRequest) => {
 
             this.team = data;
 
@@ -186,12 +225,13 @@ export class TeamEditComponent {
       //  - id
       //  - name
       //  - assignment method
+      //  - calendarid
       //  - supporters
       //  - status
       this.teamService.editTeam(this.teamForm.value).subscribe({
 
         // update team successful
-        next: (data: Team) => {
+        next: (data: TeamRequest) => {
 
           this.team = data;
 

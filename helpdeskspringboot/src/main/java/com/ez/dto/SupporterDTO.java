@@ -12,7 +12,7 @@ public class SupporterDTO {
     // supporter id
     long id;
 
-    // id + fullname(lastName + firstName) + email
-    String idFullnameEmail;
+    // description = id + fullname(lastName + firstName) + email + status
+    String description;
 
 }

@@ -1,13 +1,13 @@
 package com.ez.service;
 
 import com.ez.entity.Category;
-import com.ez.exception.ResourceNotFoundException;
 import com.ez.repository.CategoryRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.List;
 
 import static com.ez.constant.Constant.*;
@@ -55,22 +55,22 @@ public class CategoryService{
     }
 
     // find category by category id
-    public Category findById(Long id) throws ResourceNotFoundException {
+    public Category findById(Long id) throws EntityNotFoundException {
 
         LOGGER.info("find category by id");
 
         // find category by category id
-        return categoryRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(NO_CATEGORY_FOUND_BY_ID + id));
+        return categoryRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(NO_CATEGORY_FOUND_BY_ID + id));
     }
 
     // update existing category
-    public Category updateCategory(Category category) throws ResourceNotFoundException {
+    public Category updateCategory(Category category) throws EntityNotFoundException {
 
         LOGGER.info("Update category");
 
         // get existing category(persistent)
         Category existingCategory = categoryRepository.findById(category.getId())
-                .orElseThrow(() -> new ResourceNotFoundException(NO_CATEGORY_FOUND_BY_ID + category.getId()));
+                .orElseThrow(() -> new EntityNotFoundException(NO_CATEGORY_FOUND_BY_ID + category.getId()));
 
         // set new values to existing category
         existingCategory.setName(category.getName());

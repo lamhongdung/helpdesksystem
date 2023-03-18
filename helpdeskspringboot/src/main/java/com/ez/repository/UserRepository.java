@@ -1,10 +1,9 @@
 package com.ez.repository;
 
-import com.ez.dto.Supporter;
-import com.ez.dto.SupporterDTO;
 import com.ez.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import javax.transaction.Transactional;
@@ -24,49 +23,55 @@ public interface UserRepository extends JpaRepository<User, Long> {
     @Query(value =  "" +
             " select a.* " +
             " from user a " +
-            " where a.email =?1 and a.status = 'Inactive' "
+            " where a.email = :email and a.status = 'Inactive' "
             ,nativeQuery = true)
-    public User isInactiveUser(String email);
+    public User isInactiveUser(@Param("email") String email);
 
     // search users by searchTerm, role and status.
     @Query(value =  "" +
             " select a.* " +
             " from user a " +
-            " where concat(a.id,' ', a.email,' ', a.firstName,' ', a.lastName,' ', a.phone) like %?3% and " + // searchTerm
+            " where concat(a.id,' ', a.email,' ', a.firstName,' ', a.lastName,' ', a.phone) like %:searchTerm% and " + // searchTerm
             "       ( " +
-            "         case ?4 " + // role
+            "         case :role " + // role
             "           when '' then role like '%%' " +
-            "           else role = ?4 " +
+            "           else role = :role " +
             "         end " +
             "       ) and " +
             "       ( " +
-            "         case ?5 " + // status
+            "         case :status " + // status
             "           when '' then status like '%%' " +
-            "           else status = ?5 " +
+            "           else status = :status " +
             "         end " +
             "       ) " +
-            " limit ?1,?2 " // pageNumber and pageSize
+            " limit :pageNumber,:pageSize " // pageNumber and pageSize
             ,nativeQuery = true)
-    public List<User> searchUsers(int pageNumber, int pageSize, String searchTerm, String role, String status);
+    public List<User> searchUsers(@Param("pageNumber") int pageNumber,
+                                  @Param("pageSize") int pageSize,
+                                  @Param("searchTerm") String searchTerm,
+                                  @Param("role") String role,
+                                  @Param("status") String status);
 
     // calculate total of users for pagination
     @Query(value =  "" +
                     " select count(a.id) as totalOfUsers " +
                     " from user a " +
-                    " where concat(a.id,' ', a.email,' ', a.firstName,' ', a.lastName,' ', a.phone) like %?1% and " + // searchTerm
+                    " where concat(a.id,' ', a.email,' ', a.firstName,' ', a.lastName,' ', a.phone) like %:searchTerm% and " + // searchTerm
                     "       ( " +
-                    "         case ?2 " + // role
+                    "         case :role " + // role
                     "           when '' then role like '%%' " +
-                    "           else role = ?2 " +
+                    "           else role = :role " +
                     "         end " +
                     "       ) and " +
                     "       ( " +
-                    "         case ?3 " + // status
+                    "         case :status " + // status
                     "           when '' then status like '%%' " +
-                    "           else status = ?3 " +
+                    "           else status = :status " +
                     "         end " +
                     "       ) "
             ,nativeQuery = true)
-    public long getTotalOfUsers(String searchTerm, String role, String status);
+    public long getTotalOfUsers(@Param("searchTerm") String searchTerm,
+                                @Param("role") String role,
+                                @Param("status") String status);
 
 }

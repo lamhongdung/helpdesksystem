@@ -2,13 +2,13 @@ export class Supporter {
 
     // parameter property: 2 properties
     //  - id
-    //  - idFullnameEmail
+    //  - descripton(= id + lastName + firstName + email + status)
     constructor(
 
         public id: number,
 
-        // id + lastName + firstName + email
-        public idFullnameEmail: string
+        // description = id + lastName + firstName + email + status
+        public description: string
 
     ) {
 

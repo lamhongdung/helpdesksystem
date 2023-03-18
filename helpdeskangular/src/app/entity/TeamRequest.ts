@@ -1,6 +1,7 @@
 import { Supporter } from "./Supporter";
 
-export class Team {
+// this class contains data is submited from client
+export class TeamRequest {
 
     constructor(
 
@@ -8,10 +9,13 @@ export class Team {
         public name: string,
         public assignmentMethod: string,
 
+        public calendarid: number,
+
         // active supporters
         public supporters: Supporter[] = [],
 
-        public status: string) {
+        public status: string
+    ) {
 
     }
 

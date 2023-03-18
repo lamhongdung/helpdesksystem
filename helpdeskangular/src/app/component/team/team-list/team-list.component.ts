@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { Team } from 'src/app/entity/Team';
+import { TeamResponse } from 'src/app/entity/TeamResponse';
 import { TeamService } from 'src/app/service/team.service';
 
 @Component({
@@ -22,11 +22,11 @@ export class TeamListComponent implements OnInit {
   // total of teams(for pagination)
   totalOfTeams: number;
   // team list(the grid of the team table)
-  teams: Team[] = [];
+  teams: TeamResponse[] = [];
   // number of teams per page(default = 5)
   pageSize: number;
 
-  // form of "Search team"
+  // the "Search team" form
   searchTeam = this.formBuilder.group({
 
     // search term
@@ -58,7 +58,12 @@ export class TeamListComponent implements OnInit {
 
   } // end of ngOnInit()
 
-  // get teams, total of teams and total pages
+  // get teams, total of teams and total pages.
+  // parameters:
+  //  - pageNumber: page number
+  //  - search term: id, team name and calendar name
+  //  - assignmentMethod: ''(all), 'Auto', 'Manual'
+  //  - status: ''(all), 'Active', 'Inactive'
   searchTeams(pageNumber: number, searchTerm: string, assignmentMethod: string, status: string) {
 
     // push to list of subscriptions for easily unsubscribes all subscriptions of the TeamListComponent
@@ -69,10 +74,18 @@ export class TeamListComponent implements OnInit {
 
         .subscribe({
 
-          next: (data: Team[]) => {
+          // get team from database successful.
+          // TeamResponse includes:
+          //  - id
+          //  - teamName
+          //  - assignmentMethod
+          //  - calendarid
+          //  - calendarName
+          //  - status
+          next: (data: TeamResponse[]) => {
             return this.teams = data
           }
-          
+
         })
     );
 
@@ -83,6 +96,8 @@ export class TeamListComponent implements OnInit {
       this.teamService.getTotalOfTeams(searchTerm, assignmentMethod, status)
 
         .subscribe({
+
+          // get total of teams from database successful
           next: (data: number) => {
             // total of teams
             this.totalOfTeams = data;
@@ -133,7 +148,7 @@ export class TeamListComponent implements OnInit {
 
   } // end of goPage()
 
-  // user changes page number in the text box
+  // user changes the page number in the text box
   changePageNumber(value: number) {
     this.currentPage = value;
   }

@@ -18,19 +18,20 @@
 
         <!-- SearchTerm -->
         <!-- search for: ID, name -->
-        <div class="col-lg-3 col-md-3 form-group" style="text-align: center">
+        <div class="col-lg-5 col-md-5 form-group" style="text-align: center">
 
           <!-- label -->
           <label for="searchTerm">Search term</label>
 
           <!-- textbox -->
           <input id="searchTerm" class="form-control" type="search" formControlName="searchTerm"
-            placeholder="Search term(id, name)" tooltip="Search term(id, name).<br> Blank means search all IDs, names"
+            placeholder="Search term(id, team name, calendar name)"
+            tooltip="Search term(id, team name, calendar name).<br> Blank means search all IDs, team names and calendar names"
             theme="light" placement="bottom" [autoPlacement]="true">
         </div>
 
         <!-- Assignment method -->
-        <div class="col-lg-3 col-md-3 form-group" style="text-align: center">
+        <div class="col-lg-2 col-md-2 form-group" style="text-align: center">
 
           <!-- label -->
           <label for="assignmentMethod">Assignment method</label>
@@ -51,7 +52,7 @@
         </div>
 
         <!-- Status -->
-        <div class="col-lg-3 col-md-3 form-group" style="text-align: center">
+        <div class="col-lg-2 col-md-2 form-group" style="text-align: center">
 
           <!-- label -->
           <label for="status">Status</label>
@@ -98,7 +99,7 @@
 
       </div>
 
-      <!-- display the number of found teams. -->
+      <!-- display the number of teams found. -->
 
       <!-- if (number of teams) > 1 -->
       <div *ngIf="totalOfTeams > 1" tooltip="Number of teams found" theme="light" placement="left"
@@ -125,17 +126,20 @@
 
           <!-- Order -->
           <!-- scope="col": specifies that the cell is a header for a column -->
-          <th scope="col" style="width: 7%" tooltip="Order" theme="light" placement="bottom" [autoPlacement]="true">Ord
+          <th scope="col" style="width: 5%" tooltip="Order" theme="light" placement="bottom" [autoPlacement]="true">Ord
           </th>
 
-          <th scope="col" style="width: 8%" tooltip="Identity" theme="light" placement="bottom" [autoPlacement]="true">
+          <th scope="col" style="width: 5%" tooltip="Identity" theme="light" placement="bottom" [autoPlacement]="true">
             ID</th>
-          <th scope="col" style="width: 40%" tooltip="Team name" theme="light" placement="bottom"
-            [autoPlacement]="true">Name</th>
+          <th scope="col" style="width: 30%" tooltip="Team name" theme="light" placement="bottom"
+            [autoPlacement]="true">Team name</th>
 
           <th scope="col" style="width: 20%" tooltip="Assignment method" theme="light" placement="bottom"
             [autoPlacement]="true">Assignment method</th>
-          <th scope="col" style="width: 15%" tooltip="Team status" theme="light" placement="bottom"
+
+          <th scope="col" style="width: 20%" tooltip="Calendar name" theme="light" placement="bottom"
+            [autoPlacement]="true">Calendar name</th>
+          <th scope="col" style="width: 10%" tooltip="Team status" theme="light" placement="bottom"
             [autoPlacement]="true">Status</th>
           <th scope="col" style="width: 10%" tooltip="Edit team" theme="light" placement="bottom"
             [autoPlacement]="true">Action</th>
@@ -156,11 +160,15 @@
 
           <!-- column: Name -->
           <!-- navigate to the "/team-view/{id}" when user clicks on the table(except the column "Action") -->
-          <td class="pointer-link" (click)="viewTeam(team.id)">{{team.name}}</td>
+          <td class="pointer-link" (click)="viewTeam(team.id)">{{team.teamName}}</td>
 
           <!-- column: Assignment method -->
           <!-- navigate to the "/team-view/{id}" when user clicks on the table(except the column "Action") -->
           <td class="pointer-link" (click)="viewTeam(team.id)">{{team.assignmentMethod}}</td>
+
+          <!-- column: Assignment method -->
+          <!-- navigate to the "/team-view/{id}" when user clicks on the table(except the column "Action") -->
+          <td class="pointer-link" (click)="viewTeam(team.id)">{{team.calendarName}}</td>
 
           <!-- column: Status -->
           <!-- navigate to the "/team-view/{id}" when user clicks on the table(except the column "Action") -->

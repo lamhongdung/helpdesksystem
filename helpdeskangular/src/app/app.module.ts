@@ -38,6 +38,8 @@ import { NotificationModule } from './notification.module';
 import { AuthService } from './service/auth.service';
 import { NotificationService } from './service/notification.service';
 import { UserService } from './service/user.service';
+import { CalendarEditComponent } from './component/calendar/calendar-edit/calendar-edit.component';
+import { CalendarViewComponent } from './component/calendar/calendar-view/calendar-view.component';
 
 @NgModule({
   declarations: [
@@ -66,7 +68,9 @@ import { UserService } from './service/user.service';
     UserCreateComponent,
     UserEditComponent,
     UserListComponent,
-    UserViewComponent
+    UserViewComponent,
+    CalendarEditComponent,
+    CalendarViewComponent
   ],
   imports: [
     NgMultiSelectDropDownModule.forRoot(),

@@ -47,6 +47,11 @@ public class Constant {
     public static final String NO_PRIORITY_FOUND_BY_ID = "No priority found for id: ";
 
     //
+    // calendar constants
+    //
+    public static final String NO_CALENDAR_FOUND_BY_ID = "No calendar found for id: ";
+
+    //
     // team constants
     //
     public static final String NO_TEAM_FOUND_BY_ID = "No team found for id: ";

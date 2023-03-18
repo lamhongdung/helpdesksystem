@@ -3,6 +3,7 @@ package com.ez.repository;
 import com.ez.entity.Priority;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -14,44 +15,51 @@ public interface PriorityRepository extends JpaRepository<Priority, Long> {
     @Query(value = "" +
             " select a.* " +
             " from priority a " +
-            " where concat(a.id,' ', a.name) like %?3% and " + // searchTerm
+            " where concat(a.id,' ', a.name) like %:searchTerm% and " + // searchTerm
             "       ( " +
-            "         case ?4 " + // resolveInOpt
-            "           when 'gt' then resolveIn >= ?5 " + // resolveIn
-            "           when 'eq' then resolveIn = ?5 " + // resolveIn
-            "           else resolveIn <= ?5 " + // resolveIn
+            "         case :resolveInOpt " + // resolveInOpt
+            "           when 'gt' then resolveIn >= :resolveIn " + // resolveIn
+            "           when 'eq' then resolveIn = :resolveIn " + // resolveIn
+            "           else resolveIn <= :resolveIn " + // resolveIn
             "         end " +
             "       ) and " +
             "       ( " +
-            "         case ?6 " + // status
+            "         case :status " + // status
             "           when '' then status like '%%' " +
-            "           else status = ?6 " +
+            "           else status = :status " +
             "         end " +
             "       ) " +
-            " limit ?1,?2 " // pageNumber and pageSize
+            " limit :pageNumber,:pageSize " // pageNumber and pageSize
             , nativeQuery = true)
-    public List<Priority> searchPriorities(int pageNumber, int pageSize,
-                                           String searchTerm, String resolveInOpt, long resolveIn, String status);
+    public List<Priority> searchPriorities(@Param("pageNumber") int pageNumber,
+                                           @Param("pageSize") int pageSize,
+                                           @Param("searchTerm") String searchTerm,
+                                           @Param("resolveInOpt") String resolveInOpt,
+                                           @Param("resolveIn") long resolveIn,
+                                           @Param("status") String status);
 
     // calculate total of priorities for pagination
     @Query(value = "" +
             " select count(a.id) as totalOfPriorities " +
             " from priority a " +
-            " where concat(a.id,' ', a.name) like %?1% and " + // searchTerm
+            " where concat(a.id,' ', a.name) like %:searchTerm% and " + // searchTerm
             "       ( " +
-            "         case ?2 " + // resolveInOpt
-            "           when 'gt' then resolveIn >= ?3 " + // resolveIn
-            "           when 'eq' then resolveIn = ?3 " + // resolveIn
-            "           else resolveIn <= ?3 " + // resolveIn
+            "         case :resolveInOpt " + // resolveInOpt
+            "           when 'gt' then resolveIn >= :resolveIn " + // resolveIn
+            "           when 'eq' then resolveIn = :resolveIn " + // resolveIn
+            "           else resolveIn <= :resolveIn " + // resolveIn
             "         end " +
             "       ) and " +
             "       ( " +
-            "         case ?4 " + // status
+            "         case :status " + // status
             "           when '' then status like '%%' " +
-            "           else status = ?4 " +
+            "           else status = :status " +
             "         end " +
             "       ) "
             , nativeQuery = true)
-    public long getTotalOfPriorities(String searchTerm, String resolveInOpt, long resolveIn, String status);
+    public long getTotalOfPriorities(@Param("searchTerm") String searchTerm,
+                                     @Param("resolveInOpt") String resolveInOpt,
+                                     @Param("resolveIn") long resolveIn,
+                                     @Param("status") String status);
 
 }

@@ -1,7 +1,7 @@
 <div class="text-center">
     <!-- title -->
     <h3>Edit team</h3>
-    <hr width="700px">
+    <hr width="890px">
 </div>
 
 <!-- {{teamForm.value | json}} -->
@@ -13,7 +13,7 @@
         <div class="row mt-5">
 
             <!-- move column to central -->
-            <div class="col-lg-8 col-md-8 offset-lg-2">
+            <div class="col-lg-10 col-md-10 offset-lg-1">
                 <div class="container">
 
                     <!-- id -->
@@ -68,7 +68,36 @@
                         </div>
                     </div>
 
-                    <!-- Supporters -->
+                    <!-- Calendar -->
+                    <div class="row mb-3">
+
+                        <!-- label -->
+                        <div class="col-3">
+                            <label class="col-form-label" for="calendar">Calendar<small
+                                    class="text-danger">*</small></label>
+                        </div>
+
+                        <!-- dropdown -->
+                        <div class="col-9">
+                            <select id="calendarid" class="form-control" formControlName="calendarid"
+                                tooltip="Calendar. <br> A team must belong to a certain calendar.<br> Values include 'id' + 'name' + 'status'"
+                                theme="light" placement="right" [autoPlacement]="true">
+                                <!-- all(active + inactive) calendars -->
+                                <option *ngFor="let calendar of calendars" [value]="calendar.id">
+                                    {{calendar.id}} - {{calendar.name}} - {{calendar.status}}</option>
+                            </select>
+                            <!-- error messages -->
+                            <div class="text-danger" *ngFor="let e of errorMessages.calendarid">
+                                <!-- errors on the "calendarid" field -->
+                                <div *ngIf="teamForm.get('calendarid').hasError(e.type) && 
+                                            (teamForm.get('calendarid').dirty || teamForm.get('calendarid').touched) ">
+                                    <small>{{e.message}}</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Active supporters -->
                     <div class="row mb-3">
 
                         <!-- label -->
@@ -82,7 +111,7 @@
                             <!-- dropdown(multi selection) -->
                             <ng-multiselect-dropdown placeholder="Active supporters" [settings]="supporterSetting"
                                 [data]="activeSupporters" formControlName="supporters" id="supporters"
-                                tooltip="Assign active supporters to team.<br> Values includes 'id' + 'last name' + 'first name' + 'email'"
+                                tooltip="Assign active supporters to team. <br> A team must has at least 1 supporter.<br> Values includes 'id' + 'last name' + 'first name' + 'email' + 'status'"
                                 theme="light" placement="right" [autoPlacement]="true">
                             </ng-multiselect-dropdown>
                             <!-- error messages -->

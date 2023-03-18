@@ -4,8 +4,10 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { ActivatedRoute, ParamMap } from '@angular/router';
 import { IDropdownSettings } from 'ng-multiselect-dropdown';
 import { Subscription } from 'rxjs';
-import { Team } from 'src/app/entity/Team';
+import { Calendar } from 'src/app/entity/Calendar';
+import { TeamRequest } from 'src/app/entity/TeamRequest';
 import { NotificationType } from 'src/app/enum/NotificationType.enum';
+import { CalendarService } from 'src/app/service/calendar.service';
 import { NotificationService } from 'src/app/service/notification.service';
 import { TeamService } from 'src/app/service/team.service';
 
@@ -23,6 +25,7 @@ export class TeamViewComponent {
   //  - id
   //  - name
   //  - assignment method
+  //  - calendarid
   //  - supporters
   //  - status
   teamForm: FormGroup;
@@ -31,9 +34,13 @@ export class TeamViewComponent {
   //  - id
   //  - name
   //  - assignment method
+  //  - calendarid
   //  - supporters
   //  - status
-  team: Team;
+  team: TeamRequest;
+
+  // all(active + inactive) calendars
+  calendars: Calendar[] = [];
 
   // team id
   id: number;
@@ -46,11 +53,37 @@ export class TeamViewComponent {
   supporterSetting: IDropdownSettings;
 
   constructor(private teamService: TeamService,
+    private calendarService: CalendarService,
     private notificationService: NotificationService,
     private formBuilder: FormBuilder,
-    private activatedRoute: ActivatedRoute) {
+    private activatedRoute: ActivatedRoute
+  ) {
 
-  }
+
+    this.subscriptions.push(
+
+      // get all(active + inactive) calendars
+      this.calendarService.getAllCalendars("")
+
+        .subscribe({
+
+          // get all(active + inactive) calendars successful
+          next: (data: Calendar[]) => {
+
+            // all(active + inactive) calendars
+            this.calendars = data;
+          },
+
+          // there are some errors when get all(active + inactive) calendars
+          error: (errorResponse: HttpErrorResponse) => {
+
+            // show the error message to user
+            this.sendNotification(NotificationType.ERROR, errorResponse.error.message);
+
+          }
+        })
+    ); // end of this.subscriptions.push()
+  } // end of constructor()
 
   // initial values
   ngOnInit(): void {
@@ -62,8 +95,8 @@ export class TeamViewComponent {
       singleSelection: false,
       // id field
       idField: 'id',
-      // textField: id + fullname(lastName + firstName) + email
-      textField: 'idFullnameEmail',
+      // textField: id + fullname(lastName + firstName) + email + status
+      textField: 'description',
       // naming of 'Select all'
       selectAllText: 'Select All',
       // naming of 'Unselect all'
@@ -79,6 +112,7 @@ export class TeamViewComponent {
       id: [''],
       name: [''],
       assignmentMethod: [{ value: '', disabled: true }],
+      calendarid: [{ value: '', disabled: true }],
       supporters: [{ value: '', disabled: true }],
 
       // initial empty value to the status, and disable it
@@ -105,7 +139,7 @@ export class TeamViewComponent {
           this.teamService.findById(this.id).subscribe({
 
             // if there is no error when get data from database
-            next: (data: Team) => {
+            next: (data: TeamRequest) => {
 
               this.team = data;
 
@@ -120,8 +154,7 @@ export class TeamViewComponent {
           });
         } // end of (params: ParamMap)
       }) // end of this.activatedRoute.paramMap.subscribe()
-    );
-
+    ); // end of this.subscriptions.push()
 
   } // end of ngOnInit()
 
