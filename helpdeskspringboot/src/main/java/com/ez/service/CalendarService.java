@@ -21,10 +21,13 @@ public class CalendarService {
     private CalendarRepository calendarRepository;
 
     // get all calendars.
+    // parameters:
+    //  - status = "": all(active + inactive) calendars
+    //  - status = "Active": all active calendars
+    //  - status = "Inactive": all inactive calendars
     public List<HDCalendar> getAllCalendars(String status) {
 
         LOGGER.info("get all calendars");
-
 
         return calendarRepository.getAllCalendars(status);
     }
@@ -50,7 +53,7 @@ public class CalendarService {
         return calendarRepository.getTotalOfCalendars(searchTerm, status);
     }
 
-    // create new calendar
+    // create a new calendar
     public HDCalendar createCalendar(HDCalendar calendar) {
 
         LOGGER.info("create new calendar");

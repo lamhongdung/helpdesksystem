@@ -27,8 +27,16 @@ public class CalendarController {
     CalendarService calendarService;
 
     //
-    // get all calendars
+    // get all calendars.
     //
+    // url:
+    //  - ex: /calendars?status=""
+    //  - ex: /calendars?status="Active"
+    //  - ex: /calendars?status="Inactive"
+    // parameters:
+    //  - status = "": all(active + inactive) calendars
+    //  - status = "Active": all active calendars
+    //  - status = "Inactive": all inactive calendars
     @GetMapping("/calendars")
     // only the ROLE_ADMIN can access this address
     @PreAuthorize("hasAnyRole('ROLE_ADMIN')")

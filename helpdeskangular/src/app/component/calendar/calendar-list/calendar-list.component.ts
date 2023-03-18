@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { Calendar } from 'src/app/entity/Calendar';
 import { CalendarService } from 'src/app/service/calendar.service';
+import { ShareService } from 'src/app/service/share.service';
 
 @Component({
   selector: 'app-calendar-list',
@@ -26,7 +27,7 @@ export class CalendarListComponent {
   // number of calendars per page(default = 5)
   pageSize: number;
 
-  // form of "Search calendar"
+  // the "Search calendar" form
   searchCalendar = this.formBuilder.group({
 
     // search term
@@ -38,6 +39,7 @@ export class CalendarListComponent {
 
 
   constructor(private calendarService: CalendarService,
+    private shareService: ShareService,
     private formBuilder: FormBuilder,
     private router: Router) { }
 
@@ -66,6 +68,8 @@ export class CalendarListComponent {
       this.calendarService.searchCalendars(pageNumber, searchTerm, status)
 
         .subscribe({
+
+          // get calendars successful
           next: (data: Calendar[]) => {
             return this.calendars = data
           }
@@ -79,38 +83,28 @@ export class CalendarListComponent {
       this.calendarService.getTotalOfCalendars(searchTerm, status)
 
         .subscribe({
+          // get total of calendars successful
           next: (data: number) => {
             // total of calendars
             this.totalOfCalendars = data;
             // total pages
-            this.totalPages = this.calculateTotalPages(this.totalOfCalendars, this.pageSize);
+            this.totalPages = this.shareService.calculateTotalPages(this.totalOfCalendars, this.pageSize);
           }
         })
     )
   } // end of searchCalendars()
 
-  // calculate total pages for pagination
-  calculateTotalPages(totalOfCalendars: number, pageSize: number): number {
-
-    if ((totalOfCalendars % pageSize) != 0) {
-      //  Math.floor: rounds down and returns the largest integer less than or equal to a given number
-      return (Math.floor(totalOfCalendars / pageSize)) + 1;
-    }
-
-    return totalOfCalendars / pageSize;
-
-  } // end of calculateTotalPages()
-
   // count index for current page
   // ex:  page 1: ord 1 --> ord 5
   //      page 2: ord 6 --> ord 10 (not repeat: ord 1 --> ord 5)
   // parameters:
+  //  - pageSize: page size(default = 5)
   //  - currentPage: current page
   //  - index: running variable(the index variable of "for loop")
-  indexBasedPage(currentPage: number, index: number): number {
+  indexBasedPage(pageSize: number, currentPage: number, index: number): number {
 
-    // this.pageSize = 5
-    return (this.pageSize * (currentPage - 1)) + (index + 1);
+    return (this.shareService.indexBasedPage(pageSize, currentPage, index));
+
   }
 
   // go to specific page
@@ -120,7 +114,8 @@ export class CalendarListComponent {
     if (this.currentPage >= 1 && this.currentPage <= this.totalPages) {
 
       // the "nth element" in MySQL
-      let nth_element = (this.pageSize) * (this.currentPage - 1);
+      // let nth_element = (this.pageSize) * (this.currentPage - 1);
+      let nth_element = this.shareService.countNthElement(this.pageSize, this.currentPage);
 
       // get calendars, total of calendars and total of pages
       this.searchCalendars(nth_element, this.searchCalendar.value.searchTerm, this.searchCalendar.value.status);
@@ -142,7 +137,8 @@ export class CalendarListComponent {
       this.currentPage = 1;
 
       // the "nth element" in MySQL
-      let nth_element = (this.pageSize) * (this.currentPage - 1);
+      // let nth_element = (this.pageSize) * (this.currentPage - 1);
+      let nth_element = this.shareService.countNthElement(this.pageSize, this.currentPage);
 
       // get calendars, total of calendars and total pages
       this.searchCalendars(nth_element, this.searchCalendar.value.searchTerm, this.searchCalendar.value.status);
@@ -159,7 +155,8 @@ export class CalendarListComponent {
       this.currentPage = this.currentPage + 1;
 
       // the "nth element" in MySQL
-      let nth_element = (this.pageSize) * (this.currentPage - 1);
+      // let nth_element = (this.pageSize) * (this.currentPage - 1);
+      let nth_element = this.shareService.countNthElement(this.pageSize, this.currentPage);
 
       // get calendars, total of calendars and total pages
       this.searchCalendars(nth_element, this.searchCalendar.value.searchTerm, this.searchCalendar.value.status);
@@ -176,7 +173,8 @@ export class CalendarListComponent {
       this.currentPage = this.currentPage - 1;
 
       // the "nth element" in MySQL
-      let nth_element = (this.pageSize) * (this.currentPage - 1);
+      // let nth_element = (this.pageSize) * (this.currentPage - 1);
+      let nth_element = this.shareService.countNthElement(this.pageSize, this.currentPage);
 
       // get calendars, total of calendars and total pages
       this.searchCalendars(nth_element, this.searchCalendar.value.searchTerm, this.searchCalendar.value.status);
@@ -193,7 +191,8 @@ export class CalendarListComponent {
       this.currentPage = this.totalPages;
 
       // the "nth element" in MySQL
-      let nth_element = (this.pageSize) * (this.currentPage - 1);
+      // let nth_element = (this.pageSize) * (this.currentPage - 1);
+      let nth_element = this.shareService.countNthElement(this.pageSize, this.currentPage);
 
       // get calendars, total of calendars and total pages
       this.searchCalendars(nth_element, this.searchCalendar.value.searchTerm, this.searchCalendar.value.status);

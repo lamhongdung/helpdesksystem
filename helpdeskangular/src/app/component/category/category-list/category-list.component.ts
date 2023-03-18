@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { Category } from 'src/app/entity/Category';
 import { CategoryService } from 'src/app/service/category.service';
+import { ShareService } from 'src/app/service/share.service';
 
 @Component({
   selector: 'app-category-list',
@@ -38,6 +39,7 @@ export class CategoryListComponent implements OnInit {
 
 
   constructor(private categoryService: CategoryService,
+    private shareService: ShareService,
     private formBuilder: FormBuilder,
     private router: Router) { }
 
@@ -83,34 +85,23 @@ export class CategoryListComponent implements OnInit {
             // total of categories
             this.totalOfCategories = data;
             // total pages
-            this.totalPages = this.calculateTotalPages(this.totalOfCategories, this.pageSize);
+            this.totalPages = this.shareService.calculateTotalPages(this.totalOfCategories, this.pageSize);
           }
         })
     )
   } // end of searchCategories()
 
-  // calculate total pages for pagination
-  calculateTotalPages(totalOfCategories: number, pageSize: number): number {
-
-    if ((totalOfCategories % pageSize) != 0) {
-      //  Math.floor: rounds down and returns the largest integer less than or equal to a given number
-      return (Math.floor(totalOfCategories / pageSize)) + 1;
-    }
-
-    return totalOfCategories / pageSize;
-
-  } // end of calculateTotalPages()
-
   // count index for current page
   // ex:  page 1: ord 1 --> ord 5
   //      page 2: ord 6 --> ord 10 (not repeat: ord 1 --> ord 5)
   // parameters:
+  //  - pageSize: page size(default = 5)
   //  - currentPage: current page
   //  - index: running variable(the index variable of "for loop")
-  indexBasedPage(currentPage: number, index: number): number {
+  indexBasedPage(pageSize: number, currentPage: number, index: number): number {
 
-    // this.pageSize = 5
-    return (this.pageSize * (currentPage - 1)) + (index + 1);
+    return (this.shareService.indexBasedPage(pageSize, currentPage, index));
+
   }
 
   // go to specific page
@@ -120,7 +111,8 @@ export class CategoryListComponent implements OnInit {
     if (this.currentPage >= 1 && this.currentPage <= this.totalPages) {
 
       // the "nth element" in MySQL
-      let nth_element = (this.pageSize) * (this.currentPage - 1);
+      // let nth_element = (this.pageSize) * (this.currentPage - 1);
+      let nth_element = this.shareService.countNthElement(this.pageSize, this.currentPage);
 
       // get categories, total of categories and total of pages
       this.searchCategories(nth_element, this.searchCategory.value.searchTerm, this.searchCategory.value.status);
@@ -142,7 +134,8 @@ export class CategoryListComponent implements OnInit {
       this.currentPage = 1;
 
       // the "nth element" in MySQL
-      let nth_element = (this.pageSize) * (this.currentPage - 1);
+      // let nth_element = (this.pageSize) * (this.currentPage - 1);
+      let nth_element = this.shareService.countNthElement(this.pageSize, this.currentPage);
 
       // get categories, total of categories and total pages
       this.searchCategories(nth_element, this.searchCategory.value.searchTerm, this.searchCategory.value.status);
@@ -159,7 +152,8 @@ export class CategoryListComponent implements OnInit {
       this.currentPage = this.currentPage + 1;
 
       // the "nth element" in MySQL
-      let nth_element = (this.pageSize) * (this.currentPage - 1);
+      // let nth_element = (this.pageSize) * (this.currentPage - 1);
+      let nth_element = this.shareService.countNthElement(this.pageSize, this.currentPage);
 
       // get categories, total of categories and total pages
       this.searchCategories(nth_element, this.searchCategory.value.searchTerm, this.searchCategory.value.status);
@@ -176,7 +170,8 @@ export class CategoryListComponent implements OnInit {
       this.currentPage = this.currentPage - 1;
 
       // the "nth element" in MySQL
-      let nth_element = (this.pageSize) * (this.currentPage - 1);
+      // let nth_element = (this.pageSize) * (this.currentPage - 1);
+      let nth_element = this.shareService.countNthElement(this.pageSize, this.currentPage);
 
       // get categories, total of categories and total pages
       this.searchCategories(nth_element, this.searchCategory.value.searchTerm, this.searchCategory.value.status);
@@ -193,7 +188,8 @@ export class CategoryListComponent implements OnInit {
       this.currentPage = this.totalPages;
 
       // the "nth element" in MySQL
-      let nth_element = (this.pageSize) * (this.currentPage - 1);
+      // let nth_element = (this.pageSize) * (this.currentPage - 1);
+      let nth_element = this.shareService.countNthElement(this.pageSize, this.currentPage);
 
       // get categories, total of categories and total pages
       this.searchCategories(nth_element, this.searchCategory.value.searchTerm, this.searchCategory.value.status);

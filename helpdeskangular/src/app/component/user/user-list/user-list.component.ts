@@ -3,6 +3,7 @@ import { FormBuilder } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { User } from 'src/app/entity/User';
+import { ShareService } from 'src/app/service/share.service';
 import { UserService } from 'src/app/service/user.service';
 
 @Component({
@@ -40,6 +41,7 @@ export class UserListComponent implements OnInit {
 
 
   constructor(private userService: UserService,
+    private shareService: ShareService,
     private formBuilder: FormBuilder,
     private router: Router) { }
 
@@ -57,18 +59,6 @@ export class UserListComponent implements OnInit {
     this.searchUsers(0, this.searchUser.value.searchTerm, this.searchUser.value.role, this.searchUser.value.status);
 
   } // end of ngOnInit()
-
-  // calculate total pages for pagination
-  calculateTotalOfPages(totalOfUsers: number, pageSize: number): number {
-
-    if ((totalOfUsers % pageSize) != 0) {
-      //  Math.floor: rounds down and returns the largest integer less than or equal to a given number
-      // totalPages = (Math.floor(totalOfUsers / pageSize)) + 1;
-      return (Math.floor(totalOfUsers / pageSize)) + 1;
-    }
-
-    return totalOfUsers / pageSize;
-  }
 
   // get users, total of users and total pages
   searchUsers(pageNumber: number, searchTerm: string, role: string, status: string) {
@@ -95,7 +85,7 @@ export class UserListComponent implements OnInit {
             // total of users
             this.totalOfUsers = data;
             // total of pages
-            this.totalPages = this.calculateTotalOfPages(this.totalOfUsers, this.pageSize);
+            this.totalPages = this.shareService.calculateTotalPages(this.totalOfUsers, this.pageSize);
           }
         })
     )
@@ -107,10 +97,11 @@ export class UserListComponent implements OnInit {
   // parameters:
   //  - currentPage: current page
   //  - index: running variable(the index variable of "for loop")
-  indexBasedPage(currentPage: number, index: number): number {
+  indexBasedPage(pageSize:number, currentPage: number, index: number): number {
 
     // this.pageSize = 5
-    return (this.pageSize * (currentPage - 1)) + (index + 1);
+    // return (this.pageSize * (currentPage - 1)) + (index + 1);
+    return (this.shareService.indexBasedPage(pageSize, currentPage, index));
   }
 
   // go to specific page
@@ -121,7 +112,8 @@ export class UserListComponent implements OnInit {
 
       // the "nth element" in MySQL
       // let sqlPage = (this.currentPage * this.pageSize) - this.pageSize;
-      let nth_element = (this.pageSize) * (this.currentPage - 1);
+      // let nth_element = (this.pageSize) * (this.currentPage - 1);
+      let nth_element = this.shareService.countNthElement(this.pageSize, this.currentPage);
 
       // get users, total of users and total of pages
       this.searchUsers(nth_element, this.searchUser.value.searchTerm, this.searchUser.value.role, this.searchUser.value.status);
@@ -144,7 +136,8 @@ export class UserListComponent implements OnInit {
 
       // the "nth element" in MySQL
       // let sqlPage = (this.currentPage * this.pageSize) - this.pageSize;
-      let nth_element = (this.pageSize) * (this.currentPage - 1);
+      // let nth_element = (this.pageSize) * (this.currentPage - 1);
+      let nth_element = this.shareService.countNthElement(this.pageSize, this.currentPage);
 
       // get users, total of users and total pages
       this.searchUsers(nth_element, this.searchUser.value.searchTerm, this.searchUser.value.role, this.searchUser.value.status);
@@ -162,7 +155,8 @@ export class UserListComponent implements OnInit {
 
       // the "nth element" in MySQL
       // let sqlPage = (this.currentPage * this.pageSize) - this.pageSize;
-      let nth_element = (this.pageSize) * (this.currentPage - 1);
+      // let nth_element = (this.pageSize) * (this.currentPage - 1);
+      let nth_element = this.shareService.countNthElement(this.pageSize, this.currentPage);
 
       // get users, total of users and total pages
       this.searchUsers(nth_element, this.searchUser.value.searchTerm, this.searchUser.value.role, this.searchUser.value.status);
@@ -180,7 +174,8 @@ export class UserListComponent implements OnInit {
 
       // the "nth element" in MySQL
       // let sqlPage = (this.currentPage * this.pageSize) - this.pageSize;
-      let nth_element = (this.pageSize) * (this.currentPage - 1);
+      // let nth_element = (this.pageSize) * (this.currentPage - 1);
+      let nth_element = this.shareService.countNthElement(this.pageSize, this.currentPage);
 
       // get users, total of users and total of pages
       this.searchUsers(nth_element, this.searchUser.value.searchTerm, this.searchUser.value.role, this.searchUser.value.status);
@@ -198,7 +193,8 @@ export class UserListComponent implements OnInit {
 
       // the "nth element" in MySQL
       // let sqlPage = (this.currentPage * this.pageSize) - this.pageSize;
-      let nth_element = (this.pageSize) * (this.currentPage - 1);
+      // let nth_element = (this.pageSize) * (this.currentPage - 1);
+      let nth_element = this.shareService.countNthElement(this.pageSize, this.currentPage);
 
       // get users, total of users and total of pages
       this.searchUsers(nth_element, this.searchUser.value.searchTerm, this.searchUser.value.role, this.searchUser.value.status);

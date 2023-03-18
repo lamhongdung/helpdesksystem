@@ -15,7 +15,7 @@ import javax.validation.constraints.Size;
 @Table(name = "calendar")
 // HDCalendar(Help Desk Calendar) class.
 // note: do use the 'Calendar' class.
-// Because this class(Calendar) is a standard class of the Java(java.util.Calendar)
+// Because this Calendar class is a standard class of the Java(java.util.Calendar)
 public class HDCalendar {
 
     @Id

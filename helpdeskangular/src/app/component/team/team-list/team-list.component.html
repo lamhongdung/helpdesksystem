@@ -152,7 +152,7 @@
           <!-- column: order(line number) -->
           <!-- navigate to the "/team-view/{id}" when user clicks on the table(except the column "Action") -->
           <td style="text-align: right" class="pointer-link" (click)="viewTeam(team.id)">
-            {{indexBasedPage(currentPage, i)}}</td>
+            {{indexBasedPage(pageSize, currentPage, i)}}</td>
 
           <!-- column: ID -->
           <!-- navigate to the "/team-view/{id}" when user clicks on the table(except the column "Action") -->

@@ -12,6 +12,10 @@ import java.util.List;
 public interface CalendarRepository extends JpaRepository<HDCalendar, Long> {
 
     // get all calendars
+    // parameters:
+    //  - status = "": all(active + inactive) calendars
+    //  - status = "Active": all active calendars
+    //  - status = "Inactive": all inactive calendars
     @Query(value = "" +
             " select a.* " +
             " from calendar a " +
@@ -44,7 +48,7 @@ public interface CalendarRepository extends JpaRepository<HDCalendar, Long> {
 
     // calculate total of calendars for pagination
     @Query(value = "" +
-            " select count(a.id) as totalOfCalendars " +
+            " select count(a.id) as totalOfCalendars " + // total of calendars
             " from calendar a " +
             " where concat(a.id,' ', a.name) like %:searchTerm% and " + // searchTerm
             "       ( " +

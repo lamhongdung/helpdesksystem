@@ -143,7 +143,7 @@
           <!-- column: order(line number) -->
           <!-- if user clicks on the table(except the Action) then  -->
           <!-- navigate to the "/user-view/{id}" when user clicks on the table(except the column "Action") -->
-          <td style="text-align: right" class="pointer-link" (click)="viewUser(user.id)">{{indexBasedPage(currentPage,
+          <td style="text-align: right" class="pointer-link" (click)="viewUser(user.id)">{{indexBasedPage(pageSize, currentPage,
             i)}}</td>
 
           <!-- column: ID -->

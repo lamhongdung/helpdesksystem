@@ -125,7 +125,7 @@
           <!-- column: order(line number) -->
           <!-- navigate to the "/category-view/{id}" when user clicks on the table(except the column "Action") -->
           <td style="text-align: right" class="pointer-link" (click)="viewCategory(category.id)">
-            {{indexBasedPage(currentPage, i)}}</td>
+            {{indexBasedPage(pageSize, currentPage, i)}}</td>
 
           <!-- column: ID -->
           <!-- navigate to the "/category-view/{id}" when user clicks on the table(except the column "Action") -->
@@ -140,8 +140,7 @@
           <td class="pointer-link" (click)="viewCategory(category.id)">{{category.status}}</td>
 
           <!-- the "Edit" button -->
-          <td class="text-center" tooltip="Edit category" theme="light" placement="right"
-            [autoPlacement]="true">
+          <td class="text-center" tooltip="Edit category" theme="light" placement="right" [autoPlacement]="true">
             <a class="btn btn-primary mr-1" [routerLink]="['/category-edit', category.id]"><i
                 class="fa fa-edit"></i></a>
           </td>

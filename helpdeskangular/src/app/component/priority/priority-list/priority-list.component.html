@@ -163,7 +163,7 @@
                     <!-- column: order(line number) -->
                     <!-- navigate to the "/priority-view/{id}" when user clicks on the table(except the column "Action") -->
                     <td style="text-align: right" class="pointer-link" (click)="viewPriority(priority.id)">
-                        {{indexBasedPage(currentPage, i)}}</td>
+                        {{indexBasedPage(pageSize, currentPage, i)}}</td>
 
                     <!-- column: ID -->
                     <!-- navigate to the "/priority-view/{id}" when user clicks on the table(except the column "Action") -->

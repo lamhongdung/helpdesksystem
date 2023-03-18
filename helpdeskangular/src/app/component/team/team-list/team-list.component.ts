@@ -3,6 +3,7 @@ import { FormBuilder } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { TeamResponse } from 'src/app/entity/TeamResponse';
+import { ShareService } from 'src/app/service/share.service';
 import { TeamService } from 'src/app/service/team.service';
 
 @Component({
@@ -40,6 +41,7 @@ export class TeamListComponent implements OnInit {
 
 
   constructor(private teamService: TeamService,
+    private shareService: ShareService,
     private formBuilder: FormBuilder,
     private router: Router) { }
 
@@ -102,23 +104,11 @@ export class TeamListComponent implements OnInit {
             // total of teams
             this.totalOfTeams = data;
             // total pages
-            this.totalPages = this.calculateTotalPages(this.totalOfTeams, this.pageSize);
+            this.totalPages = this.shareService.calculateTotalPages(this.totalOfTeams, this.pageSize);
           }
         })
     )
   } // end of searchTeams()
-
-  // calculate total pages for pagination
-  calculateTotalPages(totalOfTeams: number, pageSize: number): number {
-
-    if ((totalOfTeams % pageSize) != 0) {
-      //  Math.floor: rounds down and returns the largest integer less than or equal to a given number
-      return (Math.floor(totalOfTeams / pageSize)) + 1;
-    }
-
-    return totalOfTeams / pageSize;
-
-  } // end of calculateTotalPages()
 
   // count index for current page
   // ex:  page 1: ord 1 --> ord 5
@@ -126,10 +116,11 @@ export class TeamListComponent implements OnInit {
   // parameters:
   //  - currentPage: current page
   //  - index: running variable(the index variable of "for loop")
-  indexBasedPage(currentPage: number, index: number): number {
+  indexBasedPage(pageSize: number, currentPage: number, index: number): number {
 
     // this.pageSize = 5
-    return (this.pageSize * (currentPage - 1)) + (index + 1);
+    // return (this.pageSize * (currentPage - 1)) + (index + 1);
+    return (this.shareService.indexBasedPage(pageSize, currentPage, index));
   }
 
   // go to specific page
@@ -139,7 +130,8 @@ export class TeamListComponent implements OnInit {
     if (this.currentPage >= 1 && this.currentPage <= this.totalPages) {
 
       // the "nth element" in MySQL
-      let nth_element = (this.pageSize) * (this.currentPage - 1);
+      // let nth_element = (this.pageSize) * (this.currentPage - 1);
+      let nth_element = this.shareService.countNthElement(this.pageSize, this.currentPage);
 
       // get teams, total of teams and total of pages
       this.searchTeams(nth_element, this.searchTeam.value.searchTerm,
@@ -162,7 +154,8 @@ export class TeamListComponent implements OnInit {
       this.currentPage = 1;
 
       // the "nth element" in MySQL
-      let nth_element = (this.pageSize) * (this.currentPage - 1);
+      // let nth_element = (this.pageSize) * (this.currentPage - 1);
+      let nth_element = this.shareService.countNthElement(this.pageSize, this.currentPage);
 
       // get teams, total of teams and total pages
       this.searchTeams(nth_element, this.searchTeam.value.searchTerm,
@@ -180,7 +173,8 @@ export class TeamListComponent implements OnInit {
       this.currentPage = this.currentPage + 1;
 
       // the "nth element" in MySQL
-      let nth_element = (this.pageSize) * (this.currentPage - 1);
+      // let nth_element = (this.pageSize) * (this.currentPage - 1);
+      let nth_element = this.shareService.countNthElement(this.pageSize, this.currentPage);
 
       // get teams, total of teams and total pages
       this.searchTeams(nth_element, this.searchTeam.value.searchTerm,
@@ -198,7 +192,8 @@ export class TeamListComponent implements OnInit {
       this.currentPage = this.currentPage - 1;
 
       // the "nth element" in MySQL
-      let nth_element = (this.pageSize) * (this.currentPage - 1);
+      // let nth_element = (this.pageSize) * (this.currentPage - 1);
+      let nth_element = this.shareService.countNthElement(this.pageSize, this.currentPage);
 
       // get teams, total of teams and total pages
       this.searchTeams(nth_element, this.searchTeam.value.searchTerm,
@@ -216,7 +211,8 @@ export class TeamListComponent implements OnInit {
       this.currentPage = this.totalPages;
 
       // the "nth element" in MySQL
-      let nth_element = (this.pageSize) * (this.currentPage - 1);
+      // let nth_element = (this.pageSize) * (this.currentPage - 1);
+      let nth_element = this.shareService.countNthElement(this.pageSize, this.currentPage);
 
       // get teams, total of teams and total pages
       this.searchTeams(nth_element, this.searchTeam.value.searchTerm,
