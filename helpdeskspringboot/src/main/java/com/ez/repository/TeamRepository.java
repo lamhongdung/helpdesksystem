@@ -16,26 +16,25 @@ import java.util.List;
 @Transactional
 public interface TeamRepository extends JpaRepository<Team, Long> {
 
-    // search teams based on pageNumber, pageSize, searchTerm(id, team name, calendar name),
+    // search teams based on pageNumber, pageSize, searchTerm(id, team name),
     // assignmentMethod and status.
     //
     // The "team" table contains columns:
-    //      id, name, assignmentMethod, calendarid, status.
-    // The "calendar" table contains columns:
-    //      id, name, status
+    //      id, name, assignmentMethod, status.
     @Query(value = "" +
-            " select a.id as id, " + // teamid
-            "        a.name as teamName, " + // teamName
-            "        case a.assignmentMethod " + // team assignmentMethod
+            " select a.id as id, " + // id
+            "        a.name as name, " + // Name
+            "        case a.assignmentMethod " + // assignmentMethod
             "           when 'A' then 'Auto' " +
             "           else 'Manual' " +
             "        end as assignmentMethod, " +
-            "        a.calendarid as calendarid, " + // calendarid
-            "        COALESCE(b.name, '') as calendarName, " + // calendarName
+//            "        a.calendarid as calendarid, " + // calendarid
+//            "        COALESCE(b.name, '') as calendarName, " + // calendarName
             "        a.status as status " + // team status
             " from team a " +
-            "   left join calendar b on a.calendarid = b.id " +
-            " where concat(a.id,' ', a.name,' ', COALESCE(b.name, '')) like %:searchTerm% and " + // searchTerm
+//            "   left join calendar b on a.calendarid = b.id " +
+//            " where concat(a.id,' ', a.name,' ', COALESCE(b.name, '')) like %:searchTerm% and " + // searchTerm
+            " where concat(a.id,' ', a.name) like %:searchTerm% and " + // searchTerm
             "       ( " +
             "         case :assignmentMethod " + // assignmentMethod
             "           when '' then a.assignmentMethod like '%%' " +
@@ -59,14 +58,13 @@ public interface TeamRepository extends JpaRepository<Team, Long> {
     // calculate total of teams for pagination
     //
     // The "team" table contains columns:
-    //      id, name, assignmentMethod, calendarid, status.
-    // The "calendar" table contains columns:
-    //      id, name, status
+    //      id, name, assignmentMethod, status.
     @Query(value = "" +
             " select count(a.id) as totalOfTeams " + // total of teams
             " from team a " +
-            "   left join calendar b on a.calendarid = b.id " +
-            " where concat(a.id,' ', a.name, ' ', COALESCE(b.name, '')) like %:searchTerm% and " + // searchTerm
+//            "   left join calendar b on a.calendarid = b.id " +
+//            " where concat(a.id,' ', a.name, ' ', COALESCE(b.name, '')) like %:searchTerm% and " + // searchTerm
+            " where concat(a.id,' ', a.name) like %:searchTerm% and " + // searchTerm
             "       ( " +
             "         case :assignmentMethod " + // assignmentMethod
             "           when '' then a.assignmentMethod like '%%' " +

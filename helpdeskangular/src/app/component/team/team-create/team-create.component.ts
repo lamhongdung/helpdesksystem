@@ -4,11 +4,11 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { IDropdownSettings } from 'ng-multiselect-dropdown';
 import { Subscription } from 'rxjs';
-import { Calendar } from 'src/app/entity/Calendar';
+// import { Calendar } from 'src/app/entity/Calendar';
 import { Supporter } from 'src/app/entity/Supporter';
-import { TeamRequest } from 'src/app/entity/TeamRequest';
+import { Team } from 'src/app/entity/Team';
 import { NotificationType } from 'src/app/enum/NotificationType.enum';
-import { CalendarService } from 'src/app/service/calendar.service';
+// import { CalendarService } from 'src/app/service/calendar.service';
 import { NotificationService } from 'src/app/service/notification.service';
 import { TeamService } from 'src/app/service/team.service';
 
@@ -33,17 +33,17 @@ export class TeamCreateComponent implements OnInit {
   // active supporters
   activeSupporters: Supporter[] = [];
 
-  // all active calendars
-  calendars: Calendar[] = [];
+  // // all active calendars
+  // calendars: Calendar[] = [];
 
   errorMessages = {
     name: [
       { type: 'required', message: 'Please input team name' },
       { type: 'maxlength', message: 'Name cannot be longer than 50 characters' }
     ],
-    calendarid: [
-      { type: 'required', message: 'Please choose at least 1 active calendar' }
-    ],
+    // calendarid: [
+    //   { type: 'required', message: 'Please choose at least 1 active calendar' }
+    // ],
     supporters: [
       { type: 'required', message: 'Please choose at least 1 active supporter' }
     ]
@@ -58,36 +58,36 @@ export class TeamCreateComponent implements OnInit {
 
   constructor(private router: Router,
     private teamService: TeamService,
-    private calendarService: CalendarService,
+    // private calendarService: CalendarService,
     private formBuilder: FormBuilder,
     private notificationService: NotificationService) {
 
-    this.subscriptions.push(
+    // this.subscriptions.push(
 
-      // get all active calendars
-      this.calendarService.getAllCalendars("Active")
+    //   // get all active calendars
+    //   this.calendarService.getAllCalendars("Active")
 
-        .subscribe({
+    //     .subscribe({
 
-          // get all active calendars successful
-          next: (data: Calendar[]) => {
+    //       // get all active calendars successful
+    //       next: (data: Calendar[]) => {
 
-            // all active calendars
-            this.calendars = data;
+    //         // all active calendars
+    //         this.calendars = data;
 
-            // assign the first value of the calendar to the 'calendarid' field
-            this.teamForm.controls['calendarid'].setValue(this.calendars[0]?.id);
-          },
+    //         // // assign the first value of the calendar to the 'calendarid' field
+    //         // this.teamForm.controls['calendarid'].setValue(this.calendars[0]?.id);
+    //       },
 
-          // there are some errors when get all active calendars
-          error: (errorResponse: HttpErrorResponse) => {
+    //       // there are some errors when get all active calendars
+    //       error: (errorResponse: HttpErrorResponse) => {
 
-            // show the error message to user
-            this.sendNotification(NotificationType.ERROR, errorResponse.error.message);
+    //         // show the error message to user
+    //         this.sendNotification(NotificationType.ERROR, errorResponse.error.message);
 
-          }
-        })
-    );
+    //       }
+    //     })
+    // );
 
   }
 
@@ -122,9 +122,9 @@ export class TeamCreateComponent implements OnInit {
       // initial value = 'A'(Auto)
       assignmentMethod: ['A'],
 
-      // required. 
-      // initial value = first value of the calendar(is set in the constructor method)
-      calendarid: ['', [Validators.required]],
+      // // required. 
+      // // initial value = first value of the calendar(is set in the constructor method)
+      // calendarid: ['', [Validators.required]],
 
       // required and initial value = ''
       supporters: ['', [Validators.required]],
@@ -140,7 +140,6 @@ export class TeamCreateComponent implements OnInit {
 
     // push into the subscriptions list in order to unsubscribes all easily
     this.subscriptions.push(
-
 
       // get active supporters
       this.teamService.getActiveSupporters()
@@ -182,7 +181,6 @@ export class TeamCreateComponent implements OnInit {
       // "this.teamForm.value": includes:
       //  - name(team name)
       //  - assignment method
-      //  - calendarid
       //  - supporters
       //  - status
       this.teamService.createTeam(this.teamForm.value).subscribe({
@@ -192,10 +190,9 @@ export class TeamCreateComponent implements OnInit {
         //  - id
         //  - name
         //  - assignment method
-        //  - calendarid
         //  - supporters
         //  - status
-        next: (data: TeamRequest) => {
+        next: (data: Team) => {
 
           // show the "successful message" to user 
           this.sendNotification(NotificationType.SUCCESS, `Team ${data.name} is created successfully`);

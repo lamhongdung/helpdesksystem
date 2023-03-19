@@ -2,7 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { TeamResponse } from 'src/app/entity/TeamResponse';
+import { Team } from 'src/app/entity/Team';
+// import { TeamResponse } from 'src/app/entity/TeamResponse';
 import { ShareService } from 'src/app/service/share.service';
 import { TeamService } from 'src/app/service/team.service';
 
@@ -23,7 +24,8 @@ export class TeamListComponent implements OnInit {
   // total of teams(for pagination)
   totalOfTeams: number;
   // team list(the grid of the team table)
-  teams: TeamResponse[] = [];
+  // teams: TeamResponse[] = [];
+  teams: Team[] = [];
   // number of teams per page(default = 5)
   pageSize: number;
 
@@ -63,7 +65,7 @@ export class TeamListComponent implements OnInit {
   // get teams, total of teams and total pages.
   // parameters:
   //  - pageNumber: page number
-  //  - search term: id, team name and calendar name
+  //  - search term: id, team name
   //  - assignmentMethod: ''(all), 'Auto', 'Manual'
   //  - status: ''(all), 'Active', 'Inactive'
   searchTeams(pageNumber: number, searchTerm: string, assignmentMethod: string, status: string) {
@@ -79,12 +81,11 @@ export class TeamListComponent implements OnInit {
           // get team from database successful.
           // TeamResponse includes:
           //  - id
-          //  - teamName
+          //  - name
           //  - assignmentMethod
-          //  - calendarid
-          //  - calendarName
           //  - status
-          next: (data: TeamResponse[]) => {
+          // next: (data: TeamResponse[]) => {
+          next: (data: Team[]) => {
             return this.teams = data
           }
 

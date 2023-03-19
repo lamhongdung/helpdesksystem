@@ -4,10 +4,10 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { ActivatedRoute, ParamMap } from '@angular/router';
 import { IDropdownSettings } from 'ng-multiselect-dropdown';
 import { Subscription } from 'rxjs';
-import { Calendar } from 'src/app/entity/Calendar';
-import { TeamRequest } from 'src/app/entity/TeamRequest';
+// import { Calendar } from 'src/app/entity/Calendar';
+import { Team } from 'src/app/entity/Team';
 import { NotificationType } from 'src/app/enum/NotificationType.enum';
-import { CalendarService } from 'src/app/service/calendar.service';
+// import { CalendarService } from 'src/app/service/calendar.service';
 import { NotificationService } from 'src/app/service/notification.service';
 import { TeamService } from 'src/app/service/team.service';
 
@@ -25,7 +25,6 @@ export class TeamViewComponent {
   //  - id
   //  - name
   //  - assignment method
-  //  - calendarid
   //  - supporters
   //  - status
   teamForm: FormGroup;
@@ -34,13 +33,12 @@ export class TeamViewComponent {
   //  - id
   //  - name
   //  - assignment method
-  //  - calendarid
   //  - supporters
   //  - status
-  team: TeamRequest;
+  team: Team;
 
-  // all(active + inactive) calendars
-  calendars: Calendar[] = [];
+  // // all(active + inactive) calendars
+  // calendars: Calendar[] = [];
 
   // team id
   id: number;
@@ -53,36 +51,36 @@ export class TeamViewComponent {
   supporterSetting: IDropdownSettings;
 
   constructor(private teamService: TeamService,
-    private calendarService: CalendarService,
+    // private calendarService: CalendarService,
     private notificationService: NotificationService,
     private formBuilder: FormBuilder,
     private activatedRoute: ActivatedRoute
   ) {
 
 
-    this.subscriptions.push(
+    // this.subscriptions.push(
 
-      // get all(active + inactive) calendars
-      this.calendarService.getAllCalendars("")
+    //   // get all(active + inactive) calendars
+    //   this.calendarService.getAllCalendars("")
 
-        .subscribe({
+    //     .subscribe({
 
-          // get all(active + inactive) calendars successful
-          next: (data: Calendar[]) => {
+    //       // get all(active + inactive) calendars successful
+    //       next: (data: Calendar[]) => {
 
-            // all(active + inactive) calendars
-            this.calendars = data;
-          },
+    //         // all(active + inactive) calendars
+    //         this.calendars = data;
+    //       },
 
-          // there are some errors when get all(active + inactive) calendars
-          error: (errorResponse: HttpErrorResponse) => {
+    //       // there are some errors when get all(active + inactive) calendars
+    //       error: (errorResponse: HttpErrorResponse) => {
 
-            // show the error message to user
-            this.sendNotification(NotificationType.ERROR, errorResponse.error.message);
+    //         // show the error message to user
+    //         this.sendNotification(NotificationType.ERROR, errorResponse.error.message);
 
-          }
-        })
-    ); // end of this.subscriptions.push()
+    //       }
+    //     })
+    // ); // end of this.subscriptions.push()
   } // end of constructor()
 
   // initial values
@@ -112,7 +110,7 @@ export class TeamViewComponent {
       id: [''],
       name: [''],
       assignmentMethod: [{ value: '', disabled: true }],
-      calendarid: [{ value: '', disabled: true }],
+      // calendarid: [{ value: '', disabled: true }],
       supporters: [{ value: '', disabled: true }],
 
       // initial empty value to the status, and disable it
@@ -139,7 +137,7 @@ export class TeamViewComponent {
           this.teamService.findById(this.id).subscribe({
 
             // if there is no error when get data from database
-            next: (data: TeamRequest) => {
+            next: (data: Team) => {
 
               this.team = data;
 

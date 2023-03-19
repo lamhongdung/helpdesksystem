@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { CalendarCreateComponent } from './component/calendar/calendar-create/calendar-create.component';
-import { CalendarListComponent } from './component/calendar/calendar-list/calendar-list.component';
+// import { CalendarCreateComponent } from './component/calendar/calendar-create/calendar-create.component';
+// import { CalendarListComponent } from './component/calendar/calendar-list/calendar-list.component';
 import { CategoryCreateComponent } from './component/category/category-create/category-create.component';
 import { CategoryEditComponent } from './component/category/category-edit/category-edit.component';
 import { CategoryListComponent } from './component/category/category-list/category-list.component';
@@ -146,19 +146,19 @@ const routes: Routes = [
       roles: ['ROLE_ADMIN']
     }
   },
-  // Calendar menu
-  {
-    path: 'calendar-list', component: CalendarListComponent, canActivate: [AuthGuard],
-    data: {
-      roles: ['ROLE_ADMIN']
-    }
-  },
-  {
-    path: 'calendar-create', component: CalendarCreateComponent, canActivate: [AuthGuard],
-    data: {
-      roles: ['ROLE_ADMIN']
-    }
-  },
+  // // Calendar menu
+  // {
+  //   path: 'calendar-list', component: CalendarListComponent, canActivate: [AuthGuard],
+  //   data: {
+  //     roles: ['ROLE_ADMIN']
+  //   }
+  // },
+  // {
+  //   path: 'calendar-create', component: CalendarCreateComponent, canActivate: [AuthGuard],
+  //   data: {
+  //     roles: ['ROLE_ADMIN']
+  //   }
+  // },
   {
     path: 'ticket-list', component: TicketListComponent, canActivate: [AuthGuard],
     data: {

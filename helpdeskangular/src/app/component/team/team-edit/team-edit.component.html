@@ -69,33 +69,33 @@
                     </div>
 
                     <!-- Calendar -->
-                    <div class="row mb-3">
+                    <!-- <div class="row mb-3"> -->
 
                         <!-- label -->
-                        <div class="col-3">
+                        <!-- <div class="col-3">
                             <label class="col-form-label" for="calendar">Calendar<small
                                     class="text-danger">*</small></label>
-                        </div>
+                        </div> -->
 
                         <!-- dropdown -->
-                        <div class="col-9">
+                        <!-- <div class="col-9">
                             <select id="calendarid" class="form-control" formControlName="calendarid"
                                 tooltip="Calendar. <br> A team must belong to a certain calendar.<br> Values include 'id' + 'name' + 'status'"
-                                theme="light" placement="right" [autoPlacement]="true">
+                                theme="light" placement="right" [autoPlacement]="true"> -->
                                 <!-- all(active + inactive) calendars -->
-                                <option *ngFor="let calendar of calendars" [value]="calendar.id">
+                                <!-- <option *ngFor="let calendar of calendars" [value]="calendar.id">
                                     {{calendar.id}} - {{calendar.name}} - {{calendar.status}}</option>
-                            </select>
+                            </select> -->
                             <!-- error messages -->
-                            <div class="text-danger" *ngFor="let e of errorMessages.calendarid">
+                            <!-- <div class="text-danger" *ngFor="let e of errorMessages.calendarid"> -->
                                 <!-- errors on the "calendarid" field -->
-                                <div *ngIf="teamForm.get('calendarid').hasError(e.type) && 
+                                <!-- <div *ngIf="teamForm.get('calendarid').hasError(e.type) && 
                                             (teamForm.get('calendarid').dirty || teamForm.get('calendarid').touched) ">
                                     <small>{{e.message}}</small>
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </div> -->
 
                     <!-- Active supporters -->
                     <div class="row mb-3">

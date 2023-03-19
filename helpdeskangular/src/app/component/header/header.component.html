@@ -38,8 +38,9 @@
               <li><a class="dropdown-item" routerLink="/team-list">All teams</a></li>
             </ul>
           </li>
+
           <!-- Calendars menu -->
-          <li class="nav-item dropdown active" *ngIf="['ROLE_ADMIN'].indexOf(loggedInRole)!==-1">
+          <!-- <li class="nav-item dropdown active" *ngIf="['ROLE_ADMIN'].indexOf(loggedInRole)!==-1">
             <a class="nav-link dropdown-toggle" href="#" id="navbarCalendar" role="button" data-toggle="dropdown"
               aria-expanded="false">
               Calendars
@@ -48,7 +49,8 @@
               <li><a class="dropdown-item" routerLink="/calendar-create">Create calendar</a></li>
               <li><a class="dropdown-item" routerLink="/calendar-list">All Calendars</a></li>
             </ul>
-          </li>
+          </li> -->
+
           <!-- Priorities menu -->
           <li class="nav-item dropdown active" *ngIf="['ROLE_ADMIN'].indexOf(loggedInRole)!==-1">
             <a class="nav-link dropdown-toggle" href="#" id="navbarPriority" role="button" data-toggle="dropdown"

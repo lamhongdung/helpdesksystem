@@ -7,8 +7,8 @@ import { TooltipModule } from 'ng2-tooltip-directive';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { CalendarCreateComponent } from './component/calendar/calendar-create/calendar-create.component';
-import { CalendarListComponent } from './component/calendar/calendar-list/calendar-list.component';
+// import { CalendarCreateComponent } from './component/calendar/calendar-create/calendar-create.component';
+// import { CalendarListComponent } from './component/calendar/calendar-list/calendar-list.component';
 import { CategoryCreateComponent } from './component/category/category-create/category-create.component';
 import { CategoryEditComponent } from './component/category/category-edit/category-edit.component';
 import { CategoryListComponent } from './component/category/category-list/category-list.component';
@@ -38,14 +38,12 @@ import { NotificationModule } from './notification.module';
 import { AuthService } from './service/auth.service';
 import { NotificationService } from './service/notification.service';
 import { UserService } from './service/user.service';
-import { CalendarEditComponent } from './component/calendar/calendar-edit/calendar-edit.component';
-import { CalendarViewComponent } from './component/calendar/calendar-view/calendar-view.component';
+// import { CalendarEditComponent } from './component/calendar/calendar-edit/calendar-edit.component';
+// import { CalendarViewComponent } from './component/calendar/calendar-view/calendar-view.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    CalendarCreateComponent,
-    CalendarListComponent,
     CategoryCreateComponent,
     CategoryEditComponent,
     CategoryListComponent,
@@ -68,9 +66,11 @@ import { CalendarViewComponent } from './component/calendar/calendar-view/calend
     UserCreateComponent,
     UserEditComponent,
     UserListComponent,
+    // CalendarCreateComponent,
+    // CalendarListComponent,
+    // CalendarEditComponent,
+    // CalendarViewComponent
     UserViewComponent,
-    CalendarEditComponent,
-    CalendarViewComponent
   ],
   imports: [
     NgMultiSelectDropDownModule.forRoot(),

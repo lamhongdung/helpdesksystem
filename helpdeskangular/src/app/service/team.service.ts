@@ -3,8 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { Supporter } from '../entity/Supporter';
-import { TeamRequest } from '../entity/TeamRequest';
-import { TeamResponse } from '../entity/TeamResponse';
+import { Team } from '../entity/Team';
 
 @Injectable({
   providedIn: 'root'
@@ -20,10 +19,14 @@ export class TeamService {
   constructor(private http: HttpClient) { }
 
   // get teams by page and based on the search criteria
-  searchTeams(pageNumber: number, searchTerm: string, assignmentMethod: string, status: string): Observable<TeamResponse[]> {
+  searchTeams(pageNumber: number, searchTerm: string, 
+    assignmentMethod: string, status: string): Observable<Team[]> {
 
     // ex: url = http://localhost:8080/team-search?pageNumber=0&pageSize=5&searchTerm=""&assignmentMethod=""&status=""
-    return this.http.get<TeamResponse[]>(
+    // return this.http.get<TeamResponse[]>(
+    //   `${this.host}/team-search?pageNumber=${pageNumber}&pageSize=${this.pageSize}&searchTerm=${searchTerm}&assignmentMethod=${assignmentMethod}&status=${status}`
+    // )
+    return this.http.get<Team[]>(
       `${this.host}/team-search?pageNumber=${pageNumber}&pageSize=${this.pageSize}&searchTerm=${searchTerm}&assignmentMethod=${assignmentMethod}&status=${status}`
     )
   } // end of searchTeams()
@@ -48,19 +51,19 @@ export class TeamService {
     )
   }
 
-  // create new team
-  public createTeam(team: TeamRequest): Observable<TeamRequest> {
-    return this.http.post<TeamRequest>(`${this.host}/team-create`, team);
+  // create a new team
+  public createTeam(team: Team): Observable<Team> {
+    return this.http.post<Team>(`${this.host}/team-create`, team);
   }
 
-  // edit existing team
-  public editTeam(team: TeamRequest): Observable<TeamRequest> {
-    return this.http.put<TeamRequest>(`${this.host}/team-edit`, team);
+  // edit an existing team
+  public editTeam(team: Team): Observable<Team> {
+    return this.http.put<Team>(`${this.host}/team-edit`, team);
   }
 
   // find team by id
-  findById(id: number): Observable<TeamRequest> {
-    return this.http.get<TeamRequest>(`${this.host}/team-list/${id}`);
+  findById(id: number): Observable<Team> {
+    return this.http.get<Team>(`${this.host}/team-list/${id}`);
   }
 
 } // end of class TeamService

@@ -1,13 +1,13 @@
-export class Calendar {
+// export class Calendar {
 
-    constructor(
+//     constructor(
 
-        public id: number,
-        public name: string,
-        public status: string
+//         public id: number,
+//         public name: string,
+//         public status: string
 
-    ) {
+//     ) {
 
-    }
+//     }
 
-}
+// }

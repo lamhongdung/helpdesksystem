@@ -1,18 +1,18 @@
 // this class contains data is received from server
-export class TeamResponse {
+// export class TeamResponse {
 
-    constructor(
+//     constructor(
 
-        public id: number,
-        public teamName: string,
-        public assignmentMethod: string,
+//         public id: number,
+//         public teamName: string,
+//         public assignmentMethod: string,
 
-        public calendarid: number,
-        public calendarName: string,
+//         // public calendarid: number,
+//         // public calendarName: string,
 
-        public status: string
-    ) {
+//         public status: string
+//     ) {
 
-    }
+//     }
 
-}
+// }

@@ -35,7 +35,7 @@ public class TeamController {
     // parameters:
     //  - pageNumber: page number
     //  - pageSize: page size(default = 5)
-    //  - searchTerm: word to search(ID, team name, calendar name). '' is for search all
+    //  - searchTerm: word to search(ID, team name). '' is for search all
     //  - assignmentMethod: ''(all), 'A'(Auto), 'M'(Manual)
     //  - status: ''(all), 'Active', 'Inactive'
     @GetMapping("/team-search")
@@ -47,7 +47,7 @@ public class TeamController {
                                                           @RequestParam(required = false, defaultValue = "") String assignmentMethod,
                                                           @RequestParam(required = false, defaultValue = "") String status) {
 
-        // get all teams of 1 page
+        // get all teams of page "pageNumber"
         List<TeamResponse> teams = teamService.searchTeams(pageNumber, pageSize, searchTerm, assignmentMethod, status);
 
         return new ResponseEntity<>(teams, OK);
