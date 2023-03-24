@@ -1,6 +1,6 @@
 package com.ez.controller;
 
-import com.ez.dto.SupporterResponse;
+import com.ez.dto.DropdownResponse;
 import com.ez.dto.TeamRequest;
 import com.ez.dto.TeamResponse;
 import com.ez.entity.Team;
@@ -77,12 +77,12 @@ public class TeamController {
     @GetMapping("/active-supporters")
     // only the ROLE_ADMIN can access this address
     @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
-    public ResponseEntity<List<SupporterResponse>> getActiveSupporters() {
+    public ResponseEntity<List<DropdownResponse>> getActiveSupporters() {
 
         // get active supporters
-        List<SupporterResponse> supporters = teamService.getActiveSupporters();
+        List<DropdownResponse> supporterResponses = teamService.getActiveSupporters();
 
-        return new ResponseEntity<>(supporters, OK);
+        return new ResponseEntity<>(supporterResponses, OK);
     }
 
     //

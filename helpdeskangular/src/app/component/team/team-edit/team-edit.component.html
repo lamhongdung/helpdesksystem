@@ -13,7 +13,7 @@
         <div class="row mt-5">
 
             <!-- move column to central -->
-            <div class="col-lg-10 col-md-10 offset-lg-1">
+            <div class="col-md-10 offset-md-1">
                 <div class="container">
 
                     <!-- id -->
@@ -60,7 +60,7 @@
                         <!-- dropdown -->
                         <div class="col-9">
                             <select id="assignmentMethod" class="form-control" formControlName="assignmentMethod"
-                                tooltip="Assignment method. <br>- <b>Auto</b>: auto assign supporter to ticket. <br>-<b>Manual</b>: assign ticket to supporter manually"
+                                tooltip="- Assignment method. <br>- <b>Auto</b>: auto assign supporter to ticket.<br>- <b>Manual</b>: assign ticket to supporter manually"
                                 theme="light" placement="right" [autoPlacement]="true">
                                 <option value="A">Auto</option>
                                 <option value="M">Manual</option>
@@ -111,7 +111,7 @@
                             <!-- dropdown(multi selection) -->
                             <ng-multiselect-dropdown placeholder="Active supporters" [settings]="supporterSetting"
                                 [data]="activeSupporters" formControlName="supporters" id="supporters"
-                                tooltip="Assign active supporters to team. <br> A team must has at least 1 supporter.<br> Values includes 'id' + 'last name' + 'first name' + 'email' + 'status'"
+                                tooltip="- Assign active supporters to team.<br>- A team must has at least 1 supporter.<br> Values includes 'id' + 'last name' + 'first name' + 'email' + 'status'"
                                 theme="light" placement="right" [autoPlacement]="true">
                             </ng-multiselect-dropdown>
                             <!-- error messages -->
@@ -165,7 +165,7 @@
                 <!-- the "Cancel" button -->
                 <!-- re-direct to the "team-list" page -->
                 <button class="btn btn-dark" routerLink="/team-list" style="width: 150px"
-                    tooltip="Cancel and redirect to the 'Team list' screen" theme="light" placement="bottom"
+                    tooltip="Cancel and go back to the 'Team list' screen" theme="light" placement="bottom"
                     [autoPlacement]="true">Cancel</button>
             </div>
         </div>

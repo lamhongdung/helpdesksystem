@@ -1,17 +1,17 @@
-export class Supporter {
+// export class Supporter {
 
-    // parameter property: 2 properties
-    //  - id
-    //  - descripton(= id + lastName + firstName + email + status)
-    constructor(
+//     // parameter property: 2 properties
+//     //  - id
+//     //  - descripton(= id + lastName + firstName + email + status)
+//     constructor(
 
-        public id: number,
+//         public id: number,
 
-        // description = id + lastName + firstName + email + status
-        public description: string
+//         // description = id + lastName + firstName + email + status
+//         public description: string
 
-    ) {
+//     ) {
 
-    }
+//     }
 
-}
+// }

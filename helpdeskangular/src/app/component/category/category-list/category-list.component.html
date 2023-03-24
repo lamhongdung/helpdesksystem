@@ -18,7 +18,7 @@
 
         <!-- SearchTerm -->
         <!-- search for: ID, name -->
-        <div class="col-lg-4 col-md-4 form-group" style="text-align: center">
+        <div class="col-md-4 form-group" style="text-align: center">
 
           <!-- label -->
           <label for="searchTerm">Search term</label>
@@ -26,19 +26,19 @@
           <!-- textbox -->
           <input id="searchTerm" class="form-control" type="search" formControlName="searchTerm"
             placeholder="Search term(id, name)"
-            tooltip="Search term(id, name). <br>Blank means search all IDs and names" theme="light" placement="bottom"
+            tooltip="- Search term(id, name).<br>- Blank means search all IDs and names" theme="light" placement="bottom"
             [autoPlacement]="true">
         </div>
 
         <!-- Status -->
-        <div class="col-lg-4 col-md-4 form-group" style="text-align: center">
+        <div class="col-md-4 form-group" style="text-align: center">
 
           <!-- label -->
           <label for="status">Status</label>
 
           <!-- dropdown -->
           <select id="status" class="form-control" formControlName="status"
-            tooltip="Category status.<br> 'All' means both 'Active' and 'Inacitve'" placement="bottom" theme="light"
+            tooltip="- Category status.<br>- 'All' means both 'Active' and 'Inacitve'" placement="bottom" theme="light"
             [autoPlacement]="true">
             <option value="">All</option>
             <option value="Active">Active</option>
@@ -47,7 +47,7 @@
         </div>
 
         <!-- the "Search" button -->
-        <div class="col-lg-4 col-md-4">
+        <div class="col-md-4">
           <!-- break a line(insert a line break(carriage-return)) -->
           <br>
           <!-- "Search button" -->

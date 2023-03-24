@@ -1,4 +1,5 @@
-import { Supporter } from "./Supporter";
+import { DropdownResponse } from "./DropdownResponse";
+// import { Supporter } from "./Supporter";
 
 // this class contains data is submited from client
 export class Team {
@@ -12,7 +13,8 @@ export class Team {
         // public calendarid: number,
 
         // active supporters
-        public supporters: Supporter[] = [],
+        // public supporters: Supporter[] = [],
+        public supporters: DropdownResponse[] = [],
 
         public status: string
     ) {

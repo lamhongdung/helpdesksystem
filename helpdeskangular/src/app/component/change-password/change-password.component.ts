@@ -53,14 +53,14 @@ export class ChangePasswordComponent implements OnInit {
   constructor(private router: Router,
     private userService: UserService,
     private formBuilder: FormBuilder,
-    private authenticationService: AuthService,
+    private authService: AuthService,
     private notificationService: NotificationService) { }
 
   // this method ngOnInit() is run after the component "ChangePasswordComponent" is contructed
   ngOnInit(): void {
 
     // get email of logged in user
-    this.loggedInEmail = this.authenticationService.getEmailFromLocalStorage();
+    this.loggedInEmail = this.authService.getEmailFromLocalStorage();
 
     // initial form
     this.changePasswordForm = this.formBuilder.group(

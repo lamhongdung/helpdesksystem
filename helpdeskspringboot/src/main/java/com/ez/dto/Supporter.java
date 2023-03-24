@@ -7,7 +7,7 @@ import lombok.*;
 @ToString
 @Getter
 @Setter
-public class SupporterDTO {
+public class Supporter {
 
     // supporter id
     long id;

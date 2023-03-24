@@ -18,7 +18,7 @@
 
         <!-- SearchTerm -->
         <!-- search for: ID, name -->
-        <div class="col-lg-3 col-md-3 form-group" style="text-align: center">
+        <div class="col-md-3 form-group" style="text-align: center">
 
           <!-- label -->
           <label for="searchTerm">Search term</label>
@@ -26,19 +26,19 @@
           <!-- textbox -->
           <input id="searchTerm" class="form-control" type="search" formControlName="searchTerm"
             placeholder="Search term(id, team name)"
-            tooltip="Search term(id, team name).<br> Blank means search all IDs and team names" theme="light"
+            tooltip="- Search term(id, team name).<br>- Blank means search all IDs and team names" theme="light"
             placement="bottom" [autoPlacement]="true">
         </div>
 
         <!-- Assignment method -->
-        <div class="col-lg-3 col-md-3 form-group" style="text-align: center">
+        <div class="col-md-3 form-group" style="text-align: center">
 
           <!-- label -->
           <label for="assignmentMethod">Assignment method</label>
 
           <!-- dropdown -->
           <select id="assignmentMethod" class="form-control" formControlName="assignmentMethod"
-            tooltip="Assignment method.<br> 'All' means both 'Auto' and 'Manual'" theme="light" placement="bottom"
+            tooltip="- Assignment method.<br>- 'All' means both 'Auto' and 'Manual'" theme="light" placement="bottom"
             [autoPlacement]="true">
 
             <option value="">All</option>
@@ -52,14 +52,14 @@
         </div>
 
         <!-- Status -->
-        <div class="col-lg-3 col-md-3 form-group" style="text-align: center">
+        <div class="col-md-3 form-group" style="text-align: center">
 
           <!-- label -->
           <label for="status">Status</label>
 
           <!-- dropdown -->
           <select id="status" class="form-control" formControlName="status"
-            tooltip="Team status.<br> 'All' means both 'Active' and 'Inactive'" theme="light" placement="bottom"
+            tooltip="- Team status.<br>- 'All' means both 'Active' and 'Inactive'" theme="light" placement="bottom"
             [autoPlacement]="true">>
             <option value="">All</option>
             <option value="Active">Active</option>
@@ -68,7 +68,7 @@
         </div>
 
         <!-- the "Search" button -->
-        <div class="col-lg-3 col-md-3">
+        <div class="col-md-3">
           <!-- break a line(insert a line break(carriage-return)) -->
           <br>
           <!-- "Search button" -->

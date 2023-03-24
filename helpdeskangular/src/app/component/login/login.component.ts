@@ -39,7 +39,7 @@ export class LoginComponent implements OnInit, OnDestroy {
   };
 
   constructor(private router: Router,
-    private authenticationService: AuthService,
+    private authService: AuthService,
     private notificationService: NotificationService,
     private formBuilder: FormBuilder,
     private shareService: ShareService) { }
@@ -58,11 +58,11 @@ export class LoginComponent implements OnInit, OnDestroy {
     });
 
     // if user already logged in before then navigate to '/ticket-list'(absoluate path)
-    if (this.authenticationService.isLoggedInUser()) {
+    if (this.authService.isLoggedInUser()) {
 
       // navigate to '/ticket-list';
       // this.router.navigateByUrl('/ticket-list');
-      this.router.navigateByUrl(this.authenticationService.urlAfterLogin);
+      this.router.navigateByUrl(this.authService.urlAfterLogin);
 
     } else { // if user has not yet logged in then re-direct to '/login'
 
@@ -85,7 +85,7 @@ export class LoginComponent implements OnInit, OnDestroy {
       // get data from server
 
       // this.loginForm.value = { "email": "nguoiquantri01@gmail.com", "password": "abcxyz" }
-      this.authenticationService.login(this.loginForm.value).subscribe({
+      this.authService.login(this.loginForm.value).subscribe({
 
         // login success.
         // return: User and token
@@ -95,14 +95,14 @@ export class LoginComponent implements OnInit, OnDestroy {
           const token = response.headers.get(HeaderType.JWT_TOKEN);
 
           // save token value into Local Storage
-          this.authenticationService.saveTokenToLocalStorage(token);
+          this.authService.saveTokenToLocalStorage(token);
 
           // save user into Local Storage
-          this.authenticationService.saveUserToLocalStorage(response.body);
+          this.authService.saveUserToLocalStorage(response.body);
 
           // navigate to url '/ticket-list'
           // this.router.navigateByUrl('/ticket-list');
-          this.router.navigateByUrl(this.authenticationService.urlAfterLogin);
+          this.router.navigateByUrl(this.authService.urlAfterLogin);
 
           // hide spinner(circle)
           this.showSpinner = false;

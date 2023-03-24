@@ -1,6 +1,6 @@
 package com.ez.repository;
 
-import com.ez.dto.SupporterResponse;
+import com.ez.dto.DropdownResponse;
 import com.ez.dto.TeamResponse;
 import com.ez.entity.Team;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -89,7 +89,7 @@ public interface TeamRepository extends JpaRepository<Team, Long> {
             " from user a " +
             " where a.role = 'ROLE_SUPPORTER' and a.status = 'Active' "
             , nativeQuery = true)
-    public List<SupporterResponse> getActiveSupporters();
+    public List<DropdownResponse> getActiveSupporters();
 
     // save teamid and supporterid into the "teamSupporter" table
     @Modifying
@@ -113,7 +113,7 @@ public interface TeamRepository extends JpaRepository<Team, Long> {
             "   left join user b on a.supporterid = b.id " +
             " where a.teamid = :teamid "
             , nativeQuery = true)
-    public List<SupporterResponse> getSelectedSupporters(@Param("teamid") long teamid);
+    public List<DropdownResponse> getSelectedSupporters(@Param("teamid") long teamid);
 
     // delete the "teamSupporter" table by teamid.
     // delete old data before re-add new data.

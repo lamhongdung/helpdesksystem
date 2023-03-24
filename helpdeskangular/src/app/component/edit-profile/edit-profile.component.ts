@@ -70,21 +70,21 @@ export class EditProfileComponent implements OnInit {
   constructor(private router: Router,
     private userService: UserService,
     private formBuilder: FormBuilder,
-    private authenticationService: AuthService,
+    private authService: AuthService,
     private notificationService: NotificationService) { }
 
   // this method ngOnInit() is run after the component "EditProfileComponent" is contructed
   ngOnInit(): void {
 
     // get email of the logged in user
-    this.loggedInEmail = this.authenticationService.getEmailFromLocalStorage();
+    this.loggedInEmail = this.authService.getEmailFromLocalStorage();
 
     // get user id of the logged in user.
     // the "+" sign: use to convert string to number
-    this.userId = +this.authenticationService.getIdFromLocalStorage();
+    this.userId = +this.authService.getIdFromLocalStorage();
 
     // get user role
-    this.userRole = this.authenticationService.getRoleFromLocalStorage();
+    this.userRole = this.authService.getRoleFromLocalStorage();
 
     // initial form
     this.editProfileForm = this.formBuilder.group(

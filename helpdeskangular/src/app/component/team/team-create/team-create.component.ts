@@ -4,8 +4,9 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { IDropdownSettings } from 'ng-multiselect-dropdown';
 import { Subscription } from 'rxjs';
+import { DropdownResponse } from 'src/app/entity/DropdownResponse';
 // import { Calendar } from 'src/app/entity/Calendar';
-import { Supporter } from 'src/app/entity/Supporter';
+// import { Supporter } from 'src/app/entity/Supporter';
 import { Team } from 'src/app/entity/Team';
 import { NotificationType } from 'src/app/enum/NotificationType.enum';
 // import { CalendarService } from 'src/app/service/calendar.service';
@@ -31,7 +32,7 @@ export class TeamCreateComponent implements OnInit {
   teamForm: FormGroup;
 
   // active supporters
-  activeSupporters: Supporter[] = [];
+  activeSupporters: DropdownResponse[] = [];
 
   // // all active calendars
   // calendars: Calendar[] = [];
@@ -147,7 +148,7 @@ export class TeamCreateComponent implements OnInit {
         .subscribe({
 
           // get active supporters successful
-          next: (data: Supporter[]) => {
+          next: (data: DropdownResponse[]) => {
 
             // active supporters
             this.activeSupporters = data;

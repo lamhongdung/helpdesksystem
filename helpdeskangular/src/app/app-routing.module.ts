@@ -19,7 +19,9 @@ import { TeamEditComponent } from './component/team/team-edit/team-edit.componen
 import { TeamListComponent } from './component/team/team-list/team-list.component';
 import { TeamViewComponent } from './component/team/team-view/team-view.component';
 import { TicketCreateComponent } from './component/ticket/ticket-create/ticket-create.component';
+import { TicketEditComponent } from './component/ticket/ticket-edit/ticket-edit.component';
 import { TicketListComponent } from './component/ticket/ticket-list/ticket-list.component';
+import { TicketViewComponent } from './component/ticket/ticket-view/ticket-view.component';
 import { UserCreateComponent } from './component/user/user-create/user-create.component';
 import { UserEditComponent } from './component/user/user-edit/user-edit.component';
 import { UserListComponent } from './component/user/user-list/user-list.component';
@@ -146,6 +148,30 @@ const routes: Routes = [
       roles: ['ROLE_ADMIN']
     }
   },
+  {
+    path: 'ticket-list', component: TicketListComponent, canActivate: [AuthGuard],
+    data: {
+      roles: ['ROLE_CUSTOMER', 'ROLE_SUPPORTER', 'ROLE_ADMIN']
+    }
+  },
+  {
+    path: 'ticket-create', component: TicketCreateComponent, canActivate: [AuthGuard],
+    data: {
+      roles: ['ROLE_CUSTOMER', 'ROLE_SUPPORTER', 'ROLE_ADMIN']
+    }
+  },
+  {
+    path: 'ticket-edit/:id', component: TicketEditComponent, canActivate: [AuthGuard],
+    data: {
+      roles: ['ROLE_SUPPORTER', 'ROLE_ADMIN']
+    }
+  },
+  {
+    path: 'ticket-view/:id', component: TicketViewComponent, canActivate: [AuthGuard],
+    data: {
+      roles: ['ROLE_CUSTOMER', 'ROLE_SUPPORTER', 'ROLE_ADMIN']
+    }
+  },
   // // Calendar menu
   // {
   //   path: 'calendar-list', component: CalendarListComponent, canActivate: [AuthGuard],
@@ -159,18 +185,7 @@ const routes: Routes = [
   //     roles: ['ROLE_ADMIN']
   //   }
   // },
-  {
-    path: 'ticket-list', component: TicketListComponent, canActivate: [AuthGuard],
-    data: {
-      roles: ['ROLE_CUSTOMER', 'ROLE_SUPPORTER', 'ROLE_ADMIN']
-    }
-  },
-  {
-    path: 'ticket-create', component: TicketCreateComponent, canActivate: [AuthGuard],
-    data: {
-      roles: ['ROLE_CUSTOMER', 'ROLE_SUPPORTER', 'ROLE_ADMIN']
-    }
-  },
+
   // if paths are not in the above list then redirects to path '/users-list'
   { path: '**', redirectTo: '/ticket-list', pathMatch: 'full' }
 ];

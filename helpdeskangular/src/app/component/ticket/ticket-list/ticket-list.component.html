@@ -1,1 +1,458 @@
-<p>ticket-list works!</p>
+{{searchTicket.value | json}}
+
+<!-- the "Ticket list" screen -->
+<div class="container-fluid">
+
+  <!-- title -->
+  <div>
+    <h2 style="text-align: center">Ticket list</h2>
+    <hr width="100%">
+  </div>
+
+  <!-- search -->
+  <div class="container-fluid">
+
+    <!-- Search Form -->
+    <form [formGroup]="searchTicket" (ngSubmit)="ngOnInit()">
+
+      <!-- the "search form"-->
+      <div class="search row d-flex justify-content-md-end mb-4">
+
+        <!--  -->
+        <!-- SearchTerm -->
+        <!--  -->
+
+        <!-- search for:  -->
+        <!--  - ROLE_CUSTOMER: ticketid, subject -->
+        <!--  - ROLE_SUPPORTER or ROLE_ADMIN: ticketid, subject, creator phone, creator email -->
+        <div class="col-md-4 form-group" style="text-align: center">
+
+          <!-- label -->
+          <label for="searchTerm">Search term</label>
+
+          <!-- textbox -->
+          <input id="searchTerm" class="form-control" type="search" formControlName="searchTerm"
+            [placeholder]="placeholders.get('searchTerm')" [tooltip]="tooltips.get('searchTerm')" theme="light"
+            placement="bottom" [autoPlacement]="true">
+        </div>
+
+        <!-- fromDate -->
+        <div class="col-md-2 form-group" style="text-align: center">
+
+          <!-- label -->
+          <label for="fromDate">From date</label>
+
+          <!-- date -->
+          <input id="fromDate" class="form-control" type="date" formControlName="fromDate"
+            [placeholder]="placeholders.get('fromDate')" [tooltip]="tooltips.get('fromDate')" theme="light"
+            placement="bottom" [autoPlacement]="true">
+        </div>
+
+        <!-- toDate -->
+        <div class="col-md-2 form-group" style="text-align: center">
+
+          <!-- label -->
+          <label for="toDate">To date</label>
+
+          <!-- date -->
+          <input id="toDate" class="form-control" type="date" formControlName="toDate"
+            [placeholder]="placeholders.get('toDate')" [tooltip]="tooltips.get('toDate')" theme="light"
+            placement="bottom" [autoPlacement]="true">
+        </div>
+
+        <!-- category -->
+        <div class="col-md-2 form-group" style="text-align: center">
+
+          <!-- label -->
+          <label for="categoryid">Category</label>
+
+          <!-- dropdown -->
+          <select id="categoryid" class="form-control" formControlName="categoryid"
+            [tooltip]="tooltips.get('categoryid')" theme="light" placement="bottom" [autoPlacement]="true">
+            <!-- get all categories. -->
+            <!-- default value = 0(All)(is set in the typescript code) -->
+            <option *ngFor="let e of categories" [value]="e.id">
+              {{e.description}}</option>
+          </select>
+        </div>
+
+        <!-- priority -->
+        <div class="col-md-2 form-group" style="text-align: center">
+
+          <!-- label -->
+          <label for="priorityid">Priority</label>
+
+          <!-- dropdown -->
+          <select id="priorityid" class="form-control" formControlName="priorityid"
+            [tooltip]="tooltips.get('priorityid')" theme="light" placement="bottom" [autoPlacement]="true">
+            <!-- get all priorities. -->
+            <!-- assign the first value of the priorities to this "Priority" field(is set in the typescript code) -->
+            <option *ngFor="let e of priorities" [value]="e.id">
+              {{e.description}}</option>
+          </select>
+        </div>
+
+        <!--  -->
+        <!-- creator -->
+        <!--  -->
+
+        <!-- Roles: "ROLE_SUPPORTER" and "ROLE_ADMIN" -->
+        <!-- if roles is ("ROLE_SUPPORTER" or "ROLE_ADMIN") then display it  -->
+        <!-- else(role = "ROLE_CUSTOMER") hide it  -->
+
+        <div class="col-md-2 form-group" style="text-align: center"
+          *ngIf="(loggedInRole === 'ROLE_SUPPORTER' || loggedInRole === 'ROLE_ADMIN')">
+
+          <!-- label -->
+          <label for="creatorid">Creator</label>
+
+          <!-- dropdown -->
+          <select id="creatorid" class="form-control" formControlName="creatorid" [tooltip]="tooltips.get('creatorid')"
+            theme="light" placement="bottom" [autoPlacement]="true">
+            <!-- get all creators. -->
+            <!-- default value = 0(All)(is set in the typescript code) -->
+            <option *ngFor="let e of creators" [value]="e.id">
+              {{e.description}}</option>
+          </select>
+        </div>
+
+        <!--  -->
+        <!-- team -->
+        <!--  -->
+
+        <!--  if user role is "Customer" the the "Team" field occupies 3 columns -->
+        <!--  else if user role is "Admin" or "Supporter" the the "Team" field occupies 2 columns -->
+        <div [ngClass]="(loggedInRole === 'ROLE_CUSTOMER')? 'col-md-3 form-group' : 'col-md-2 form-group'"
+          style="text-align: center">
+
+          <!-- label -->
+          <label for="teamid">Team</label>
+
+          <!-- dropdown -->
+          <select id="teamid" class="form-control" formControlName="teamid" [tooltip]="tooltips.get('teamid')"
+            theme="light" placement="bottom" [autoPlacement]="true">
+            <option *ngFor="let e of teams" [value]="e.id">
+              {{e.description}}</option>
+          </select>
+        </div>
+
+        <!--  -->
+        <!-- Assignee -->
+        <!--  -->
+
+        <!--  if user role is "Customer" the the "Assignee" field occupies 3 columns -->
+        <!--  else if user role is "Admin" or "Supporter" the the "Assignee" field occupies 2 columns -->
+        <div [ngClass]="(loggedInRole === 'ROLE_CUSTOMER')? 'col-md-3 form-group' : 'col-md-2 form-group'"
+          style="text-align: center">
+
+          <!-- label -->
+          <label for="assigneeid">Assignee</label>
+
+          <!-- dropdown -->
+          <select id="assigneeid" class="form-control" formControlName="assigneeid"
+            [tooltip]="tooltips.get('assigneeid')" theme="light" placement="bottom" [autoPlacement]="true">
+          </select>
+        </div>
+
+        <!-- SLA(ontime or late) -->
+        <div class="col-md-2 form-group" style="text-align: center">
+
+          <!-- label -->
+          <label for="sla">SLA</label>
+
+          <!-- dropdown -->
+          <select id="sla" class="form-control" formControlName="sla" [tooltip]="tooltips.get('sla')" theme="light"
+            placement="bottom" [autoPlacement]="true">>
+            <!-- check if a ticket is on time or late. -->
+            <!-- default value = ''(All)(is set in the typescript code) -->
+            <option value="">All</option>
+            <option value="Ontime">On time</option>
+            <option value="Late">Late</option>
+          </select>
+        </div>
+
+        <!-- ticket status -->
+        <div class="col-md-2 form-group" style="text-align: center">
+
+          <!-- label -->
+          <label for="ticketStatusid">Status</label>
+
+          <!-- dropdown -->
+          <select id="ticketStatusid" class="form-control" formControlName="ticketStatusid"
+            [tooltip]="tooltips.get('ticketStatusid')" theme="light" placement="bottom" [autoPlacement]="true">>
+            <!-- get all ticket status. -->
+            <!-- assign the first value of the ticket status to this status field(is set in the typescript code) -->
+            <option *ngFor="let e of allTicketStatus" [value]="e.id">
+              {{e.description}}</option>
+          </select>
+        </div>
+
+        <!-- the "Search" button -->
+        <div class="col-md-2">
+          <!-- break a line(insert a line break(carriage-return)) -->
+          <br>
+          <!-- "Search button" -->
+          <button id="searchButton" class="btn btn-primary mt-xl-2" style="width: 100%"
+            [tooltip]="tooltips.get('searchButton')" theme="light" placement="bottom" [autoPlacement]="true">
+            <i class="fa fa-search"></i>
+            Search
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+
+  <!-- the "Create ticket" button, the "Extract excel" button and "There are x tickets" message -->
+  <div class="container-fluid">
+
+    <div class="d-flex">
+
+      <!-- mr-auto: push the "There are x tickets" to the right-end -->
+      <div class="mr-auto">
+
+        <!-- the "Create ticket" button. -->
+        <!-- when user clicks on the "Create ticket" button -->
+        <button class="btn btn-primary mr-1" routerLink="/ticket-create" [tooltip]="tooltips.get('createTicket')"
+          theme="light" placement="bottom" [autoPlacement]="true"><i class="fa fa-plus"></i>
+          Create ticket
+        </button>
+
+        <!-- the "Extract excel" button. -->
+        <!-- when user clicks on the "Extract excel" button -->
+        <button class="btn btn-primary" routerLink="/extract-excel" [tooltip]="tooltips.get('extractExcel')"
+          theme="light" placement="bottom" [autoPlacement]="true"><i class="fa fa-download"></i>
+          Extract excel
+        </button>
+
+      </div>
+
+      <!-- display the number of tickets found. -->
+
+      <!-- if (number of tickets) > 1 -->
+      <div *ngIf="totalOfTickets > 1" tooltip="Number of tickets found" theme="light" placement="left"
+        [autoPlacement]="true">There are {{totalOfTickets}} tickets</div>
+      <!-- if (number of tickets) == 1 -->
+      <div *ngIf="totalOfTickets == 1" tooltip="Number of tickets found" theme="light" placement="left"
+        [autoPlacement]="true">There is {{totalOfTickets}} ticket</div>
+      <!-- there is no team -->
+      <div *ngIf="totalOfTickets == 0" tooltip="There is no team found" theme="light" placement="left"
+        [autoPlacement]="true">There is no ticket</div>
+
+    </div>
+  </div>
+
+  <!-- table -->
+  <div class="container-fluid tab">
+
+    <!-- table -->
+    <table class="table table-hover table-striped table-bordered">
+      <thead>
+        <!-- table header -->
+        <tr class="bg-table-header">
+
+          <!-- Order -->
+          <!-- scope="col": specifies that the cell is a header for a column -->
+          <th scope="col" style="width: 10px" tooltip="Order" theme="light" placement="bottom" [autoPlacement]="true">
+            Ord
+          </th>
+
+          <!-- ticket id -->
+          <th scope="col" style="width: 50px" tooltip="Ticket id" theme="light" placement="bottom"
+            [autoPlacement]="true">Ticket ID
+          </th>
+
+          <!-- subject -->
+          <th scope="col" style="width: 50px" tooltip="Ticket subject" theme="light" placement="bottom"
+            [autoPlacement]="true">
+            Subject</th>
+
+          <!--  -->
+          <!-- creator name -->
+          <!--  -->
+
+          <!-- if role is 'ROLE_SUPPORTER' or 'ROLE_ADMIN' then display 'Creator name' -->
+          <th scope="col" style="width: 50px" tooltip="Creator name.<br>(Person created the ticket)" theme="light"
+            placement="bottom" [autoPlacement]="true"
+            *ngIf="(loggedInRole === 'ROLE_SUPPORTER' || loggedInRole === 'ROLE_ADMIN')">Creator name</th>
+
+          <!-- assignee name -->
+          <th scope="col" style="width: 50px" tooltip="The person is assigned to resolve the ticket" theme="light"
+            placement="bottom" [autoPlacement]="true">
+            Assignee name</th>
+
+          <!-- create time -->
+          <th scope="col" style="width: 50px" tooltip="Ticket creation time" theme="light" placement="bottom"
+            [autoPlacement]="true">
+            Create time</th>
+
+          <!-- ticket status -->
+          <th scope="col" style="width: 50px" tooltip="Ticket status" theme="light" placement="bottom"
+            [autoPlacement]="true">
+            Status</th>
+
+          <!-- Actions: Edit ticket, Add comment -->
+          <th scope="col" style="width: 50px" tooltip="Actions" theme="light" placement="bottom" [autoPlacement]="true">
+            Actions</th>
+
+          <!-- SLA -->
+          <th scope="col" style="width: 50px"
+            tooltip="- SLA(service level agreement).<br>- Check if a ticket is on time or late." theme="light"
+            placement="bottom" [autoPlacement]="true">SLA</th>
+
+          <!--  -->
+          <!-- creator phone -->
+          <!--  -->
+
+          <!-- if role is 'ROLE_SUPPORTER' or 'ROLE_ADMIN' then display 'Creator phone' -->
+          <th scope="col" style="width: 50px" tooltip="Ticket creator's phone number" theme="light" placement="bottom"
+            [autoPlacement]="true" *ngIf="(loggedInRole === 'ROLE_SUPPORTER' || loggedInRole === 'ROLE_ADMIN')">Creator
+            phone</th>
+
+          <!--  -->
+          <!-- creator email -->
+          <!--  -->
+
+          <!-- if role is 'ROLE_SUPPORTER' or 'ROLE_ADMIN' then display 'Creator email' -->
+          <th scope="col" style="width: 50px" tooltip="Ticket creator's email" theme="light" placement="bottom"
+            [autoPlacement]="true" *ngIf="(loggedInRole === 'ROLE_SUPPORTER' || loggedInRole === 'ROLE_ADMIN')">Creator
+            email</th>
+
+          <!-- team -->
+          <th scope="col" style="width: 50px" tooltip="Ticket is created to the team" theme="light" placement="bottom"
+            [autoPlacement]="true">
+            Team name</th>
+
+          <!-- category -->
+          <th scope="col" style="width: 50px" tooltip="Category" theme="light" placement="bottom"
+            [autoPlacement]="true">
+            Category</th>
+
+          <!-- priority -->
+          <th scope="col" style="width: 50px" tooltip="Priority" theme="light" placement="bottom"
+            [autoPlacement]="true">
+            Priority</th>
+
+        </tr>
+      </thead>
+
+      <tbody style="text-align: center">
+
+        <tr *ngFor="let ticket of tickets, index as i">
+
+          <!-- column: order(line number) -->
+          <!-- navigate to the "/ticket-view/{ticketid}" when user clicks on the table(except the column "Action") -->
+          <td style="text-align: right" class="pointer-link" (click)="viewTicket(ticket.ticketid)">
+            {{indexBasedPage(pageSize, currentPage, i)}}</td>
+
+          <!-- column: Ticket ID -->
+          <!-- navigate to the "/ticket-view/{ticketid}" when user clicks on the table(except the column "Action") -->
+          <td style="text-align: right" class="pointer-link" (click)="viewTicket(ticket.ticketid)">{{ticket.ticketid}}
+          </td>
+
+          <!-- column: Subject -->
+          <!-- navigate to the "/ticket-view/{ticketid}" when user clicks on the table(except the column "Action") -->
+          <td style="text-align: right" class="pointer-link" (click)="viewTicket(ticket.ticketid)">{{ticket.subject}}
+          </td>
+
+          <!-- column: Creator Name -->
+          <!-- navigate to the "/ticket-view/{ticketid}" when user clicks on the table(except the column "Action") -->
+          <td class="pointer-link" (click)="viewTicket(ticket.ticketid)">{{ticket.creatorName}}</td>
+
+          <!-- column: Creator phone -->
+          <!-- navigate to the "/ticket-view/{ticketid}" when user clicks on the table(except the column "Action") -->
+          <td class="pointer-link" (click)="viewTicket(ticket.ticketid)">{{ticket.creatorPhone}}</td>
+
+          <!-- column: Assignee name -->
+          <!-- navigate to the "/ticket-view/{ticketid}" when user clicks on the table(except the column "Action") -->
+          <td class="pointer-link" (click)="viewTicket(ticket.ticketid)">{{ticket.assigneeName}}</td>
+
+          <!-- column: Create time -->
+          <!-- navigate to the "/ticket-view/{ticketid}" when user clicks on the table(except the column "Action") -->
+          <td class="pointer-link" (click)="viewTicket(ticket.ticketid)">{{ticket.createDatetime}}</td>
+
+          <!-- column: Status -->
+          <!-- navigate to the "/ticket-view/{ticketid}" when user clicks on the table(except the column "Action") -->
+          <td class="pointer-link" (click)="viewTicket(ticket.ticketid)">{{ticket.ticketStatusName}}</td>
+
+          <!-- the "Edit" & "Add comment" button -->
+          <td class="text-center">
+            <a class="btn btn-primary mr-1" [routerLink]="['/ticket-edit', ticket.ticketid]" tooltip="Edit team"
+              theme="light" placement="right" [autoPlacement]="true"><i class="fa fa-edit"></i></a>
+
+            <a class="btn btn-primary mr-1" [routerLink]="['/comment-add', ticket.ticketid]" tooltip="Add comment"
+              theme="light" placement="right" [autoPlacement]="true"><i class="fa fa-plus"></i></a>
+          </td>
+
+          <!-- column: Creator email -->
+          <!-- navigate to the "/ticket-view/{ticketid}" when user clicks on the table(except the column "Action") -->
+          <td class="pointer-link" (click)="viewTicket(ticket.ticketid)">{{ticket.creatorEmail}}</td>
+
+          <!-- column: Team name -->
+          <!-- navigate to the "/ticket-view/{ticketid}" when user clicks on the table(except the column "Action") -->
+          <td class="pointer-link" (click)="viewTicket(ticket.ticketid)">{{ticket.teamName}}</td>
+
+          <!-- column: category -->
+          <!-- navigate to the "/ticket-view/{ticketid}" when user clicks on the table(except the column "Action") -->
+          <td class="pointer-link" (click)="viewTicket(ticket.ticketid)">{{ticket.categoryName}}</td>
+
+          <!-- column: priority -->
+          <!-- navigate to the "/ticket-view/{ticketid}" when user clicks on the table(except the column "Action") -->
+          <td class="pointer-link" (click)="viewTicket(ticket.ticketid)">{{ticket.priorityName}}</td>
+
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- pagination -->
+
+  <!-- only display the pagination when totalPages > 0 -->
+  <div class="container mt-3" *ngIf="totalPages > 0">
+    <nav aria-label="Page navigation">
+      <ul class="pagination d-flex justify-content-md-end justify-content-center">
+
+        <!-- move to the "first page" -->
+        <li class="page-item"><button class="page-link" (click)="moveFirst()" [disabled]="currentPage==1"
+            tooltip="Go to the first page" theme="light" placement="bottom" [autoPlacement]="true">First</button>
+        </li>
+
+        <!-- move to the "previous page" -->
+        <li class="page-item"><button class="page-link" (click)="movePrevious()" [disabled]="currentPage==1"
+            tooltip="Go to previous page" theme="light" placement="bottom" [autoPlacement]="true">Previous</button></li>
+
+        <!--  -->
+        <li class="page-item col-md-1 col-2 px-0">
+          <div class="input-group">
+            <!-- textbox to input the Page number -->
+            <!-- rounded-0: have no round at corners -->
+            <input type="number" min="1" [max]="totalPages" class="form-control rounded-0"
+              aria-describedby="basic-addon1" [value]="currentPage"
+              (change)="changePageNumber($any($event.target).value)" tooltip="Current page" theme="light"
+              placement="bottom" [autoPlacement]="true">
+            <!-- total pages -->
+            <div class="input-group-prepend">
+              <span class="input-group-text" id="basic-addon1" tooltip="Total pages" theme="light" placement="bottom"
+                [autoPlacement]="true">/{{totalPages}}</span>
+            </div>
+          </div>
+        </li>
+
+        <!-- the "Go" button -->
+        <!-- rounded-0: have no round at corners -->
+        <li class="page-item">
+          <button class="btn btn-primary rounded-0" (click)="goPage()" onmouseover="this.style.cursor='pointer'"
+            tooltip="Go to specific page" theme="light" placement="bottom" [autoPlacement]="true">Go</button>
+        </li>
+
+        <!-- the "Next" button -->
+        <li class="page-item"><button class="page-link" (click)="moveNext()" [disabled]="currentPage==totalPages"
+            tooltip="Go to next page" theme="light" placement="bottom" [autoPlacement]="true">Next</button></li>
+
+        <!-- the "Last" button -->
+        <li class="page-item"><button class="page-link" (click)="moveLast()" [disabled]="currentPage==totalPages"
+            tooltip="Go to the last page" theme="light" placement="bottom" [autoPlacement]="true">Last</button></li>
+
+      </ul>
+    </nav>
+  </div>
+</div>

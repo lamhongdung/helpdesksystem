@@ -2,7 +2,8 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
-import { Supporter } from '../entity/Supporter';
+import { DropdownResponse } from '../entity/DropdownResponse';
+// import { Supporter } from '../entity/Supporter';
 import { Team } from '../entity/Team';
 
 @Injectable({
@@ -42,11 +43,11 @@ export class TeamService {
   } // end of getTotalOfTeams()
 
   // get all active supporters
-  getActiveSupporters(): Observable<Supporter[]> {
+  getActiveSupporters(): Observable<DropdownResponse[]> {
 
     // console.log(`${this.host}/active-supporters`);
 
-    return this.http.get<Supporter[]>(
+    return this.http.get<DropdownResponse[]>(
       `${this.host}/active-supporters`
     )
   }

@@ -1,10 +1,17 @@
 import { Injectable } from '@angular/core';
 import { Observable, Subject } from 'rxjs';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ShareService {
+
+  // 'http://localhost:8080'
+  host = environment.apiUrl;
+
+  // number of teams per page(default = 5)
+  pageSize = environment.pageSize;
 
 
   constructor() { }
@@ -45,7 +52,7 @@ export class ShareService {
   } // end of indexBasedPage()
 
   // count "nth element" in MySQL
-  countNthElement(pageSize: number, currentPage: number): number{
+  countNthElement(pageSize: number, currentPage: number): number {
 
     return (pageSize) * (currentPage - 1);
 

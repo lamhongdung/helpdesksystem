@@ -38,6 +38,8 @@ import { NotificationModule } from './notification.module';
 import { AuthService } from './service/auth.service';
 import { NotificationService } from './service/notification.service';
 import { UserService } from './service/user.service';
+import { TicketViewComponent } from './component/ticket/ticket-view/ticket-view.component';
+import { TicketEditComponent } from './component/ticket/ticket-edit/ticket-edit.component';
 // import { CalendarEditComponent } from './component/calendar/calendar-edit/calendar-edit.component';
 // import { CalendarViewComponent } from './component/calendar/calendar-view/calendar-view.component';
 
@@ -71,6 +73,8 @@ import { UserService } from './service/user.service';
     // CalendarEditComponent,
     // CalendarViewComponent
     UserViewComponent,
+    TicketEditComponent,
+    TicketViewComponent,
   ],
   imports: [
     NgMultiSelectDropDownModule.forRoot(),

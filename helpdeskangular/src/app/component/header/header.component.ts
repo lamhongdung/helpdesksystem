@@ -16,7 +16,7 @@ export class HeaderComponent implements OnInit {
   loggedInEmail: string;
   loggedInRole: string;
 
-  constructor(private router: Router, private authenticationService: AuthService,
+  constructor(private router: Router, private authService: AuthService,
     private shareService: ShareService,
     private notificationService: NotificationService) {
 
@@ -28,9 +28,9 @@ export class HeaderComponent implements OnInit {
   }
 
   loadHeader() {
-    this.userId = +this.authenticationService.getIdFromLocalStorage();
-    this.loggedInEmail = this.authenticationService.getEmailFromLocalStorage();
-    this.loggedInRole = this.authenticationService.getRoleFromLocalStorage();
+    this.userId = +this.authService.getIdFromLocalStorage();
+    this.loggedInEmail = this.authService.getEmailFromLocalStorage();
+    this.loggedInRole = this.authService.getRoleFromLocalStorage();
     // console.log(this.loggedInEmail);
   }
 
@@ -39,7 +39,7 @@ export class HeaderComponent implements OnInit {
   }
 
   logOut() {
-    this.authenticationService.logOut();
+    this.authService.logOut();
     this.router.navigate(['/login']);
   }
 

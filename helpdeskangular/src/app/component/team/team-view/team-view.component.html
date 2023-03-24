@@ -12,7 +12,7 @@
         <div class=" row mt-5">
 
             <!-- move column to central -->
-            <div class="col-lg-10 offset-lg-1">
+            <div class="col-md-10 offset-md-1">
                 <div class="container">
 
                     <!-- id -->
@@ -93,7 +93,7 @@
 
                         <!-- https://github.com/NileshPatel17/ng-multiselect-dropdown -->
                         <div class="col-9"
-                            tooltip="Assign active supporters to team.<br> Values includes 'id' + 'last name' + 'first name' + 'email' + 'status'"
+                            tooltip="- Assign active supporters to team.<br>- Values include 'id' + 'last name' + 'first name' + 'email' + 'status'"
                             theme="light" placement="right" [autoPlacement]="true">
                             <!-- dropdown(multi selection) -->
                             <ng-multiselect-dropdown placeholder="Active supporters" [settings]="supporterSetting"
@@ -128,7 +128,7 @@
                 <!-- the "Close" button -->
                 <!-- re-direct to the "priority-list" page -->
                 <button class="btn btn-primary" routerLink="/team-list" style="width: 150px"
-                    tooltip="Close and redirects to the 'Team list' screen" theme="light" placement="right"
+                    tooltip="Close and go back to the 'Team list' screen" theme="light" placement="right"
                     [autoPlacement]="true">Close</button>
             </div>
         </div>

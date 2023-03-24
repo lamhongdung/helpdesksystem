@@ -1,7 +1,12 @@
 export class LoginUser {
 
-    email: string;
-    password: string;
-  
+    constructor(
+
+        public email: string,
+        public password: string
+
+    ) {
+
+    }
+
 }
-  

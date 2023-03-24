@@ -1,8 +1,7 @@
 export interface CustomHttpRespone {
-  
-    timeStamp: Date;
-    statusCode: number;
-    message: string;
-  
-  }
-  
+
+  timeStamp: Date;
+  statusCode: number;
+  message: string;
+
+}

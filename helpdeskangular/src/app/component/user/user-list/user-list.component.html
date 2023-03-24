@@ -17,7 +17,7 @@
 
         <!-- SearchTerm -->
         <!-- search for: ID, email, firstName, lastName and phone -->
-        <div class="col-lg-5 col-md-5 form-group" style="text-align: center">
+        <div class="col-md-5 form-group" style="text-align: center">
           <!-- label -->
           <label for="searchTerm">Search term</label>
           <!-- textbox -->
@@ -28,12 +28,12 @@
         </div>
 
         <!-- Role -->
-        <div class="col-xl-3 col-md-3 form-group" style="text-align: center">
+        <div class="col-md-3 form-group" style="text-align: center">
           <!-- label -->
           <label for="role">Role</label>
           <!-- dropdown -->
           <select id="role" class="form-control" formControlName="role" placeholder="Role"
-            tooltip="User role. <br> 'All' means all roles." theme="light" placement="bottom" [autoPlacement]="true">
+            tooltip="- User role.<br>- 'All' means all roles." theme="light" placement="bottom" [autoPlacement]="true">
             <option value="">All</option>
             <option value="ROLE_CUSTOMER">ROLE_CUSTOMER</option>
             <option value="ROLE_SUPPORTER">ROLE_SUPPORTER</option>
@@ -42,12 +42,12 @@
         </div>
 
         <!-- Status -->
-        <div class="col-lg-2 col-md-2 form-group" style="text-align: center">
+        <div class="col-md-2 form-group" style="text-align: center">
           <!-- label -->
           <label for="status">Status</label>
           <!-- dropdown -->
           <select id="status" class="form-control" formControlName="status"
-            tooltip="User status. <br> 'All' means all status" theme="light" placement="bottom" [autoPlacement]="true">
+            tooltip="- User status.<br>- 'All' means all status" theme="light" placement="bottom" [autoPlacement]="true">
             <option value="">All</option>
             <option value="Active">Active</option>
             <option value="Inactive">Inactive</option>
@@ -55,7 +55,7 @@
         </div>
 
         <!-- the "Search" button -->
-        <div class="col-lg-2 col-md-2">
+        <div class="col-md-2">
           <!-- break a line(insert a line break(carriage-return)) -->
           <br>
           <!-- "Search button" -->

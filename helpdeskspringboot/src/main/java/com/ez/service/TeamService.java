@@ -1,7 +1,7 @@
 package com.ez.service;
 
-import com.ez.dto.SupporterResponse;
-import com.ez.dto.SupporterDTO;
+import com.ez.dto.DropdownResponse;
+import com.ez.dto.Supporter;
 import com.ez.dto.TeamRequest;
 import com.ez.dto.TeamResponse;
 import com.ez.entity.Team;
@@ -51,8 +51,8 @@ public class TeamService {
 
     // get active supporters.
     // note:
-    //  - interface Supporter: include 2 columns: id(getId()) and description(getDescription())
-    public List<SupporterResponse> getActiveSupporters() {
+    //  - interface DropdownResponse: include 2 columns: id(getId()) and description(getDescription())
+    public List<DropdownResponse> getActiveSupporters() {
 
         LOGGER.info("get active supporters");
 
@@ -91,9 +91,9 @@ public class TeamService {
     // note:
     //  - class Team: not include supporters
     //  - class TeamRequest: include supporters
-    //  - interface SupporterResponse: include 2 columns:
+    //  - interface DropdownResponse: include 2 columns:
     //      id(getId()) and description(getDescription() = "id" + "lastName" + "firstName" + "email" + "status")
-    //  - class SupporterDTO: include 2 columns: id and description
+    //  - class Supporter: include 2 columns: id and description
     public TeamRequest findById(Long id) throws EntityNotFoundException {
 
         // team without supporters
@@ -104,10 +104,10 @@ public class TeamService {
 
         //  interface Supporter: include 2 columns: id(getId()) and description(getDescription()).
         //  selected(assigned) supporters
-        List<SupporterResponse> selectedSupporters;
+        List<DropdownResponse> selectedSupporters;
 
-        // class SupporterDTO: include 2 columns: id and description
-        List<SupporterDTO> supporterDTOs = new ArrayList<>();
+        // class Supporter: include 2 columns: id and description
+        List<Supporter> supporters = new ArrayList<>();
 
         // return team without supporters
         team = teamRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(NO_TEAM_FOUND_BY_ID + id));
@@ -115,7 +115,7 @@ public class TeamService {
         LOGGER.info("team is in string format: " + team.toString());
 
         //
-        // convert from list of selectedSupporters(interface) to list of supporterDTOs(class).
+        // convert from list of selectedSupporters(interface) to list of supporters(class).
         // (convert from functions to columns).
         //
 
@@ -123,12 +123,12 @@ public class TeamService {
         // selectedSupporters = list of {id, description}
         selectedSupporters = teamRepository.getSelectedSupporters(id);
 
-        // convert list of selectedSupporters(interface SupporterResponse) to list of supporterDTOs(class).
+        // convert list of selectedSupporters(interface SupporterResponse) to list of supporters(class).
         // selectedSupporters(interface): list of {id(getId()), description(getDescription())}.
-        // supporterDTOs(class): list of {id, description}.
+        // supporters(class): list of {id, description}.
         // decription = id + lastName + firstName + email + status
         selectedSupporters.forEach(selectedSupporter ->
-                supporterDTOs.add(new SupporterDTO(selectedSupporter.getId(), selectedSupporter.getDescription())));
+                supporters.add(new Supporter(selectedSupporter.getId(), selectedSupporter.getDescription())));
 
         //
         // convert "team(without supporters) + supporters" to teamRequest(includes supporters)
@@ -140,8 +140,8 @@ public class TeamService {
         teamRequest.setStatus(team.getStatus());
 
         // add supporters to the "teamRequest".
-        // note: supporterDTOs = list of {id, description}
-        teamRequest.setSupporters(supporterDTOs);
+        // note: supporters = list of {id, description}
+        teamRequest.setSupporters(supporters);
 
         // return teamRequest(include supporters)
         return teamRequest;

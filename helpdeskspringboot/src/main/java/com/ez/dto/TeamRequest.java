@@ -26,7 +26,7 @@ public class TeamRequest {
 //    private long calendarid;
 
     @Size(min = 1, message = "Team must have at least 1 supporter")
-    private List<SupporterDTO> supporters;
+    private List<Supporter> supporters;
 
     @Pattern(regexp = "Active|Inactive", message = "Value of the status must be 'Active' or 'Inactive'")
     private String status;
