@@ -28,7 +28,7 @@
                         <div class="col-9">
                             <input class="form-control" type="text" formControlName="name" placeholder="Category name"
                                 id="name" tooltip="Category name" theme="light" placement="right"
-                                [autoPlacement]="true">
+                                >
                             <!-- error messages -->
                             <div class="text-danger" *ngFor="let e of errorMessages.name">
                                 <!-- errors on the "name" field -->
@@ -53,7 +53,7 @@
                         <div class="col-9">
                             <!-- default value = "Active"(is set in the typescript code) -->
                             <select id="status" class="form-control" formControlName="status" tooltip="Category status"
-                                theme="light" placement="right" [autoPlacement]="true">
+                                theme="light" placement="right" >
                                 <option value="Active">Active</option>
                                 <option value="Inactive">Inactive</option>
                             </select>
@@ -70,7 +70,7 @@
                 <!-- if the form values are invalid then disable the "Save" button -->
                 <button type="submit" [disabled]="categoryForm.invalid" style="width: 150px"
                     class="btn btn-primary mr-2" tooltip="Save category" theme="light" placement="bottom"
-                    [autoPlacement]="true">
+                    >
 
                     <!-- display the spinner icon when press the "Save" button -->
                     <i *ngIf="showSpinner" class="fas fa-spinner fa-spin"></i>
@@ -85,7 +85,7 @@
                 <!-- re-direct to the "category-list" page -->
                 <button class="btn btn-dark" routerLink="/category-list" style="width: 150px"
                     tooltip="Cancel and go back to the 'Category list' screen" theme="light" placement="bottom"
-                    [autoPlacement]="true">Cancel</button>
+                    >Cancel</button>
             </div>
         </div>
     </form>

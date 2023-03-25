@@ -25,7 +25,7 @@
                         <!-- textbox -->
                         <div class="col-9">
                             <input class="form-control" type="email" formControlName="email" id="email" tooltip="Email"
-                                theme="light" placement="right" [autoPlacement]="true" readonly>
+                                theme="light" placement="right"  readonly>
                         </div>
                     </div>
 
@@ -40,7 +40,7 @@
                         <div class="col-9">
                             <input class="form-control" type="text" formControlName="firstName" placeholder="First name"
                                 id="firstName" tooltip="First name" theme="light" placement="right"
-                                [autoPlacement]="true">
+                                >
                             <!-- error messages -->
                             <div class="text-danger" *ngFor="let e of errorMessages.firstName">
                                 <!-- errors on the "firstName" field -->
@@ -64,7 +64,7 @@
                         <div class="col-9">
                             <input class="form-control" type="text" formControlName="lastName" placeholder="Last name"
                                 id="lastName" tooltip="Last name" theme="light" placement="right"
-                                [autoPlacement]="true">
+                                >
                             <!-- error messages -->
                             <div class="text-danger" *ngFor="let e of errorMessages.lastName">
                                 <!-- errors on the "lastName" field -->
@@ -88,7 +88,7 @@
                         <div class="col-9">
                             <input class="form-control" type="text" formControlName="phone" placeholder="Phone"
                                 id="phone" tooltip="Phone number(10 digits)" theme="light" placement="right"
-                                [autoPlacement]="true">
+                                >
                             <!-- error messages -->
                             <div class="text-danger" *ngFor="let e of errorMessages.phone">
                                 <!-- errors on the "phone" field -->
@@ -111,7 +111,7 @@
                         <!-- textbox -->
                         <div class="col-9">
                             <input class="form-control" type="text" formControlName="address" placeholder="Address"
-                                id="address" tooltip="Address" theme="light" placement="right" [autoPlacement]="true">
+                                id="address" tooltip="Address" theme="light" placement="right" >
                             <!-- error messages -->
                             <div class="text-danger" *ngFor="let e of errorMessages.address">
                                 <!-- errors on the "address" field -->
@@ -133,7 +133,7 @@
                 <!-- if the form values are invalid then disable the "Save" button -->
                 <button type="submit" [disabled]="editProfileForm.invalid" style="width: 150px"
                     class="btn btn-primary mr-2" tooltip="Save profile" theme="light" placement="bottom"
-                    [autoPlacement]="true">
+                    >
 
                     <!-- display the spinner icon when press the "Save" button -->
                     <i *ngIf="showSpinner" class="fas fa-spinner fa-spin"></i>
@@ -147,7 +147,7 @@
                 <!-- the "Cancel" button -->
                 <!-- re-direct to the "ticket-list" page -->
                 <button class="btn btn-dark" routerLink="/ticket-list" style="width: 150px" tooltip="Cancel"
-                    theme="light" placement="bottom" [autoPlacement]="true">Cancel</button>
+                    theme="light" placement="bottom" >Cancel</button>
             </div>
         </div>
     </form>

@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { DropdownResponse } from '../entity/DropdownResponse';
 import { Ticket } from '../entity/Ticket';
+import { TicketResponse } from '../entity/TicketResponse';
 import { ShareService } from './share.service';
 
 @Injectable({
@@ -10,35 +11,28 @@ import { ShareService } from './share.service';
 })
 export class TicketService {
 
-  //  // 'http://localhost:8080'
-  //  host = environment.apiUrl;
-
-  //  // number of teams per page(default = 5)
-  //  pageSize = environment.pageSize;
-
   constructor(private http: HttpClient,
     private shareService: ShareService
   ) { }
 
-  // get teams by page and based on the search criteria
-  searchTickets(pageNumber: number, searchTerm: string,
-    assignmentMethod: string, status: string): Observable<Ticket[]> {
+  // get tickets by userid(and by user role), by page and based on the search criteria
+  searchTickets(userid: number, pageNumber: number, searchTerm: string): Observable<TicketResponse[]> {
 
     // ex: url = http://localhost:8080/team-search?pageNumber=0&pageSize=5&searchTerm=""&assignmentMethod=""&status=""
     // return this.http.get<TeamResponse[]>(
     //   `${this.host}/team-search?pageNumber=${pageNumber}&pageSize=${this.pageSize}&searchTerm=${searchTerm}&assignmentMethod=${assignmentMethod}&status=${status}`
     // )
-    return this.http.get<Ticket[]>(
-      `${this.shareService.host}/team-search?pageNumber=${pageNumber}&pageSize=${this.shareService.pageSize}&searchTerm=${searchTerm}&assignmentMethod=${assignmentMethod}&status=${status}`
+    return this.http.get<TicketResponse[]>(
+      `${this.shareService.host}/ticket-search?userid=${userid}&pageNumber=${pageNumber}&pageSize=${this.shareService.pageSize}&searchTerm=${searchTerm}`
     )
   } // end of searchTeams()
 
   // calculate total of teams for counting total pages
-  getTotalOfTickets(searchTerm: string, assignmentMethod: string, status: string): Observable<number> {
+  getTotalOfTickets(userid: number, searchTerm: string): Observable<number> {
 
     // ex: http://localhost:8080/total-of-teams?searchTerm=""&assignmentMethod=""&status=""
     return this.http.get<number>(
-      `${this.shareService.host}/total-of-tickets?searchTerm=${searchTerm}&assignmentMethod=${assignmentMethod}&status=${status}`
+      `${this.shareService.host}/total-of-tickets?userid=${userid}&searchTerm=${searchTerm}`
     );
 
   } // end of getTotalOfTeams()
@@ -73,23 +67,33 @@ export class TicketService {
     )
   }
 
-  // get all categories
-  getAllCategories(): Observable<DropdownResponse[]> {
+  // get assignees by userid(and by user role)
+  getAssigneesByUserid(userid: number): Observable<DropdownResponse[]> {
 
     // console.log(`${this.host}/active-supporters`);
 
     return this.http.get<DropdownResponse[]>(
-      `${this.shareService.host}/categories`
+      `${this.shareService.host}/assignees?userid=${userid}`
     )
   }
 
-  // get all priorities
-  getAllPriorities(): Observable<DropdownResponse[]> {
+  // get categories by userid(and by user role)
+  getCategoriesByUserid(userid: number): Observable<DropdownResponse[]> {
 
     // console.log(`${this.host}/active-supporters`);
 
     return this.http.get<DropdownResponse[]>(
-      `${this.shareService.host}/priorities`
+      `${this.shareService.host}/categories?userid=${userid}`
+    )
+  }
+
+  // get priorities by userid(and by user role)
+  getPrioritiesByUserid(userid: number): Observable<DropdownResponse[]> {
+
+    // console.log(`${this.host}/active-supporters`);
+
+    return this.http.get<DropdownResponse[]>(
+      `${this.shareService.host}/priorities?userid=${userid}`
     )
   }
 
@@ -110,4 +114,4 @@ export class TicketService {
   //    return this.http.get<Team>(`${this.host}/team-list/${id}`);
   //  }
 
-} // end of class TeamService
+} // end of class Ticketervice

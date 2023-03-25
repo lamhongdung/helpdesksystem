@@ -27,7 +27,7 @@
           <input id="searchTerm" class="form-control" type="search" formControlName="searchTerm"
             placeholder="Search term(id, name)"
             tooltip="- Search term(id, name).<br>- Blank means search all IDs and names" theme="light" placement="bottom"
-            [autoPlacement]="true">
+            >
         </div>
 
         <!-- Status -->
@@ -39,7 +39,7 @@
           <!-- dropdown -->
           <select id="status" class="form-control" formControlName="status"
             tooltip="- Category status.<br>- 'All' means both 'Active' and 'Inacitve'" placement="bottom" theme="light"
-            [autoPlacement]="true">
+            >
             <option value="">All</option>
             <option value="Active">Active</option>
             <option value="Inactive">Inactive</option>
@@ -52,7 +52,7 @@
           <br>
           <!-- "Search button" -->
           <button id="searchButton" class="btn btn-primary mt-xl-2" style="width: 100%" tooltip="Search categories"
-            theme="light" placement="bottom" [autoPlacement]="true">
+            theme="light" placement="bottom" >
             <i class="fa fa-search"></i>
             Search
           </button>
@@ -72,7 +72,7 @@
         <!-- the "Create category" button. -->
         <!-- when user clicks on the "Create category" button -->
         <button class="btn btn-primary" routerLink="/category-create" tooltip="Navigate to the 'Create category' screen"
-          theme="light" placement="right" [autoPlacement]="true"><i class="fa fa-plus"></i>
+          theme="light" placement="right" ><i class="fa fa-plus"></i>
           Create category
         </button>
 
@@ -82,13 +82,13 @@
 
       <!-- if (number of categories) > 1 -->
       <div *ngIf="totalOfCategories > 1" tooltip="Number of categories found" theme="light" placement="left"
-        [autoPlacement]="true">There are {{totalOfCategories}} categories</div>
+        >There are {{totalOfCategories}} categories</div>
       <!-- if (number of categories) == 1 -->
       <div *ngIf="totalOfCategories == 1" tooltip="Number of categories found" theme="light" placement="left"
-        [autoPlacement]="true">There is {{totalOfCategories}} category</div>
+        >There is {{totalOfCategories}} category</div>
       <!-- there is no category -->
       <div *ngIf="totalOfCategories == 0" tooltip="There is no category found" theme="light" placement="left"
-        [autoPlacement]="true">There is no category</div>
+        >There is no category</div>
 
     </div>
   </div>
@@ -105,17 +105,17 @@
 
           <!-- Order -->
           <!-- scope="col": specifies that the cell is a header for a column -->
-          <th scope="col" style="width: 10%" tooltip="Order" theme="light" placement="bottom" [autoPlacement]="true">Ord
+          <th scope="col" style="width: 10%" tooltip="Order" theme="light" placement="bottom" >Ord
           </th>
 
-          <th scope="col" style="width: 10%" tooltip="Identity" theme="light" placement="bottom" [autoPlacement]="true">
+          <th scope="col" style="width: 10%" tooltip="Identity" theme="light" placement="bottom" >
             ID</th>
           <th scope="col" style="width: 50%" tooltip="Category name" theme="light" placement="bottom"
-            [autoPlacement]="true">Name</th>
+            >Name</th>
           <th scope="col" style="width: 15%" tooltip="Category status" theme="light" placement="bottom"
-            [autoPlacement]="true">Status</th>
+            >Status</th>
           <th scope="col" style="width: 15%" tooltip="Edit category" theme="light" placement="bottom"
-            [autoPlacement]="true">Action</th>
+            >Action</th>
         </tr>
       </thead>
       <tbody style="text-align: center">
@@ -140,7 +140,7 @@
           <td class="pointer-link" (click)="viewCategory(category.id)">{{category.status}}</td>
 
           <!-- the "Edit" button -->
-          <td class="text-center" tooltip="Edit category" theme="light" placement="right" [autoPlacement]="true">
+          <td class="text-center" tooltip="Edit category" theme="light" placement="right" >
             <a class="btn btn-primary mr-1" [routerLink]="['/category-edit', category.id]"><i
                 class="fa fa-edit"></i></a>
           </td>
@@ -158,12 +158,12 @@
 
         <!-- move to the "first page" -->
         <li class="page-item"><button class="page-link" (click)="moveFirst()" [disabled]="currentPage==1"
-            tooltip="Go to the first page" theme="light" placement="bottom" [autoPlacement]="true">First</button>
+            tooltip="Go to the first page" theme="light" placement="bottom" >First</button>
         </li>
 
         <!-- move to the "previous page" -->
         <li class="page-item"><button class="page-link" (click)="movePrevious()" [disabled]="currentPage==1"
-            tooltip="Go to previous page" theme="light" placement="bottom" [autoPlacement]="true">Previous</button>
+            tooltip="Go to previous page" theme="light" placement="bottom" >Previous</button>
         </li>
 
         <!--  -->
@@ -174,11 +174,11 @@
             <input type="number" min="1" [max]="totalPages" class="form-control rounded-0"
               aria-describedby="basic-addon1" [value]="currentPage"
               (change)="changePageNumber($any($event.target).value)" tooltip="Current page" theme="light"
-              placement="bottom" [autoPlacement]="true">
+              placement="bottom" >
             <!-- total pages -->
             <div class="input-group-prepend">
               <span class="input-group-text" id="basic-addon1" tooltip="Total pages" theme="light" placement="bottom"
-                [autoPlacement]="true">/{{totalPages}}</span>
+                >/{{totalPages}}</span>
             </div>
           </div>
         </li>
@@ -187,16 +187,16 @@
         <!-- rounded-0: have no round at corners -->
         <li class="page-item">
           <button class="btn btn-primary rounded-0" (click)="goPage()" onmouseover="this.style.cursor='pointer'"
-            tooltip="Go to specific page" theme="light" placement="bottom" [autoPlacement]="true">Go</button>
+            tooltip="Go to specific page" theme="light" placement="bottom" >Go</button>
         </li>
 
         <!-- the "Next" button -->
         <li class="page-item"><button class="page-link" (click)="moveNext()" [disabled]="currentPage==totalPages"
-            tooltip="Go to next page" theme="light" placement="bottom" [autoPlacement]="true">Next</button></li>
+            tooltip="Go to next page" theme="light" placement="bottom" >Next</button></li>
 
         <!-- the "Last" button -->
         <li class="page-item"><button class="page-link" (click)="moveLast()" [disabled]="currentPage==totalPages"
-            tooltip="Go to the last page" theme="light" placement="bottom" [autoPlacement]="true">Last</button></li>
+            tooltip="Go to the last page" theme="light" placement="bottom" >Last</button></li>
 
       </ul>
     </nav>

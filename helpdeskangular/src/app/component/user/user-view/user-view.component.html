@@ -21,7 +21,7 @@
                         <!-- textbox -->
                         <div class="col-8">
                             <input class="form-control" type="id" formControlName="id" id="id" tooltip="Identity"
-                                theme="light" placement="bottom" [autoPlacement]="true" readonly>
+                                theme="light" placement="bottom"  readonly>
                         </div>
                     </div>
 
@@ -34,7 +34,7 @@
                         <!-- textbox -->
                         <div class="col-8">
                             <input class="form-control" type="email" formControlName="email" id="email" tooltip="Email"
-                                theme="light" placement="bottom" [autoPlacement]="true" readonly>
+                                theme="light" placement="bottom"  readonly>
                         </div>
                     </div>
 
@@ -48,7 +48,7 @@
                         <div class="col-8">
                             <input class="form-control" type="text" formControlName="firstName" placeholder="First name"
                                 id="firstName" tooltip="First name" theme="light" placement="bottom"
-                                [autoPlacement]="true" readonly>
+                                 readonly>
                         </div>
                     </div>
 
@@ -62,7 +62,7 @@
                         <div class="col-8">
                             <input class="form-control" type="text" formControlName="lastName" placeholder="Last name"
                                 id="lastName" tooltip="Last name" theme="light" placement="bottom"
-                                [autoPlacement]="true" readonly>
+                                 readonly>
                         </div>
                     </div>
 
@@ -83,7 +83,7 @@
                         <div class="col-8">
                             <input class="form-control" type="text" formControlName="phone"
                                 placeholder="ex: 0986111222(10 digits)" id="phone" tooltip="Phone number" theme="light"
-                                placement="bottom" [autoPlacement]="true" readonly>
+                                placement="bottom"  readonly>
                         </div>
                     </div>
 
@@ -97,7 +97,7 @@
                         <div class="col-8">
                             <input class="form-control" type="text" formControlName="address" id="address"
                                 placeholder="Address" tooltip="Address" theme="light" placement="bottom"
-                                [autoPlacement]="true" readonly>
+                                 readonly>
                         </div>
                     </div>
 
@@ -108,7 +108,7 @@
                             <label class="col-form-label" for="role">Role<small>*</small></label>
                         </div>
                         <!-- dropdown -->
-                        <div class="col-8" tooltip="User role" theme="light" placement="bottom" [autoPlacement]="true">
+                        <div class="col-8" tooltip="User role" theme="light" placement="bottom" >
                             <select id="role" class="form-control" formControlName="role" placeholder="Role">
                                 <option value="ROLE_CUSTOMER">ROLE_CUSTOMER</option>
                                 <option value="ROLE_SUPPORTER">ROLE_SUPPORTER</option>
@@ -125,7 +125,7 @@
                         </div>
                         <!-- dropdown -->
                         <div class="col-8" tooltip="User status" theme="light" placement="bottom"
-                            [autoPlacement]="true">
+                            >
                             <select id="status" class="form-control" formControlName="status" placeholder="Status">
                                 <option value="Active">Active</option>
                                 <option value="Inactive">Inactive</option>
@@ -142,7 +142,7 @@
                 <!-- the "Close" button -->
                 <button class="btn btn-primary" routerLink="/user-list" style="width: 150px"
                     tooltip="Close and go back to the 'User list' screen" theme="light" placement="bottom"
-                    [autoPlacement]="true">Close</button>
+                    >Close</button>
             </div>
         </div>
     </form>

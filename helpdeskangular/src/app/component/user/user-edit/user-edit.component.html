@@ -27,7 +27,7 @@
                         <!-- textbox -->
                         <div class="col-8">
                             <input class="form-control" type="id" formControlName="id" id="id" tooltip="Identity"
-                                theme="light" placement="bottom" [autoPlacement]="true" readonly>
+                                theme="light" placement="bottom"  readonly>
                         </div>
                     </div>
 
@@ -40,7 +40,7 @@
                         <!-- textbox -->
                         <div class="col-8">
                             <input class="form-control" type="email" formControlName="email" id="email" tooltip="Email"
-                                theme="light" placement="bottom" [autoPlacement]="true" readonly>
+                                theme="light" placement="bottom"  readonly>
                         </div>
                     </div>
 
@@ -55,7 +55,7 @@
                         <div class="col-8">
                             <input class="form-control" type="text" formControlName="firstName" placeholder="First name"
                                 id="firstName" tooltip="First name" theme="light" placement="bottom"
-                                [autoPlacement]="true">
+                                >
                             <div class="text-danger" *ngFor="let e of errorMessages.firstName">
                                 <div *ngIf="userForm.get('firstName').hasError(e.type) && 
                                     (userForm.get('firstName').dirty || userForm.get('firstName').touched)">
@@ -76,7 +76,7 @@
                         <div class="col-8">
                             <input class="form-control" type="text" formControlName="lastName" placeholder="Last name"
                                 id="lastName" tooltip="Last name" theme="light" placement="bottom"
-                                [autoPlacement]="true">
+                                >
                             <div class="text-danger" *ngFor="let e of errorMessages.lastName">
                                 <div
                                     *ngIf="userForm.get('lastName').hasError(e.type) && (userForm.get('lastName').dirty || userForm.get('lastName').touched)">
@@ -102,7 +102,7 @@
                         <div class="col-8">
                             <input class="form-control" type="text" formControlName="phone"
                                 placeholder="ex: 0986111222(10 digits)" id="phone" tooltip="Phone number(10 digits)"
-                                theme="light" placement="bottom" [autoPlacement]="true">
+                                theme="light" placement="bottom" >
                             <div class=" text-danger" *ngFor="let e of errorMessages.phone">
                                 <div
                                     *ngIf="userForm.get('phone').hasError(e.type) && (userForm.get('phone').dirty || userForm.get('phone').touched)">
@@ -122,7 +122,7 @@
                         <div class="col-8">
                             <input class="form-control" type="text" formControlName="address" id="address"
                                 placeholder="Address" tooltip="Address" theme="light" placement="bottom"
-                                [autoPlacement]="true">
+                                >
                             <div class="text-danger" *ngFor="let e of errorMessages.address">
                                 <div
                                     *ngIf="userForm.get('address').hasError(e.type) && (userForm.get('address').dirty || userForm.get('address').touched)">
@@ -141,7 +141,7 @@
                         <!-- dropdown -->
                         <div class="col-8">
                             <select id="role" class="form-control" formControlName="role" placeholder="Role"
-                                tooltip="User role" theme="light" placement="bottom" [autoPlacement]="true">
+                                tooltip="User role" theme="light" placement="bottom" >
                                 <option value="ROLE_CUSTOMER">ROLE_CUSTOMER</option>
                                 <option value="ROLE_SUPPORTER">ROLE_SUPPORTER</option>
                                 <option value="ROLE_ADMIN">ROLE_ADMIN</option>
@@ -159,7 +159,7 @@
                         <!-- dropdown -->
                         <div class="col-8">
                             <select id="status" class="form-control" formControlName="status" placeholder="Status"
-                                tooltip="User status" theme="light" placement="bottom" [autoPlacement]="true">
+                                tooltip="User status" theme="light" placement="bottom" >
                                 <option value="Active">Active</option>
                                 <option value="Inactive">Inactive</option>
                             </select>
@@ -176,7 +176,7 @@
                 <!-- the "Save" button -->
                 <!-- if userForm is invalid then disabled the button "Save" -->
                 <button type="submit" [disabled]="userForm.invalid" style="width: 150px" class="btn btn-primary mr-2"
-                    tooltip="Save user" theme="light" placement="bottom" [autoPlacement]="true">
+                    tooltip="Save user" theme="light" placement="bottom" >
                     <!-- show the spinner icon in the "Save" button -->
                     <i *ngIf="showSpinner" class="fas fa-spinner fa-spin"></i>
                     <!-- Change label button "Save" to "Saving.." -->
@@ -189,7 +189,7 @@
                 <!-- re-directs to the "user-list" page -->
                 <button class="btn btn-dark" routerLink="/user-list" style="width: 150px"
                     tooltip="Cancel and go back to the 'User list' screen" theme="light" placement="bottom"
-                    [autoPlacement]="true">Cancel</button>
+                    >Cancel</button>
             </div>
         </div>
     </form>

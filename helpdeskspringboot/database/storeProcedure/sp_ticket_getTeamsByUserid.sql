@@ -14,9 +14,9 @@ DELIMITER $$
 -- 	- in_userid: user id
 -- -----------------------------------------------------
 
--- admin: call sp_ticket_getTeamsByUserid(1)
+-- customer: call sp_ticket_getTeamsByUserid(1)
 -- supporter: call sp_ticket_getTeamsByUserid(2)
--- customer: call sp_ticket_getTeamsByUserid(3)
+-- admin: call sp_ticket_getTeamsByUserid(3)
 
 CREATE PROCEDURE sp_ticket_getTeamsByUserid(in_userid int)
 BEGIN
@@ -96,8 +96,8 @@ end if;
   
 END $$
 
--- admin: call sp_ticket_getTeamsByUserid(1)
+-- customer: call sp_ticket_getTeamsByUserid(1)
 -- supporter: call sp_ticket_getTeamsByUserid(2)
--- customer: call sp_ticket_getTeamsByUserid(3)
+-- admin: call sp_ticket_getTeamsByUserid(3)
 
 DELIMITER ;

@@ -25,7 +25,7 @@
                         <!-- textbox -->
                         <div class="col-9">
                             <input class="form-control" type="text" formControlName="id" id="id" tooltip="Identity"
-                                theme="light" placement="right" [autoPlacement]="true" readonly>
+                                theme="light" placement="right"  readonly>
                         </div>
                     </div>
 
@@ -38,7 +38,7 @@
                         <!-- textbox -->
                         <div class="col-9">
                             <input class="form-control" type="text" formControlName="name" placeholder="Team name"
-                                id="name" tooltip="Team name" theme="light" placement="right" [autoPlacement]="true">
+                                id="name" tooltip="Team name" theme="light" placement="right" >
                             <!-- error messages -->
                             <div class="text-danger" *ngFor="let e of errorMessages.name">
                                 <!-- errors on the "name" field -->
@@ -61,7 +61,7 @@
                         <div class="col-9">
                             <select id="assignmentMethod" class="form-control" formControlName="assignmentMethod"
                                 tooltip="- Assignment method. <br>- <b>Auto</b>: auto assign supporter to ticket.<br>- <b>Manual</b>: assign ticket to supporter manually"
-                                theme="light" placement="right" [autoPlacement]="true">
+                                theme="light" placement="right" >
                                 <option value="A">Auto</option>
                                 <option value="M">Manual</option>
                             </select>
@@ -81,7 +81,7 @@
                         <!-- <div class="col-9">
                             <select id="calendarid" class="form-control" formControlName="calendarid"
                                 tooltip="Calendar. <br> A team must belong to a certain calendar.<br> Values include 'id' + 'name' + 'status'"
-                                theme="light" placement="right" [autoPlacement]="true"> -->
+                                theme="light" placement="right" > -->
                                 <!-- all(active + inactive) calendars -->
                                 <!-- <option *ngFor="let calendar of calendars" [value]="calendar.id">
                                     {{calendar.id}} - {{calendar.name}} - {{calendar.status}}</option>
@@ -112,7 +112,7 @@
                             <ng-multiselect-dropdown placeholder="Active supporters" [settings]="supporterSetting"
                                 [data]="activeSupporters" formControlName="supporters" id="supporters"
                                 tooltip="- Assign active supporters to team.<br>- A team must has at least 1 supporter.<br> Values includes 'id' + 'last name' + 'first name' + 'email' + 'status'"
-                                theme="light" placement="right" [autoPlacement]="true">
+                                theme="light" placement="right" >
                             </ng-multiselect-dropdown>
                             <!-- error messages -->
                             <div class="text-danger" *ngFor="let e of errorMessages.supporters">
@@ -135,7 +135,7 @@
                         <!-- dropdown -->
                         <div class="col-9">
                             <select id="status" class="form-control" formControlName="status" tooltip="Team status"
-                                theme="light" placement="right" [autoPlacement]="true">
+                                theme="light" placement="right" >
                                 <option value="Active">Active</option>
                                 <option value="Inactive">Inactive</option>
                             </select>
@@ -151,7 +151,7 @@
                 <!-- the "Save" button -->
                 <!-- if the form values are invalid then disable the "Save" button -->
                 <button type="submit" [disabled]="teamForm.invalid" style="width: 150px" class="btn btn-primary mr-2"
-                    tooltip="Save team" theme="light" placement="bottom" [autoPlacement]="true">
+                    tooltip="Save team" theme="light" placement="bottom" >
 
                     <!-- display the spinner icon when press the "Save" button -->
                     <i *ngIf="showSpinner" class="fas fa-spinner fa-spin"></i>
@@ -166,7 +166,7 @@
                 <!-- re-direct to the "team-list" page -->
                 <button class="btn btn-dark" routerLink="/team-list" style="width: 150px"
                     tooltip="Cancel and go back to the 'Team list' screen" theme="light" placement="bottom"
-                    [autoPlacement]="true">Cancel</button>
+                    >Cancel</button>
             </div>
         </div>
     </form>

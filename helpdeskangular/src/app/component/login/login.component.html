@@ -20,7 +20,7 @@
                             <!-- textbox -->
                             <input formControlName="email" type="email" id="email" class="form-control"
                                 placeholder="Email" tooltip="Email" theme="light" placement="bottom"
-                                [autoPlacement]="true">
+                                >
                             <!-- error messages -->
                             <div class="text-danger" *ngFor="let e of errorMessages.email">
                                 <div *ngIf="loginForm.get('email').hasError(e.type) && 
@@ -37,7 +37,7 @@
                             <!-- textbox -->
                             <input formControlName="password" type="password" id="password" class="form-control"
                                 placeholder="Password" tooltip="Password" theme="light" placement="bottom"
-                                [autoPlacement]="true" required>
+                                 required>
                             <!-- error messages -->
                             <div class="text-danger" *ngFor="let e of errorMessages.password">
                                 <div
@@ -50,14 +50,14 @@
                         <!-- Forgot password -->
                         <div>
                             <p><a routerLink="/reset-password" tooltip="Navigate to the 'Reset password' screen"
-                                    theme="light" placement="right" [autoPlacement]="true">Forgot password?</a></p>
+                                    theme="light" placement="right" >Forgot password?</a></p>
                         </div>
 
                         <!-- The "Login" button -->
                         <!-- <button class="btn btn-lg btn-primary" type="submit"
                             [disabled]="loginForm.invalid || showLoading"> -->
                         <button class="btn btn-lg btn-primary" type="submit" tooltip="Login to the Help Desk system"
-                            theme="light" placement="bottom" [autoPlacement]="true">
+                            theme="light" placement="bottom" >
 
                             <!-- display the spinner icon when press the "Login" button -->
                             <i *ngIf="showSpinner" class="fas fa-spinner fa-spin"></i>

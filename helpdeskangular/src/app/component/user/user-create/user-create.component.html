@@ -26,7 +26,7 @@
                         <div class="col-8">
                             <input class="form-control" type="email" formControlName="email"
                                 placeholder="Ex: abc@gmail.com" id="email" tooltip="Email" theme="light"
-                                placement="bottom" [autoPlacement]="true">
+                                placement="bottom" >
                             <!-- error messages -->
                             <div class="text-danger" *ngFor="let e of errorMessages.email">
                                 <div *ngIf="userForm.get('email').hasError(e.type) && 
@@ -49,7 +49,7 @@
                         <div class="col-8">
                             <input class="form-control" type="text" formControlName="firstName" placeholder="First name"
                                 id="firstName" tooltip="First name" theme="light" placement="bottom"
-                                [autoPlacement]="true">
+                                >
                             <!-- error messages -->
                             <div class="text-danger" *ngFor="let e of errorMessages.firstName">
                                 <div
@@ -71,7 +71,7 @@
                         <div class="col-8">
                             <input class="form-control" type="text" formControlName="lastName" placeholder="Last name"
                                 id="lastName" tooltip="Last name" theme="light" placement="bottom"
-                                [autoPlacement]="true">
+                                >
                             <!-- error messages -->
                             <div class="text-danger" *ngFor="let e of errorMessages.lastName">
                                 <div
@@ -92,7 +92,7 @@
                         <div class="col-8">
                             <input class="form-control" type="text" formControlName="phone"
                                 placeholder="ex: 0986111222(10 digits)" id="phone" tooltip="Phone number(10 digits)"
-                                theme="light" placement="bottom" [autoPlacement]="true">
+                                theme="light" placement="bottom" >
                             <!-- error messages -->
                             <div class="text-danger" *ngFor="let e of errorMessages.phone">
                                 <div
@@ -119,7 +119,7 @@
                         <div class="col-8">
                             <input class="form-control" type="text" formControlName="address" id="address"
                                 placeholder="Address" tooltip="Address" theme="light" placement="bottom"
-                                [autoPlacement]="true">
+                                >
                             <!-- error messages -->
                             <div class="text-danger" *ngFor="let e of errorMessages.address">
                                 <div
@@ -140,7 +140,7 @@
                         <div class="col-8">
                             <!-- default value = "ROLE_CUSTOMER"(is set in the typecript code) -->
                             <select id="role" class="form-control" formControlName="role" placeholder="Role"
-                                tooltip="User role" theme="light" placement="bottom" [autoPlacement]="true">
+                                tooltip="User role" theme="light" placement="bottom" >
                                 <option value="ROLE_CUSTOMER">ROLE_CUSTOMER</option>
                                 <option value="ROLE_SUPPORTER">ROLE_SUPPORTER</option>
                                 <option value="ROLE_ADMIN">ROLE_ADMIN</option>
@@ -159,7 +159,7 @@
                         <div class="col-8">
                             <!-- default value = "Active"(is set in the typescript code) -->
                             <select id="status" class="form-control" formControlName="status" placeholder="Status"
-                                tooltip="User status" theme="light" placement="bottom" [autoPlacement]="true">
+                                tooltip="User status" theme="light" placement="bottom" >
                                 <option value="Active">Active</option>
                                 <option value="Inactive">Inactive</option>
                             </select>
@@ -175,7 +175,7 @@
                 <!-- the "Save" button -->
                 <!-- if the form values are invalid then disable the "Save" button -->
                 <button type="submit" [disabled]="userForm.invalid" style="width: 150px" class="btn btn-primary mr-2"
-                    tooltip="Save user" theme="light" placement="bottom" [autoPlacement]="true">
+                    tooltip="Save user" theme="light" placement="bottom" >
 
                     <!-- display the spinner icon when press the "Save" button -->
                     <i *ngIf="showSpinner" class="fas fa-spinner fa-spin"></i>
@@ -190,7 +190,7 @@
                 <!-- re-direct to the "user-list" page -->
                 <button class="btn btn-dark" routerLink="/user-list" style="width: 150px"
                     tooltip="Cancel and redirect to the 'User list' screen" theme="light" placement="bottom"
-                    [autoPlacement]="true">Cancel</button>
+                    >Cancel</button>
             </div>
         </div>
     </form>

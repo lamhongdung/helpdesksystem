@@ -26,7 +26,7 @@
                         <!-- textbox -->
                         <div class="col-9">
                             <input class="form-control" type="text" formControlName="id" id="id" tooltip="Identity"
-                                theme="light" placement="right" [autoPlacement]="true" readonly>
+                                theme="light" placement="right"  readonly>
                         </div>
                     </div>
 
@@ -41,7 +41,7 @@
                         <!-- textbox -->
                         <div class="col-9">
                             <input class="form-control" type="text" formControlName="name" id="name"
-                                tooltip="Category name" theme="light" placement="right" [autoPlacement]="true" readonly>
+                                tooltip="Category name" theme="light" placement="right"  readonly>
                         </div>
                     </div>
 
@@ -55,7 +55,7 @@
 
                         <!-- dropdown -->
                         <div class="col-9" tooltip="Category status" theme="light" placement="right"
-                            [autoPlacement]="true">
+                            >
                             <select id="status" class="form-control" formControlName="status">
                                 <option value="Active">Active</option>
                                 <option value="Inactive">Inactive</option>
@@ -73,7 +73,7 @@
                 <!-- re-direct to the "category-list" page -->
                 <button class="btn btn-primary" routerLink="/category-list" style="width: 150px"
                     tooltip="Close and go back to the 'Category list' screen" theme="light" placement="right"
-                    [autoPlacement]="true">Close</button>
+                    >Close</button>
             </div>
         </div>
     </form>

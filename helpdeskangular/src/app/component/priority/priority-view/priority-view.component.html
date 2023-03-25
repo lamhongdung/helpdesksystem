@@ -26,7 +26,7 @@
                         <!-- textbox -->
                         <div class="col-8">
                             <input class="form-control" type="text" formControlName="id" id="id" tooltip="Identity"
-                                theme="light" placement="right" [autoPlacement]="true" readonly>
+                                theme="light" placement="right"  readonly>
                         </div>
                     </div>
 
@@ -41,7 +41,7 @@
                         <!-- textbox -->
                         <div class="col-8">
                             <input class="form-control" type="text" formControlName="name" id="name"
-                                tooltip="Priority name" theme="light" placement="right" [autoPlacement]="true" readonly>
+                                tooltip="Priority name" theme="light" placement="right"  readonly>
                         </div>
                     </div>
 
@@ -57,7 +57,7 @@
                         <div class="col-8">
                             <input class="form-control" type="number" formControlName="resolveIn" id="resolveIn"
                                 tooltip="Number of hours to resolve a ticket. <br> =0 means do not care about the resolve time. It means all tickets are on time."
-                                theme="light" placement="right" [autoPlacement]="true" readonly>
+                                theme="light" placement="right"  readonly>
                         </div>
                     </div>
 
@@ -71,7 +71,7 @@
 
                         <!-- dropdown -->
                         <div class="col-8" tooltip="Priority status" theme="light" placement="right"
-                            [autoPlacement]="true">
+                            >
                             <select id="status" class="form-control" formControlName="status">
                                 <option value="Active">Active</option>
                                 <option value="Inactive">Inactive</option>
@@ -89,7 +89,7 @@
                 <!-- re-direct to the "priority-list" page -->
                 <button class="btn btn-primary" routerLink="/priority-list" style="width: 150px"
                     tooltip="Close and go back to the 'Priority list' screen" theme="light" placement="right"
-                    [autoPlacement]="true">Close</button>
+                    >Close</button>
             </div>
         </div>
     </form>

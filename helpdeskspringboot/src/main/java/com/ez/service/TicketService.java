@@ -1,6 +1,7 @@
 package com.ez.service;
 
 import com.ez.dto.DropdownResponse;
+import com.ez.dto.TicketResponse;
 import com.ez.repository.TicketRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -48,20 +49,44 @@ public class TicketService {
         return ticketRepository.getTeamsByUserid(userid);
     }
 
-    // get all categories.
-    public List<DropdownResponse> getAllCategories() {
+    // get assignees by userid(and by user role).
+    public List<DropdownResponse> getAssigneesByUserid(int userid) {
 
-        LOGGER.info("Get all categories");
+        LOGGER.info("Get assignees by userid(and by user role)");
 
-        return ticketRepository.getAllCategories();
+        return ticketRepository.getAssigneesByUserid(userid);
     }
 
-    // get all priorities.
-    public List<DropdownResponse> getAllPriorities() {
+    // get categories by userid(and by user role).
+    public List<DropdownResponse> getCategoriesByUserid(int userid) {
 
-        LOGGER.info("Get all priorities");
+        LOGGER.info("Get categories by userid(and by user role)");
 
-        return ticketRepository.getAllPriorities();
+        return ticketRepository.getCategoriesByUserid(userid);
+    }
+
+    // get priorities by userid(and by user role).
+    public List<DropdownResponse> getPrioritiesByUserid(int userid) {
+
+        LOGGER.info("Get priorities by user id(and by user role)");
+
+        return ticketRepository.getPrioritiesByUserid(userid);
+    }
+
+    // get tickets by userid(and by user role).
+    public List<TicketResponse> getTicketsByUserid(long userid, String searchTerm) {
+
+        LOGGER.info("Get tickets by user id(and by user role)");
+
+        return ticketRepository.getTicketsByUserid(userid, searchTerm);
+    }
+
+    // calculate total of teams based on the search criteria
+    public long getTotalOfTickets(long userid, String searchTerm) {
+
+        LOGGER.info("get total of teams");
+
+        return ticketRepository.getTotalOfTickets(userid, searchTerm);
     }
 
 }

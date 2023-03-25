@@ -26,7 +26,7 @@
                         <!-- textbox -->
                         <div class="col-9">
                             <input class="form-control" type="text" formControlName="id" id="id" tooltip="Identity"
-                                theme="light" placement="right" [autoPlacement]="true" readonly>
+                                theme="light" placement="right"  readonly>
                         </div>
                     </div>
 
@@ -41,7 +41,7 @@
                         <!-- textbox -->
                         <div class="col-9">
                             <input class="form-control" type="text" formControlName="name" id="name" tooltip="Team name"
-                                theme="light" placement="right" [autoPlacement]="true" readonly>
+                                theme="light" placement="right"  readonly>
                         </div>
                     </div>
 
@@ -55,7 +55,7 @@
                         <!-- dropdown -->
                         <div class="col-9"
                             tooltip="Assignment method. <br>- <b>Auto</b>: auto assign supporter to ticket. <br>-<b>Manual</b>: assign ticket to supporter manually"
-                            theme="light" placement="right" [autoPlacement]="true">
+                            theme="light" placement="right" >
                             <select id="assignmentMethod" class="form-control" formControlName="assignmentMethod">
                                 <option value="A">Auto</option>
                                 <option value="M">Manual</option>
@@ -75,7 +75,7 @@
                         <!-- dropdown -->
                         <!-- <div class="col-9"
                             tooltip="Calendar. <br> A team must belong to a certain calendar. <br> Values include 'id' + 'name' + 'status'"
-                            theme="light" placement="right" [autoPlacement]="true">
+                            theme="light" placement="right" >
                             <select id="calendarid" class="form-control" formControlName="calendarid">
                                 <option *ngFor="let calendar of calendars" [value]="calendar.id">
                                     {{calendar.id}} - {{calendar.name}} - {{calendar.status}}</option>
@@ -94,7 +94,7 @@
                         <!-- https://github.com/NileshPatel17/ng-multiselect-dropdown -->
                         <div class="col-9"
                             tooltip="- Assign active supporters to team.<br>- Values include 'id' + 'last name' + 'first name' + 'email' + 'status'"
-                            theme="light" placement="right" [autoPlacement]="true">
+                            theme="light" placement="right" >
                             <!-- dropdown(multi selection) -->
                             <ng-multiselect-dropdown placeholder="Active supporters" [settings]="supporterSetting"
                                 formControlName="supporters" id="supporters" [disabled]="true">
@@ -111,7 +111,7 @@
                         </div>
 
                         <!-- dropdown -->
-                        <div class="col-9" tooltip="Team status" theme="light" placement="right" [autoPlacement]="true">
+                        <div class="col-9" tooltip="Team status" theme="light" placement="right" >
                             <select id="status" class="form-control" formControlName="status">
                                 <option value="Active">Active</option>
                                 <option value="Inactive">Inactive</option>
@@ -129,7 +129,7 @@
                 <!-- re-direct to the "priority-list" page -->
                 <button class="btn btn-primary" routerLink="/team-list" style="width: 150px"
                     tooltip="Close and go back to the 'Team list' screen" theme="light" placement="right"
-                    [autoPlacement]="true">Close</button>
+                    >Close</button>
             </div>
         </div>
     </form>

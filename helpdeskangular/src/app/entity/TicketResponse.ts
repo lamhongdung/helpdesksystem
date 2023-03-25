@@ -16,6 +16,8 @@ export class TicketResponse {
         public createDatetime: Date,
         // ticket status name
         public ticketStatusName: string,
+        // sla(service level agreement): ontime or late
+        public sla: string,
         // creator email
         public creatorEmail: string,
         // team name
@@ -24,6 +26,9 @@ export class TicketResponse {
         public categoryName: string,
         // priority name
         public priorityName: number,
+
+        // ticket content
+        public content: string
 
     ) {
 

@@ -1,10 +1,12 @@
 package com.ez.controller;
 
 import com.ez.dto.DropdownResponse;
+import com.ez.dto.TicketResponse;
 import com.ez.service.TicketService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -33,7 +35,7 @@ public class TicketController {
     //  - Closed
     @GetMapping("/ticketStatus")
     // all users can access this resource
-    @PreAuthorize("hasAnyRole('ROLE_CUSTOMER','ROLE_SUPPORTER','ROLE_ADMIN')")
+//    @PreAuthorize("hasAnyRole('ROLE_CUSTOMER','ROLE_SUPPORTER','ROLE_ADMIN')")
     public ResponseEntity<List<DropdownResponse>> getAllTicketStatus() {
 
         // get all ticket status
@@ -45,7 +47,7 @@ public class TicketController {
     // get creators by userid(and by user role).
     @GetMapping("/creators")
     // all users can access this resource
-    @PreAuthorize("hasAnyRole('ROLE_CUSTOMER','ROLE_SUPPORTER','ROLE_ADMIN')")
+//    @PreAuthorize("hasAnyRole('ROLE_CUSTOMER','ROLE_SUPPORTER','ROLE_ADMIN')")
     public ResponseEntity<List<DropdownResponse>> getCreatorsByUserid(@RequestParam int userid) {
 
         // get creators by userid(and by user role)
@@ -57,8 +59,8 @@ public class TicketController {
     // get teams by userid(and by user role).
     @GetMapping("/teams")
     // all users can access this resource
-    @PreAuthorize("hasAnyRole('ROLE_CUSTOMER','ROLE_SUPPORTER','ROLE_ADMIN')")
-    public ResponseEntity<List<DropdownResponse>> getAllTeamsByUserid(@RequestParam int userid) {
+//    @PreAuthorize("hasAnyRole('ROLE_CUSTOMER','ROLE_SUPPORTER','ROLE_ADMIN')")
+    public ResponseEntity<List<DropdownResponse>> getTeamsByUserid(@RequestParam int userid) {
 
         // get teams by userid(and by user role)
         List<DropdownResponse> teamsResponses = ticketService.getTeamsByUserid(userid);
@@ -66,28 +68,72 @@ public class TicketController {
         return new ResponseEntity<>(teamsResponses, OK);
     }
 
-    // get all categories.
+    // get assignees by userid(and by user role).
+    @GetMapping("/assignees")
+    // all users can access this resource
+//    @PreAuthorize("hasAnyRole('ROLE_CUSTOMER','ROLE_SUPPORTER','ROLE_ADMIN')")
+    public ResponseEntity<List<DropdownResponse>> getAssigneesByUserid(@RequestParam int userid) {
+
+        // get assignees by userid(and by user role)
+        List<DropdownResponse> assigneesResponses = ticketService.getAssigneesByUserid(userid);
+
+        return new ResponseEntity<>(assigneesResponses, OK);
+    }
+
+    // get categories by userid(and by user role).
     @GetMapping("/categories")
     // all users can access this resource
-    @PreAuthorize("hasAnyRole('ROLE_CUSTOMER','ROLE_SUPPORTER','ROLE_ADMIN')")
-    public ResponseEntity<List<DropdownResponse>> getAllCategories() {
+//    @PreAuthorize("hasAnyRole('ROLE_CUSTOMER','ROLE_SUPPORTER','ROLE_ADMIN')")
+    public ResponseEntity<List<DropdownResponse>> getCategoriesByUserid(@RequestParam int userid) {
 
         // get all categories
-        List<DropdownResponse> categoryResponses = ticketService.getAllCategories();
+        List<DropdownResponse> categoryResponses = ticketService.getCategoriesByUserid(userid);
 
         return new ResponseEntity<>(categoryResponses, OK);
     }
 
-    // get all priorities.
+    // get priorities by userid(and by user role).
     @GetMapping("/priorities")
     // all users can access this resource
-    @PreAuthorize("hasAnyRole('ROLE_CUSTOMER','ROLE_SUPPORTER','ROLE_ADMIN')")
-    public ResponseEntity<List<DropdownResponse>> getAllPriorities() {
+//    @PreAuthorize("hasAnyRole('ROLE_CUSTOMER','ROLE_SUPPORTER','ROLE_ADMIN')")
+    public ResponseEntity<List<DropdownResponse>> getPrioritiesByUserid(@RequestParam int userid) {
 
         // get all priorities
-        List<DropdownResponse> priorityResponses = ticketService.getAllPriorities();
+        List<DropdownResponse> priorityResponses = ticketService.getPrioritiesByUserid(userid);
 
         return new ResponseEntity<>(priorityResponses, OK);
+    }
+
+    // get priorities by userid(and by user role).
+    @GetMapping("/ticket-search")
+    // all users can access this resource
+//    @PreAuthorize("hasAnyRole('ROLE_CUSTOMER','ROLE_SUPPORTER','ROLE_ADMIN')")
+    public ResponseEntity<List<TicketResponse>> getTicketsByUserid(@RequestParam(required = false, defaultValue = "0") long userid,
+//                                                                   @RequestParam int pageNumber,
+//                                                                   @RequestParam int pageSize,
+                                                                   @RequestParam(required = false, defaultValue = "") String searchTerm) {
+
+        // get tickets by userid(and by user role)
+        List<TicketResponse> ticketResponses = ticketService.getTicketsByUserid(userid, searchTerm);
+
+        return new ResponseEntity<>(ticketResponses, OK);
+    }
+
+    //
+    // calculate total of teams based on the search criteria.
+    // use this total of teams value to calculate total pages for pagination.
+    //
+    // url: ex: /total-of-teams?searchTerm=""&assignmentMethod=""&status=""
+    @GetMapping("/total-of-tickets")
+    // only the ROLE_ADMIN can access this address
+//    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
+    public ResponseEntity<Long> getTotalOfTickets(@RequestParam(required = false, defaultValue = "") long userid,
+                                                  @RequestParam(required = false, defaultValue = "") String searchTerm) {
+
+        // calculate total of teams based on the search criteria
+        long totalOfTickets = ticketService.getTotalOfTickets(userid, searchTerm);
+
+        return new ResponseEntity<>(totalOfTickets, HttpStatus.OK);
     }
 
 }

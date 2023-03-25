@@ -27,7 +27,7 @@
                     <input id="searchTerm" class="form-control" type="search" formControlName="searchTerm"
                         placeholder="Search term(id, name)"
                         tooltip="Search term(id, name). <br>Blank means search all IDs and names" theme="light"
-                        placement="bottom" [autoPlacement]="true">
+                        placement="bottom" >
                 </div>
 
                 <!-- Status -->
@@ -39,7 +39,7 @@
                     <!-- dropdown -->
                     <select id="status" class="form-control" formControlName="status"
                         tooltip="Calendar status.<br> 'All' means both 'Active' and 'Inacitve'" placement="bottom"
-                        theme="light" [autoPlacement]="true">
+                        theme="light" >
                         <option value="">All</option>
                         <option value="Active">Active</option>
                         <option value="Inactive">Inactive</option>
@@ -52,7 +52,7 @@
                     <br>
                     <!-- "Search button" -->
                     <button id="searchButton" class="btn btn-primary mt-xl-2" style="width: 100%"
-                        tooltip="Search calendars" theme="light" placement="bottom" [autoPlacement]="true">
+                        tooltip="Search calendars" theme="light" placement="bottom" >
                         <i class="fa fa-search"></i>
                         Search
                     </button>
@@ -73,7 +73,7 @@
                 <!-- when user clicks on the "Create calendar" button -->
                 <button class="btn btn-primary" routerLink="/calendar-create"
                     tooltip="Navigate to the 'Create calendar' screen" theme="light" placement="right"
-                    [autoPlacement]="true"><i class="fa fa-plus"></i>
+                    ><i class="fa fa-plus"></i>
                     Create calendar
                 </button>
 
@@ -83,13 +83,13 @@
 
             <!-- if (number of calendars) > 1 -->
             <div *ngIf="totalOfCalendars > 1" tooltip="Number of calendars found" theme="light" placement="left"
-                [autoPlacement]="true">There are {{totalOfCalendars}} calendars</div>
+                >There are {{totalOfCalendars}} calendars</div>
             <!-- if (number of calendars) == 1 -->
             <div *ngIf="totalOfCalendars == 1" tooltip="Number of calendars found" theme="light" placement="left"
-                [autoPlacement]="true">There is {{totalOfCalendars}} calendar</div>
+                >There is {{totalOfCalendars}} calendar</div>
             <!-- there is no calendar -->
             <div *ngIf="totalOfCalendars == 0" tooltip="There is no calendar found" theme="light" placement="left"
-                [autoPlacement]="true">There is no calendar</div>
+                >There is no calendar</div>
 
         </div>
     </div>
@@ -106,18 +106,18 @@
                     <!-- Order -->
                     <!-- scope="col": specifies that the cell is a header for a column -->
                     <th scope="col" style="width: 10%" tooltip="Order" theme="light" placement="bottom"
-                        [autoPlacement]="true">Ord
+                        >Ord
                     </th>
 
                     <th scope="col" style="width: 10%" tooltip="Identity" theme="light" placement="bottom"
-                        [autoPlacement]="true">
+                        >
                         ID</th>
                     <th scope="col" style="width: 50%" tooltip="Calendar name" theme="light" placement="bottom"
-                        [autoPlacement]="true">Name</th>
+                        >Name</th>
                     <th scope="col" style="width: 15%" tooltip="Calendar status" theme="light" placement="bottom"
-                        [autoPlacement]="true">Status</th>
+                        >Status</th>
                     <th scope="col" style="width: 15%" tooltip="Edit calendar" theme="light" placement="bottom"
-                        [autoPlacement]="true">Action</th>
+                        >Action</th>
                 </tr>
             </thead>
             <tbody style="text-align: center">
@@ -144,7 +144,7 @@
 
                     <!-- the "Edit" button -->
                     <td class="text-center" tooltip="Edit calendar" theme="light" placement="right"
-                        [autoPlacement]="true">
+                        >
                         <a class="btn btn-primary mr-1" [routerLink]="['/calendar-edit', calendar.id]"><i
                                 class="fa fa-edit"></i></a>
                     </td>
@@ -163,13 +163,13 @@
                 <!-- move to the "first page" -->
                 <li class="page-item"><button class="page-link" (click)="moveFirst()" [disabled]="currentPage==1"
                         tooltip="Go to the first page" theme="light" placement="bottom"
-                        [autoPlacement]="true">First</button>
+                        >First</button>
                 </li>
 
                 <!-- move to the "previous page" -->
                 <li class="page-item"><button class="page-link" (click)="movePrevious()" [disabled]="currentPage==1"
                         tooltip="Go to previous page" theme="light" placement="bottom"
-                        [autoPlacement]="true">Previous</button>
+                        >Previous</button>
                 </li>
 
                 <!--  -->
@@ -180,11 +180,11 @@
                         <input type="number" min="1" [max]="totalPages" class="form-control rounded-0"
                             aria-describedby="basic-addon1" [value]="currentPage"
                             (change)="changePageNumber($any($event.target).value)" tooltip="Current page" theme="light"
-                            placement="bottom" [autoPlacement]="true">
+                            placement="bottom" >
                         <!-- total pages -->
                         <div class="input-group-prepend">
                             <span class="input-group-text" id="basic-addon1" tooltip="Total pages" theme="light"
-                                placement="bottom" [autoPlacement]="true">/{{totalPages}}</span>
+                                placement="bottom" >/{{totalPages}}</span>
                         </div>
                     </div>
                 </li>
@@ -194,18 +194,18 @@
                 <li class="page-item">
                     <button class="btn btn-primary rounded-0" (click)="goPage()"
                         onmouseover="this.style.cursor='pointer'" tooltip="Go to specific page" theme="light"
-                        placement="bottom" [autoPlacement]="true">Go</button>
+                        placement="bottom" >Go</button>
                 </li>
 
                 <!-- the "Next" button -->
                 <li class="page-item"><button class="page-link" (click)="moveNext()"
                         [disabled]="currentPage==totalPages" tooltip="Go to next page" theme="light" placement="bottom"
-                        [autoPlacement]="true">Next</button></li>
+                        >Next</button></li>
 
                 <!-- the "Last" button -->
                 <li class="page-item"><button class="page-link" (click)="moveLast()"
                         [disabled]="currentPage==totalPages" tooltip="Go to the last page" theme="light"
-                        placement="bottom" [autoPlacement]="true">Last</button></li>
+                        placement="bottom" >Last</button></li>
 
             </ul>
         </nav>

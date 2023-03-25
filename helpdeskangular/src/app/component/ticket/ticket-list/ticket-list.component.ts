@@ -19,6 +19,8 @@ import { TicketService } from 'src/app/service/ticket.service';
 })
 export class TicketListComponent {
 
+  tooptipWidth: number = 500;
+
   // use to unsubcribe all subscribes easily, avoid leak memeory
   subscriptions: Subscription[] = [];
 
@@ -47,6 +49,9 @@ export class TicketListComponent {
 
   // all teams
   teams: DropdownResponse[] = [];
+
+  // assignees
+  assignees: DropdownResponse[] = [];
 
   // all priorities
   priorities: DropdownResponse[] = [];
@@ -138,47 +143,20 @@ export class TicketListComponent {
     // initial values for all form controls
     //----------------------------------------
 
-    //
-    // creator.
-    //
-
     // load creators by userid(and by user role) into the "Creator" dropdown
     this.loadCreatorsByUserid(this.userid)
-
-    // set default value for the "Creator" dropdown
-
-    // if role is "ROLE_CUSTOMER" then creator is him-self
-    if (this.loggedInRole === "ROLE_CUSTOMER") {
-      // this.userId + "": means convert number to string
-      this.searchTicket.controls['creatorid'].setValue(this.userid + "");
-    }
-    // if role is "ROLE_SUPPORTER" or "ROLE_ADMIN" then creator = "0"(All)
-    else {
-      this.searchTicket.controls['creatorid'].setValue("0");
-    }
-
-    //
-    // Team.
-    //
 
     // load teams by userid(and by user role) into the "Team" dropdown
     this.loadTeamsByUserid(this.userid)
 
-    this.searchTicket.controls['teamid'].setValue("0");
+    // load assignees by userid(and by user role) into the "Assignees" dropdown
+    this.loadAssigneesByUserid(this.userid)
 
-    //
-    // Category.
-    //
+    // load categories by userid(and by user role) into the "Category" dropdown
+    this.loadCategoriesByUserid(this.userid)
 
-    // load all categories into the "Category" dropdown
-    this.loadAllCategories()
-
-    //
-    // Priority.
-    //
-
-    // load all priorities into the "Priority" dropdown
-    this.loadAllPriorities()
+    // load priorities by userid(and by user role) into the "Priority" dropdown
+    this.loadPrioritiesByUserid(this.userid)
 
     // fromDate = first day of current month(local).
     this.searchTicket.controls['fromDate'].setValue(this.firstDayOfCurrentMonth);
@@ -193,7 +171,7 @@ export class TicketListComponent {
 
     // assign teams from database to the this.teams variable, and get totalPages.
     // the first parameter(page) = 0: in MySQL 0 means the first page.
-    // this.searchTickets(0, this.searchTicket.value.searchTerm, this.searchTicket.value.subject, this.searchTicket.value.ticketStatus);
+    this.searchTickets(this.userid, 0, this.searchTicket.value.searchTerm);
 
   } // end of ngOnInit()
 
@@ -262,6 +240,19 @@ export class TicketListComponent {
           }
         })
     );
+
+    // set default value for the "Creator" dropdown
+
+    // if role is "ROLE_CUSTOMER" then creator is him-self
+    if (this.loggedInRole === "ROLE_CUSTOMER") {
+      // this.userId + "": means convert number to string
+      this.searchTicket.controls['creatorid'].setValue(this.userid + "");
+    }
+    // if role is "ROLE_SUPPORTER" or "ROLE_ADMIN" then creator = "0"(All)
+    else {
+      this.searchTicket.controls['creatorid'].setValue("0");
+    }
+
   } // end of loadCreatorsByUserid()
 
   // load teams userid(and by user role)
@@ -292,16 +283,52 @@ export class TicketListComponent {
           }
         })
     );
+
+    this.searchTicket.controls['teamid'].setValue("0");
+
   } // end of loadCreatorsByUserid()
 
-  // load all priorities
-  loadAllPriorities() {
+  // load assignees userid(and by user role)
+  loadAssigneesByUserid(userid: number) {
+
+    // push into the subscriptions array to unsubscibe them easily later
+    this.subscriptions.push(
+
+      // get assignees
+      this.ticketService.getAssigneesByUserid(userid)
+
+        .subscribe({
+
+          // get assignees successful
+          next: (data: DropdownResponse[]) => {
+
+            // assignees
+            this.assignees = data;
+
+          },
+
+          // there are some errors when get all ticket status
+          error: (errorResponse: HttpErrorResponse) => {
+
+            // show the error message to user
+            this.sendNotification(NotificationType.ERROR, errorResponse.error.message);
+
+          }
+        })
+    );
+
+    this.searchTicket.controls['assigneeid'].setValue("0");
+
+  } // end of loadCreatorsByUserid()
+
+  // load priorities by userid(and by user role)
+  loadPrioritiesByUserid(userid: number) {
 
     // push into the subscriptions array to unsubscibe them easily later
     this.subscriptions.push(
 
       // get all ticket status
-      this.ticketService.getAllPriorities()
+      this.ticketService.getPrioritiesByUserid(userid)
 
         .subscribe({
 
@@ -324,14 +351,14 @@ export class TicketListComponent {
     );
   } // end of loadAllPriorities()
 
-  // load all categories
-  loadAllCategories() {
+  // load categories by userid(and by user role)
+  loadCategoriesByUserid(userid: number) {
 
     // push into the subscriptions array to unsubscibe them easily later
     this.subscriptions.push(
 
       // get all ticket status
-      this.ticketService.getAllCategories()
+      this.ticketService.getCategoriesByUserid(userid)
 
         .subscribe({
 
@@ -352,20 +379,16 @@ export class TicketListComponent {
           }
         })
     );
-  } // end of loadAllCategories()
+  } // end of loadCategoriesByUserid()
 
   // load tooltips.
   loadHtmlProperties() {
 
-    // placeholders
-    this.placeholders.set("fromDate", "From date");
-    this.placeholders.set("toDate", "To date");
-
     // tooltips
     this.tooltips.set("fromDate", "- From ticket date(mm/dd/yyyy).<br>- Default value is the first day of current month");
     this.tooltips.set("toDate", "- To ticket date(mm/dd/yyyy).<br>- Default value is current date");
-    this.tooltips.set("categoryid", "- Category.<br>- 'All' means all categories.<br>- Values include: Category name + Category status.<br>- Only display categories have ticket");
-    this.tooltips.set("priorityid", "- Priority.<br>- 'All' means all priorities.<br>- Values include: Priority name + Priority status.<br>- Only display priorities have ticket");
+    this.tooltips.set("categoryid", "- Category.<br>- 'All' means all categories.<br>- Values include: Category id + Category name.<br>- Only display categories have ticket");
+    this.tooltips.set("priorityid", "- Priority.<br>- 'All' means all priorities.<br>- Values include: Priority id + Priority name.<br>- Only display priorities have ticket");
     this.tooltips.set("creatorid", "- Creator(person creates ticket).<br>- 'All' means all creators.<br>- Only display creators have ticket");
     this.tooltips.set("teamid", "- Team.<br>- 'All' means all teams.<br>- Only display teams have ticket");
     this.tooltips.set("assigneeid", "- Assignee(a person will resove the ticket).<br>- 'All' means all supporters.<br>- Only display supporters have ticket");
@@ -378,63 +401,64 @@ export class TicketListComponent {
     // if user role is "Customer"
     if (this.loggedInRole === "ROLE_CUSTOMER") {
 
-      this.placeholders.set("searchTerm", "Ticket id, subject");
-      this.tooltips.set("searchTerm", "- Search term(ticket id, subject).<br>- Blank means search all ticket IDs, subjects");
+      this.placeholders.set("searchTerm", "Ticket id, subject, content");
+      this.tooltips.set("searchTerm", "- Search term(ticket id, subject, content).<br>- Blank means search all ticket IDs, subjects, contents");
 
     }
 
     // if user role is "Admin" or "Supporter"
     else {
 
-      this.placeholders.set("searchTerm", "Ticket id, subject, creator phone, creator email");
-      this.tooltips.set("searchTerm", "- Search term(ticket id, subject, creator phone, creator email).<br>- Blank means search all ticket IDs, subjects, creator phones, creator emails");
+      this.placeholders.set("searchTerm", "Ticket id, subject, creator phone/email, content");
+      this.tooltips.set("searchTerm", "- Search term(ticket id, subject, creator phone, creator email, content).<br>- Blank means search all ticket IDs, subjects, creator phones, creator emails, contents");
     }
 
   } // end of loadHtmlProperties()
 
 
-  searchTickets(pageNumber: number, searchTerm: string, subject: string, status: string) {
+  searchTickets(userid: number, pageNumber: number, searchTerm: string) {
 
     // push to list of subscriptions for easily unsubscribes all subscriptions of the TeamListComponent
-    // this.subscriptions.push(
 
-    //   // get teams
-    //   this.ticketService.searchTickets(pageNumber, searchTerm, subject, status)
+    this.subscriptions.push(
 
-    //     .subscribe({
+      // get tickets
+      this.ticketService.searchTickets(userid, pageNumber, searchTerm)
 
-    //       // get team from database successful.
-    //       // TeamResponse includes:
-    //       //  - id
-    //       //  - name
-    //       //  - assignmentMethod
-    //       //  - status
-    //       // next: (data: TeamResponse[]) => {
-    //       next: (data: Ticket[]) => {
-    //         return this.tickets = data
-    //       }
+        .subscribe({
 
-    //     })
-    // );
+          // get team from database successful.
+          // TeamResponse includes:
+          //  - id
+          //  - name
+          //  - assignmentMethod
+          //  - status
+          // next: (data: TeamResponse[]) => {
+          next: (data: TicketResponse[]) => {
+            return this.tickets = data
+          }
 
-    // // push to list of subscriptions for easily unsubscribes all subscriptions of the TeamListComponent
-    // this.subscriptions.push(
+        })
+    );
 
-    //   // get total of teams and total pages
-    //   this.ticketService.getTotalOfTickets(searchTerm, subject, status)
+    // push to list of subscriptions for easily unsubscribes all subscriptions of the TeamListComponent
+    this.subscriptions.push(
 
-    //     .subscribe({
+      // get total of teams and total pages
+      this.ticketService.getTotalOfTickets(userid, searchTerm)
 
-    //       // get total of teams from database successful
-    //       next: (data: number) => {
-    //         // total of teams
-    //         this.totalOfTickets = data;
-    //         // total pages
-    //         this.totalPages = this.shareService.calculateTotalPages(this.totalOfTickets, this.pageSize);
-    //       }
-    //     })
-    // )
-  } // end of searchTeams()
+        .subscribe({
+
+          // get total of teams from database successful
+          next: (data: number) => {
+            // total of teams
+            this.totalOfTickets = data;
+            // total pages
+            this.totalPages = this.shareService.calculateTotalPages(this.totalOfTickets, this.pageSize);
+          }
+        })
+    )
+  } // end of searchTickets()
 
   // count index for current page
   // ex:  page 1: ord 1 --> ord 5
