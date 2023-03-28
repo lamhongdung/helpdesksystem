@@ -43,7 +43,7 @@
           <!-- date -->
           <!-- default value = the first day of current month(ex: 2023-03-01) -->
           <input id="fromDate" class="form-control" type="date" formControlName="fromDate"
-            [tooltip]="tooltips.get('fromDate')" theme="light" placement="bottom">
+            [tooltip]="tooltips.get('fromDate')" theme="light" placement="top">
         </div>
 
         <!-- toDate -->
@@ -55,7 +55,7 @@
           <!-- date. -->
           <!-- default value = current date(ex: 2023-03-25) -->
           <input id="toDate" class="form-control" type="date" formControlName="toDate"
-            [tooltip]="tooltips.get('toDate')" theme="light" placement="bottom">
+            [tooltip]="tooltips.get('toDate')" theme="light" placement="top">
         </div>
 
         <!-- category -->
@@ -283,6 +283,16 @@
             tooltip="- SLA(service level agreement).<br>- On time: ticket is on time.<br>- Late: ticket is late."
             theme="light" placement="bottom">SLA</th>
 
+          <!-- last update date time -->
+          <th scope="col"
+            tooltip="- Last update date time.<br>- Last update date time the ticket is updated its status."
+            theme="light" placement="bottom">Last update date time</th>
+
+          <!-- Spend hours -->
+          <th scope="col"
+            tooltip="- SLA(service level agreement).<br>- On time: ticket is on time.<br>- Late: ticket is late."
+            theme="light" placement="bottom">Spend hours</th>
+
           <!-- creator phone -->
           <!-- if role is 'supporter' or 'admin' then display 'Creator phone' -->
           <th scope="col" tooltip="Ticket creator's phone number" theme="light" placement="bottom"
@@ -327,7 +337,7 @@
           <!-- column: Subject -->
           <!-- navigate to the "/ticket-view/{ticketid}" when user clicks on the table(except the column "Action") -->
           <td style="text-align: left" class="pointer-link" (click)="viewTicket(ticket.ticketid)"
-            [tooltip]="ticket.content" theme="light" placement="bottom">{{ticket.subject}}
+            [tooltip]="ticket.content" theme="dark" placement="bottom">{{ticket.subject}}
           </td>
 
           <!-- column: Creator Name. -->
@@ -343,7 +353,8 @@
 
           <!-- column: Create time -->
           <!-- navigate to the "/ticket-view/{ticketid}" when user clicks on the table(except the column "Action") -->
-          <td class="pointer-link" (click)="viewTicket(ticket.ticketid)">{{ticket.createDatetime}}</td>
+          <td class="pointer-link" (click)="viewTicket(ticket.ticketid)">
+            {{ticket.createDatetime | date:'yyyy-MM-dd HH:mm:ss'}}</td>
 
           <!-- column: Status -->
           <!-- navigate to the "/ticket-view/{ticketid}" when user clicks on the table(except the column "Action") -->
@@ -365,6 +376,15 @@
           <!-- column: SLA -->
           <!-- navigate to the "/ticket-view/{ticketid}" when user clicks on the table(except the column "Action") -->
           <td class="pointer-link" (click)="viewTicket(ticket.ticketid)">{{ticket.sla}}</td>
+
+          <!-- column: Last update datetime -->
+          <!-- navigate to the "/ticket-view/{ticketid}" when user clicks on the table(except the column "Action") -->
+          <td class="pointer-link" (click)="viewTicket(ticket.ticketid)">
+            {{ticket.lastUpdateDatetime | date:'yyyy-MM-dd HH:mm:ss'}}</td>
+
+          <!-- column: spend hour -->
+          <!-- navigate to the "/ticket-view/{ticketid}" when user clicks on the table(except the column "Action") -->
+          <td class="pointer-link" (click)="viewTicket(ticket.ticketid)">{{ticket.spendHour | number : '1.2-2'}}</td>
 
           <!-- column: Creator phone. -->
           <!-- if role is 'supporter' or 'admin' then display 'Creator phone'. -->
@@ -404,12 +424,12 @@
 
         <!-- move to the "first page" -->
         <li class="page-item"><button class="page-link" (click)="moveFirst()" [disabled]="currentPage==1"
-            tooltip="Go to the first page" theme="light" placement="bottom">First</button>
+            [tooltip]="tooltipFirstPage" theme="light" placement="bottom">First</button>
         </li>
 
         <!-- move to the "previous page" -->
         <li class="page-item"><button class="page-link" (click)="movePrevious()" [disabled]="currentPage==1"
-            tooltip="Go to previous page" theme="light" placement="bottom">Previous</button></li>
+            [tooltip]="tooltipPreviousPage" theme="light" placement="bottom">Previous</button></li>
 
         <!--  -->
         <li class="page-item col-md-1 col-2 px-0">
@@ -418,11 +438,11 @@
             <!-- rounded-0: have no round at corners -->
             <input type="number" min="1" [max]="totalPages" class="form-control rounded-0"
               aria-describedby="basic-addon1" [value]="currentPage"
-              (change)="changePageNumber($any($event.target).value)" tooltip="Current page" theme="light"
+              (change)="changePageNumber($any($event.target).value)" [tooltip]="tooltipCurrentPage" theme="light"
               placement="bottom">
             <!-- total pages -->
             <div class="input-group-prepend">
-              <span class="input-group-text" id="basic-addon1" tooltip="Total pages" theme="light"
+              <span class="input-group-text" id="basic-addon1" [tooltip]="tooltipTotalPages" theme="light"
                 placement="bottom">/{{totalPages}}</span>
             </div>
           </div>
@@ -432,16 +452,16 @@
         <!-- rounded-0: have no round at corners -->
         <li class="page-item">
           <button class="btn btn-primary rounded-0" (click)="goPage()" onmouseover="this.style.cursor='pointer'"
-            tooltip="Go to specific page" theme="light" placement="bottom">Go</button>
+            [tooltip]="tooltipGoPage" theme="light" placement="bottom">Go</button>
         </li>
 
         <!-- the "Next" button -->
         <li class="page-item"><button class="page-link" (click)="moveNext()" [disabled]="currentPage==totalPages"
-            tooltip="Go to next page" theme="light" placement="bottom">Next</button></li>
+            [tooltip]="tooltipNextPage" theme="light" placement="bottom">Next</button></li>
 
         <!-- the "Last" button -->
         <li class="page-item"><button class="page-link" (click)="moveLast()" [disabled]="currentPage==totalPages"
-            tooltip="Go to the last page" theme="light" placement="bottom">Last</button></li>
+            [tooltip]="tooltipLastPage" theme="light" placement="bottom">Last</button></li>
 
       </ul>
     </nav>

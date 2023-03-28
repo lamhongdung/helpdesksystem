@@ -27,7 +27,7 @@
                         <!-- textbox -->
                         <div class="col-8">
                             <input class="form-control" type="id" formControlName="id" id="id" tooltip="Identity"
-                                theme="light" placement="bottom"  readonly>
+                                theme="light" placement="top"  readonly>
                         </div>
                     </div>
 
@@ -40,7 +40,7 @@
                         <!-- textbox -->
                         <div class="col-8">
                             <input class="form-control" type="email" formControlName="email" id="email" tooltip="Email"
-                                theme="light" placement="bottom"  readonly>
+                                theme="light" placement="top"  readonly>
                         </div>
                     </div>
 
@@ -54,7 +54,7 @@
                         <!-- textbox -->
                         <div class="col-8">
                             <input class="form-control" type="text" formControlName="firstName" placeholder="First name"
-                                id="firstName" tooltip="First name" theme="light" placement="bottom"
+                                id="firstName" tooltip="First name" theme="light" placement="top"
                                 >
                             <div class="text-danger" *ngFor="let e of errorMessages.firstName">
                                 <div *ngIf="userForm.get('firstName').hasError(e.type) && 
@@ -75,7 +75,7 @@
                         <!-- textbox -->
                         <div class="col-8">
                             <input class="form-control" type="text" formControlName="lastName" placeholder="Last name"
-                                id="lastName" tooltip="Last name" theme="light" placement="bottom"
+                                id="lastName" tooltip="Last name" theme="light" placement="top"
                                 >
                             <div class="text-danger" *ngFor="let e of errorMessages.lastName">
                                 <div
@@ -102,7 +102,7 @@
                         <div class="col-8">
                             <input class="form-control" type="text" formControlName="phone"
                                 placeholder="ex: 0986111222(10 digits)" id="phone" tooltip="Phone number(10 digits)"
-                                theme="light" placement="bottom" >
+                                theme="light" placement="top" >
                             <div class=" text-danger" *ngFor="let e of errorMessages.phone">
                                 <div
                                     *ngIf="userForm.get('phone').hasError(e.type) && (userForm.get('phone').dirty || userForm.get('phone').touched)">
@@ -121,7 +121,7 @@
                         <!-- textbox -->
                         <div class="col-8">
                             <input class="form-control" type="text" formControlName="address" id="address"
-                                placeholder="Address" tooltip="Address" theme="light" placement="bottom"
+                                placeholder="Address" tooltip="Address" theme="light" placement="top"
                                 >
                             <div class="text-danger" *ngFor="let e of errorMessages.address">
                                 <div
@@ -141,7 +141,7 @@
                         <!-- dropdown -->
                         <div class="col-8">
                             <select id="role" class="form-control" formControlName="role" placeholder="Role"
-                                tooltip="User role" theme="light" placement="bottom" >
+                                tooltip="User role" theme="light" placement="top" >
                                 <option value="ROLE_CUSTOMER">ROLE_CUSTOMER</option>
                                 <option value="ROLE_SUPPORTER">ROLE_SUPPORTER</option>
                                 <option value="ROLE_ADMIN">ROLE_ADMIN</option>
@@ -159,7 +159,7 @@
                         <!-- dropdown -->
                         <div class="col-8">
                             <select id="status" class="form-control" formControlName="status" placeholder="Status"
-                                tooltip="User status" theme="light" placement="bottom" >
+                                tooltip="User status" theme="light" placement="top" >
                                 <option value="Active">Active</option>
                                 <option value="Inactive">Inactive</option>
                             </select>

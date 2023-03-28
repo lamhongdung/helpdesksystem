@@ -108,13 +108,27 @@ public class TicketController {
     @GetMapping("/ticket-search")
     // all users can access this resource
 //    @PreAuthorize("hasAnyRole('ROLE_CUSTOMER','ROLE_SUPPORTER','ROLE_ADMIN')")
-    public ResponseEntity<List<TicketResponse>> getTicketsByUserid(@RequestParam(required = false, defaultValue = "0") long userid,
-//                                                                   @RequestParam int pageNumber,
-//                                                                   @RequestParam int pageSize,
-                                                                   @RequestParam(required = false, defaultValue = "") String searchTerm) {
+    public ResponseEntity<List<TicketResponse>> getTicketsByUserid(@RequestParam long userid,
+                                                                   @RequestParam long pageNumber,
+                                                                   @RequestParam long pageSize,
+                                                                   @RequestParam String searchTerm,
+                                                                   @RequestParam String fromDate,
+                                                                   @RequestParam String toDate,
+                                                                   @RequestParam String categoryid,
+                                                                   @RequestParam String priorityid,
+                                                                   @RequestParam String creatorid,
+                                                                   @RequestParam String teamid,
+                                                                   @RequestParam String assigneeid,
+                                                                   @RequestParam String sla,
+                                                                   @RequestParam String ticketStatusid
+                                                                   ) {
 
         // get tickets by userid(and by user role)
-        List<TicketResponse> ticketResponses = ticketService.getTicketsByUserid(userid, searchTerm);
+        List<TicketResponse> ticketResponses = ticketService.getTicketsByUserid(userid, pageNumber, pageSize,
+                searchTerm, fromDate, toDate,
+                categoryid, priorityid, creatorid,
+                teamid, assigneeid, sla, ticketStatusid
+                );
 
         return new ResponseEntity<>(ticketResponses, OK);
     }
@@ -127,11 +141,23 @@ public class TicketController {
     @GetMapping("/total-of-tickets")
     // only the ROLE_ADMIN can access this address
 //    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
-    public ResponseEntity<Long> getTotalOfTickets(@RequestParam(required = false, defaultValue = "") long userid,
-                                                  @RequestParam(required = false, defaultValue = "") String searchTerm) {
+    public ResponseEntity<Long> getTotalOfTickets(@RequestParam long userid,
+                                                  @RequestParam String searchTerm,
+                                                  @RequestParam String fromDate,
+                                                  @RequestParam String toDate,
+                                                  @RequestParam String categoryid,
+                                                  @RequestParam String priorityid,
+                                                  @RequestParam String creatorid,
+                                                  @RequestParam String teamid,
+                                                  @RequestParam String assigneeid,
+                                                  @RequestParam String sla,
+                                                  @RequestParam String ticketStatusid) {
 
         // calculate total of teams based on the search criteria
-        long totalOfTickets = ticketService.getTotalOfTickets(userid, searchTerm);
+        long totalOfTickets = ticketService.getTotalOfTickets(userid,
+                searchTerm, fromDate, toDate,
+                categoryid, priorityid, creatorid,
+                teamid, assigneeid, sla, ticketStatusid);
 
         return new ResponseEntity<>(totalOfTickets, HttpStatus.OK);
     }

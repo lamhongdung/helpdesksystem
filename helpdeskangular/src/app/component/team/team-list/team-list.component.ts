@@ -29,6 +29,15 @@ export class TeamListComponent implements OnInit {
   // number of teams per page(default = 5)
   pageSize: number;
 
+  // tooltips
+  tooltipFirstPage: string;
+  tooltipPreviousPage: string;
+  tooltipCurrentPage: string;
+  tooltipTotalPages: string;
+  tooltipGoPage: string;
+  tooltipNextPage: string;
+  tooltipLastPage: string;
+
   // the "Search team" form
   searchTeam = this.formBuilder.group({
 
@@ -55,6 +64,15 @@ export class TeamListComponent implements OnInit {
 
     // initial current page(in the front end)
     this.currentPage = 1;
+
+    // tooltips
+    this.tooltipFirstPage = this.shareService.tooltips.get("firstPage");
+    this.tooltipPreviousPage = this.shareService.tooltips.get("previousPage");
+    this.tooltipCurrentPage = this.shareService.tooltips.get("currentPage");
+    this.tooltipTotalPages = this.shareService.tooltips.get("totalPages");
+    this.tooltipGoPage = this.shareService.tooltips.get("goPage");
+    this.tooltipNextPage = this.shareService.tooltips.get("nextPage");
+    this.tooltipLastPage = this.shareService.tooltips.get("lastPage");
 
     // assign teams from database to the this.teams variable, and get totalPages.
     // the first parameter(page) = 0: in MySQL 0 means the first page.

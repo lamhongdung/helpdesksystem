@@ -7,9 +7,7 @@ export class TicketResponse {
         // subject
         public subject: string,
         // creator name
-        public creatorName: number,
-        // creator phone number
-        public creatorPhone: number,
+        public creatorName: string,
         // assignee name
         public assigneeName: string,
         // create date time
@@ -18,6 +16,12 @@ export class TicketResponse {
         public ticketStatusName: string,
         // sla(service level agreement): ontime or late
         public sla: string,
+        // last update date time
+        public lastUpdateDatetime: Date,
+        // spend hours
+        public spendHour: number,
+        // creator phone number
+        public creatorPhone: string,
         // creator email
         public creatorEmail: string,
         // team name
@@ -25,10 +29,16 @@ export class TicketResponse {
         // category name
         public categoryName: string,
         // priority name
-        public priorityName: number,
+        public priorityName: string,
 
         // ticket content
-        public content: string
+        public content: string,
+
+        // resolveIn
+        public resolveIn: string,
+        // currentTime
+        public currentTime: Date
+
 
     ) {
 

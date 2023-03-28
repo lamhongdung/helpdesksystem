@@ -13,8 +13,22 @@ export class ShareService {
   // number of teams per page(default = 5)
   pageSize = environment.pageSize;
 
+  // tooltips for pagination controls
+  tooltips = new Map<string, string>(
+    [
+      ["firstPage", "Go to the first page"],
+      ["previousPage", "Go to previous page"],
+      ["currentPage", "Current page"],
+      ["totalPages", "Total pages"],
+      ["goPage", "Go to specific page"],
+      ["nextPage", "Go to next page"],
+      ["lastPage", "Go to the last page"]
+    ]
+  );
 
-  constructor() { }
+  constructor(
+
+  ) { }
 
   private subject = new Subject<any>();
 

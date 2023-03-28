@@ -7,8 +7,6 @@ import { TooltipModule } from 'ng2-tooltip-directive';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-// import { CalendarCreateComponent } from './component/calendar/calendar-create/calendar-create.component';
-// import { CalendarListComponent } from './component/calendar/calendar-list/calendar-list.component';
 import { CategoryCreateComponent } from './component/category/category-create/category-create.component';
 import { CategoryEditComponent } from './component/category/category-edit/category-edit.component';
 import { CategoryListComponent } from './component/category/category-list/category-list.component';

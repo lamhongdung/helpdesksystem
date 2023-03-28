@@ -74,19 +74,33 @@ public class TicketService {
     }
 
     // get tickets by userid(and by user role).
-    public List<TicketResponse> getTicketsByUserid(long userid, String searchTerm) {
+    public List<TicketResponse> getTicketsByUserid(long userid, long pageNumber, long pageSize,
+                                                   String searchTerm, String fromDate, String toDate,
+                                                   String categoryid, String priorityid, String creatorid,
+                                                   String teamid, String assigneeid, String sla, String ticketStatusid
+                                                   ) {
 
         LOGGER.info("Get tickets by user id(and by user role)");
 
-        return ticketRepository.getTicketsByUserid(userid, searchTerm);
+        return ticketRepository.searchTicketsByUserid(userid, pageNumber, pageSize,
+                searchTerm, fromDate, toDate,
+                categoryid, priorityid, creatorid,
+                teamid, assigneeid, sla, ticketStatusid
+                );
     }
 
     // calculate total of teams based on the search criteria
-    public long getTotalOfTickets(long userid, String searchTerm) {
+    public long getTotalOfTickets(long userid,
+                                  String searchTerm, String fromDate, String toDate,
+                                  String categoryid, String priorityid, String creatorid,
+                                  String teamid, String assigneeid, String sla, String ticketStatusid) {
 
         LOGGER.info("get total of teams");
 
-        return ticketRepository.getTotalOfTickets(userid, searchTerm);
+        return ticketRepository.getTotalOfTickets(userid,
+                searchTerm, fromDate, toDate,
+                categoryid, priorityid, creatorid,
+                teamid, assigneeid, sla, ticketStatusid);
     }
 
 }

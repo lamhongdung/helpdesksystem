@@ -29,27 +29,43 @@ CREATE TABLE `user` (
 ) ENGINE=InnoDB AUTO_INCREMENT=101 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 INSERT INTO `user`(id, email, password, firstName, lastName, phone, address, role, status) VALUES
-(1,'dunglh+customer@gmail.com','$2a$12$CR0useg0GQlwrYMvylhHROZg0Vq5nr7jRILz14lc.ArB9iuw1wsEC','Quân','Châu','3333333330','789 Vo Van Kiet','ROLE_CUSTOMER','Active'),
-(2,'dunglh+supporter@gmail.com','$2a$12$CR0useg0GQlwrYMvylhHROZg0Vq5nr7jRILz14lc.ArB9iuw1wsEC','Hồng Đào','Trịnh','2222222221','456 Suong Nguyet Anh','ROLE_SUPPORTER','Active'),
-(3,'nguoiquantri@proton.me','$2a$12$CR0useg0GQlwrYMvylhHROZg0Vq5nr7jRILz14lc.ArB9iuw1wsEC','Văn Khiêm','Tô','1444444444','79 Huyen Tran Cong Chua','ROLE_ADMIN','Active'),
-
-(4,'dunglh+supporter2@gmail.com','$2a$12$CR0useg0GQlwrYMvylhHROZg0Vq5nr7jRILz14lc.ArB9iuw1wsEC','Kim Dung','Hồ','2222222222','456 Suong Nguyet Anh','ROLE_SUPPORTER','Active'),
-(5,'dunglh+supporter3@gmail.com','$2a$12$CR0useg0GQlwrYMvylhHROZg0Vq5nr7jRILz14lc.ArB9iuw1wsEC','Ngọc Yến','Võ','2222222223','456 Suong Nguyet Anh','ROLE_SUPPORTER','Active'),
-(6,'dunglh+supporter4@gmail.com','$2a$12$CR0useg0GQlwrYMvylhHROZg0Vq5nr7jRILz14lc.ArB9iuw1wsEC','Yến Quyên','Trần','2222222224','456 Suong Nguyet Anh','ROLE_SUPPORTER','Active'),
-(7,'dunglh+supporter5@gmail.com','$2a$12$CR0useg0GQlwrYMvylhHROZg0Vq5nr7jRILz14lc.ArB9iuw1wsEC','Văn Khá','Đồng','2222222225','456 Suong Nguyet Anh','ROLE_SUPPORTER','Active'),
-(8,'dunglh+supporter6@gmail.com','$2a$12$CR0useg0GQlwrYMvylhHROZg0Vq5nr7jRILz14lc.ArB9iuw1wsEC','Xuân Trung','Tô','2222222226','456 Suong Nguyet Anh','ROLE_SUPPORTER','Inactive'),
-(9,'nguoihotro@proton.me','$2a$12$CR0useg0GQlwrYMvylhHROZg0Vq5nr7jRILz14lc.ArB9iuw1wsEC','Thị Cúc','Đinh','2666666666','22 Nguyen Thi Minh Khai','ROLE_SUPPORTER','Active'),
-(10,'dunglh@gmail.com','$2a$12$CR0useg0GQlwrYMvylhHROZg0Vq5nr7jRILz14lc.ArB9iuw1wsEC','Hồng Dũng','Lâm','0986814665','90/12/1/6 Bong Sao','ROLE_ADMIN','Active'),
-(11,'dunglh+admin@gmail.com','$2a$12$CR0useg0GQlwrYMvylhHROZg0Vq5nr7jRILz14lc.ArB9iuw1wsEC','Văn An','Nguyễn','1111111111','123 Pham Hung','ROLE_ADMIN','Active'),
-(12,'dunglh+customer2@gmail.com','$2a$12$CR0useg0GQlwrYMvylhHROZg0Vq5nr7jRILz14lc.ArB9iuw1wsEC','Văn Tâm','Hoàng','3333333332','789 Vo Van Kiet','ROLE_CUSTOMER','Active'),
-(13,'dunglh+customer3@gmail.com','$2a$12$CR0useg0GQlwrYMvylhHROZg0Vq5nr7jRILz14lc.ArB9iuw1wsEC','Kim Uyên','Phan','3333333333','789 Vo Van Kiet','ROLE_CUSTOMER','Active'),
-(14,'dunglh+customer4@gmail.com','$2a$12$CR0useg0GQlwrYMvylhHROZg0Vq5nr7jRILz14lc.ArB9iuw1wsEC','Nguyên Đức','Đặng','3333333334','789 Vo Van Kiet','ROLE_CUSTOMER','Active'),
-(15,'dunglh+customer5@gmail.com','$2a$12$CR0useg0GQlwrYMvylhHROZg0Vq5nr7jRILz14lc.ArB9iuw1wsEC','Đăng Khoa','Đỗ','3333333335','789 Vo Van Kiet','ROLE_CUSTOMER','Active'),
-(16,'dunglh+customer6@gmail.com','$2a$12$CR0useg0GQlwrYMvylhHROZg0Vq5nr7jRILz14lc.ArB9iuw1wsEC','Thu Hằng','Ngô','3333333336','789 Vo Van Kiet','ROLE_CUSTOMER','Active'),
-(17,'dunglh+customer7@gmail.com','$2a$12$CR0useg0GQlwrYMvylhHROZg0Vq5nr7jRILz14lc.ArB9iuw1wsEC','Bạch Ngọc','Dương','3333333337','789 Vo Van Kiet','ROLE_CUSTOMER','Active'),
-(18,'dunglh+customer8@gmail.com','$2a$12$CR0useg0GQlwrYMvylhHROZg0Vq5nr7jRILz14lc.ArB9iuw1wsEC','Huệ Anh','Âu','3333333338','789 Vo Van Kiet','ROLE_CUSTOMER','Active'),
-(19,'dunglh+customer9@gmail.com','$2a$12$CR0useg0GQlwrYMvylhHROZg0Vq5nr7jRILz14lc.ArB9iuw1wsEC','Ngọc Bích','Tạ','3333333339','789 Vo Van Kiet','ROLE_CUSTOMER','Inactive'),
-(20,'khachhang_hd@proton.me','$2a$12$CR0useg0GQlwrYMvylhHROZg0Vq5nr7jRILz14lc.ArB9iuw1wsEC','Thị Phương','Bùi','8888888888','789 Pham The Hien','ROLE_CUSTOMER','Active');
+-- customer
+(1,'dunglh+customer1@gmail.com','$2a$12$CR0useg0GQlwrYMvylhHROZg0Vq5nr7jRILz14lc.ArB9iuw1wsEC','Quân','Châu','0111111111','','ROLE_CUSTOMER','Active'),
+(2,'dunglh+customer2@gmail.com','$2a$12$CR0useg0GQlwrYMvylhHROZg0Vq5nr7jRILz14lc.ArB9iuw1wsEC','Thị Vân','Hoàng','0111111112','','ROLE_CUSTOMER','Active'),
+(3,'dunglh+customer3@gmail.com','$2a$12$CR0useg0GQlwrYMvylhHROZg0Vq5nr7jRILz14lc.ArB9iuw1wsEC','Thị Quyên','Bùi','0111111113','','ROLE_CUSTOMER','Active'),
+(4,'dunglh+customer4@gmail.com','$2a$12$CR0useg0GQlwrYMvylhHROZg0Vq5nr7jRILz14lc.ArB9iuw1wsEC','Thị Mỹ Linh','Phạm','0111111114','','ROLE_CUSTOMER','Active'),
+(5,'dunglh+customer5@gmail.com','$2a$12$CR0useg0GQlwrYMvylhHROZg0Vq5nr7jRILz14lc.ArB9iuw1wsEC','Kim Huệ','Âu','0111111115','','ROLE_CUSTOMER','Active'),
+(6,'dunglh+customer6@gmail.com','$2a$12$CR0useg0GQlwrYMvylhHROZg0Vq5nr7jRILz14lc.ArB9iuw1wsEC','Minh Trí','Nguyễn','0111111116','','ROLE_CUSTOMER','Active'),
+(7,'dunglh+customer7@gmail.com','$2a$12$CR0useg0GQlwrYMvylhHROZg0Vq5nr7jRILz14lc.ArB9iuw1wsEC','Thị Ngọc Hân','Nguyễn','0111111117','','ROLE_CUSTOMER','Active'),
+(8,'dunglh+customer8@gmail.com','$2a$12$CR0useg0GQlwrYMvylhHROZg0Vq5nr7jRILz14lc.ArB9iuw1wsEC','Trần Lan Anh','Phạm','0111111118','','ROLE_CUSTOMER','Active'),
+(9,'dunglh+customer9@gmail.com','$2a$12$CR0useg0GQlwrYMvylhHROZg0Vq5nr7jRILz14lc.ArB9iuw1wsEC','Hồng Hạc','Nguyễn','0111111119','','ROLE_CUSTOMER','Active'),
+-- supporter
+(10,'dunglh+supporter@gmail.com','$2a$12$CR0useg0GQlwrYMvylhHROZg0Vq5nr7jRILz14lc.ArB9iuw1wsEC','Minh Tâm','Tạ','0222222220','','ROLE_SUPPORTER','Active'),
+(11,'dunglh+supporter1@gmail.com','$2a$12$CR0useg0GQlwrYMvylhHROZg0Vq5nr7jRILz14lc.ArB9iuw1wsEC','Hồng Đào','Trịnh','0222222221','','ROLE_SUPPORTER','Active'),
+(12,'dunglh+supporter2@gmail.com','$2a$12$CR0useg0GQlwrYMvylhHROZg0Vq5nr7jRILz14lc.ArB9iuw1wsEC','Ngọc Tư','Nguyễn','0222222222','','ROLE_SUPPORTER','Active'),
+(13,'dunglh+supporter3@gmail.com','$2a$12$CR0useg0GQlwrYMvylhHROZg0Vq5nr7jRILz14lc.ArB9iuw1wsEC','Thị Ngọc Yến','Nguyễn','0222222223','','ROLE_SUPPORTER','Active'),
+(14,'dunglh+supporter4@gmail.com','$2a$12$CR0useg0GQlwrYMvylhHROZg0Vq5nr7jRILz14lc.ArB9iuw1wsEC','Yến Quyên','Lý','0222222224','','ROLE_SUPPORTER','Active'),
+(15,'dunglh+supporter5@gmail.com','$2a$12$CR0useg0GQlwrYMvylhHROZg0Vq5nr7jRILz14lc.ArB9iuw1wsEC','Đức Nhân','Bùi','0222222225','','ROLE_SUPPORTER','Active'),
+(16,'dunglh+supporter6@gmail.com','$2a$12$CR0useg0GQlwrYMvylhHROZg0Vq5nr7jRILz14lc.ArB9iuw1wsEC','Sanh Minh','Lư','0222222226','','ROLE_SUPPORTER','Active'),
+(17,'dunglh+supporter7@gmail.com','$2a$12$CR0useg0GQlwrYMvylhHROZg0Vq5nr7jRILz14lc.ArB9iuw1wsEC','Thị Hiếu','Lý','0222222227','','ROLE_SUPPORTER','Active'),
+(18,'dunglh+supporter8@gmail.com','$2a$12$CR0useg0GQlwrYMvylhHROZg0Vq5nr7jRILz14lc.ArB9iuw1wsEC','Thanh Danh','Phạm','0222222228','','ROLE_SUPPORTER','Active'),
+(19,'dunglh+supporter9@gmail.com','$2a$12$CR0useg0GQlwrYMvylhHROZg0Vq5nr7jRILz14lc.ArB9iuw1wsEC','Viết Cường','Bùi','0222222229','','ROLE_SUPPORTER','Active'),
+-- admin
+(20,'dunglh+admin@gmail.com','$2a$12$CR0useg0GQlwrYMvylhHROZg0Vq5nr7jRILz14lc.ArB9iuw1wsEC','Công Phượng','Nguyễn','0333333330','','ROLE_ADMIN','Active'),
+(21,'dunglh+admin1@gmail.com','$2a$12$CR0useg0GQlwrYMvylhHROZg0Vq5nr7jRILz14lc.ArB9iuw1wsEC','Tuấn Anh','Nguyễn','0333333331','','ROLE_ADMIN','Active'),
+(22,'dunglh+admin2@gmail.com','$2a$12$CR0useg0GQlwrYMvylhHROZg0Vq5nr7jRILz14lc.ArB9iuw1wsEC','Quang Hải','Nguyễn','0333333332','','ROLE_ADMIN','Active'),
+(23,'dunglh+admin3@gmail.com','$2a$12$CR0useg0GQlwrYMvylhHROZg0Vq5nr7jRILz14lc.ArB9iuw1wsEC','Minh Vương','Trần','0333333333','','ROLE_ADMIN','Active'),
+(24,'dunglh+admin4@gmail.com','$2a$12$CR0useg0GQlwrYMvylhHROZg0Vq5nr7jRILz14lc.ArB9iuw1wsEC','Văn Thanh','Nguyễn','0333333334','','ROLE_ADMIN','Active'),
+(25,'dunglh+admin5@gmail.com','$2a$12$CR0useg0GQlwrYMvylhHROZg0Vq5nr7jRILz14lc.ArB9iuw1wsEC','Tuấn Hải','Nguyễn','0333333335','','ROLE_ADMIN','Active'),
+(26,'dunglh+admin6@gmail.com','$2a$12$CR0useg0GQlwrYMvylhHROZg0Vq5nr7jRILz14lc.ArB9iuw1wsEC','Văn Lâm','Nguyễn','0333333336','','ROLE_ADMIN','Active'),
+(27,'dunglh+admin7@gmail.com','$2a$12$CR0useg0GQlwrYMvylhHROZg0Vq5nr7jRILz14lc.ArB9iuw1wsEC','Tiến Linh','Nguyễn','0333333337','','ROLE_ADMIN','Active'),
+(28,'dunglh+admin8@gmail.com','$2a$12$CR0useg0GQlwrYMvylhHROZg0Vq5nr7jRILz14lc.ArB9iuw1wsEC','Thành Chung','Nguyễn','0333333338','','ROLE_ADMIN','Active'),
+(29,'dunglh+admin9@gmail.com','$2a$12$CR0useg0GQlwrYMvylhHROZg0Vq5nr7jRILz14lc.ArB9iuw1wsEC','Hoàng Việt Anh','Bùi','0333333339','','ROLE_ADMIN','Active');
+-- other
+-- (30,'nguoiquantri@proton.me','$2a$12$CR0useg0GQlwrYMvylhHROZg0Vq5nr7jRILz14lc.ArB9iuw1wsEC','Văn Khiêm','Tô','0555555550','','ROLE_ADMIN','Active'),
+-- (31,'dunglh@gmail.com','$2a$12$CR0useg0GQlwrYMvylhHROZg0Vq5nr7jRILz14lc.ArB9iuw1wsEC','Hồng Dũng','Lâm','0555555551','','ROLE_ADMIN','Active'),
+-- (32,'nguoihotro@proton.me','$2a$12$CR0useg0GQlwrYMvylhHROZg0Vq5nr7jRILz14lc.ArB9iuw1wsEC','Thu Hiền','Đinh','0555555552','','ROLE_SUPPORTER','Active'),
+-- (33,'khachhang_hd@proton.me','$2a$12$CR0useg0GQlwrYMvylhHROZg0Vq5nr7jRILz14lc.ArB9iuw1wsEC','Ngọc Duyên','Trần','0555555553','','ROLE_CUSTOMER','Active');
 
 -- -----------------------------------------------------
 -- Table `category`
@@ -131,9 +147,9 @@ CREATE TABLE `teamSupporter` (
 ) ENGINE=InnoDB AUTO_INCREMENT=101 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 INSERT INTO `teamSupporter`(teamid, supporterid) VALUES 
-(1, 2),
-(1, 4),
-(1, 5);
+(1, 10),
+(1, 11),
+(1, 12);
 
 -- -----------------------------------------------------
 -- Table `ticketStatus`
@@ -166,7 +182,7 @@ drop table if exists `ticket`;
 CREATE TABLE `ticket` (
 
 	`ticketid` int NOT NULL AUTO_INCREMENT,
-	`subject` varchar(255) NOT NULL,
+	`subject` varchar(2000) NOT NULL,
 	`categoryid` int NOT NULL,
 	`creatorid` int NOT NULL,
 	`teamid` int NOT NULL,
@@ -195,8 +211,9 @@ CREATE TABLE `ticket` (
 ) ENGINE=InnoDB AUTO_INCREMENT=101 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 INSERT INTO `ticket`(ticketid, subject, categoryid, creatorid, teamid, priorityid, assigneeid, ticketStatusid, content, fileUrl, createDatetime, lastUpdateDatetime) VALUES 
-(1,'Laptop bị hỏng',1,1,1,1,2,3,'Laptop bị hỏng. Vui lòng thay laptop mới',NULL,'2023-03-18 08:30:00','2023-03-18 08:30:00'),
-(2,'Máy in bị hết mực',3,1,1,1,null,1,'Máy in bị hết mực. Đề nghị thay mực máy in',NULL,'2023-03-23 22:05:00','2023-03-23 22:05:00');
+(1,'Laptop bị hỏng',1,1,1,1,10,3,'Laptop bị hỏng. Vui lòng thay laptop mới',NULL,'2023-03-18 08:30:00','2023-03-18 11:30:00'),
+(2,'Máy in bị hết mực',3,1,1,1,null,1,'Máy in bị hết mực. Đề nghị thay mực máy in',NULL,'2023-03-23 22:05:00','2023-03-23 22:05:00'),
+(3,'Không thể kết nối mạng wifi',4,2,1,2,11,3,'Không tìm thấy mạng wifi nên không thể kết nối internet qua wifi',NULL,'2023-03-26 11:18:00','2023-03-27 15:18:00');
 
 
 -- -----------------------------------------------------
@@ -223,7 +240,8 @@ CREATE TABLE `comment` (
 ) ENGINE=InnoDB AUTO_INCREMENT=101 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 INSERT INTO `comment`(ticketid, commentid, commentDescription, commenterid, commentDatetime) VALUES 
-(1, 1, 'Sẽ thay laptop mới cho bạn', 2 , '2023-03-19 08:30:00');
+(1, 1, 'Sẽ thay laptop mới cho bạn', 10 , '2023-03-19 08:30:00'),
+(3, 2, 'Vui lòng khởi động lại laptop sau đó kết nối lại wifi', 11 , '2023-03-26 13:30:00');
 
 
 

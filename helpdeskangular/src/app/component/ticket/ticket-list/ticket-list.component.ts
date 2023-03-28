@@ -19,8 +19,6 @@ import { TicketService } from 'src/app/service/ticket.service';
 })
 export class TicketListComponent {
 
-  tooptipWidth: number = 500;
-
   // use to unsubcribe all subscribes easily, avoid leak memeory
   subscriptions: Subscription[] = [];
 
@@ -32,7 +30,7 @@ export class TicketListComponent {
   totalOfTickets: number;
   // ticket list(the grid of the team table)
   tickets: TicketResponse[] = [];
-  // number of ticket per page(default = 5)
+  // number of tickets per page(default = 5)
   pageSize: number;
 
   // user who logged in the system
@@ -44,19 +42,20 @@ export class TicketListComponent {
   // all ticket status
   allTicketStatus: DropdownResponse[] = [];
 
-  // all creators
+  // all creators who have tickets
   creators: DropdownResponse[] = [];
 
-  // all teams
+  // all teams that supporter belongs to these teams
+  // and these teams have tickets
   teams: DropdownResponse[] = [];
 
-  // assignees
+  // assignees who is assigned to resolve the ticket
   assignees: DropdownResponse[] = [];
 
-  // all priorities
+  // all priorities have tickets
   priorities: DropdownResponse[] = [];
 
-  // all categories
+  // all categories have tickets
   categories: DropdownResponse[] = [];
 
   // current date(ex: Vietnam local).
@@ -64,53 +63,76 @@ export class TicketListComponent {
   // => new Date() = Tue Mar 21 2023 10:08:29 GMT+0700 (Indochina Time)
   currentDate = new Date();
 
-  // first day of current month.
+  // first day of current year.
   // note:
   //  - this.currentDate.getFullYear(): current year(yyyy)
-  //  - this.currentDate.getMonth(): current month(MM)
+  //  - 0: January
   //  - 1: first day
   //  - toLocaleString(): convert to string M/dd/yyyy
   //  - formatDate(...,"yyyy-MM-dd"): convert to format "yyyy-MM-dd"
-  firstDayOfCurrentMonth = formatDate(new Date(this.currentDate.getFullYear(), this.currentDate.getMonth(), 1)
+  // firstDayOfCurrentYear = formatDate(new Date(this.currentDate.getFullYear(), this.currentDate.getMonth(), 1)
+  //   .toLocaleString(), "yyyy-MM-dd", "en-US");
+  firstDayOfCurrentYear = formatDate(new Date(this.currentDate.getFullYear(), 0, 1)
     .toLocaleString(), "yyyy-MM-dd", "en-US");
 
   // current date(local) in format "yyyy-MM-dd"
   toDate = formatDate(this.currentDate.toLocaleString(), "yyyy-MM-dd", "en-US");
 
+  //
   // tooltips
+  //
+
+  // tooltips for "Search form" and "table"
   tooltips = new Map<string, string>();
+
+  // tooltips for pagination
+  tooltipFirstPage: string;
+  tooltipPreviousPage: string;
+  tooltipCurrentPage: string;
+  tooltipTotalPages: string;
+  tooltipGoPage: string;
+  tooltipNextPage: string;
+  tooltipLastPage: string;
 
   // placeholders
   placeholders = new Map<string, string>();
 
-  // the "Search team" form
+  // the "Search ticket" form
   searchTicket = this.formBuilder.group({
 
-    // search term
+    // search term.
+    // if role is "customer" then will search for : ticket id, subject and content.
+    // else if role is "supporter" or "admin" then search for: 
+    //  ticket id, subject, content, creator name, creator phone, creator email
     searchTerm: [''],
-    // creator id
-    creatorid: [''],
-    // assignee id
-    assigneeid: [''],
-    // team id
-    teamid: [''],
-    // category id
-    categoryid: ['0'],
-    // priority id
-    priorityid: ["0"],
     // first day of current month
     fromDate: [''],
     // current date
     toDate: [''],
-    // SLA(service level agreement)
+    // default value = 0(all)
+    categoryid: ['0'],
+    // default value = 0(all)
+    priorityid: ["0"],
+
+    // creator id.
+    // default value depends on his role
+    creatorid: ['0'],
+
+    // default value = 0(all)
+    teamid: ['0'],
+    // default value = 0(all)
+    assigneeid: ['0'],
+    // SLA(service level agreement).
+    // default value = ''(all)
     sla: [''],
-    // default values = "All"(id = 0)
-    ticketStatusid: ["0"],
+    // default values = 0(all)
+    ticketStatusid: ['0']
 
   });
 
 
-  constructor(private ticketService: TicketService,
+  constructor(
+    private ticketService: TicketService,
     private authService: AuthService,
     private shareService: ShareService,
     private formBuilder: FormBuilder,
@@ -118,39 +140,128 @@ export class TicketListComponent {
     private notificationService: NotificationService
   ) {
 
+    // fromDate = first day of current year(local).
+    this.searchTicket.controls['fromDate'].setValue(this.firstDayOfCurrentYear);
+
+    // toDate = current date(local)
+    this.searchTicket.controls['toDate'].setValue(this.toDate);
+
+    // load creators by userid(and by user role) into the "Creator" dropdown
+    // this.loadCreatorsByUserid(this.userid)
+
   }
 
   // this method ngOnInit() is run right after the contructor
   ngOnInit(): void {
 
-    // initial page size(default = 5)
+    // initialize page size(default = 5)
     this.pageSize = this.shareService.pageSize;
 
-    // initial current page(in the front end)
+    // initialize current page(in the front end)
     this.currentPage = 1;
 
-    // user id who has logged in the system
+    // user id who has logged in the system.
+    // the '+' sign means convert string to number
     this.userid = +this.authService.getIdFromLocalStorage();
 
     // user role of person has just logged in the sytem
     this.loggedInRole = this.authService.getRoleFromLocalStorage();
 
-    // tooltip and placeholder for searchTerm
-    this.loadHtmlProperties();
+    // tooltips and placeholders
+    this.loadTooltipPlaceholder();
+
+    // initialize default values for all form controls
+    this.initializeControlValues();
+
+    // assign tickets from database to the this.tickets variable, and get totalPages.
+    // the first parameter(page) = 0: in MySQL 0 means the first page.
+    this.searchTickets(this.userid, 0,
+      this.searchTicket.value.searchTerm,
+      this.searchTicket.value.fromDate,
+      this.searchTicket.value.toDate,
+      this.searchTicket.value.categoryid,
+      this.searchTicket.value.priorityid,
+      this.searchTicket.value.creatorid,
+      this.searchTicket.value.teamid,
+      this.searchTicket.value.assigneeid,
+      this.searchTicket.value.sla,
+      this.searchTicket.value.ticketStatusid);
+
+  } // end of ngOnInit()
 
 
-    //----------------------------------------
-    // initial values for all form controls
-    //----------------------------------------
+  // search tickets based on user id and search criteria
+  searchTickets(userid: number, pageNumber: number,
+    searchTerm: string,
+    fromDate: string,
+    toDate: string,
+    categoryid: string,
+    priorityid: string,
+    creatorid: string,
+    teamid: string,
+    assigneeid: string,
+    sla: string,
+    ticketStatusid: string) {
 
-    // load creators by userid(and by user role) into the "Creator" dropdown
-    this.loadCreatorsByUserid(this.userid)
+    // push to list of subscriptions for easily unsubscribes all subscriptions of the TicketListComponent
+    this.subscriptions.push(
 
-    // load teams by userid(and by user role) into the "Team" dropdown
-    this.loadTeamsByUserid(this.userid)
+      // get tickets
+      this.ticketService.searchTickets(userid,
+        pageNumber,
+        searchTerm,
+        fromDate,
+        toDate,
+        categoryid,
+        priorityid,
+        creatorid,
+        teamid,
+        assigneeid,
+        sla,
+        ticketStatusid)
 
-    // load assignees by userid(and by user role) into the "Assignees" dropdown
-    this.loadAssigneesByUserid(this.userid)
+        .subscribe({
+
+          // get tickets from database successful.
+          next: (data: TicketResponse[]) => {
+            return this.tickets = data
+          }
+
+        })
+    );
+
+    // push to list of subscriptions for easily unsubscribes all subscriptions of the TicketListComponent
+    this.subscriptions.push(
+
+      // get total of teams and total pages
+      this.ticketService.getTotalOfTickets(
+        userid,
+        searchTerm,
+        fromDate,
+        toDate,
+        categoryid,
+        priorityid,
+        creatorid,
+        teamid,
+        assigneeid,
+        sla,
+        ticketStatusid)
+
+        .subscribe({
+
+          // get total of tickets from database successful
+          next: (data: number) => {
+            // total of tickets
+            this.totalOfTickets = data;
+            // total pages
+            this.totalPages = this.shareService.calculateTotalPages(this.totalOfTickets, this.pageSize);
+          }
+        })
+    )
+  } // end of searchTickets()
+
+  // initialize default values for all form controls
+  initializeControlValues() {
 
     // load categories by userid(and by user role) into the "Category" dropdown
     this.loadCategoriesByUserid(this.userid)
@@ -158,24 +269,21 @@ export class TicketListComponent {
     // load priorities by userid(and by user role) into the "Priority" dropdown
     this.loadPrioritiesByUserid(this.userid)
 
-    // fromDate = first day of current month(local).
-    this.searchTicket.controls['fromDate'].setValue(this.firstDayOfCurrentMonth);
+    // load creators by userid(and by user role) into the "Creator" dropdown
+    this.loadCreatorsByUserid(this.userid)
 
-    // toDate = current date(local)
-    this.searchTicket.controls['toDate'].setValue(this.toDate);
+    // load teams by userid(and by user role) into the "Team" dropdown
+    this.loadTeamsByUserid(this.userid)
+
+    // load assignees by userid(and by user role) into the "Assignee" dropdown
+    this.loadAssigneesByUserid(this.userid)
 
     // load all ticket status into the "Status" dropdown
     this.loadAllTicketStatus()
 
+  } // end of initializeControlValues()
 
-
-    // assign teams from database to the this.teams variable, and get totalPages.
-    // the first parameter(page) = 0: in MySQL 0 means the first page.
-    this.searchTickets(this.userid, 0, this.searchTicket.value.searchTerm);
-
-  } // end of ngOnInit()
-
-  // initial values for "Ticket status".
+  // initialize values for "Ticket status".
   // 5 status + 1 dummy status:
   //  - All(dummy)
   //  - Open
@@ -212,26 +320,26 @@ export class TicketListComponent {
     );
   } // end of loadAllTicketStatus()
 
-  // load creators userid(and by user role)
+  // load creators by userid(and by user role)
   loadCreatorsByUserid(userid: number) {
 
     // push into the subscriptions array to unsubscibe them easily later
     this.subscriptions.push(
 
-      // get all creators
+      // get creators by userid(and by user role)
       this.ticketService.getCreatorsByUserid(userid)
 
         .subscribe({
 
-          // get all creators status successful
+          // get creators by userid(and by user role) successful
           next: (data: DropdownResponse[]) => {
 
-            // all creators
+            // get creators by userid(and by user role)
             this.creators = data;
 
           },
 
-          // there are some errors when get all ticket status
+          // there are some errors when get creators
           error: (errorResponse: HttpErrorResponse) => {
 
             // show the error message to user
@@ -241,17 +349,19 @@ export class TicketListComponent {
         })
     );
 
+    //
     // set default value for the "Creator" dropdown
+    //
 
     // if role is "ROLE_CUSTOMER" then creator is him-self
     if (this.loggedInRole === "ROLE_CUSTOMER") {
       // this.userId + "": means convert number to string
       this.searchTicket.controls['creatorid'].setValue(this.userid + "");
     }
-    // if role is "ROLE_SUPPORTER" or "ROLE_ADMIN" then creator = "0"(All)
-    else {
-      this.searchTicket.controls['creatorid'].setValue("0");
-    }
+    // else if role is "ROLE_SUPPORTER" or "ROLE_ADMIN" then creator = "0"(All)
+    // else {
+    //   this.searchTicket.controls['creatorid'].setValue("0");
+    // }
 
   } // end of loadCreatorsByUserid()
 
@@ -261,20 +371,20 @@ export class TicketListComponent {
     // push into the subscriptions array to unsubscibe them easily later
     this.subscriptions.push(
 
-      // get all creators
+      // get teams by userid(and by user role)
       this.ticketService.getTeamsByUserid(userid)
 
         .subscribe({
 
-          // get all creators status successful
+          // get teams successful
           next: (data: DropdownResponse[]) => {
 
-            // all teams
+            // teams by userid(and by user role)
             this.teams = data;
 
           },
 
-          // there are some errors when get all ticket status
+          // there are some errors when get teams
           error: (errorResponse: HttpErrorResponse) => {
 
             // show the error message to user
@@ -284,17 +394,15 @@ export class TicketListComponent {
         })
     );
 
-    this.searchTicket.controls['teamid'].setValue("0");
+  } // end of loadTeamsByUserid()
 
-  } // end of loadCreatorsByUserid()
-
-  // load assignees userid(and by user role)
+  // load assignees by userid(and by user role)
   loadAssigneesByUserid(userid: number) {
 
     // push into the subscriptions array to unsubscibe them easily later
     this.subscriptions.push(
 
-      // get assignees
+      // get assignees by userid(and by user role)
       this.ticketService.getAssigneesByUserid(userid)
 
         .subscribe({
@@ -302,12 +410,12 @@ export class TicketListComponent {
           // get assignees successful
           next: (data: DropdownResponse[]) => {
 
-            // assignees
+            // assignees by userid(and by user role)
             this.assignees = data;
 
           },
 
-          // there are some errors when get all ticket status
+          // there are some errors when get assignees
           error: (errorResponse: HttpErrorResponse) => {
 
             // show the error message to user
@@ -317,9 +425,7 @@ export class TicketListComponent {
         })
     );
 
-    this.searchTicket.controls['assigneeid'].setValue("0");
-
-  } // end of loadCreatorsByUserid()
+  } // end of loadAssigneesByUserid()
 
   // load priorities by userid(and by user role)
   loadPrioritiesByUserid(userid: number) {
@@ -327,20 +433,20 @@ export class TicketListComponent {
     // push into the subscriptions array to unsubscibe them easily later
     this.subscriptions.push(
 
-      // get all ticket status
+      // get priorities by userid(and by user role)
       this.ticketService.getPrioritiesByUserid(userid)
 
         .subscribe({
 
-          // get all ticket status successful
+          // get priorites successful
           next: (data: DropdownResponse[]) => {
 
-            // all ticket status
+            // priorities by userid(and by user role)
             this.priorities = data;
 
           },
 
-          // there are some errors when get all ticket status
+          // there are some errors when get priorities
           error: (errorResponse: HttpErrorResponse) => {
 
             // show the error message to user
@@ -357,20 +463,20 @@ export class TicketListComponent {
     // push into the subscriptions array to unsubscibe them easily later
     this.subscriptions.push(
 
-      // get all ticket status
+      // get categories by userid(and by user role)
       this.ticketService.getCategoriesByUserid(userid)
 
         .subscribe({
 
-          // get all ticket status successful
+          // get categories successful
           next: (data: DropdownResponse[]) => {
 
-            // all ticket status
+            // categories by userid(and by user role)
             this.categories = data;
 
           },
 
-          // there are some errors when get all ticket status
+          // there are some errors when get categories
           error: (errorResponse: HttpErrorResponse) => {
 
             // show the error message to user
@@ -381,11 +487,14 @@ export class TicketListComponent {
     );
   } // end of loadCategoriesByUserid()
 
-  // load tooltips.
-  loadHtmlProperties() {
+  // load tooltips and placeholder
+  loadTooltipPlaceholder() {
 
-    // tooltips
-    this.tooltips.set("fromDate", "- From ticket date(mm/dd/yyyy).<br>- Default value is the first day of current month");
+    //
+    // tooltips for the "search form" and "table"
+    //
+
+    this.tooltips.set("fromDate", "- From ticket date(mm/dd/yyyy).<br>- Default value is the first day of current year");
     this.tooltips.set("toDate", "- To ticket date(mm/dd/yyyy).<br>- Default value is current date");
     this.tooltips.set("categoryid", "- Category.<br>- 'All' means all categories.<br>- Values include: Category id + Category name.<br>- Only display categories have ticket");
     this.tooltips.set("priorityid", "- Priority.<br>- 'All' means all priorities.<br>- Values include: Priority id + Priority name.<br>- Only display priorities have ticket");
@@ -397,6 +506,8 @@ export class TicketListComponent {
     this.tooltips.set("searchButton", "Search tickets");
     this.tooltips.set("createTicket", "Navigate to the 'Create ticket' screen");
     this.tooltips.set("extractExcel", "Navigate to the 'Extract excel' screen");
+
+    // searchTerm
 
     // if user role is "Customer"
     if (this.loggedInRole === "ROLE_CUSTOMER") {
@@ -413,52 +524,19 @@ export class TicketListComponent {
       this.tooltips.set("searchTerm", "- Search term(ticket id, subject, creator phone, creator email, content).<br>- Blank means search all ticket IDs, subjects, creator phones, creator emails, contents");
     }
 
-  } // end of loadHtmlProperties()
+    //
+    // tooltips for the "pagination"
+    //
 
+    this.tooltipFirstPage = this.shareService.tooltips.get("firstPage");
+    this.tooltipPreviousPage = this.shareService.tooltips.get("previousPage");
+    this.tooltipCurrentPage = this.shareService.tooltips.get("currentPage");
+    this.tooltipTotalPages = this.shareService.tooltips.get("totalPages");
+    this.tooltipGoPage = this.shareService.tooltips.get("goPage");
+    this.tooltipNextPage = this.shareService.tooltips.get("nextPage");
+    this.tooltipLastPage = this.shareService.tooltips.get("lastPage");
 
-  searchTickets(userid: number, pageNumber: number, searchTerm: string) {
-
-    // push to list of subscriptions for easily unsubscribes all subscriptions of the TeamListComponent
-
-    this.subscriptions.push(
-
-      // get tickets
-      this.ticketService.searchTickets(userid, pageNumber, searchTerm)
-
-        .subscribe({
-
-          // get team from database successful.
-          // TeamResponse includes:
-          //  - id
-          //  - name
-          //  - assignmentMethod
-          //  - status
-          // next: (data: TeamResponse[]) => {
-          next: (data: TicketResponse[]) => {
-            return this.tickets = data
-          }
-
-        })
-    );
-
-    // push to list of subscriptions for easily unsubscribes all subscriptions of the TeamListComponent
-    this.subscriptions.push(
-
-      // get total of teams and total pages
-      this.ticketService.getTotalOfTickets(userid, searchTerm)
-
-        .subscribe({
-
-          // get total of teams from database successful
-          next: (data: number) => {
-            // total of teams
-            this.totalOfTickets = data;
-            // total pages
-            this.totalPages = this.shareService.calculateTotalPages(this.totalOfTickets, this.pageSize);
-          }
-        })
-    )
-  } // end of searchTickets()
+  } // end of loadTooltipPlaceholder()
 
   // count index for current page
   // ex:  page 1: ord 1 --> ord 5
@@ -468,8 +546,6 @@ export class TicketListComponent {
   //  - index: running variable(the index variable of "for loop")
   indexBasedPage(pageSize: number, currentPage: number, index: number): number {
 
-    // this.pageSize = 5
-    // return (this.pageSize * (currentPage - 1)) + (index + 1);
     return (this.shareService.indexBasedPage(pageSize, currentPage, index));
   }
 

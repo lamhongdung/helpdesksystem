@@ -16,26 +16,50 @@ export class TicketService {
   ) { }
 
   // get tickets by userid(and by user role), by page and based on the search criteria
-  searchTickets(userid: number, pageNumber: number, searchTerm: string): Observable<TicketResponse[]> {
+  searchTickets(userid: number,
+    pageNumber: number,
+    searchTerm: string,
+    fromDate: string,
+    toDate: string,
+    categoryid: string,
+    priorityid: string,
+    creatorid: string,
+    teamid: string,
+    assigneeid: string,
+    sla: string,
+    ticketStatusid: string): Observable<TicketResponse[]> {
 
     // ex: url = http://localhost:8080/team-search?pageNumber=0&pageSize=5&searchTerm=""&assignmentMethod=""&status=""
     // return this.http.get<TeamResponse[]>(
     //   `${this.host}/team-search?pageNumber=${pageNumber}&pageSize=${this.pageSize}&searchTerm=${searchTerm}&assignmentMethod=${assignmentMethod}&status=${status}`
     // )
-    return this.http.get<TicketResponse[]>(
-      `${this.shareService.host}/ticket-search?userid=${userid}&pageNumber=${pageNumber}&pageSize=${this.shareService.pageSize}&searchTerm=${searchTerm}`
-    )
-  } // end of searchTeams()
 
-  // calculate total of teams for counting total pages
-  getTotalOfTickets(userid: number, searchTerm: string): Observable<number> {
+    console.log(`${this.shareService.host}/ticket-search?userid=${userid}&pageNumber=${pageNumber}&pageSize=${this.shareService.pageSize}&searchTerm=${searchTerm}&fromDate=${fromDate}&toDate=${toDate}&categoryid=${categoryid}&priorityid=${priorityid}&creatorid=${creatorid}&teamid=${teamid}&assigneeid=${assigneeid}&sla=${sla}&ticketStatusid=${ticketStatusid}`);
+    return this.http.get<TicketResponse[]>(
+      
+      `${this.shareService.host}/ticket-search?userid=${userid}&pageNumber=${pageNumber}&pageSize=${this.shareService.pageSize}&searchTerm=${searchTerm}&fromDate=${fromDate}&toDate=${toDate}&categoryid=${categoryid}&priorityid=${priorityid}&creatorid=${creatorid}&teamid=${teamid}&assigneeid=${assigneeid}&sla=${sla}&ticketStatusid=${ticketStatusid}`
+    )
+
+  } // end of searchTickets()
+
+  // calculate total of tickets for counting total pages
+  getTotalOfTickets(userid: number, searchTerm: string,
+    fromDate: string,
+    toDate: string,
+    categoryid: string,
+    priorityid: string,
+    creatorid: string,
+    teamid: string,
+    assigneeid: string,
+    sla: string,
+    ticketStatusid: string): Observable<number> {
 
     // ex: http://localhost:8080/total-of-teams?searchTerm=""&assignmentMethod=""&status=""
     return this.http.get<number>(
-      `${this.shareService.host}/total-of-tickets?userid=${userid}&searchTerm=${searchTerm}`
+      `${this.shareService.host}/total-of-tickets?userid=${userid}&searchTerm=${searchTerm}&fromDate=${fromDate}&toDate=${toDate}&categoryid=${categoryid}&priorityid=${priorityid}&creatorid=${creatorid}&teamid=${teamid}&assigneeid=${assigneeid}&sla=${sla}&ticketStatusid=${ticketStatusid}`
     );
 
-  } // end of getTotalOfTeams()
+  } // end of getTotalOfTickets()
 
   // get all ticket status
   getAllTicketStatus(): Observable<DropdownResponse[]> {
