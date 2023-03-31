@@ -16,11 +16,18 @@ export class Ticket {
         public priorityid: number,
         // assignee id
         public assigneeid: number,
+        // ticket status id
+        public ticketStatusid: number,
         // content
         public content: string,
 
         // file URL
         public fileUrl: string,
+        
+        // date creates ticket
+        public createDatetime: Date,
+        // last datetime ticket is updated
+        public lastUpdateDatetime: Date,
 
     ) {
 

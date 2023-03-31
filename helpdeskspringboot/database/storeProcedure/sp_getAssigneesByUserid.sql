@@ -39,7 +39,6 @@ begin
 	) a
     order by a.id, a.description;
 	
-  
 end $$
 
 -- customer: 	call sp_getAssigneesByUserid(1)

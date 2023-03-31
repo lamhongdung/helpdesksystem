@@ -5,10 +5,7 @@ drop procedure if exists sp_ticketTbl;
 delimiter $$
 
 -- -----------------------------------------------------
--- Get tickets by user id, user role
---
--- This store procedure is used to create temporary "ticketTbl" table.
--- This temporary "ticketTbl" table	contains tickets based on user id and user role.
+-- Create temporary "ticketTbl" table contains tickets based on user id and user role.
 --
 -- Input parameters:
 -- 	- in_userid: user id
@@ -29,6 +26,7 @@ drop temporary table if exists ticketTbl;
 
 -- create new temporary table "ticketTbl"
 create temporary table ticketTbl(
+
 	`ticketid` int,
 	`subject` varchar(255),
 	`categoryid` int,
@@ -41,6 +39,7 @@ create temporary table ticketTbl(
 	`fileUrl` varchar(255) default null,
 	`createDatetime` datetime,
 	`lastUpdateDatetime` datetime
+    
 );
     
 -- get user role by user id
@@ -53,8 +52,10 @@ set userRole = (select a.role
 -- role "customer"
 -- --------------------
 
--- get all tickets of the creator "in_userid"
+-- if role is "customer"
 if userRole = "ROLE_CUSTOMER" then
+
+	-- get all tickets of the creator "in_userid"
   
 	insert into ticketTbl
 	select 	a.*
@@ -64,7 +65,8 @@ if userRole = "ROLE_CUSTOMER" then
 -- --------------------
 -- role "supporter"
 -- --------------------
-   
+
+-- -- if role is "supporter"   
 elseif userRole = "ROLE_SUPPORTER" then
    
 	-- get all tickets of teams that the supporter "in_userid" belongs to
@@ -81,7 +83,9 @@ elseif userRole = "ROLE_SUPPORTER" then
 -- role "admin"
 -- --------------------
     
-else  
+-- if role is "Admin"
+else
+
     -- get all tickets
     
 	insert into ticketTbl

@@ -20,12 +20,12 @@ public class TicketService {
 
     // get all ticket status.
     // 5 status + 1 dummy status:
-    //  - All(dummy)
-    //  - Open
-    //  - Cancel
-    //  - Assigned
-    //  - Resolved
-    //  - Closed
+    //  - 0: All(dummy)
+    //  - 1: Open
+    //  - 2: Assigned
+    //  - 3: Resolved
+    //  - 4: Closed
+    //  - 5: Cancel
     public List<DropdownResponse> getAllTicketStatus() {
 
         LOGGER.info("Get all ticket status");
@@ -74,33 +74,37 @@ public class TicketService {
     }
 
     // get tickets by userid(and by user role).
-    public List<TicketResponse> getTicketsByUserid(long userid, long pageNumber, long pageSize,
-                                                   String searchTerm, String fromDate, String toDate,
-                                                   String categoryid, String priorityid, String creatorid,
-                                                   String teamid, String assigneeid, String sla, String ticketStatusid
-                                                   ) {
+    public List<TicketResponse> searchTickets(long userid, long pageNumber, long pageSize,
+                                              String searchTerm, String fromDate, String toDate,
+                                              String categoryid, String priorityid, String creatorid,
+                                              String teamid, String assigneeid, String sla,
+                                              String ticketStatusid
+    ) {
 
         LOGGER.info("Get tickets by user id(and by user role)");
 
         return ticketRepository.searchTicketsByUserid(userid, pageNumber, pageSize,
                 searchTerm, fromDate, toDate,
                 categoryid, priorityid, creatorid,
-                teamid, assigneeid, sla, ticketStatusid
-                );
+                teamid, assigneeid, sla,
+                ticketStatusid
+        );
     }
 
-    // calculate total of teams based on the search criteria
+    // calculate total of tickets based on the search criteria
     public long getTotalOfTickets(long userid,
                                   String searchTerm, String fromDate, String toDate,
                                   String categoryid, String priorityid, String creatorid,
-                                  String teamid, String assigneeid, String sla, String ticketStatusid) {
+                                  String teamid, String assigneeid, String sla,
+                                  String ticketStatusid) {
 
-        LOGGER.info("get total of teams");
+        LOGGER.info("get total of tickets");
 
         return ticketRepository.getTotalOfTickets(userid,
                 searchTerm, fromDate, toDate,
                 categoryid, priorityid, creatorid,
-                teamid, assigneeid, sla, ticketStatusid);
+                teamid, assigneeid, sla,
+                ticketStatusid);
     }
 
 }

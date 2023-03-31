@@ -12,7 +12,7 @@ import { ShareService } from 'src/app/service/share.service';
 })
 export class HeaderComponent implements OnInit {
 
-  userId: number;
+  userid: number;
   loggedInEmail: string;
   loggedInRole: string;
 
@@ -28,7 +28,7 @@ export class HeaderComponent implements OnInit {
   }
 
   loadHeader() {
-    this.userId = +this.authService.getIdFromLocalStorage();
+    this.userid = +this.authService.getIdFromLocalStorage();
     this.loggedInEmail = this.authService.getEmailFromLocalStorage();
     this.loggedInRole = this.authService.getRoleFromLocalStorage();
     // console.log(this.loggedInEmail);
@@ -50,6 +50,28 @@ export class HeaderComponent implements OnInit {
     } else {
       this.notificationService.notify(notificationType, 'An error occurred. Please try again.');
     }
+  } // end of sendNotification()
+
+  displayBriefProfile(userid: number, role: string, email: string): string {
+
+    let briefProfile: string = "";
+    let id: string;
+
+    id = userid + "";
+
+    if (['ROLE_CUSTOMER'].indexOf(role) !== -1) {
+      briefProfile = `Customer: ${id} - ${email}`;
+    }
+    else if (['ROLE_SUPPORTER'].indexOf(role) !== -1) {
+      briefProfile = `Supporter: ${id} - ${email}`;
+
+    } else {
+      briefProfile = `Admin: ${id} - ${email}`;
+
+    }
+
+    return briefProfile;
   }
+
 }
 

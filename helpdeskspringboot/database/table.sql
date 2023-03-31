@@ -1,7 +1,7 @@
 --------------
 -- database --
 --------------
-DROP DATABASE IF EXISTS helpdesk;
+drop database if exists helpdesk;
 
 create database helpdesk;
 
@@ -13,22 +13,27 @@ use helpdesk;
 
 drop table if exists `user`;
 
-CREATE TABLE `user` (
-  -- `id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `id` int NOT NULL AUTO_INCREMENT,
-  `email` VARCHAR(255) not NULL,
-  `password` VARCHAR(255) not NULL,   
-  `firstName` VARCHAR(255) not NULL,
-  `lastName` VARCHAR(255) not NULL,
-  `phone` VARCHAR(255) not NULL,
-  `address` VARCHAR(255) NULL,
-  `role` VARCHAR(255) not NULL,  
-  `status` VARCHAR(255) not NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE (`email`)
-) ENGINE=InnoDB AUTO_INCREMENT=101 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+create table `user` (
 
-INSERT INTO `user`(id, email, password, firstName, lastName, phone, address, role, status) VALUES
+	`id` int not null auto_increment,
+	`email` varchar(255) not null,
+	`password` varchar(255) not null,
+	`firstName` varchar(255) not null,
+	`lastName` varchar(255) not null,
+	`phone` varchar(255) not null,
+	`address` varchar(255) null,
+
+	-- "ROLE_CUSTOMER", "ROLE_SUPPORTER", "ROLE_ADMIN"
+	`role` varchar(255) not null,
+	-- "Active", "Inactive"
+	`status` varchar(255) not null,
+
+	primary key (`id`),
+	unique (`email`)
+    
+) engine=InnoDB auto_increment=101 default charset=utf8mb4 collate=utf8mb4_0900_ai_ci;
+
+insert into `user`(id, email, password, firstName, lastName, phone, address, role, status) values
 -- customer
 (1,'dunglh+customer1@gmail.com','$2a$12$CR0useg0GQlwrYMvylhHROZg0Vq5nr7jRILz14lc.ArB9iuw1wsEC','Quân','Châu','0111111111','','ROLE_CUSTOMER','Active'),
 (2,'dunglh+customer2@gmail.com','$2a$12$CR0useg0GQlwrYMvylhHROZg0Vq5nr7jRILz14lc.ArB9iuw1wsEC','Thị Vân','Hoàng','0111111112','','ROLE_CUSTOMER','Active'),
@@ -40,16 +45,16 @@ INSERT INTO `user`(id, email, password, firstName, lastName, phone, address, rol
 (8,'dunglh+customer8@gmail.com','$2a$12$CR0useg0GQlwrYMvylhHROZg0Vq5nr7jRILz14lc.ArB9iuw1wsEC','Trần Lan Anh','Phạm','0111111118','','ROLE_CUSTOMER','Active'),
 (9,'dunglh+customer9@gmail.com','$2a$12$CR0useg0GQlwrYMvylhHROZg0Vq5nr7jRILz14lc.ArB9iuw1wsEC','Hồng Hạc','Nguyễn','0111111119','','ROLE_CUSTOMER','Active'),
 -- supporter
-(10,'dunglh+supporter@gmail.com','$2a$12$CR0useg0GQlwrYMvylhHROZg0Vq5nr7jRILz14lc.ArB9iuw1wsEC','Minh Tâm','Tạ','0222222220','','ROLE_SUPPORTER','Active'),
-(11,'dunglh+supporter1@gmail.com','$2a$12$CR0useg0GQlwrYMvylhHROZg0Vq5nr7jRILz14lc.ArB9iuw1wsEC','Hồng Đào','Trịnh','0222222221','','ROLE_SUPPORTER','Active'),
-(12,'dunglh+supporter2@gmail.com','$2a$12$CR0useg0GQlwrYMvylhHROZg0Vq5nr7jRILz14lc.ArB9iuw1wsEC','Ngọc Tư','Nguyễn','0222222222','','ROLE_SUPPORTER','Active'),
-(13,'dunglh+supporter3@gmail.com','$2a$12$CR0useg0GQlwrYMvylhHROZg0Vq5nr7jRILz14lc.ArB9iuw1wsEC','Thị Ngọc Yến','Nguyễn','0222222223','','ROLE_SUPPORTER','Active'),
-(14,'dunglh+supporter4@gmail.com','$2a$12$CR0useg0GQlwrYMvylhHROZg0Vq5nr7jRILz14lc.ArB9iuw1wsEC','Yến Quyên','Lý','0222222224','','ROLE_SUPPORTER','Active'),
-(15,'dunglh+supporter5@gmail.com','$2a$12$CR0useg0GQlwrYMvylhHROZg0Vq5nr7jRILz14lc.ArB9iuw1wsEC','Đức Nhân','Bùi','0222222225','','ROLE_SUPPORTER','Active'),
-(16,'dunglh+supporter6@gmail.com','$2a$12$CR0useg0GQlwrYMvylhHROZg0Vq5nr7jRILz14lc.ArB9iuw1wsEC','Sanh Minh','Lư','0222222226','','ROLE_SUPPORTER','Active'),
-(17,'dunglh+supporter7@gmail.com','$2a$12$CR0useg0GQlwrYMvylhHROZg0Vq5nr7jRILz14lc.ArB9iuw1wsEC','Thị Hiếu','Lý','0222222227','','ROLE_SUPPORTER','Active'),
-(18,'dunglh+supporter8@gmail.com','$2a$12$CR0useg0GQlwrYMvylhHROZg0Vq5nr7jRILz14lc.ArB9iuw1wsEC','Thanh Danh','Phạm','0222222228','','ROLE_SUPPORTER','Active'),
-(19,'dunglh+supporter9@gmail.com','$2a$12$CR0useg0GQlwrYMvylhHROZg0Vq5nr7jRILz14lc.ArB9iuw1wsEC','Viết Cường','Bùi','0222222229','','ROLE_SUPPORTER','Active'),
+(10,'dunglh+supporter@gmail.com','$2a$12$CR0useg0GQlwrYMvylhHROZg0Vq5nr7jRILz14lc.ArB9iuw1wsEC','Ngộ Không','Tôn','0222222220','','ROLE_SUPPORTER','Active'),
+(11,'dunglh+supporter1@gmail.com','$2a$12$CR0useg0GQlwrYMvylhHROZg0Vq5nr7jRILz14lc.ArB9iuw1wsEC','Bát Giới','Trư','0222222221','','ROLE_SUPPORTER','Active'),
+(12,'dunglh+supporter2@gmail.com','$2a$12$CR0useg0GQlwrYMvylhHROZg0Vq5nr7jRILz14lc.ArB9iuw1wsEC','Ngộ Tịnh','Sa','0222222222','','ROLE_SUPPORTER','Active'),
+(13,'dunglh+supporter3@gmail.com','$2a$12$CR0useg0GQlwrYMvylhHROZg0Vq5nr7jRILz14lc.ArB9iuw1wsEC','Huyền Trang','Trần','0222222223','','ROLE_SUPPORTER','Active'),
+(14,'dunglh+supporter4@gmail.com','$2a$12$CR0useg0GQlwrYMvylhHROZg0Vq5nr7jRILz14lc.ArB9iuw1wsEC','Long Mã','Bạch','0222222224','','ROLE_SUPPORTER','Active'),
+(15,'dunglh+supporter5@gmail.com','$2a$12$CR0useg0GQlwrYMvylhHROZg0Vq5nr7jRILz14lc.ArB9iuw1wsEC','Ma Vương','Ngưu','0222222225','','ROLE_SUPPORTER','Active'),
+(16,'dunglh+supporter6@gmail.com','$2a$12$CR0useg0GQlwrYMvylhHROZg0Vq5nr7jRILz14lc.ArB9iuw1wsEC','Hài Nhi','Hồng','0222222226','','ROLE_SUPPORTER','Active'),
+(17,'dunglh+supporter7@gmail.com','$2a$12$CR0useg0GQlwrYMvylhHROZg0Vq5nr7jRILz14lc.ArB9iuw1wsEC','Tiên','Hạnh','0222222227','','ROLE_SUPPORTER','Active'),
+(18,'dunglh+supporter8@gmail.com','$2a$12$CR0useg0GQlwrYMvylhHROZg0Vq5nr7jRILz14lc.ArB9iuw1wsEC','Thúy Lan','Cao','0222222228','','ROLE_SUPPORTER','Active'),
+(19,'dunglh+supporter9@gmail.com','$2a$12$CR0useg0GQlwrYMvylhHROZg0Vq5nr7jRILz14lc.ArB9iuw1wsEC','Nga','Hằng','0222222229','','ROLE_SUPPORTER','Active'),
 -- admin
 (20,'dunglh+admin@gmail.com','$2a$12$CR0useg0GQlwrYMvylhHROZg0Vq5nr7jRILz14lc.ArB9iuw1wsEC','Công Phượng','Nguyễn','0333333330','','ROLE_ADMIN','Active'),
 (21,'dunglh+admin1@gmail.com','$2a$12$CR0useg0GQlwrYMvylhHROZg0Vq5nr7jRILz14lc.ArB9iuw1wsEC','Tuấn Anh','Nguyễn','0333333331','','ROLE_ADMIN','Active'),
@@ -73,22 +78,26 @@ INSERT INTO `user`(id, email, password, firstName, lastName, phone, address, rol
 
 drop table if exists `category`;
 
-CREATE TABLE `category` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `name` VARCHAR(255) not NULL,
-  `status` VARCHAR(255) not NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=101 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+create table `category` (
 
-INSERT INTO `category`(id, name, status) VALUES 
+	`id` int not null auto_increment,
+	`name` varchar(255) not null,
+	`status`varchar(255) not null,
+
+	primary key (`id`)
+    
+) engine=InnoDB auto_increment=101 default charset=utf8mb4 collate=utf8mb4_0900_ai_ci;
+
+insert into `category`(id, name, status) values 
 (1, 'Laptop', 'Active'),
 (2, 'PC', 'Active'),
 (3, 'Printer', 'Active'),
 (4, 'Networking', 'Active'),
 (5, 'Office365', 'Active'),
-(6, 'Access card', 'Active'),
-(7, 'Seat', 'Active'),
-(8, 'Other', 'Active');
+(6, 'Software', 'Active'),
+(7, 'Access card', 'Active'),
+(8, 'Seat', 'Active'),
+(9, 'Other', 'Active');
 
 -- -----------------------------------------------------
 -- Table `priority`
@@ -96,15 +105,20 @@ INSERT INTO `category`(id, name, status) VALUES
 
 drop table if exists `priority`;
 
-CREATE TABLE `priority` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `name` VARCHAR(255) not NULL,
-  `resolveIn` int not NULL,
-  `status` VARCHAR(255) not NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=101 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+create table `priority` (
 
-INSERT INTO `priority`(id, name, resolveIn, status) VALUES 
+	`id` int not null auto_increment,
+	`name` varchar(255) not null,
+	`resolveIn` int not null,
+
+	-- "Active", "Inactive"
+	`status` varchar(255) not null,
+    
+	primary key (`id`)
+    
+) engine=InnoDB auto_increment=101 default charset=utf8mb4 collate=utf8mb4_0900_ai_ci;
+
+insert into `priority`(id, name, resolveIn, status) values 
 (1, 'High', 12, 'Active'),
 (2, 'Normal', 24, 'Active'),
 (3, 'Low', 36, 'Active');
@@ -115,15 +129,22 @@ INSERT INTO `priority`(id, name, resolveIn, status) VALUES
 
 drop table if exists `team`;
 
-CREATE TABLE `team` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `name` VARCHAR(255) not NULL,
-  `assignmentMethod` VARCHAR(255) not NULL,
-  `status` VARCHAR(255) not NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=101 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+create table `team` (
 
-INSERT INTO `team`(id, name, assignmentMethod, status) VALUES 
+	`id` int not null auto_increment,
+	`name` varchar(255) not null,
+
+	-- 'A': Auto, 'M': Manual
+	`assignmentMethod` varchar(255) not null,
+    
+	-- "Active", "Inactive"
+	`status` varchar(255) not null,
+
+	primary key (`id`)
+  
+) engine=InnoDB auto_increment=101 default charset=utf8mb4 collate=utf8mb4_0900_ai_ci;
+
+insert into `team`(id, name, assignmentMethod, status) values 
 (1, 'Pepsi', 'A', 'Active');
 
 -- -----------------------------------------------------
@@ -132,21 +153,22 @@ INSERT INTO `team`(id, name, assignmentMethod, status) VALUES
 
 drop table if exists `teamSupporter`;
 
-CREATE TABLE `teamSupporter` (
-  `teamid` int NOT NULL,
-  `supporterid` int NOT NULL,
-  
-  PRIMARY KEY (`teamid`, `supporterid`),
-  
-  CONSTRAINT `FK_teamid_teamSupporter` FOREIGN KEY (`teamid`) REFERENCES `team` (`id`) 
-  ON DELETE NO ACTION ON UPDATE NO ACTION,
-  
-  CONSTRAINT `FK_supporterid_teamSupporter` FOREIGN KEY (`supporterid`) REFERENCES `user` (`id`) 
-  ON DELETE NO ACTION ON UPDATE NO ACTION
-  
-) ENGINE=InnoDB AUTO_INCREMENT=101 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+create table `teamSupporter` (
 
-INSERT INTO `teamSupporter`(teamid, supporterid) VALUES 
+	`teamid` int not null,
+	`supporterid` int not null,
+
+	primary key (`teamid`, `supporterid`),
+
+	constraint `FK_teamid_teamSupporter` foreign key(`teamid`) references `team` (`id`) 
+	on delete no action on update no action,
+
+	constraint `FK_supporterid_teamSupporter` foreign key (`supporterid`) references `user` (`id`) 
+	on delete no action on update no action
+  
+) engine=InnoDB auto_increment=101 default charset=utf8mb4 collate=utf8mb4_0900_ai_ci;
+
+insert into `teamSupporter`(teamid, supporterid) values 
 (1, 10),
 (1, 11),
 (1, 12);
@@ -157,21 +179,22 @@ INSERT INTO `teamSupporter`(teamid, supporterid) VALUES
 
 drop table if exists `ticketStatus`;
 
-CREATE TABLE `ticketStatus` (
+create table `ticketStatus` (
 
-	`statusid` int NOT NULL,
-	`name` varchar(255) NOT NULL,
+	`statusid` int not null,
+	`name` varchar(255) not null,
     
-	PRIMARY KEY (`statusid`)
+	primary key (`statusid`)
   
-) ENGINE=InnoDB AUTO_INCREMENT=101 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) engine=InnoDB auto_increment=101 default charset=utf8mb4 collate=utf8mb4_0900_ai_ci;
 
-INSERT INTO `ticketStatus`(statusid, name) VALUES 
+insert into `ticketStatus`(statusid, name) values 
 (1,'Open'),
-(2,'Cancel'),
-(3,'Assigned'),
-(4,'Resolved'),
-(5,'Closed');
+(2,'Assigned'),
+(3,'Resolved'),
+(4,'Closed'),
+(5,'Cancel');
+
 
 -- -----------------------------------------------------
 -- Table `ticket`
@@ -179,41 +202,44 @@ INSERT INTO `ticketStatus`(statusid, name) VALUES
 
 drop table if exists `ticket`;
 
-CREATE TABLE `ticket` (
+create table `ticket` (
 
-	`ticketid` int NOT NULL AUTO_INCREMENT,
-	`subject` varchar(2000) NOT NULL,
-	`categoryid` int NOT NULL,
-	`creatorid` int NOT NULL,
-	`teamid` int NOT NULL,
-	`priorityid` int NOT NULL,
-	`assigneeid` int DEFAULT NULL,
-	`ticketStatusid` int NOT NULL,
-	`content` text NOT NULL,
-	`fileUrl` varchar(255) DEFAULT NULL,
-	`createDatetime` datetime NOT NULL,
-	`lastUpdateDatetime` datetime NOT NULL,
+	`ticketid` int not null auto_increment,
+	`subject` varchar(2000) not null,
+	`categoryid` int not null,
+	`creatorid` int not null,
+	`teamid` int not null,
+	`priorityid` int not null,
+	`assigneeid` int default null,
+	`ticketStatusid` int not null,
+	`content` text not null,
+	`fileUrl` varchar(255) default null,
+	`createDatetime` datetime not null,
+	`lastUpdateDatetime` datetime not null,
     
-	PRIMARY KEY (`ticketid`),
+	primary key (`ticketid`),
     
-	KEY `FK_categoryid_ticket` (`categoryid`),
-	KEY `FK_creatorid_ticket` (`creatorid`),
-	KEY `FK_teamid_ticket` (`teamid`),
-	KEY `FK_priorityid_ticket` (`priorityid`),
-	KEY `FK_ticketStatusid_ticket` (`ticketStatusid`),
+	key `FK_categoryid_ticket` (`categoryid`),
+	key `FK_creatorid_ticket` (`creatorid`),
+	key `FK_teamid_ticket` (`teamid`),
+	key `FK_priorityid_ticket` (`priorityid`),
+	key `FK_ticketStatusid_ticket` (`ticketStatusid`),
     
-	CONSTRAINT `FK_categoryid_ticket` FOREIGN KEY (`categoryid`) REFERENCES `category` (`id`),
-	CONSTRAINT `FK_creatorid_ticket` FOREIGN KEY (`creatorid`) REFERENCES `user` (`id`),
-	CONSTRAINT `FK_priorityid_ticket` FOREIGN KEY (`priorityid`) REFERENCES `priority` (`id`),
-	CONSTRAINT `FK_teamid_ticket` FOREIGN KEY (`teamid`) REFERENCES `team` (`id`),
-	CONSTRAINT `FK_ticketStatusid_ticket` FOREIGN KEY (`ticketStatusid`) REFERENCES `ticketstatus` (`statusid`)
+	constraint `FK_categoryid_ticket` foreign key (`categoryid`) references `category` (`id`),
+	constraint `FK_creatorid_ticket` foreign key (`creatorid`) references `user` (`id`),
+	constraint `FK_priorityid_ticket` foreign key (`priorityid`) references `priority` (`id`),
+	constraint `FK_teamid_ticket` foreign key (`teamid`) references `team` (`id`),
+	constraint `FK_ticketStatusid_ticket` foreign key (`ticketStatusid`) references `ticketstatus` (`statusid`)
   
-) ENGINE=InnoDB AUTO_INCREMENT=101 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) engine=InnoDB auto_increment=101 default charset=utf8mb4 collate=utf8mb4_0900_ai_ci;
 
-INSERT INTO `ticket`(ticketid, subject, categoryid, creatorid, teamid, priorityid, assigneeid, ticketStatusid, content, fileUrl, createDatetime, lastUpdateDatetime) VALUES 
-(1,'Laptop bị hỏng',1,1,1,1,10,3,'Laptop bị hỏng. Vui lòng thay laptop mới',NULL,'2023-03-18 08:30:00','2023-03-18 11:30:00'),
-(2,'Máy in bị hết mực',3,1,1,1,null,1,'Máy in bị hết mực. Đề nghị thay mực máy in',NULL,'2023-03-23 22:05:00','2023-03-23 22:05:00'),
-(3,'Không thể kết nối mạng wifi',4,2,1,2,11,3,'Không tìm thấy mạng wifi nên không thể kết nối internet qua wifi',NULL,'2023-03-26 11:18:00','2023-03-27 15:18:00');
+insert into `ticket`(ticketid, subject, categoryid, creatorid, teamid, priorityid, assigneeid, ticketStatusid, content, fileUrl, createDatetime, lastUpdateDatetime) values 
+(1,'Laptop bị hỏng',1,1,1,1,10,3,'Laptop bị hỏng. Vui lòng thay laptop mới',null,'2023-03-18 08:30:00','2023-03-18 11:30:00'),
+(2,'Máy in bị hết mực',3,1,1,1,null,1,'Máy in bị hết mực. Đề nghị thay mực máy in',null,'2023-03-23 22:05:00','2023-03-23 22:05:00'),
+(3,'Không thể kết nối mạng wifi',4,2,1,2,11,3,'Không tìm thấy mạng wifi nên không thể kết nối internet qua wifi',null,'2023-03-26 11:18:00','2023-03-27 15:18:00'),
+(4,'Không thể xuất báo cáo từ phần mềm',6,2,1,3,11,4,'Không thể xuất báo cáo từ phần. Nhờ đợi kỹ thuật kiểm tra giúp',null,'2023-03-28 08:00:00','2023-03-28 10:00:00'),
+(5,'Xin cài phần mềm Visio cho laptop',6,1,1,2,11,5,'Nhờ IT cài phần mềm Visio cho máy laptop cá nhân',null,'2023-03-29 10:40:00','2023-03-29 11:00:00'),
+(6,'Nhờ reset password email account: abc@xyz.com',5,2,1,2,10,2,'Nhờ IT reset password cho email account abc@xyz.com. Cảm ơn IT nhiều!',null,'2023-03-30 21:30:00','2023-03-31 10:00:00');
 
 
 -- -----------------------------------------------------
@@ -222,24 +248,24 @@ INSERT INTO `ticket`(ticketid, subject, categoryid, creatorid, teamid, priorityi
 
 drop table if exists `comment`;
 
-CREATE TABLE `comment` (
+create table `comment` (
 
-	`ticketid` int NOT NULL,
-	`commentid` int NOT NULL AUTO_INCREMENT,
-	`commentDescription` varchar(255) NOT NULL,
-	`commenterid` int NOT NULL,
-	`commentDatetime` datetime NOT NULL,
+	`ticketid` int not null,
+	`commentid` int not null auto_increment,
+	`commentDescription` varchar(255) not null,
+	`commenterid` int not null,
+	`commentDatetime` datetime not null,
     
-	PRIMARY KEY (`commentid`),
+	PRIMARY key (`commentid`),
     
-	KEY `FK_ticketid_comment` (`ticketid`),
-	KEY `FK_commenterid_comment` (`commenterid`),
-	CONSTRAINT `FK_commenterid_comment` FOREIGN KEY (`commenterid`) REFERENCES `user` (`id`),
-	CONSTRAINT `FK_ticketid_comment` FOREIGN KEY (`ticketid`) REFERENCES `ticket` (`ticketid`)
+	key `FK_ticketid_comment` (`ticketid`),
+	key `FK_commenterid_comment` (`commenterid`),
+	constraint `FK_commenterid_comment` foreign key (`commenterid`) references `user` (`id`),
+	constraint `FK_ticketid_comment` foreign key (`ticketid`) references `ticket` (`ticketid`)
   
-) ENGINE=InnoDB AUTO_INCREMENT=101 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) engine=InnoDB auto_increment=101 default charset=utf8mb4 collate=utf8mb4_0900_ai_ci;
 
-INSERT INTO `comment`(ticketid, commentid, commentDescription, commenterid, commentDatetime) VALUES 
+insert into `comment`(ticketid, commentid, commentDescription, commenterid, commentDatetime) values 
 (1, 1, 'Sẽ thay laptop mới cho bạn', 10 , '2023-03-19 08:30:00'),
 (3, 2, 'Vui lòng khởi động lại laptop sau đó kết nối lại wifi', 11 , '2023-03-26 13:30:00');
 

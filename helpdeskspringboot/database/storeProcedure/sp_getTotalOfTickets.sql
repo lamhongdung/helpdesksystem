@@ -5,10 +5,9 @@ drop procedure if exists sp_getTotalOfTickets;
 delimiter $$
 
 -- -----------------------------------------------------
--- Get total of tickets by user id, user role and based on search criterias
+-- Get total of tickets by user id, user role and based on search criteria
+-- for pagination.
 --
---
--- Input parameters:
 -- Input parameters:
 --
 -- 	- in_userid: user id
@@ -21,7 +20,12 @@ delimiter $$
 -- 	- in_teamid: team id(a team has multi supporters)
 -- 	- in_assignee: assignee is person will resove the ticket
 -- 	- in_sla: service level agreement. Check whether a certain ticket is on time or late
--- 	- in_ticketStatusid: ticket status id(has 5 status: Open, Cancel, Assigned, Resolved, Closed)
+-- 	- in_ticketStatusid: ticket status id: has 5 status: 
+--      - 1: Open
+--      - 2: Assigned
+--      - 3: Resolved
+--      - 4: Closed
+--      - 5: Cancel
 -- -----------------------------------------------------
 
 -- customer: 	call sp_getTotalOfTickets(1,'','2023-01-01','2023-03-26','0','0','1','0','0','','0')
@@ -53,7 +57,6 @@ call sp_searchTicketTbl(in_userid, in_searchTerm, in_fromDate, in_toDate, in_cat
 
 select 	count(a.ticketid) as totalOfTickets
 from searchTicketTbl a;
-
 
 end $$
 

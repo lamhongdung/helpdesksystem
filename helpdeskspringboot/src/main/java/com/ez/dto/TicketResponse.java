@@ -29,7 +29,12 @@ public interface TicketResponse {
     Date getLastUpdateDatetime();
 
     // "spendHour" column
+    // ex: 1.5 hours
     float getSpendHour();
+
+    // "spendHourHhmmss" column
+    // hours in hh:mm:ss(ex: 01:30:00)
+    String getSpendHourHhmmss();
 
     // "creatorPhone" column
     String getCreatorPhone();
@@ -49,10 +54,14 @@ public interface TicketResponse {
     // "content" column
     String getContent();
 
-    // "resolveIn" column
+    // "resolveIn" column.
+    // limit hours to resolve a ticket
     String getResolveIn();
 
-    // "currentTime" column
-    Date getCurrentTime();
+    // "currentDatetime" column
+    Date getCurrentDatetime();
+
+    // "ticketStatusid" column
+    long getTicketStatusid();
 
 }

@@ -18,8 +18,10 @@ export class TicketResponse {
         public sla: string,
         // last update date time
         public lastUpdateDatetime: Date,
-        // spend hours
+        // spend hours. ex: 1.5 hours
         public spendHour: number,
+        // spend hours in hh:mm:ss format. ex: 01:30:00
+        public spendHourHhmmss: string,
         // creator phone number
         public creatorPhone: string,
         // creator email
@@ -36,9 +38,10 @@ export class TicketResponse {
 
         // resolveIn
         public resolveIn: string,
-        // currentTime
-        public currentTime: Date
-
+        // currentDatetime
+        public currentDatetime: Date,
+        // ticket status id
+        public ticketStatusid: number
 
     ) {
 

@@ -72,4 +72,20 @@ export class ShareService {
 
   }
 
+  // display total of elements found.
+  // ex: "There are 5 tickets"
+  displayTotalOfElements(totalOfElements: number, element: string): string {
+
+    if (totalOfElements > 1) {
+      return `There are ${totalOfElements} ${element}s`;
+    }
+    else if ((totalOfElements === 1)) {
+      return `There is ${totalOfElements} ${element}`;
+    }
+    else {
+      return `There is no ${element}`;
+    }
+
+  } // end of displayTotalOfElements()
+
 }

@@ -28,6 +28,7 @@ export class TicketListComponent {
   totalPages: number;
   // total of tickets(for pagination)
   totalOfTickets: number;
+
   // ticket list(the grid of the team table)
   tickets: TicketResponse[] = [];
   // number of tickets per page(default = 5)
@@ -70,8 +71,6 @@ export class TicketListComponent {
   //  - 1: first day
   //  - toLocaleString(): convert to string M/dd/yyyy
   //  - formatDate(...,"yyyy-MM-dd"): convert to format "yyyy-MM-dd"
-  // firstDayOfCurrentYear = formatDate(new Date(this.currentDate.getFullYear(), this.currentDate.getMonth(), 1)
-  //   .toLocaleString(), "yyyy-MM-dd", "en-US");
   firstDayOfCurrentYear = formatDate(new Date(this.currentDate.getFullYear(), 0, 1)
     .toLocaleString(), "yyyy-MM-dd", "en-US");
 
@@ -83,6 +82,8 @@ export class TicketListComponent {
   //
 
   // tooltips for "Search form" and "table"
+  // ex:  tooltips.set('key', 'value');
+  //      tooltips.get('key') --> return 'value';
   tooltips = new Map<string, string>();
 
   // tooltips for pagination
@@ -94,7 +95,9 @@ export class TicketListComponent {
   tooltipNextPage: string;
   tooltipLastPage: string;
 
-  // placeholders
+  // placeholders.
+  // ex:  tooltips.set('key', 'value');
+  //      tooltips.get('key') --> return 'value';
   placeholders = new Map<string, string>();
 
   // the "Search ticket" form
@@ -103,9 +106,9 @@ export class TicketListComponent {
     // search term.
     // if role is "customer" then will search for : ticket id, subject and content.
     // else if role is "supporter" or "admin" then search for: 
-    //  ticket id, subject, content, creator name, creator phone, creator email
+    //  ticket id, subject, content, creator phone, creator email
     searchTerm: [''],
-    // first day of current month
+    // first day of current year
     fromDate: [''],
     // current date
     toDate: [''],
@@ -115,7 +118,9 @@ export class TicketListComponent {
     priorityid: ["0"],
 
     // creator id.
-    // default value depends on his role
+    // default value depends on his role.
+    // if role is "customer" then creatorid is him-self
+    // else creatorid = 0(all)
     creatorid: ['0'],
 
     // default value = 0(all)
@@ -146,9 +151,6 @@ export class TicketListComponent {
     // toDate = current date(local)
     this.searchTicket.controls['toDate'].setValue(this.toDate);
 
-    // load creators by userid(and by user role) into the "Creator" dropdown
-    // this.loadCreatorsByUserid(this.userid)
-
   }
 
   // this method ngOnInit() is run right after the contructor
@@ -174,8 +176,10 @@ export class TicketListComponent {
     this.initializeControlValues();
 
     // assign tickets from database to the this.tickets variable, and get totalPages.
-    // the first parameter(page) = 0: in MySQL 0 means the first page.
-    this.searchTickets(this.userid, 0,
+    // the second parameter(page) = 0: in MySQL 0 means the first page.
+    this.searchTickets(
+      this.userid,
+      0,
       this.searchTicket.value.searchTerm,
       this.searchTicket.value.fromDate,
       this.searchTicket.value.toDate,
@@ -191,7 +195,9 @@ export class TicketListComponent {
 
 
   // search tickets based on user id and search criteria
-  searchTickets(userid: number, pageNumber: number,
+  searchTickets(
+    userid: number,
+    pageNumber: number,
     searchTerm: string,
     fromDate: string,
     toDate: string,
@@ -206,8 +212,11 @@ export class TicketListComponent {
     // push to list of subscriptions for easily unsubscribes all subscriptions of the TicketListComponent
     this.subscriptions.push(
 
+      //
       // get tickets
-      this.ticketService.searchTickets(userid,
+      //
+      this.ticketService.searchTickets(
+        userid,
         pageNumber,
         searchTerm,
         fromDate,
@@ -225,6 +234,14 @@ export class TicketListComponent {
           // get tickets from database successful.
           next: (data: TicketResponse[]) => {
             return this.tickets = data
+          },
+
+          // there are some errors when get tickets from database
+          error: (errorResponse: HttpErrorResponse) => {
+
+            // show the error message to user
+            this.sendNotification(NotificationType.ERROR, errorResponse.error.message);
+
           }
 
         })
@@ -233,7 +250,9 @@ export class TicketListComponent {
     // push to list of subscriptions for easily unsubscribes all subscriptions of the TicketListComponent
     this.subscriptions.push(
 
-      // get total of teams and total pages
+      //
+      // get total of tickets and total pages
+      //
       this.ticketService.getTotalOfTickets(
         userid,
         searchTerm,
@@ -255,6 +274,14 @@ export class TicketListComponent {
             this.totalOfTickets = data;
             // total pages
             this.totalPages = this.shareService.calculateTotalPages(this.totalOfTickets, this.pageSize);
+          },
+
+          // there are some errors when get total of tickets from database
+          error: (errorResponse: HttpErrorResponse) => {
+
+            // show the error message to user
+            this.sendNotification(NotificationType.ERROR, errorResponse.error.message);
+
           }
         })
     )
@@ -285,12 +312,12 @@ export class TicketListComponent {
 
   // initialize values for "Ticket status".
   // 5 status + 1 dummy status:
-  //  - All(dummy)
-  //  - Open
-  //  - Cancel
-  //  - Assigned
-  //  - Resolved
-  //  - Closed
+  //  - 0: All(dummy)
+  //  - 1: Open
+  //  - 2: Assigned
+  //  - 3: Resolved
+  //  - 4: Closed
+  //  - 5: Cancel
   loadAllTicketStatus() {
 
     // push into the subscriptions array to unsubscibe them easily later
@@ -358,10 +385,6 @@ export class TicketListComponent {
       // this.userId + "": means convert number to string
       this.searchTicket.controls['creatorid'].setValue(this.userid + "");
     }
-    // else if role is "ROLE_SUPPORTER" or "ROLE_ADMIN" then creator = "0"(All)
-    // else {
-    //   this.searchTicket.controls['creatorid'].setValue("0");
-    // }
 
   } // end of loadCreatorsByUserid()
 
@@ -501,8 +524,10 @@ export class TicketListComponent {
     this.tooltips.set("creatorid", "- Creator(person creates ticket).<br>- 'All' means all creators.<br>- Only display creators have ticket");
     this.tooltips.set("teamid", "- Team.<br>- 'All' means all teams.<br>- Only display teams have ticket");
     this.tooltips.set("assigneeid", "- Assignee(a person will resove the ticket).<br>- 'All' means all supporters.<br>- Only display supporters have ticket");
-    this.tooltips.set("sla", "- SLA(service level agreement).<br>- Check if a ticket is on time or late.");
-    this.tooltips.set("ticketStatusid", "- Ticket status.<br>- <b>All</b>: all status.<br>- <b>Open</b>: ticket has not yet assigned to supporter.<br>- <b>Cancel</b>: ticket has been canceled.<br>- <b>Assigned</b>: ticket has been assigned to supporter.<br>- <b>Resolved</b>: ticket has been resolved.<br>- <b>Closed</b>: ticket has been closed.");
+
+    this.tooltips.set("sla", "- SLA(service level agreement).<br>- On time: ticket is on time.<br>- Late: ticket is late.<br>- All: means both 'On time' and 'Late'.");
+
+    this.tooltips.set("ticketStatusid", "- Ticket status.<br>- <b>All</b>: all status.<br>- <b>Open</b>: ticket has not yet assigned to supporter.<br>- <b>Assigned</b>: ticket has been assigned to supporter.<br>- <b>Resolved</b>: ticket has been resolved.<br>- <b>Closed</b>: ticket has been closed.<br>- <b>Cancel</b>: ticket has been canceled.");
     this.tooltips.set("searchButton", "Search tickets");
     this.tooltips.set("createTicket", "Navigate to the 'Create ticket' screen");
     this.tooltips.set("extractExcel", "Navigate to the 'Extract excel' screen");
@@ -538,6 +563,49 @@ export class TicketListComponent {
 
   } // end of loadTooltipPlaceholder()
 
+  tooltipSlaDetail(ticketStatusid: number, createTime: Date, lastUpdateDatetime: Date,
+    currentDatetime: Date, limitTimeToResolve: string, spendHourHhmmss: string,
+    sla: string): string {
+
+    // SLA datetime
+    let slaDatetime: Date
+
+    // tooltip SLA detail
+    let tooltipSlaDetail: string;
+
+    let ticketStatus: { [key: number]: string; } = {
+      1: "Open",
+      2: "Assigned",
+      3: "Resolved",
+      4: "Closed",
+      5: "Cancel"
+    }
+
+    // if ticketStatusid === 4(Closed) or ticketStatusid === 5(Cancel) then slaDatetime = lastUpdateDatetime
+    // else slaDatetime = currentDatetime
+    slaDatetime = (ticketStatusid === 4 || ticketStatusid === 5) ? lastUpdateDatetime : currentDatetime
+
+    // ticketStatus[1]: "Open"
+    // ticketStatus[2]: "Assigned"
+    // ...
+    tooltipSlaDetail = "";
+    tooltipSlaDetail = tooltipSlaDetail + `- Status: <b>${ticketStatus[ticketStatusid]}</b>`
+    tooltipSlaDetail = tooltipSlaDetail + `<br>- From datetime: <b>${formatDate(createTime.toLocaleString(), "yyyy-MM-dd HH:mm:ss", "en-US")} </b>`
+    tooltipSlaDetail = tooltipSlaDetail + `<br>- To datetime: <b>${formatDate(slaDatetime.toLocaleString(), "yyyy-MM-dd HH:mm:ss", "en-US")} </b>`
+    tooltipSlaDetail = tooltipSlaDetail + `<br>- Limit time to resolve ticket: <b>${limitTimeToResolve}</b> hours`
+    tooltipSlaDetail = tooltipSlaDetail + `<br>- Spent hours(HH:mm:ss): <b>${spendHourHhmmss}</b>`
+    tooltipSlaDetail = tooltipSlaDetail + `<br>-> <b>SLA</b>: ${sla}`
+
+    return tooltipSlaDetail;
+  } // end of tooltipSlaDetail()
+
+  // display total of elements(ex: tickets, teams,...) is on the top-right of the table
+  displayTotalOfElements(totalOfElements: number, element: string): string {
+
+    return this.shareService.displayTotalOfElements(totalOfElements, element);
+
+  } // end of displayTotalOfElements()
+
   // count index for current page
   // ex:  page 1: ord 1 --> ord 5
   //      page 2: ord 6 --> ord 10 (not repeat: ord 1 --> ord 5)
@@ -559,9 +627,20 @@ export class TicketListComponent {
       // let nth_element = (this.pageSize) * (this.currentPage - 1);
       let nth_element = this.shareService.countNthElement(this.pageSize, this.currentPage);
 
-      // get teams, total of teams and total of pages
-      // this.searchTickets(nth_element, this.searchTicket.value.searchTerm,
-      //   this.searchTicket.value.subject, this.searchTicket.value.ticketStatus);
+      // get tickets, total of tickets and total of pages
+      this.searchTickets(
+        this.userid,
+        nth_element,
+        this.searchTicket.value.searchTerm,
+        this.searchTicket.value.fromDate,
+        this.searchTicket.value.toDate,
+        this.searchTicket.value.categoryid,
+        this.searchTicket.value.priorityid,
+        this.searchTicket.value.creatorid,
+        this.searchTicket.value.teamid,
+        this.searchTicket.value.assigneeid,
+        this.searchTicket.value.sla,
+        this.searchTicket.value.ticketStatusid);
     }
 
   } // end of goPage()
@@ -583,9 +662,20 @@ export class TicketListComponent {
       // let nth_element = (this.pageSize) * (this.currentPage - 1);
       let nth_element = this.shareService.countNthElement(this.pageSize, this.currentPage);
 
-      // get teams, total of teams and total pages
-      // this.searchTickets(nth_element, this.searchTicket.value.searchTerm,
-      //   this.searchTicket.value.subject, this.searchTicket.value.ticketStatus);
+      // get tickets, total of tickets and total of pages
+      this.searchTickets(
+        this.userid,
+        nth_element,
+        this.searchTicket.value.searchTerm,
+        this.searchTicket.value.fromDate,
+        this.searchTicket.value.toDate,
+        this.searchTicket.value.categoryid,
+        this.searchTicket.value.priorityid,
+        this.searchTicket.value.creatorid,
+        this.searchTicket.value.teamid,
+        this.searchTicket.value.assigneeid,
+        this.searchTicket.value.sla,
+        this.searchTicket.value.ticketStatusid);
     }
 
   } // end of moveFirst()
@@ -602,9 +692,20 @@ export class TicketListComponent {
       // let nth_element = (this.pageSize) * (this.currentPage - 1);
       let nth_element = this.shareService.countNthElement(this.pageSize, this.currentPage);
 
-      // get teams, total of teams and total pages
-      // this.searchTickets(nth_element, this.searchTicket.value.searchTerm,
-      //   this.searchTicket.value.subject, this.searchTicket.value.ticketStatus);
+      // get tickets, total of tickets and total of pages
+      this.searchTickets(
+        this.userid,
+        nth_element,
+        this.searchTicket.value.searchTerm,
+        this.searchTicket.value.fromDate,
+        this.searchTicket.value.toDate,
+        this.searchTicket.value.categoryid,
+        this.searchTicket.value.priorityid,
+        this.searchTicket.value.creatorid,
+        this.searchTicket.value.teamid,
+        this.searchTicket.value.assigneeid,
+        this.searchTicket.value.sla,
+        this.searchTicket.value.ticketStatusid);
     }
 
   } // end of moveNext()
@@ -621,9 +722,20 @@ export class TicketListComponent {
       // let nth_element = (this.pageSize) * (this.currentPage - 1);
       let nth_element = this.shareService.countNthElement(this.pageSize, this.currentPage);
 
-      // get teams, total of teams and total pages
-      // this.searchTickets(nth_element, this.searchTicket.value.searchTerm,
-      //   this.searchTicket.value.subject, this.searchTicket.value.ticketStatus);
+      // get tickets, total of tickets and total of pages
+      this.searchTickets(
+        this.userid,
+        nth_element,
+        this.searchTicket.value.searchTerm,
+        this.searchTicket.value.fromDate,
+        this.searchTicket.value.toDate,
+        this.searchTicket.value.categoryid,
+        this.searchTicket.value.priorityid,
+        this.searchTicket.value.creatorid,
+        this.searchTicket.value.teamid,
+        this.searchTicket.value.assigneeid,
+        this.searchTicket.value.sla,
+        this.searchTicket.value.ticketStatusid);
     }
 
   } // end of movePrevious()
@@ -640,9 +752,20 @@ export class TicketListComponent {
       // let nth_element = (this.pageSize) * (this.currentPage - 1);
       let nth_element = this.shareService.countNthElement(this.pageSize, this.currentPage);
 
-      // get teams, total of teams and total pages
-      // this.searchTickets(nth_element, this.searchTicket.value.searchTerm,
-      //   this.searchTicket.value.subject, this.searchTicket.value.ticketStatus);
+      // get tickets, total of tickets and total of pages
+      this.searchTickets(
+        this.userid,
+        nth_element,
+        this.searchTicket.value.searchTerm,
+        this.searchTicket.value.fromDate,
+        this.searchTicket.value.toDate,
+        this.searchTicket.value.categoryid,
+        this.searchTicket.value.priorityid,
+        this.searchTicket.value.creatorid,
+        this.searchTicket.value.teamid,
+        this.searchTicket.value.assigneeid,
+        this.searchTicket.value.sla,
+        this.searchTicket.value.ticketStatusid);
     }
   } // end of moveLast()
 
@@ -659,7 +782,6 @@ export class TicketListComponent {
       this.notificationService.notify(notificationType, 'An error occurred. Please try again.');
     }
   }
-
 
   // unsubscribe all subscriptions from this component "TeamListComponent"
   ngOnDestroy(): void {

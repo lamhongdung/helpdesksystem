@@ -6,7 +6,7 @@ drop procedure if exists sp_searchTickets;
 delimiter $$
 
 -- -----------------------------------------------------
--- Get tickets list by user id, user role and based on search criterias.
+-- Get tickets list by user id, user role and based on search criteria.
 --
 -- This store procedure is used for tickets table in 
 -- the "Ticket list" screen.
@@ -15,7 +15,7 @@ delimiter $$
 --
 -- 	- in_userid: user id
 --
--- 	- in_pageNumber: page number
+-- 	- in_pageNumber: page number(0,1,2,...)
 -- 	- in_pageSize: page size(default = 5)
 --
 -- 	- in_searchTerm: search term
@@ -24,10 +24,15 @@ delimiter $$
 -- 	- in_categoryid: category id
 -- 	- in_priorityid: priority id
 -- 	- in_creatorid: creator id(who created ticket)
--- 	- in_teamid: team id(a team has multi supporters)
+-- 	- in_teamid: team id(a team may has multi supporters)
 -- 	- in_assignee: assignee is person will resove the ticket
 -- 	- in_sla: service level agreement. Check whether a certain ticket is on time or late
--- 	- in_ticketStatusid: ticket status id(has 5 status: Open, Cancel, Assigned, Resolved, Closed)
+-- 	- in_ticketStatusid: ticket status id: has 5 status: 
+--      - 1: Open
+--      - 2: Assigned
+--      - 3: Resolved
+--      - 4: Closed
+--      - 5: Cancel
 -- -----------------------------------------------------
 
 -- customer: 	call sp_searchTickets(1,0,5,'','2023-01-01','2023-03-26','0','0','1','0','0','','0')
@@ -36,7 +41,7 @@ delimiter $$
 -- customer: 	call sp_searchTickets(1,0,5,'','2023-01-01','2023-03-26','1','0','1','0','0','','0')
 
 -- supporter: 	call sp_searchTickets(10,0,5,'','2023-01-01','2023-03-26','0','0','1','0','0','','0')
--- admin: 		call sp_searchTickets(20,0,5,'','2023-01-01','2023-03-26','0','0','1','0','0','','0')
+-- admin: 		call sp_searchTickets(20,0,5,'','2023-01-01','2023-03-29','0','0','0','0','0','','0')
 
 create procedure sp_searchTickets(	in_userid int, 
 									in_pageNumber int, 
@@ -55,14 +60,15 @@ create procedure sp_searchTickets(	in_userid int,
 begin
 
 -- create temporary "searchTicketTbl" table contains tickets by user id, user role
--- and by search criterias
+-- and by search criteria
 call sp_searchTicketTbl(in_userid, in_searchTerm, in_fromDate, in_toDate, in_categoryid,
 						in_priorityid, in_creatorid, in_teamid, in_assigneeid, in_sla,
 						in_ticketStatusid);
     
 select a.*
 from searchTicketTbl a
-order by a.createDatetime desc, a.ticketid asc
+order by a.createDatetime desc, a.assigneeName asc, a.subject asc
+-- only 1 page with 5 elements
 limit in_pageNumber, in_pageSize;
 
 end $$
@@ -73,7 +79,7 @@ end $$
 -- customer: 	call sp_searchTickets(1,0,5,'','2023-01-01','2023-03-26','1','0','1','0','0','','0')
 
 -- supporter: 	call sp_searchTickets(10,0,5,'','2023-01-01','2023-03-26','0','0','1','0','0','','0')
--- admin: 		call sp_searchTickets(20,0,5,'','2023-01-01','2023-03-26','0','0','1','0','0','','0')
+-- admin: 		call sp_searchTickets(20,0,5,'','2023-01-01','2023-03-29','0','0','0','0','0','','0')
 
 delimiter ;
 

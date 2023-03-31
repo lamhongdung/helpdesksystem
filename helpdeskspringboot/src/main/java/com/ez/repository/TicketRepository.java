@@ -17,12 +17,12 @@ public interface TicketRepository extends JpaRepository<Ticket, Long> {
 
     // get all ticket status.
     // 5 status + 1 dummy status:
-    //  - All(dummy)
-    //  - Open
-    //  - Cancel
-    //  - Assigned
-    //  - Resolved
-    //  - Closed
+    //  - 0: All(dummy)
+    //  - 1: Open
+    //  - 2: Assigned
+    //  - 3: Resolved
+    //  - 4: Closed
+    //  - 5: Cancel
     @Query(value = "" +
             " select 0 as id, 'All' as description " +
             "  " +
@@ -111,7 +111,7 @@ public interface TicketRepository extends JpaRepository<Ticket, Long> {
                                                       @Param("ticketStatusid") String ticketStatusid
                                                       );
 
-    // calculate total of tickets for pagination
+    // calculate total of tickets based on search criteria for pagination
     @Query(value = "" +
             " {call sp_getTotalOfTickets( " +
             "                             :userid, " +

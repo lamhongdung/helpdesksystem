@@ -44,8 +44,8 @@ public class Ticket implements Serializable {
     //    @Min(value = 1, message = "Value of assignee id must be greater than or equal to 1")
     private long assigneeid;
 
-    @Pattern(regexp = "^[1-5]", message = "Value of the ticket status must be 1 of 5 following values: Open, Cancel, Assigned, Resolved, Closed")
-    private String ticketStatusid;
+    @Pattern(regexp = "^[1-5]", message = "Value of the ticket status must be 1 of 5 following values: Open, Assigned, Resolved, Closed, Cancel")
+    private long ticketStatusid;
 
     @Size(min = 1, message = "Please input the content")
     private String content;

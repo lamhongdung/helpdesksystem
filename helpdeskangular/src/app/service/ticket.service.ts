@@ -2,7 +2,6 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { DropdownResponse } from '../entity/DropdownResponse';
-import { Ticket } from '../entity/Ticket';
 import { TicketResponse } from '../entity/TicketResponse';
 import { ShareService } from './share.service';
 
@@ -15,8 +14,9 @@ export class TicketService {
     private shareService: ShareService
   ) { }
 
-  // get tickets by userid(and by user role), by page and based on the search criteria
-  searchTickets(userid: number,
+  // search tickets by userid(and by user role), by page and based on the search criteria
+  searchTickets(
+    userid: number,
     pageNumber: number,
     searchTerm: string,
     fromDate: string,
@@ -29,12 +29,12 @@ export class TicketService {
     sla: string,
     ticketStatusid: string): Observable<TicketResponse[]> {
 
-    // ex: url = http://localhost:8080/team-search?pageNumber=0&pageSize=5&searchTerm=""&assignmentMethod=""&status=""
-    // return this.http.get<TeamResponse[]>(
-    //   `${this.host}/team-search?pageNumber=${pageNumber}&pageSize=${this.pageSize}&searchTerm=${searchTerm}&assignmentMethod=${assignmentMethod}&status=${status}`
+    // ex: url = http://localhost:8080/ticket-search?userid=1&pageNumber=0&pageSize=5&searchTerm=&fromDate=2023-01-01&toDate=2023-03-26&categoryid=0&priorityid=0&creatorid=1&teamid=0&assigneeid=0&sla=&ticketStatusid=0
+    // return this.http.get<TicketResponse[]>(
+    //   `${this.shareService.host}/ticket-search?userid=${userid}&pageNumber=${pageNumber}&pageSize=${this.shareService.pageSize}&searchTerm=${searchTerm}&fromDate=${fromDate}&toDate=${toDate}&categoryid=${categoryid}&priorityid=${priorityid}&creatorid=${creatorid}&teamid=${teamid}&assigneeid=${assigneeid}&sla=${sla}&ticketStatusid=${ticketStatusid}`
     // )
 
-    console.log(`${this.shareService.host}/ticket-search?userid=${userid}&pageNumber=${pageNumber}&pageSize=${this.shareService.pageSize}&searchTerm=${searchTerm}&fromDate=${fromDate}&toDate=${toDate}&categoryid=${categoryid}&priorityid=${priorityid}&creatorid=${creatorid}&teamid=${teamid}&assigneeid=${assigneeid}&sla=${sla}&ticketStatusid=${ticketStatusid}`);
+    // console.log(`${this.shareService.host}/ticket-search?userid=${userid}&pageNumber=${pageNumber}&pageSize=${this.shareService.pageSize}&searchTerm=${searchTerm}&fromDate=${fromDate}&toDate=${toDate}&categoryid=${categoryid}&priorityid=${priorityid}&creatorid=${creatorid}&teamid=${teamid}&assigneeid=${assigneeid}&sla=${sla}&ticketStatusid=${ticketStatusid}`);
     return this.http.get<TicketResponse[]>(
       
       `${this.shareService.host}/ticket-search?userid=${userid}&pageNumber=${pageNumber}&pageSize=${this.shareService.pageSize}&searchTerm=${searchTerm}&fromDate=${fromDate}&toDate=${toDate}&categoryid=${categoryid}&priorityid=${priorityid}&creatorid=${creatorid}&teamid=${teamid}&assigneeid=${assigneeid}&sla=${sla}&ticketStatusid=${ticketStatusid}`
@@ -43,7 +43,9 @@ export class TicketService {
   } // end of searchTickets()
 
   // calculate total of tickets for counting total pages
-  getTotalOfTickets(userid: number, searchTerm: string,
+  getTotalOfTickets(
+    userid: number, 
+    searchTerm: string,
     fromDate: string,
     toDate: string,
     categoryid: string,
@@ -54,7 +56,7 @@ export class TicketService {
     sla: string,
     ticketStatusid: string): Observable<number> {
 
-    // ex: http://localhost:8080/total-of-teams?searchTerm=""&assignmentMethod=""&status=""
+    // ex: http://localhost:8080/total-of-tickets?userid=20&searchTerm=&fromDate=2023-01-01&toDate=2023-03-28&categoryid=0&priorityid=0&creatorid=0&teamid=0&assigneeid=0&sla=&ticketStatusid=0
     return this.http.get<number>(
       `${this.shareService.host}/total-of-tickets?userid=${userid}&searchTerm=${searchTerm}&fromDate=${fromDate}&toDate=${toDate}&categoryid=${categoryid}&priorityid=${priorityid}&creatorid=${creatorid}&teamid=${teamid}&assigneeid=${assigneeid}&sla=${sla}&ticketStatusid=${ticketStatusid}`
     );
@@ -64,8 +66,6 @@ export class TicketService {
   // get all ticket status
   getAllTicketStatus(): Observable<DropdownResponse[]> {
 
-    // console.log(`${this.host}/active-supporters`);
-
     return this.http.get<DropdownResponse[]>(
       `${this.shareService.host}/ticketStatus`
     )
@@ -73,8 +73,6 @@ export class TicketService {
 
   // get creators by userid(and by user role)
   getCreatorsByUserid(userid: number): Observable<DropdownResponse[]> {
-
-    // console.log(`${this.host}/active-supporters`);
 
     return this.http.get<DropdownResponse[]>(
       `${this.shareService.host}/creators?userid=${userid}`
@@ -84,8 +82,6 @@ export class TicketService {
   // get teams by userid(and by user role)
   getTeamsByUserid(userid: number): Observable<DropdownResponse[]> {
 
-    // console.log(`${this.host}/active-supporters`);
-
     return this.http.get<DropdownResponse[]>(
       `${this.shareService.host}/teams?userid=${userid}`
     )
@@ -93,8 +89,6 @@ export class TicketService {
 
   // get assignees by userid(and by user role)
   getAssigneesByUserid(userid: number): Observable<DropdownResponse[]> {
-
-    // console.log(`${this.host}/active-supporters`);
 
     return this.http.get<DropdownResponse[]>(
       `${this.shareService.host}/assignees?userid=${userid}`
@@ -104,8 +98,6 @@ export class TicketService {
   // get categories by userid(and by user role)
   getCategoriesByUserid(userid: number): Observable<DropdownResponse[]> {
 
-    // console.log(`${this.host}/active-supporters`);
-
     return this.http.get<DropdownResponse[]>(
       `${this.shareService.host}/categories?userid=${userid}`
     )
@@ -113,8 +105,6 @@ export class TicketService {
 
   // get priorities by userid(and by user role)
   getPrioritiesByUserid(userid: number): Observable<DropdownResponse[]> {
-
-    // console.log(`${this.host}/active-supporters`);
 
     return this.http.get<DropdownResponse[]>(
       `${this.shareService.host}/priorities?userid=${userid}`
@@ -138,4 +128,4 @@ export class TicketService {
   //    return this.http.get<Team>(`${this.host}/team-list/${id}`);
   //  }
 
-} // end of class Ticketervice
+} // end of class TicketService

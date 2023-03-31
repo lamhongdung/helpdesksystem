@@ -1,4 +1,4 @@
-{{searchTicket.value | json}}
+<!-- {{searchTicket.value | json}} -->
 
 <!-- the "Ticket list" screen -->
 <div class="container-fluid">
@@ -41,7 +41,7 @@
           <label for="fromDate">From date</label>
 
           <!-- date -->
-          <!-- default value = the first day of current month(ex: 2023-03-01) -->
+          <!-- default value = the first day of current year(ex: 2023-01-01) -->
           <input id="fromDate" class="form-control" type="date" formControlName="fromDate"
             [tooltip]="tooltips.get('fromDate')" theme="light" placement="top">
         </div>
@@ -90,7 +90,7 @@
 
         <!-- creator -->
 
-        <!-- if roles is ("supporter" or "admin") then display it  -->
+        <!-- if role is ("supporter" or "admin") then display it  -->
         <!-- else(role = "customer") hide it  -->
         <div class="col-md-2 form-group" style="text-align: center"
           *ngIf="(loggedInRole === 'ROLE_SUPPORTER' || loggedInRole === 'ROLE_ADMIN')">
@@ -182,7 +182,8 @@
           <!-- break a line(insert a line break(carriage-return)) -->
           <br>
           <!-- "Search button" -->
-          <button id="searchButton" class="btn btn-primary mt-xl-2" style="width: 100%"
+          <!-- mt-md-2: align the "Search" button with other controls in horizontal -->
+          <button id="searchButton" class="btn btn-primary mt-md-2" style="width: 100%"
             [tooltip]="tooltips.get('searchButton')" theme="light" placement="bottom">
             <i class="fa fa-search"></i>
             Search
@@ -217,16 +218,8 @@
       </div>
 
       <!-- display the number of tickets found. -->
-
-      <!-- if (number of tickets) > 1 -->
-      <div *ngIf="totalOfTickets > 1" tooltip="Number of tickets found" theme="light" placement="left">There are
-        {{totalOfTickets}} tickets</div>
-      <!-- if (number of tickets) == 1 -->
-      <div *ngIf="totalOfTickets == 1" tooltip="Number of tickets found" theme="light" placement="left">There is
-        {{totalOfTickets}} ticket</div>
-      <!-- there is no team -->
-      <div *ngIf="totalOfTickets == 0" tooltip="There is no team found" theme="light" placement="left">There is no
-        ticket</div>
+      <div tooltip="Number of tickets found" theme="light" placement="left">
+        {{this.displayTotalOfElements(totalOfTickets, "ticket")}}</div>
 
     </div>
   </div>
@@ -262,7 +255,7 @@
 
           <!-- assignee name -->
           <th scope="col"
-            tooltip="- The person is assigned to resolve the ticket.<br>- Blank means ticket has not yet assigned to supporter"
+            tooltip="- The person is assigned to resolve the ticket.<br>- Blank means ticket has not yet assigned to any supporter"
             theme="light" placement="bottom">
             Assignee name</th>
 
@@ -286,12 +279,10 @@
           <!-- last update date time -->
           <th scope="col"
             tooltip="- Last update date time.<br>- Last update date time the ticket is updated its status."
-            theme="light" placement="bottom">Last update date time</th>
+            theme="light" placement="bottom">Last update datetime</th>
 
           <!-- Spend hours -->
-          <th scope="col"
-            tooltip="- SLA(service level agreement).<br>- On time: ticket is on time.<br>- Late: ticket is late."
-            theme="light" placement="bottom">Spend hours</th>
+          <th scope="col" tooltip="- Spent hours in hh:mm:ss format" theme="light" placement="bottom">Spend hours</th>
 
           <!-- creator phone -->
           <!-- if role is 'supporter' or 'admin' then display 'Creator phone' -->
@@ -337,7 +328,7 @@
           <!-- column: Subject -->
           <!-- navigate to the "/ticket-view/{ticketid}" when user clicks on the table(except the column "Action") -->
           <td style="text-align: left" class="pointer-link" (click)="viewTicket(ticket.ticketid)"
-            [tooltip]="ticket.content" theme="dark" placement="bottom">{{ticket.subject}}
+            [tooltip]="ticket.content" theme="light" placement="bottom">{{ticket.subject}}
           </td>
 
           <!-- column: Creator Name. -->
@@ -353,6 +344,7 @@
 
           <!-- column: Create time -->
           <!-- navigate to the "/ticket-view/{ticketid}" when user clicks on the table(except the column "Action") -->
+          <!-- HH:mm:ss : in 24 hours format -->
           <td class="pointer-link" (click)="viewTicket(ticket.ticketid)">
             {{ticket.createDatetime | date:'yyyy-MM-dd HH:mm:ss'}}</td>
 
@@ -362,29 +354,35 @@
 
           <!-- the "Edit" & "Add comment" button -->
           <td class="text-center">
-            <!-- only display the "Edit" button if user role is "supporter" or "admin" -->
-            <a class="btn btn-primary mr-1" [routerLink]="['/ticket-edit', ticket.ticketid]" [tooltip]="'Edit team'"
-              theme="light" placement="right"
+            <!-- only display the "Edit" button if user role is "supporter" or "admin". -->
+            <!-- if ticketStatusid is '4'(Closed) or '5'(Cancel) then disables these 2 buttons -->
+            <a [ngClass]="(ticket.ticketStatusid===4 || ticket.ticketStatusid===5)? 'disabled-link btn btn-secondary mr-1' : 'btn btn-primary mr-1'"
+              [routerLink]="['/ticket-edit', ticket.ticketid]" [tooltip]="'Edit team'" theme="light" placement="bottom"
               *ngIf="(loggedInRole === 'ROLE_SUPPORTER' || loggedInRole === 'ROLE_ADMIN')"><i
                 class="fa fa-edit"></i></a>
 
-            <!-- all authenticated users can see the "Add comment" button -->
-            <a class="btn btn-info mr-1" [routerLink]="['/comment-add', ticket.ticketid]" tooltip="Add comment"
-              theme="light" placement="right"><i class="fa fa-plus"></i></a>
+            <!-- all authenticated users can see the "Add comment" button. -->
+            <!-- if ticketStatusid is '4'(Closed) or '5'(Cancel) then disables these 2 buttons -->
+            <a [ngClass]="(ticket.ticketStatusid===4 || ticket.ticketStatusid===5)? 'disabled-link btn btn-secondary mr-1' : 'btn btn-info mr-1'"
+              [routerLink]="['/comment-add', ticket.ticketid]" tooltip="Add comment" theme="light" placement="bottom"><i
+                class="fa fa-plus"></i></a>
           </td>
 
           <!-- column: SLA -->
           <!-- navigate to the "/ticket-view/{ticketid}" when user clicks on the table(except the column "Action") -->
-          <td class="pointer-link" (click)="viewTicket(ticket.ticketid)">{{ticket.sla}}</td>
+          <td class="pointer-link" (click)="viewTicket(ticket.ticketid)"
+            [tooltip]="tooltipSlaDetail(ticket.ticketStatusid,ticket.createDatetime,ticket.lastUpdateDatetime,ticket.currentDatetime,ticket.resolveIn,ticket.spendHourHhmmss,ticket.sla)"
+            theme="light">
+            {{ticket.sla}}</td>
 
           <!-- column: Last update datetime -->
           <!-- navigate to the "/ticket-view/{ticketid}" when user clicks on the table(except the column "Action") -->
           <td class="pointer-link" (click)="viewTicket(ticket.ticketid)">
             {{ticket.lastUpdateDatetime | date:'yyyy-MM-dd HH:mm:ss'}}</td>
 
-          <!-- column: spend hour -->
+          <!-- column: spend hours in format 'HH:mm:ss' -->
           <!-- navigate to the "/ticket-view/{ticketid}" when user clicks on the table(except the column "Action") -->
-          <td class="pointer-link" (click)="viewTicket(ticket.ticketid)">{{ticket.spendHour | number : '1.2-2'}}</td>
+          <td class="pointer-link" (click)="viewTicket(ticket.ticketid)">{{ticket.spendHourHhmmss}}</td>
 
           <!-- column: Creator phone. -->
           <!-- if role is 'supporter' or 'admin' then display 'Creator phone'. -->
