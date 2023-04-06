@@ -15,6 +15,7 @@ import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.multipart.MaxUploadSizeExceededException;
 
 import javax.persistence.EntityNotFoundException;
 import javax.persistence.NoResultException;
@@ -79,6 +80,14 @@ public class ExceptionHandling implements ErrorController {
     @ExceptionHandler(NewPasswordIsNotMatchException.class)
     public ResponseEntity<HttpResponse> newPasswordIsNotMatchException(NewPasswordIsNotMatchException exception) {
         return createHttpResponse(BAD_REQUEST, exception.getMessage());
+    }
+
+    @ExceptionHandler(MaxUploadSizeExceededException.class)
+    public ResponseEntity<HttpResponse> handleMaxSizeException(MaxUploadSizeExceededException exception) {
+//        return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(new ResponseMessage("File too large!"));
+
+//        return createHttpResponse(EXPECTATION_FAILED, exception.getMessage());
+        return createHttpResponse(EXPECTATION_FAILED, "File too large!");
     }
 
     @ExceptionHandler(EntityNotFoundException.class)

@@ -98,7 +98,7 @@ export class EditProfileComponent implements OnInit {
         firstName: ['', [Validators.required, Validators.maxLength(50)]],
         lastName: ['', [Validators.required, Validators.maxLength(50)]],
         phone: ['', [Validators.required, Validators.pattern("^[0-9]{10}$")]],
-        address: ['', [Validators.maxLength(300)]],
+        address: ['', [Validators.maxLength(100)]],
       }
     );
 

@@ -1,8 +1,11 @@
+import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { Priority } from 'src/app/entity/Priority';
+import { NotificationType } from 'src/app/enum/NotificationType.enum';
+import { NotificationService } from 'src/app/service/notification.service';
 import { PriorityService } from 'src/app/service/priority.service';
 import { ShareService } from 'src/app/service/share.service';
 
@@ -63,7 +66,9 @@ export class PriorityListComponent implements OnInit {
   constructor(private priorityService: PriorityService,
     private shareService: ShareService,
     private formBuilder: FormBuilder,
-    private router: Router) { }
+    private router: Router,
+    private notificationService: NotificationService
+  ) { }
 
   // this method ngOnInit() is run right after the contructor
   ngOnInit(): void {
@@ -134,13 +139,23 @@ export class PriorityListComponent implements OnInit {
       this.priorityService.getTotalOfPriorities(searchTerm, resolveInOpt, resolveIn, status)
 
         .subscribe({
+          // get total of priorites successful
           next: (data: number) => {
             // total of priorities
             this.totalOfPriorities = data;
             // total pages
             this.totalPages = this.shareService.calculateTotalPages(this.totalOfPriorities, this.pageSize);
 
+          },
+
+          // get total of priorites failure
+          error: (errorResponse: HttpErrorResponse) => {
+
+            // show the error message to user
+            this.sendNotification(NotificationType.ERROR, errorResponse.error.message);
+
           }
+
         })
     )
   } // end of searchPriorities()
@@ -268,6 +283,22 @@ export class PriorityListComponent implements OnInit {
   // view specific priority by id
   viewPriority(id: number) {
     this.router.navigate(['/priority-view', id]);
+  }
+
+  // display total of elements is on the top-right of the table
+  displayTotalOfElements(totalOfElements: number, singleElement: string, pluralElement: string): string {
+
+    return this.shareService.displayTotalOfElements(totalOfElements, singleElement, pluralElement);
+
+  } // end of displayTotalOfElements()
+
+  // send notification to user
+  private sendNotification(notificationType: NotificationType, message: string): void {
+    if (message) {
+      this.notificationService.notify(notificationType, message);
+    } else {
+      this.notificationService.notify(notificationType, 'An error occurred. Please try again.');
+    }
   }
 
   // unsubscribe all subscriptions from this component "PriorityListComponent"

@@ -4,10 +4,8 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { ActivatedRoute, ParamMap } from '@angular/router';
 import { IDropdownSettings } from 'ng-multiselect-dropdown';
 import { Subscription } from 'rxjs';
-// import { Calendar } from 'src/app/entity/Calendar';
 import { Team } from 'src/app/entity/Team';
 import { NotificationType } from 'src/app/enum/NotificationType.enum';
-// import { CalendarService } from 'src/app/service/calendar.service';
 import { NotificationService } from 'src/app/service/notification.service';
 import { TeamService } from 'src/app/service/team.service';
 
@@ -51,36 +49,11 @@ export class TeamViewComponent {
   supporterSetting: IDropdownSettings;
 
   constructor(private teamService: TeamService,
-    // private calendarService: CalendarService,
     private notificationService: NotificationService,
     private formBuilder: FormBuilder,
     private activatedRoute: ActivatedRoute
   ) {
 
-
-    // this.subscriptions.push(
-
-    //   // get all(active + inactive) calendars
-    //   this.calendarService.getAllCalendars("")
-
-    //     .subscribe({
-
-    //       // get all(active + inactive) calendars successful
-    //       next: (data: Calendar[]) => {
-
-    //         // all(active + inactive) calendars
-    //         this.calendars = data;
-    //       },
-
-    //       // there are some errors when get all(active + inactive) calendars
-    //       error: (errorResponse: HttpErrorResponse) => {
-
-    //         // show the error message to user
-    //         this.sendNotification(NotificationType.ERROR, errorResponse.error.message);
-
-    //       }
-    //     })
-    // ); // end of this.subscriptions.push()
   } // end of constructor()
 
   // initial values

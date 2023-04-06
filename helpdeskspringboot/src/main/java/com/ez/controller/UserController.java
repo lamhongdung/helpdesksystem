@@ -34,8 +34,6 @@ public class UserController extends ExceptionHandling {
 
     private Logger LOGGER = LoggerFactory.getLogger(getClass());
 
-    public static final String RESET_PASSWORD_MESSAGE = "Password was reset and sent to: ";
-
     @Autowired
     private AuthenticationManager authenticationManager;
 
@@ -214,7 +212,7 @@ public class UserController extends ExceptionHandling {
         // reset password
         userService.resetPassword(resetPassword.getEmail());
 
-        return response(OK, RESET_PASSWORD_MESSAGE + resetPassword.getEmail());
+        return response(OK, RESET_PASSWORD + resetPassword.getEmail());
     }
 
     @PutMapping("/change-password")

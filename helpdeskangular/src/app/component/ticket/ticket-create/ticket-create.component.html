@@ -1,1 +1,242 @@
-<p>ticket-create works!</p>
+<div class="text-center">
+    <h3>Create ticket</h3>
+    <hr width="100%">
+</div>
+
+{{ticketForm.value | json}}
+
+<div class="container-fluid">
+
+    <!-- call createTicket() when user clicks the "Submit" button -->
+    <form [formGroup]="ticketForm" (ngSubmit)="createTicket()">
+
+        <div class="row">
+
+            <!-- the "Left" column -->
+            <div class="col-md-7">
+                <div class="container-fluid">
+
+                    <!-- Subject -->
+                    <div class="row mb-3">
+                        <!-- label -->
+                        <div class="col-2">
+                            <label class="col-form-label" for="subject">Subject<small
+                                    class="text-danger">*</small></label>
+                        </div>
+                        <!-- textbox -->
+                        <div class="col-10">
+                            <input class="form-control" type="text" formControlName="subject"
+                                placeholder="Subject. Cannot be longer than 60 characters." id="subject"
+                                tooltip="- Subject.<br>- Cannot be longer than 60 characters" theme="light"
+                                placement="top">
+                            <!-- error messages -->
+                            <div class="text-danger" *ngFor="let e of errorMessages.subject">
+                                <div *ngIf="ticketForm.get('subject').hasError(e.type) && 
+                                    (ticketForm.get('subject').dirty || ticketForm.get('subject').touched)">
+
+                                    <small>{{e.message}}</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Content -->
+                    <div class="row mb-3">
+                        <!-- label -->
+                        <div class="col-2">
+                            <label class="col-form-label" for="categoryid">Content<small
+                                    class="text-danger">*</small></label>
+                        </div>
+                        <!-- dropdown -->
+                        <div class="col-10" tooltip="Ticket content" theme="light" placement="left">
+                            <quill-editor [modules]="modules" [placeholder]="'Ticket body'"
+                                [styles]="{'height': '200px'}" formControlName="content">
+                            </quill-editor>
+                            <!-- error messages -->
+                            <div class="text-danger" *ngFor="let e of errorMessages.content">
+                                <div *ngIf="ticketForm.get('content').hasError(e.type) && 
+                                    (ticketForm.get('content').dirty || ticketForm.get('content').touched)">
+
+                                    <small>{{e.message}}</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- the "Right" column -->
+            <div class="col-md-5">
+                <div class="container-fluid">
+
+                    <!-- Team -->
+                    <div class="row mb-3">
+                        <!-- label -->
+                        <div class="col-3">
+                            <label class="col-form-label" for="teamid">Team<small class="text-danger">*</small></label>
+                        </div>
+                        <!-- dropdown -->
+                        <div class="col-9">
+                            <!-- default value = "ROLE_CUSTOMER"(is set in the typecript code) -->
+                            <select id="teamid" class="form-control" formControlName="teamid" tooltip="Team"
+                                theme="light" placement="top">
+                                <option value="ROLE_CUSTOMER">ROLE_CUSTOMER</option>
+                                <option value="ROLE_SUPPORTER">ROLE_SUPPORTER</option>
+                            </select>
+                            <!-- error messages -->
+                            <div class="text-danger" *ngFor="let e of errorMessages.teamid">
+                                <div *ngIf="ticketForm.get('teamid').hasError(e.type) && 
+                                    (ticketForm.get('teamid').dirty || ticketForm.get('teamid').touched)">
+
+                                    <small>{{e.message}}</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Category -->
+                    <div class="row mb-3">
+                        <!-- label -->
+                        <div class="col-3">
+                            <label class="col-form-label" for="categoryid">Category<small
+                                    class="text-danger">*</small></label>
+                        </div>
+                        <!-- dropdown -->
+                        <div class="col-9">
+                            <!-- default value = "ROLE_CUSTOMER"(is set in the typecript code) -->
+                            <select id="categoryid" class="form-control" formControlName="categoryid"
+                                placeholder="Category" tooltip="Category" theme="light" placement="top">
+                                <option value="ROLE_CUSTOMER">ROLE_CUSTOMER</option>
+                                <option value="ROLE_SUPPORTER">ROLE_SUPPORTER</option>
+                            </select>
+                            <!-- error messages -->
+                            <div class="text-danger" *ngFor="let e of errorMessages.categoryid">
+                                <div *ngIf="ticketForm.get('categoryid').hasError(e.type) && 
+                                    (ticketForm.get('categoryid').dirty || ticketForm.get('categoryid').touched)">
+
+                                    <small>{{e.message}}</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Priority -->
+                    <div class="row mb-3">
+                        <!-- label -->
+                        <div class="col-3">
+                            <label class="col-form-label" for="priorityid">Priority<small
+                                    class="text-danger">*</small></label>
+                        </div>
+                        <!-- dropdown -->
+                        <div class="col-9">
+                            <!-- default value = "ROLE_CUSTOMER"(is set in the typecript code) -->
+                            <select id="priorityid" class="form-control" formControlName="priorityid"
+                                placeholder="Priority" tooltip="Priority" theme="light" placement="top">
+                                <option value="ROLE_CUSTOMER">ROLE_CUSTOMER</option>
+                                <option value="ROLE_SUPPORTER">ROLE_SUPPORTER</option>
+                            </select>
+                            <!-- error messages -->
+                            <div class="text-danger" *ngFor="let e of errorMessages.priorityid">
+                                <div *ngIf="ticketForm.get('priorityid').hasError(e.type) && 
+                                    (ticketForm.get('priorityid').dirty || ticketForm.get('priorityid').touched)">
+
+                                    <small>{{e.message}}</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- File -->
+                    <!-- <div class="row mb-3"> -->
+                        <!-- label -->
+                        <!-- <div class="col-12"> -->
+                            <!-- (max file size <=10 MB) -->
+                            <!-- <label class="col-form-label" for="attachment">File(&lt;=10MB) </label> -->
+                        <!-- </div> -->
+                        
+                    <!-- </div> -->
+                    <div class="row mb-3">
+                        <!-- label -->
+                        <div class="col-3">
+                            <!-- (max file size <=10 MB) -->
+                            <label class="col-form-label" for="attachment">File(&lt;=10MB) </label>
+                        </div>
+                       
+                        <!-- dropdown -->
+                        <div class="col-9">
+                            <input type="file" ng2FileSelect [uploader]="uploader" (change)="changeFile($event)" style="width:100%"/>
+                            <div
+                                *ngIf="uploader.queue[lastIndex]?.progress > 0 && !isExceedMaxFileSize && fileUploadStatus === HAS_ATTACHED_FILE ">
+                                <!-- <div> -->
+                                <div class="progress-bar progress-bar-info" role="progressbar"
+                                    attr.aria-valuenow="{{ uploader.queue[lastIndex]?.progress }}" aria-valuemin="0"
+                                    aria-valuemax="100"
+                                    [ngStyle]="{ 'width': uploader.queue[lastIndex]?.progress + '%' }">
+                                    Uploaded {{ uploader.queue[lastIndex]?.progress}}%
+                                </div>
+
+                                <!-- <button class="btn btn-danger btn-sm" style="width: 65px">Remove</button> -->
+                                <div>
+                                    lastIndex: {{lastIndex}}
+                                </div>
+                            </div>
+                            <!-- error messages -->
+                            <div class="text-danger" *ngIf="isExceedMaxFileSize">
+                                <!-- <div *ngIf="ticketForm.get('priorityid').hasError(e.type) && 
+                                    (ticketForm.get('priorityid').dirty || ticketForm.get('priorityid').touched)"> -->
+
+                                <small>File is too big!</small>
+                                <!-- </div> -->
+                            </div>
+                            
+                        </div>
+                    </div>
+                    <!-- <div *ngIf="currentFile" class="progress my-3">
+                        <div class="progress-bar progress-bar-info progress-bar-striped" role="progressbar"
+                            attr.aria-valuenow="{{ progress }}" aria-valuemin="0" aria-valuemax="100"
+                            [ngStyle]="{ width: progress + '%' }">
+                            {{ progress }}%
+                        </div>
+                    </div>
+
+                    <div *ngIf="message" class="alert alert-secondary" role="alert">{{ message }}</div> -->
+
+                    <!-- <div class="card mt-3">
+                        <div class="card-header">List of Files</div>
+                        <ul class="list-group list-group-flush">
+                            <li *ngFor="let file of fileInfos | async" class="list-group-item">
+                                <a href="{{ file.url }}">{{ file.name }}</a>
+                            </li>
+                        </ul>
+                    </div> -->
+
+                </div>
+            </div>
+        </div>
+
+        <!-- buttons -->
+        <div class="d-flex justify-content-center">
+            <div>
+                <!-- the "Submit" button -->
+                <!-- if the form values are invalid then disable the "Submit" button -->
+                <button type="submit" [disabled]="ticketForm.invalid" style="width: 150px" class="btn btn-primary mr-2"
+                    tooltip="Submit ticket" theme="light" placement="bottom">
+
+                    <!-- display the spinner icon when press the "Submit" button -->
+                    <i *ngIf="showSpinner" class="fas fa-spinner fa-spin"></i>
+                    <!-- Change label button "Submit" to "Submiting.." -->
+                    <span *ngIf="showSpinner">Submiting...</span>
+                    <!-- after submit the ticket then re-changes button name to "Submit" -->
+                    <span *ngIf="!showSpinner">Submit</span>
+
+                </button>
+
+                <!-- the "Cancel" button -->
+                <!-- re-direct to the "ticket-list" page -->
+                <button class="btn btn-dark" routerLink="/ticket-list" style="width: 150px"
+                    tooltip="Cancel and go back to the 'Ticket list' screen" theme="light"
+                    placement="bottom">Cancel</button>
+            </div>
+        </div>
+    </form>
+</div>

@@ -13,6 +13,9 @@ export class ShareService {
   // number of teams per page(default = 5)
   pageSize = environment.pageSize;
 
+  // max file size
+  maxFileSize = environment.maxFileSize;
+
   // tooltips for pagination controls
   tooltips = new Map<string, string>(
     [
@@ -73,17 +76,17 @@ export class ShareService {
   }
 
   // display total of elements found.
-  // ex: "There are 5 tickets"
-  displayTotalOfElements(totalOfElements: number, element: string): string {
+  // ex: "There are 5 tickets", "There are 3 teams",...
+  displayTotalOfElements(totalOfElements: number, singleElement: string, pluralElement: string): string {
 
     if (totalOfElements > 1) {
-      return `There are ${totalOfElements} ${element}s`;
+      return `There are ${totalOfElements} ${pluralElement}`;
     }
     else if ((totalOfElements === 1)) {
-      return `There is ${totalOfElements} ${element}`;
+      return `There is ${totalOfElements} ${singleElement}`;
     }
     else {
-      return `There is no ${element}`;
+      return `There is no ${singleElement}`;
     }
 
   } // end of displayTotalOfElements()

@@ -1,8 +1,11 @@
+import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { Team } from 'src/app/entity/Team';
+import { NotificationType } from 'src/app/enum/NotificationType.enum';
+import { NotificationService } from 'src/app/service/notification.service';
 // import { TeamResponse } from 'src/app/entity/TeamResponse';
 import { ShareService } from 'src/app/service/share.service';
 import { TeamService } from 'src/app/service/team.service';
@@ -54,7 +57,9 @@ export class TeamListComponent implements OnInit {
   constructor(private teamService: TeamService,
     private shareService: ShareService,
     private formBuilder: FormBuilder,
-    private router: Router) { }
+    private router: Router,
+    private notificationService: NotificationService
+  ) { }
 
   // this method ngOnInit() is run right after the contructor
   ngOnInit(): void {
@@ -96,7 +101,7 @@ export class TeamListComponent implements OnInit {
 
         .subscribe({
 
-          // get team from database successful.
+          // get teams from database successful.
           // TeamResponse includes:
           //  - id
           //  - name
@@ -105,6 +110,14 @@ export class TeamListComponent implements OnInit {
           // next: (data: TeamResponse[]) => {
           next: (data: Team[]) => {
             return this.teams = data
+          },
+
+          // there are some errors when get teams
+          error: (errorResponse: HttpErrorResponse) => {
+
+            // show the error message to user
+            this.sendNotification(NotificationType.ERROR, errorResponse.error.message);
+
           }
 
         })
@@ -124,6 +137,14 @@ export class TeamListComponent implements OnInit {
             this.totalOfTeams = data;
             // total pages
             this.totalPages = this.shareService.calculateTotalPages(this.totalOfTeams, this.pageSize);
+          },
+
+          // there are some errors when get total of teams
+          error: (errorResponse: HttpErrorResponse) => {
+
+            // show the error message to user
+            this.sendNotification(NotificationType.ERROR, errorResponse.error.message);
+
           }
         })
     )
@@ -242,6 +263,22 @@ export class TeamListComponent implements OnInit {
   // view specific team by id
   viewTeam(id: number) {
     this.router.navigate(['/team-view', id]);
+  }
+
+  // display total of elements is on the top-right of the table
+  displayTotalOfElements(totalOfElements: number, singleElement: string, pluralElement: string): string {
+
+    return this.shareService.displayTotalOfElements(totalOfElements, singleElement, pluralElement);
+
+  } // end of displayTotalOfElements()
+
+  // send notification to user
+  private sendNotification(notificationType: NotificationType, message: string): void {
+    if (message) {
+      this.notificationService.notify(notificationType, message);
+    } else {
+      this.notificationService.notify(notificationType, 'An error occurred. Please try again.');
+    }
   }
 
   // unsubscribe all subscriptions from this component "TeamListComponent"

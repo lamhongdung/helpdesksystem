@@ -213,7 +213,7 @@ create table `ticket` (
 	`assigneeid` int default null,
 	`ticketStatusid` int not null,
 	`content` text not null,
-	`fileUrl` varchar(255) default null,
+	`customFilename` varchar(255) default null,
 	`createDatetime` datetime not null,
 	`lastUpdateDatetime` datetime not null,
     
@@ -233,7 +233,7 @@ create table `ticket` (
   
 ) engine=InnoDB auto_increment=101 default charset=utf8mb4 collate=utf8mb4_0900_ai_ci;
 
-insert into `ticket`(ticketid, subject, categoryid, creatorid, teamid, priorityid, assigneeid, ticketStatusid, content, fileUrl, createDatetime, lastUpdateDatetime) values 
+insert into `ticket`(ticketid, subject, categoryid, creatorid, teamid, priorityid, assigneeid, ticketStatusid, content, customFilename, createDatetime, lastUpdateDatetime) values 
 (1,'Laptop bị hỏng',1,1,1,1,10,3,'Laptop bị hỏng. Vui lòng thay laptop mới',null,'2023-03-18 08:30:00','2023-03-18 11:30:00'),
 (2,'Máy in bị hết mực',3,1,1,1,null,1,'Máy in bị hết mực. Đề nghị thay mực máy in',null,'2023-03-23 22:05:00','2023-03-23 22:05:00'),
 (3,'Không thể kết nối mạng wifi',4,2,1,2,11,3,'Không tìm thấy mạng wifi nên không thể kết nối internet qua wifi',null,'2023-03-26 11:18:00','2023-03-27 15:18:00'),
@@ -268,6 +268,24 @@ create table `comment` (
 insert into `comment`(ticketid, commentid, commentDescription, commenterid, commentDatetime) values 
 (1, 1, 'Sẽ thay laptop mới cho bạn', 10 , '2023-03-19 08:30:00'),
 (3, 2, 'Vui lòng khởi động lại laptop sau đó kết nối lại wifi', 11 , '2023-03-26 13:30:00');
+
+-- -----------------------------------------------------
+-- Table `fileStorage`
+-- -----------------------------------------------------
+
+drop table if exists `fileStorage`;
+
+create table `fileStorage` (
+
+	`id` int not null auto_increment,
+	`customFilename` varchar(255) not null,
+    `originalFilename` varchar(255) not null,
+	`fileType` varchar(255) not null,
+    
+	PRIMARY key (`id`),
+    unique (`customFilename`)
+      
+) engine=InnoDB default charset=utf8mb4 collate=utf8mb4_0900_ai_ci;
 
 
 

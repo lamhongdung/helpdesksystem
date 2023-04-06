@@ -86,16 +86,9 @@
       </div>
 
       <!-- display the number of users found -->
+      <div tooltip="Number of users found" theme="light" placement="left">
+        {{this.displayTotalOfElements(totalOfUsers, "user", "users")}}</div>
 
-      <!-- if (number of users) > 1 -->
-      <div *ngIf="totalOfUsers > 1" tooltip="Number of users found" theme="light" placement="left">There are
-        {{totalOfUsers}} users</div>
-      <!-- if (number of users) == 1 -->
-      <div *ngIf="totalOfUsers == 1" tooltip="Number of users found" theme="light" placement="left">There is
-        {{totalOfUsers}} user</div>
-      <!-- there is no user -->
-      <div *ngIf="totalOfUsers == 0" tooltip="There is no user found" theme="light" placement="left">There is no user
-      </div>
 
     </div>
 

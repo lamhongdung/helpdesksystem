@@ -1,7 +1,7 @@
 /* allow to scroll table in x-direction */
-div .scroll-x {
+/* div .scroll-x {
     overflow-x: scroll;
-}
+} */
 
 /*  disable hyper link of 2 buttons "Edit ticket" and "Add comment"
     if ticket status is "Closed" or "Add comment"

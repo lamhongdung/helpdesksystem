@@ -17,8 +17,10 @@ public class Constant {
     public static final String ACCESS_DENIED_MESSAGE = "You do not have permission to access this page";
     public static final String OPTIONS_HTTP_METHOD = "OPTIONS";
 
-    public static final String[] PUBLIC_URLS = { "/login", "/reset-password"};
+//    public static final String[] PUBLIC_URLS = { "/login", "/reset-password", "/files/**"};
 //    public static final String[] PUBLIC_URLS = { "**" };
+//    public static final String[] PUBLIC_URLS = { "/login", "/reset-password", "/api/files/**"};
+    public static final String[] PUBLIC_URLS = { "/login", "/reset-password","/download/**"};
 
     //
     // email constants
@@ -35,6 +37,11 @@ public class Constant {
     public static final String NO_USER_FOUND_BY_EMAIL = "No user found for email: ";
     public static final String NEW_PASSWORD_IS_NOT_MATCH = "New password is not match with Confirm new password. Please try again.";
     public static final String NO_USER_FOUND_BY_ID = "No user found for id: ";
+
+    //
+    // "Change password" constants
+    //
+    public static final String RESET_PASSWORD = "Password was reset and sent to: ";
 
     //
     // category constants
@@ -55,5 +62,6 @@ public class Constant {
     // team constants
     //
     public static final String NO_TEAM_FOUND_BY_ID = "No team found for id: ";
+
 
 }

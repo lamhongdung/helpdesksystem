@@ -40,7 +40,7 @@ public class User implements Serializable {
 
     @Pattern(regexp = "^[0-9]{10}$", message = "Phone number must be 10 digits length")
     private String phone;
-    @Size(max = 300, message = "Address cannot be longer than 300 characters")
+    @Size(max = 100, message = "Address cannot be longer than 100 characters")
     private String address;
 
     // ROLE_CUSTOMER, ROLE_SUPPORTER, ROLE_ADMIN

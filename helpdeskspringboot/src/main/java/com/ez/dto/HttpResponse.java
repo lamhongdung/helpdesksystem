@@ -1,18 +1,16 @@
 package com.ez.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.springframework.http.HttpStatus;
 
 import java.util.Date;
 
+@AllArgsConstructor
+@NoArgsConstructor
+@ToString
 @Getter
 @Setter
-@NoArgsConstructor
-@AllArgsConstructor
 public class HttpResponse {
 //    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "MM-dd-yyyy hh:mm:ss", timezone = "America/New_York")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "MM-dd-yyyy hh:mm:ss", timezone = "UTC")

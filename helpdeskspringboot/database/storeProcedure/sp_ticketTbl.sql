@@ -36,7 +36,7 @@ create temporary table ticketTbl(
 	`assigneeid` int default null,
 	`ticketStatusid` int,
 	`content` text,
-	`fileUrl` varchar(255) default null,
+	`customFilename` varchar(255) default null,
 	`createDatetime` datetime,
 	`lastUpdateDatetime` datetime
     

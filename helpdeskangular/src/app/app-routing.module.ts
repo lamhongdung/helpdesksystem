@@ -172,6 +172,13 @@ const routes: Routes = [
       roles: ['ROLE_CUSTOMER', 'ROLE_SUPPORTER', 'ROLE_ADMIN']
     }
   },
+  // download file
+  {
+    path: 'files/**', component: TicketCreateComponent, canActivate: [AuthGuard],
+    data: {
+      roles: ['ROLE_CUSTOMER', 'ROLE_SUPPORTER', 'ROLE_ADMIN']
+    }
+  },
   // // Calendar menu
   // {
   //   path: 'calendar-list', component: CalendarListComponent, canActivate: [AuthGuard],

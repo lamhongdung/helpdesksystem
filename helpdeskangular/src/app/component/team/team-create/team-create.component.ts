@@ -5,11 +5,8 @@ import { Router } from '@angular/router';
 import { IDropdownSettings } from 'ng-multiselect-dropdown';
 import { Subscription } from 'rxjs';
 import { DropdownResponse } from 'src/app/entity/DropdownResponse';
-// import { Calendar } from 'src/app/entity/Calendar';
-// import { Supporter } from 'src/app/entity/Supporter';
 import { Team } from 'src/app/entity/Team';
 import { NotificationType } from 'src/app/enum/NotificationType.enum';
-// import { CalendarService } from 'src/app/service/calendar.service';
 import { NotificationService } from 'src/app/service/notification.service';
 import { TeamService } from 'src/app/service/team.service';
 
@@ -62,33 +59,6 @@ export class TeamCreateComponent implements OnInit {
     // private calendarService: CalendarService,
     private formBuilder: FormBuilder,
     private notificationService: NotificationService) {
-
-    // this.subscriptions.push(
-
-    //   // get all active calendars
-    //   this.calendarService.getAllCalendars("Active")
-
-    //     .subscribe({
-
-    //       // get all active calendars successful
-    //       next: (data: Calendar[]) => {
-
-    //         // all active calendars
-    //         this.calendars = data;
-
-    //         // // assign the first value of the calendar to the 'calendarid' field
-    //         // this.teamForm.controls['calendarid'].setValue(this.calendars[0]?.id);
-    //       },
-
-    //       // there are some errors when get all active calendars
-    //       error: (errorResponse: HttpErrorResponse) => {
-
-    //         // show the error message to user
-    //         this.sendNotification(NotificationType.ERROR, errorResponse.error.message);
-
-    //       }
-    //     })
-    // );
 
   }
 

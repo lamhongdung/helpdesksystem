@@ -80,10 +80,10 @@ export class PriorityEditComponent implements OnInit {
         this.id = +params.get('id');
 
         // get priority by priority id
-        this.priorityService.findById(this.id).subscribe(
+        this.priorityService.findById(this.id).subscribe({
 
           // get priority from database
-          (data: Priority) => {
+          next: (data: Priority) => {
 
             this.priority = data;
 
@@ -93,11 +93,12 @@ export class PriorityEditComponent implements OnInit {
           },
 
           // there is error when get priority from database
-          (errorResponse: HttpErrorResponse) => {
+          error: (errorResponse: HttpErrorResponse) => {
             this.sendNotification(NotificationType.ERROR, errorResponse.error.message);
           }
-        );
-      }
+        });
+      },
+
     });
 
   } // end of ngOnInit()

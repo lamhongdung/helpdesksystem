@@ -78,16 +78,8 @@
       </div>
 
       <!-- display the number of categories found. -->
-
-      <!-- if (number of categories) > 1 -->
-      <div *ngIf="totalOfCategories > 1" tooltip="Number of categories found" theme="light" placement="left">There are
-        {{totalOfCategories}} categories</div>
-      <!-- if (number of categories) == 1 -->
-      <div *ngIf="totalOfCategories == 1" tooltip="Number of categories found" theme="light" placement="left">There is
-        {{totalOfCategories}} category</div>
-      <!-- there is no category -->
-      <div *ngIf="totalOfCategories == 0" tooltip="There is no category found" theme="light" placement="left">There is
-        no category</div>
+      <div tooltip="Number of categories found" theme="light" placement="left">
+        {{this.displayTotalOfElements(totalOfCategories, "category", "categories")}}</div>
 
     </div>
   </div>

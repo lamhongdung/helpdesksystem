@@ -1,9 +1,12 @@
+import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { Category } from 'src/app/entity/Category';
+import { NotificationType } from 'src/app/enum/NotificationType.enum';
 import { CategoryService } from 'src/app/service/category.service';
+import { NotificationService } from 'src/app/service/notification.service';
 import { ShareService } from 'src/app/service/share.service';
 
 @Component({
@@ -50,7 +53,9 @@ export class CategoryListComponent implements OnInit {
   constructor(private categoryService: CategoryService,
     private shareService: ShareService,
     private formBuilder: FormBuilder,
-    private router: Router) { }
+    private router: Router,
+    private notificationService: NotificationService
+  ) { }
 
   // this method ngOnInit() is run right after the contructor
   ngOnInit(): void {
@@ -86,8 +91,18 @@ export class CategoryListComponent implements OnInit {
       this.categoryService.searchCategories(pageNumber, searchTerm, status)
 
         .subscribe({
+
+          // get categories successful
           next: (data: Category[]) => {
             return this.categories = data
+          },
+
+          // there are some errors when get categories
+          error: (errorResponse: HttpErrorResponse) => {
+
+            // show the error message to user
+            this.sendNotification(NotificationType.ERROR, errorResponse.error.message);
+
           }
         })
     );
@@ -104,6 +119,14 @@ export class CategoryListComponent implements OnInit {
             this.totalOfCategories = data;
             // total pages
             this.totalPages = this.shareService.calculateTotalPages(this.totalOfCategories, this.pageSize);
+          },
+
+          // there are some errors when get total of categories
+          error: (errorResponse: HttpErrorResponse) => {
+
+            // show the error message to user
+            this.sendNotification(NotificationType.ERROR, errorResponse.error.message);
+
           }
         })
     )
@@ -217,6 +240,22 @@ export class CategoryListComponent implements OnInit {
   // view specific category by id
   viewCategory(id: number) {
     this.router.navigate(['/category-view', id]);
+  }
+
+  // display total of elements is on the top-right of the table
+  displayTotalOfElements(totalOfElements: number, singleElement: string, pluralElement: string): string {
+
+    return this.shareService.displayTotalOfElements(totalOfElements, singleElement, pluralElement);
+
+  } // end of displayTotalOfElements()
+
+  // send notification to user
+  private sendNotification(notificationType: NotificationType, message: string): void {
+    if (message) {
+      this.notificationService.notify(notificationType, message);
+    } else {
+      this.notificationService.notify(notificationType, 'An error occurred. Please try again.');
+    }
   }
 
   // unsubscribe all subscriptions from this component "CategoryListComponent"

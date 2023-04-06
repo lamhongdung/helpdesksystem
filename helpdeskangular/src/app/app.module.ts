@@ -38,6 +38,10 @@ import { NotificationService } from './service/notification.service';
 import { UserService } from './service/user.service';
 import { TicketViewComponent } from './component/ticket/ticket-view/ticket-view.component';
 import { TicketEditComponent } from './component/ticket/ticket-edit/ticket-edit.component';
+import { EditorModule, TINYMCE_SCRIPT_SRC } from '@tinymce/tinymce-angular';
+import { FileUploadModule } from 'ng2-file-upload';
+import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
+import { QuillModule } from 'ngx-quill';
 // import { CalendarEditComponent } from './component/calendar/calendar-edit/calendar-edit.component';
 // import { CalendarViewComponent } from './component/calendar/calendar-view/calendar-view.component';
 
@@ -66,10 +70,6 @@ import { TicketEditComponent } from './component/ticket/ticket-edit/ticket-edit.
     UserCreateComponent,
     UserEditComponent,
     UserListComponent,
-    // CalendarCreateComponent,
-    // CalendarListComponent,
-    // CalendarEditComponent,
-    // CalendarViewComponent
     UserViewComponent,
     TicketEditComponent,
     TicketViewComponent,
@@ -82,10 +82,15 @@ import { TicketEditComponent } from './component/ticket/ticket-edit/ticket-edit.
     HttpClientModule,
     NotificationModule,
     ReactiveFormsModule,
-    TooltipModule
+    TooltipModule,
+    EditorModule,
+    FileUploadModule,
+    CKEditorModule,
+    QuillModule.forRoot()
   ],
   providers: [NotificationService, AuthGuard, AuthService, UserService,
-    { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true }],
+    { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
+    { provide: TINYMCE_SCRIPT_SRC, useValue: 'tinymce/tinymce.min.js' }],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

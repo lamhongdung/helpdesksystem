@@ -21,8 +21,8 @@ export class Ticket {
         // content
         public content: string,
 
-        // file URL
-        public fileUrl: string,
+        // // customFilename = timestamp + userid + UUID + extension(ex: .jpg)
+        public customFilename: string,
         
         // date creates ticket
         public createDatetime: Date,

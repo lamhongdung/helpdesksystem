@@ -3,6 +3,8 @@
 @import 'https://use.fontawesome.com/releases/v5.8.1/css/all.css';
 /* @import "~angular-notifier/styles"; */
 @import "node_modules/angular-notifier/styles";
+@import '~quill/dist/quill.bubble.css';
+@import '~quill/dist/quill.snow.css';
 
 /* background color of the table header */
 .bg-table-header {
@@ -32,6 +34,7 @@ tbody tr:hover {
 .navbar .logo {
     margin-right: 30px;
 }
+
 
 
 /*@media (min-width: 768px) {*/

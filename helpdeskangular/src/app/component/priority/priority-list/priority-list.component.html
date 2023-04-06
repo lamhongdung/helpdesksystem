@@ -111,17 +111,9 @@
             </div>
 
             <!-- display the number of priorities found -->
+            <div tooltip="Number of priorities found" theme="light" placement="left">
+                {{this.displayTotalOfElements(totalOfPriorities, "priority", "priorities")}}</div>
 
-            <!-- if (number of priorities) > 1 -->
-            <div *ngIf="totalOfPriorities > 1" tooltip="Number of priorities found" theme="light" placement="left">There
-                are {{totalOfPriorities}} priorities</div>
-            <!-- if (number of priorities) == 1 -->
-            <div *ngIf="totalOfPriorities == 1" tooltip="Number of priorities found" theme="light" placement="left">
-                There is {{totalOfPriorities}} priority
-            </div>
-            <!-- there is no priority -->
-            <div *ngIf="totalOfPriorities == 0" tooltip="There is no priority found" theme="light" placement="left">
-                There is no priority</div>
         </div>
 
     </div>

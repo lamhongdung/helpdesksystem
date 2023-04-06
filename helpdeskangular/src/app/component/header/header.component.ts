@@ -52,6 +52,8 @@ export class HeaderComponent implements OnInit {
     }
   } // end of sendNotification()
 
+  // display brief profile at the top-right corner of the screen.
+  // ex: Admin: 20 - abc@xyz.com
   displayBriefProfile(userid: number, role: string, email: string): string {
 
     let briefProfile: string = "";

@@ -71,8 +71,8 @@ export class UserCreateComponent implements OnInit {
       // required and length must be 10 digits
       phone: ['', [Validators.required, Validators.pattern("^[0-9]{10}$")]],
 
-      // max length = 300 characters
-      address: ['', [Validators.maxLength(300)]],
+      // max length = 100 characters
+      address: ['', [Validators.maxLength(100)]],
 
       // initial value = 'ROLE_CUSTOMER'
       role: ['ROLE_CUSTOMER'],

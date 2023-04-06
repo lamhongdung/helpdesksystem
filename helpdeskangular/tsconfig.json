@@ -14,6 +14,11 @@
     // "noPropertyAccessFromIndexSignature": true,
     "noPropertyAccessFromIndexSignature": false,
     "noImplicitReturns": true,
+
+    // fix error of CKEditor 5.
+    // refer: https://stackoverflow.com/questions/62690188/error-could-not-find-a-declaration-file-for-module-ckeditor-ckeditor5-build-c
+    "noImplicitAny": false, 
+
     "noFallthroughCasesInSwitch": true,
     "sourceMap": true,
     "declaration": false,

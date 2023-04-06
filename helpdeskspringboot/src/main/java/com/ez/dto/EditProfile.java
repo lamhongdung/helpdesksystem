@@ -1,14 +1,12 @@
 package com.ez.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.validation.constraints.*;
 
 @AllArgsConstructor
 @NoArgsConstructor
+@ToString
 @Getter
 @Setter
 public class EditProfile {
@@ -28,7 +26,7 @@ public class EditProfile {
 
     @Pattern(regexp = "^[0-9]{10}$", message="Phone number must be 10 digits length")
     private String phone;
-    @Size(max = 300, message="Address cannot be longer than 300 characters")
+    @Size(max = 100, message="Address cannot be longer than 100 characters")
     private String address;
 
 }

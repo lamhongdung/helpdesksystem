@@ -1,8 +1,11 @@
+import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { User } from 'src/app/entity/User';
+import { NotificationType } from 'src/app/enum/NotificationType.enum';
+import { NotificationService } from 'src/app/service/notification.service';
 import { ShareService } from 'src/app/service/share.service';
 import { UserService } from 'src/app/service/user.service';
 
@@ -52,7 +55,9 @@ export class UserListComponent implements OnInit {
   constructor(private userService: UserService,
     private shareService: ShareService,
     private formBuilder: FormBuilder,
-    private router: Router) { }
+    private router: Router,
+    private notificationService: NotificationService
+  ) { }
 
   // this method ngOnInit() is run right after the contructor
   ngOnInit(): void {
@@ -87,8 +92,18 @@ export class UserListComponent implements OnInit {
       // get users
       this.userService.searchUsers(pageNumber, searchTerm, role, status)
         .subscribe({
+
+          // get users successful
           next: (data: User[]) => {
             return this.users = data
+          },
+
+          // there are some errors when get users
+          error: (errorResponse: HttpErrorResponse) => {
+
+            // show the error message to user
+            this.sendNotification(NotificationType.ERROR, errorResponse.error.message);
+
           }
         })
     );
@@ -99,11 +114,21 @@ export class UserListComponent implements OnInit {
       // get total of users and total pages
       this.userService.getTotalOfUsers(searchTerm, role, status)
         .subscribe({
+
+          // get total of users successful
           next: (data: number) => {
             // total of users
             this.totalOfUsers = data;
             // total of pages
             this.totalPages = this.shareService.calculateTotalPages(this.totalOfUsers, this.pageSize);
+          },
+
+          // there are some errors when get users
+          error: (errorResponse: HttpErrorResponse) => {
+
+            // show the error message to user
+            this.sendNotification(NotificationType.ERROR, errorResponse.error.message);
+
           }
         })
     )
@@ -228,6 +253,23 @@ export class UserListComponent implements OnInit {
   viewUser(id: number) {
     this.router.navigate(['/user-view', id]);
   }
+
+  // display total of elements is on the top-right of the table
+  displayTotalOfElements(totalOfElements: number, singleElement: string, pluralElement: string): string {
+
+    return this.shareService.displayTotalOfElements(totalOfElements, singleElement, pluralElement);
+
+  } // end of displayTotalOfElements()
+
+  // send notification to user
+  private sendNotification(notificationType: NotificationType, message: string): void {
+    if (message) {
+      this.notificationService.notify(notificationType, message);
+    } else {
+      this.notificationService.notify(notificationType, 'An error occurred. Please try again.');
+    }
+  }
+
 
   // unsubscribe all subscriptions from this component "UserComponent"
   ngOnDestroy(): void {

@@ -98,16 +98,8 @@
       </div>
 
       <!-- display the number of teams found. -->
-
-      <!-- if (number of teams) > 1 -->
-      <div *ngIf="totalOfTeams > 1" tooltip="Number of teams found" theme="light" placement="left">There are
-        {{totalOfTeams}} teams</div>
-      <!-- if (number of teams) == 1 -->
-      <div *ngIf="totalOfTeams == 1" tooltip="Number of teams found" theme="light" placement="left">There is
-        {{totalOfTeams}} team</div>
-      <!-- there is no team -->
-      <div *ngIf="totalOfTeams == 0" tooltip="There is no team found" theme="light" placement="left">There is no team
-      </div>
+      <div tooltip="Number of teams found" theme="light" placement="left">
+        {{this.displayTotalOfElements(totalOfTeams, "team", "teams")}}</div>
 
     </div>
   </div>

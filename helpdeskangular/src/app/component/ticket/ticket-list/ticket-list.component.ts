@@ -599,13 +599,6 @@ export class TicketListComponent {
     return tooltipSlaDetail;
   } // end of tooltipSlaDetail()
 
-  // display total of elements(ex: tickets, teams,...) is on the top-right of the table
-  displayTotalOfElements(totalOfElements: number, element: string): string {
-
-    return this.shareService.displayTotalOfElements(totalOfElements, element);
-
-  } // end of displayTotalOfElements()
-
   // count index for current page
   // ex:  page 1: ord 1 --> ord 5
   //      page 2: ord 6 --> ord 10 (not repeat: ord 1 --> ord 5)
@@ -773,6 +766,13 @@ export class TicketListComponent {
   viewTicket(id: number) {
     this.router.navigate(['/ticket-view', id]);
   }
+
+  // display total of elements is on the top-right of the table
+  displayTotalOfElements(totalOfElements: number, singleElement: string, pluralElement: string): string {
+
+    return this.shareService.displayTotalOfElements(totalOfElements, singleElement, pluralElement);
+
+  } // end of displayTotalOfElements()
 
   // send notification to user
   private sendNotification(notificationType: NotificationType, message: string): void {

@@ -1,7 +1,9 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { environment } from 'src/environments/environment';
 import { DropdownResponse } from '../entity/DropdownResponse';
+import { Ticket } from '../entity/Ticket';
 import { TicketResponse } from '../entity/TicketResponse';
 import { ShareService } from './share.service';
 
@@ -9,6 +11,14 @@ import { ShareService } from './share.service';
   providedIn: 'root'
 })
 export class TicketService {
+
+  // 'http://localhost:8080'
+  host = environment.apiUrl;
+
+  // number of teams per page(default = 5)
+  pageSize = environment.pageSize;
+
+  
 
   constructor(private http: HttpClient,
     private shareService: ShareService
@@ -29,14 +39,9 @@ export class TicketService {
     sla: string,
     ticketStatusid: string): Observable<TicketResponse[]> {
 
-    // ex: url = http://localhost:8080/ticket-search?userid=1&pageNumber=0&pageSize=5&searchTerm=&fromDate=2023-01-01&toDate=2023-03-26&categoryid=0&priorityid=0&creatorid=1&teamid=0&assigneeid=0&sla=&ticketStatusid=0
-    // return this.http.get<TicketResponse[]>(
-    //   `${this.shareService.host}/ticket-search?userid=${userid}&pageNumber=${pageNumber}&pageSize=${this.shareService.pageSize}&searchTerm=${searchTerm}&fromDate=${fromDate}&toDate=${toDate}&categoryid=${categoryid}&priorityid=${priorityid}&creatorid=${creatorid}&teamid=${teamid}&assigneeid=${assigneeid}&sla=${sla}&ticketStatusid=${ticketStatusid}`
-    // )
-
     // console.log(`${this.shareService.host}/ticket-search?userid=${userid}&pageNumber=${pageNumber}&pageSize=${this.shareService.pageSize}&searchTerm=${searchTerm}&fromDate=${fromDate}&toDate=${toDate}&categoryid=${categoryid}&priorityid=${priorityid}&creatorid=${creatorid}&teamid=${teamid}&assigneeid=${assigneeid}&sla=${sla}&ticketStatusid=${ticketStatusid}`);
     return this.http.get<TicketResponse[]>(
-      
+
       `${this.shareService.host}/ticket-search?userid=${userid}&pageNumber=${pageNumber}&pageSize=${this.shareService.pageSize}&searchTerm=${searchTerm}&fromDate=${fromDate}&toDate=${toDate}&categoryid=${categoryid}&priorityid=${priorityid}&creatorid=${creatorid}&teamid=${teamid}&assigneeid=${assigneeid}&sla=${sla}&ticketStatusid=${ticketStatusid}`
     )
 
@@ -44,7 +49,7 @@ export class TicketService {
 
   // calculate total of tickets for counting total pages
   getTotalOfTickets(
-    userid: number, 
+    userid: number,
     searchTerm: string,
     fromDate: string,
     toDate: string,
@@ -113,10 +118,10 @@ export class TicketService {
 
 
 
-  //  // create a new team
-  //  public createTeam(team: Team): Observable<Team> {
-  //    return this.http.post<Team>(`${this.host}/team-create`, team);
-  //  }
+  // create a new team
+  public createTicket(ticket: Ticket): Observable<Ticket> {
+    return this.http.post<Ticket>(`${this.host}/ticket-create`, ticket);
+  }
 
   //  // edit an existing team
   //  public editTeam(team: Team): Observable<Team> {
