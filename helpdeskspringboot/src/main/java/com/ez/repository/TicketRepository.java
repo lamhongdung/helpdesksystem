@@ -51,6 +51,24 @@ public interface TicketRepository extends JpaRepository<Ticket, Long> {
             , nativeQuery = true)
     public List<DropdownResponse> getTeamsByUserid(@Param("userid")  int userid);
 
+    // get all active teams.
+    // notes:
+    // interface DropdownResponse contains 2 fields:
+    //  - id: getId()
+    //  - description: getDescription()
+    @Query(value = "" +
+            " select a.id as id, " + // team id
+            "        concat(a.id, ' - ', a.name, ' - ', " +
+            "                   case a.assignmentmethod " +
+            "                       when 'A' then 'Auto' " +
+            "                       else 'Manual' " +
+            "                   end " +
+            "               ) as description " +
+            " from team a " +
+            " where a.status = 'Active' "
+            , nativeQuery = true)
+    public List<DropdownResponse> getAllActiveTeams();
+
     // get assignees by userid(and by user role).
     // notes:
     // interface DropdownResponse contains 2 fields:
@@ -69,6 +87,19 @@ public interface TicketRepository extends JpaRepository<Ticket, Long> {
             , nativeQuery = true)
     public List<DropdownResponse> getCategoriesByUserid(@Param("userid")  int userid);
 
+    // get all active categories.
+    // notes:
+    // interface DropdownResponse contains 2 fields:
+    //  - id: getId()
+    //  - description: getDescription()
+    @Query(value = "" +
+            " select a.id as id, " + // category id
+            "        concat(a.id, ' - ', a.name) as description " +
+            " from category a " +
+            " where a.status = 'Active' "
+            , nativeQuery = true)
+    public List<DropdownResponse> getAllActiveCategories();
+
     // get priorities by userid(and by user role).
     // notes:
     // interface DropdownResponse contains 2 fields:
@@ -77,6 +108,19 @@ public interface TicketRepository extends JpaRepository<Ticket, Long> {
     @Query(value = "{call sp_getPrioritiesByUserid(:userid)}"
             , nativeQuery = true)
     public List<DropdownResponse> getPrioritiesByUserid(@Param("userid")  int userid);
+
+    // get all active prorities.
+    // notes:
+    // interface DropdownResponse contains 2 fields:
+    //  - id: getId()
+    //  - description: getDescription()
+    @Query(value = "" +
+            " select a.id as id, " + // priority id
+            "        concat(a.id, ' - ', a.name, ' - ', a.resolveIn, ' hours') as description " +
+            " from priority a " +
+            " where a.status = 'Active' "
+            , nativeQuery = true)
+    public List<DropdownResponse> getAllActivePriorities();
 
     // get tickets by user id, user role, and based on search criteria
     @Query(value = "" +

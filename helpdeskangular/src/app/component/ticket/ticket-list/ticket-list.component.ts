@@ -173,7 +173,7 @@ export class TicketListComponent {
     this.loadTooltipPlaceholder();
 
     // initialize default values for all form controls
-    this.initializeControlValues();
+    this.loadDropdownValues();
 
     // assign tickets from database to the this.tickets variable, and get totalPages.
     // the second parameter(page) = 0: in MySQL 0 means the first page.
@@ -287,8 +287,8 @@ export class TicketListComponent {
     )
   } // end of searchTickets()
 
-  // initialize default values for all form controls
-  initializeControlValues() {
+  // initialize default values for all dropdown controls
+  loadDropdownValues() {
 
     // load categories by userid(and by user role) into the "Category" dropdown
     this.loadCategoriesByUserid(this.userid)
@@ -308,7 +308,7 @@ export class TicketListComponent {
     // load all ticket status into the "Status" dropdown
     this.loadAllTicketStatus()
 
-  } // end of initializeControlValues()
+  } // end of loadDropdownValues()
 
   // initialize values for "Ticket status".
   // 5 status + 1 dummy status:

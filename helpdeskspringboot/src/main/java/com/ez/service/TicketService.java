@@ -49,6 +49,14 @@ public class TicketService {
         return ticketRepository.getTeamsByUserid(userid);
     }
 
+    // get active teams
+    public List<DropdownResponse> getAllActiveTeams() {
+
+        LOGGER.info("Get all active teams)");
+
+        return ticketRepository.getAllActiveTeams();
+    }
+
     // get assignees by userid(and by user role).
     public List<DropdownResponse> getAssigneesByUserid(int userid) {
 
@@ -65,6 +73,14 @@ public class TicketService {
         return ticketRepository.getCategoriesByUserid(userid);
     }
 
+    // get active categories
+    public List<DropdownResponse> getAllActiveCategories() {
+
+        LOGGER.info("Get all active categories)");
+
+        return ticketRepository.getAllActiveCategories();
+    }
+
     // get priorities by userid(and by user role).
     public List<DropdownResponse> getPrioritiesByUserid(int userid) {
 
@@ -73,7 +89,15 @@ public class TicketService {
         return ticketRepository.getPrioritiesByUserid(userid);
     }
 
-    // get tickets by userid(and by user role).
+    // get active priorities
+    public List<DropdownResponse> getAllActivePriorities() {
+
+        LOGGER.info("Get all active priorities)");
+
+        return ticketRepository.getAllActivePriorities();
+    }
+
+    // search tickets by userid(and by user role).
     public List<TicketResponse> searchTickets(long userid, long pageNumber, long pageSize,
                                               String searchTerm, String fromDate, String toDate,
                                               String categoryid, String priorityid, String creatorid,

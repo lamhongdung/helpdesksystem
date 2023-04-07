@@ -1,7 +1,7 @@
 package com.ez.service;
 
 import com.ez.entity.FileStorage;
-import com.ez.repository.FileStorageRepository;
+import com.ez.repository.FileRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +21,7 @@ import java.util.UUID;
 import java.util.stream.Stream;
 
 @Service
-public class FileStorageService {
+public class FileService {
 
     private Logger LOGGER = LoggerFactory.getLogger(getClass());
 
@@ -31,7 +31,7 @@ public class FileStorageService {
     private String fileStorageLocation;
 
     @Autowired
-    private FileStorageRepository fileStorageRepository;
+    private FileRepository fileRepository;
 
     // save file to server local directory and
     // save file information to database
@@ -55,7 +55,7 @@ public class FileStorageService {
         fileExtension = StringUtils.getFilenameExtension(file.getOriginalFilename());
 
         // customFilename = yyyyMMddHHmmss + UUID + extension
-        // ex: customerFilename = 20230405141319_9188e7cd-feb3-4fe3-9084-92fad9c1f98d.jpg
+        // ex: customFilename = 20230405141319_9188e7cd-feb3-4fe3-9084-92fad9c1f98d.jpg
         customFilename = currentDatetime + "_" + UUID.randomUUID() + "." + fileExtension;
 
         // fileStorageLocation = "D:\\helpdesksystem\\fileStorage".
@@ -66,32 +66,18 @@ public class FileStorageService {
         // copy file to the folder "filePath" in server machine
         Files.copy(file.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
 
-        // save file info to database
+        // save file information to database
         FileStorage fileStorage = new FileStorage(customFilename, file.getOriginalFilename(), file.getContentType());
 
-        return fileStorageRepository.save(fileStorage);
+        return fileRepository.save(fileStorage);
 
     } // end of save()
 
-//    // save file to database
-//    public FileStorage save(MultipartFile file) throws IOException {
-//
-//        // ex: fileName = "abc.txt"
-//        String fileName = StringUtils.cleanPath(file.getOriginalFilename());
-//
-////        FileStorage fileStorage = new FileStorage(fileName, file.getContentType(), file.getBytes());
-//        FileStorage fileStorage = new FileStorage(fileName, file.getContentType(), null);
-//
-//
-////        StringUtils.
-//        return fileStorageRepository.save(fileStorage);
-//    }
-
     public FileStorage getFile(long id) {
-        return fileStorageRepository.findById(id).get();
+        return fileRepository.findById(id).get();
     }
 
     public Stream<FileStorage> getAllFiles() {
-        return fileStorageRepository.findAll().stream();
+        return fileRepository.findAll().stream();
     }
 }

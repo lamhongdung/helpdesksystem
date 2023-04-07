@@ -70,6 +70,18 @@ public class TicketController {
         return new ResponseEntity<>(teamsResponses, OK);
     }
 
+    // get all active teams
+    @GetMapping("/active-teams")
+    // all authenticated users can access this resource
+//    @PreAuthorize("hasAnyRole('ROLE_CUSTOMER','ROLE_SUPPORTER','ROLE_ADMIN')")
+    public ResponseEntity<List<DropdownResponse>> getAllActiveTeams() {
+
+        // get all active teams
+        List<DropdownResponse> teamsResponses = ticketService.getAllActiveTeams();
+
+        return new ResponseEntity<>(teamsResponses, OK);
+    }
+
     // get assignees by userid(and by user role)
     // for loading assignees in the "Assignee" dropdown control in the "Ticket list" screen
     @GetMapping("/assignees")
@@ -96,6 +108,18 @@ public class TicketController {
         return new ResponseEntity<>(categoryResponses, OK);
     }
 
+    // get all active categories
+    @GetMapping("/active-categories")
+    // all authenticated users can access this resource
+//    @PreAuthorize("hasAnyRole('ROLE_CUSTOMER','ROLE_SUPPORTER','ROLE_ADMIN')")
+    public ResponseEntity<List<DropdownResponse>> getAllActiveCategories() {
+
+        // get all active categories
+        List<DropdownResponse> categoriesResponses = ticketService.getAllActiveCategories();
+
+        return new ResponseEntity<>(categoriesResponses, OK);
+    }
+
     // get priorities by userid(and by user role)
     // for loading priorities in the "Priority" dropdown control in the "Ticket list" screen
     @GetMapping("/priorities")
@@ -107,6 +131,18 @@ public class TicketController {
         List<DropdownResponse> priorityResponses = ticketService.getPrioritiesByUserid(userid);
 
         return new ResponseEntity<>(priorityResponses, OK);
+    }
+
+    // get all active priorities
+    @GetMapping("/active-priorities")
+    // all authenticated users can access this resource
+//    @PreAuthorize("hasAnyRole('ROLE_CUSTOMER','ROLE_SUPPORTER','ROLE_ADMIN')")
+    public ResponseEntity<List<DropdownResponse>> getAllActivePriorities() {
+
+        // get all active priorities
+        List<DropdownResponse> prioritiesResponses = ticketService.getAllActivePriorities();
+
+        return new ResponseEntity<>(prioritiesResponses, OK);
     }
 
     // search tickets based on the search criteria

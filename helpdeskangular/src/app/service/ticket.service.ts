@@ -18,7 +18,7 @@ export class TicketService {
   // number of teams per page(default = 5)
   pageSize = environment.pageSize;
 
-  
+
 
   constructor(private http: HttpClient,
     private shareService: ShareService
@@ -84,11 +84,35 @@ export class TicketService {
     )
   }
 
+  // get categories by userid(and by user role)
+  getCategoriesByUserid(userid: number): Observable<DropdownResponse[]> {
+
+    return this.http.get<DropdownResponse[]>(
+      `${this.shareService.host}/categories?userid=${userid}`
+    )
+  }
+
+  // get all active categories
+  getAllActiveCategories(): Observable<DropdownResponse[]> {
+
+    return this.http.get<DropdownResponse[]>(
+      `${this.shareService.host}/active-categories`
+    )
+  }
+
   // get teams by userid(and by user role)
   getTeamsByUserid(userid: number): Observable<DropdownResponse[]> {
 
     return this.http.get<DropdownResponse[]>(
       `${this.shareService.host}/teams?userid=${userid}`
+    )
+  }
+
+  // get all active teams
+  getAllActiveTeams(): Observable<DropdownResponse[]> {
+
+    return this.http.get<DropdownResponse[]>(
+      `${this.shareService.host}/active-teams`
     )
   }
 
@@ -100,14 +124,6 @@ export class TicketService {
     )
   }
 
-  // get categories by userid(and by user role)
-  getCategoriesByUserid(userid: number): Observable<DropdownResponse[]> {
-
-    return this.http.get<DropdownResponse[]>(
-      `${this.shareService.host}/categories?userid=${userid}`
-    )
-  }
-
   // get priorities by userid(and by user role)
   getPrioritiesByUserid(userid: number): Observable<DropdownResponse[]> {
 
@@ -116,7 +132,13 @@ export class TicketService {
     )
   }
 
+  // get all active priorities
+  getAllActivePriorities(): Observable<DropdownResponse[]> {
 
+    return this.http.get<DropdownResponse[]>(
+      `${this.shareService.host}/active-priorities`
+    )
+  }
 
   // create a new team
   public createTicket(ticket: Ticket): Observable<Ticket> {

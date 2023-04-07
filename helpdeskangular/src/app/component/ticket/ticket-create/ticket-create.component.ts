@@ -12,6 +12,8 @@ import { AuthService } from 'src/app/service/auth.service';
 import { ShareService } from 'src/app/service/share.service';
 import { CustomHttpRespone } from 'src/app/entity/CustomHttpRespone';
 import { FileService } from 'src/app/service/file.service';
+import { Constant } from 'src/app/constant/constant';
+import { DropdownResponse } from 'src/app/entity/DropdownResponse';
 
 @Component({
   selector: 'app-ticket-create',
@@ -20,12 +22,10 @@ import { FileService } from 'src/app/service/file.service';
 })
 export class TicketCreateComponent {
 
-  //
-  // constants
-  //
-  NO_ATTACHED_FILE: number = 1;
-  HAS_ATTACHED_FILE: number = 2;
-
+  // has no attached file
+  NO_ATTACHED_FILE = Constant.NO_ATTACHED_FILE;
+  // has attached file
+  HAS_ATTACHED_FILE = Constant.HAS_ATTACHED_FILE;
 
   // allow display spinner icon or not
   // =true: allow to display spinner in the "Submit" button
@@ -38,6 +38,7 @@ export class TicketCreateComponent {
   ticketForm: FormGroup;
   ticket: Ticket;
 
+  // error messages
   errorMessages = {
     subject: [
       { type: 'required', message: 'Please input a subject' },
@@ -56,7 +57,6 @@ export class TicketCreateComponent {
       { type: 'required', message: 'Please select a priority' }
     ]
   };
-
 
   // toolbar for the "ngx-quills" rich text editor
   modules = {
@@ -83,32 +83,46 @@ export class TicketCreateComponent {
     ],
   }
 
-  // selectedFiles?: FileList;
-  // currentFile?: File;
-  // progress = 0;
-  // message = '';
+  // all active teams
+  teams: DropdownResponse[] = [];
 
-  // fileInfos?: Observable<any>;
+  // all active categories
+  categories: DropdownResponse[] = [];
+
+  // all active priorities
+  priorities: DropdownResponse[] = [];
+
 
   //
   // config for ng2-file-upload
   //
 
+  // allow to upload file up to 10MB
   maxFileSize: number = this.shareService.maxFileSize;
 
+  // actual file size in bytes
+  actualFileSize: number = 0;
+
+  // check an uploaded file exceeds maxFileSize or not?
   isExceedMaxFileSize: boolean = false;
 
-  // upload component from ng2-file-upload
+  // component from ng2-file-upload
   uploader: FileUploader;
 
-  fileUploadResponse: string;
+  // response result of uploading file
+  uploadResponse: string;
 
+  // last index of the valid upload file.
+  // last index of array uploader.queue.
   lastIndex: number;
 
-  fileUploadStatus: number;
+  // status of uploading file.
+  // posible values:
+  //  - NO_ATTACHED_FILE: has no attached file
+  //  - HAS_ATTACHED_FILE: has attached file
+  uploadStatus: number;
 
-  // isSelectedFile: boolean = false;
-
+  // header data need to send to server when uploading file
   headers = [
     { name: 'Accept', value: 'application/json' },
 
@@ -144,33 +158,48 @@ export class TicketCreateComponent {
       // required
       categoryid: ['', [Validators.required]],
       // required
-      priorityid: ['', [Validators.required]]
+      priorityid: ['', [Validators.required]],
+
+      // customFilename = timestamp + UUID + extension(ex: .jpg)
+      // ex: customFilename = "20230405143231_3ed7c8ea-114e-4c1f-a3d3-8e5a439e9aff.jpg"
+      customFilename: ['']
 
     });
 
     // auto upload file to server after user selects a file
     this.uploader = new FileUploader({
 
+      // upload file to this endpoint
       url: `${this.ticketService.host}/upload?file`,
+
       method: "POST",
+
       // auto upload file to server after user selects a file
       autoUpload: true,
-      isHTML5: true,
 
-      // removeAfterUpload: true,
+      isHTML5: true,
 
       headers: this.headers,
 
-      // max file size = 10 MB
+      // max file size = 10 MB.
+      // if fileSize > 10 MB then system will block file and will not upload the file to the system
       maxFileSize: this.maxFileSize
     });
 
-    this.fileUploadResponse = '';
+    // load posible values for dropdowns:
+    //  - teams
+    //  - categories
+    //  - priorities
+    this.loadDropdownValues();
 
-    this.uploader.response.subscribe(res => this.fileUploadResponse = res);
+    // upload response is a json string
+    this.uploadResponse = '';
 
+    // this.uploader.response.subscribe(res => this.uploadResponse = res);
+
+    // last index of the valid upload file.
+    // last index of array uploader.queue.
     this.lastIndex = this.uploader.queue.length > 0 ? this.uploader.queue.length - 1 : this.uploader.queue.length;
-    // this.isSelectedFile = true;
 
     // if there are errors when uploading file
     this.uploader.onErrorItem = (item, response, status, headers) => this.onErrorItem(item, response, status, headers);
@@ -178,135 +207,97 @@ export class TicketCreateComponent {
     // if upload file successful
     this.uploader.onSuccessItem = (item, response, status, headers) => this.onSuccessItem(item, response, status, headers);
 
+    // upload file in progress
     this.uploader.onProgressItem = (fileItem, progress) => this.onProgressItem(fileItem, progress);
-
-    // this.uploader.onProgressItem = (progress: any) => {
-    //   console.log('onProgressItem : ' + progress['progress']);
-    //   // this.changeDetector.detectChanges();
-    // };
-
-    // this.uploader.onBeforeUploadItem = (fileItem) => this.onBeforeUploadItem(fileItem);
 
   } // end of ngOnInit()
 
   // in case upload file success
   onSuccessItem(item: FileItem, response: string, status: number, headers: ParsedResponseHeaders): any {
-    // let data = JSON.parse(response); //success server response
-    let data = JSON.parse(this.fileUploadResponse); //success server response
-    console.log(this.fileUploadResponse);
-    console.log(data.message);
-    // this.uploader.clearQueue();
+
+    //success server response
+    let data = JSON.parse(response);
+
+    this.ticketForm.controls['customFilename'].setValue(data.customFilename);
 
   }
 
   // in case upload file failure
   onErrorItem(item: FileItem, response: string, status: number, headers: ParsedResponseHeaders): any {
-    // let error = JSON.parse(response); //error server response
-    // console.log(error);
-    // console.log(response);
-    console.log(this.fileUploadResponse);
+
+    // error server response
+
+    // let error = JSON.parse(response); 
+
   }
 
+  // upload file in progress
   onProgressItem(fileItem: FileItem, progress: any) {
-    console.log(this.uploader.progress);
+
+    // render progress bar.
+    // few old browser needs this command to render progress bar 
     this.changeDetector.detectChanges();
+
   }
 
-  // onAfterAddingFile(fileItem: FileItem): any {
-  //   console.log("onAfterAddingFile:");
-
-  // }
-
-  // onBeforeUploadItem(fileItem: FileItem): any {
-  //   console.log("onBeforeUploadItem:" + ((fileItem._file.size / 1024) / 1024) + " MB");
-
-  //   if (fileItem._file.size > this.maxFileSize) {
-  //     console.log("exceeds file size");
-  //   }
-  //   else {
-  //     console.log("file size is valid");
-  //   }
-
-  // }
-
-  // onWhenAddingFileFailed(item: FileLikeObject, filter: any, options: any): any {
-  //   console.log("onWhenAddingFileFailed");
-  // }
-
+  // fires when user changes file at the "Choose File" button
   changeFile(event: any) {
 
-    if (event.target.files[0] === undefined){
-      this.fileUploadStatus = this.NO_ATTACHED_FILE;
-    }else{
-      
-      this.fileUploadStatus = this.HAS_ATTACHED_FILE;
-    }
+    // if user presses the "Choose File" button but they did not select any file
+    if (event.target.files[0] === undefined) {
 
-    // this.uploader.progress = 0;
-    // this.uploader.clearQueue();
+      // has not attached file
+      this.uploadStatus = this.NO_ATTACHED_FILE;
+
+      // 
+      this.actualFileSize = 0
+
+      // has not exceeds maxFileSize
+      this.isExceedMaxFileSize = false;
+
+      this.ticketForm.controls['customFilename'].setValue("");
+
+
+    } else {
+
+      // has attached file
+      this.uploadStatus = this.HAS_ATTACHED_FILE;
+
+      // actual upload file size in bytes
+      this.actualFileSize = event.target.files[0]?.size;
+
+      // check if the uploaded file exceeds max allowed file size or not?
+      this.isExceedMaxFileSize = (event.target.files[0]?.size > this.maxFileSize);
+
+      if (this.isExceedMaxFileSize){
+        this.ticketForm.controls['customFilename'].setValue("");
+      }
+
+    } // end of changeFile()
+
+    // last index of the valid upload file.
+    // last index of array uploader.queue.
+    // note: there are 3 cases:
+    //  - press "Choose File" and press "Cancel" --> has not yet selected file
+    //  - choose a valid file(file size <= maxFileSize)
+    //  - choose an invalid file(file size > maxFileSize)
     this.lastIndex = this.uploader.queue.length > 0 ? this.uploader.queue.length - 1 : this.uploader.queue.length;
 
-    // console.log(event);
-    console.log(event.target.files[0]?.name);
-    console.log(event.target.files[0]?.size);
-    console.log(event.target.files[0]);
-    console.log("fileUploadStatus:" + this.fileUploadStatus);
-
-    this.isExceedMaxFileSize = (event.target.files[0]?.size > this.maxFileSize);
-
-    if (event.target.files[0]?.size > this.maxFileSize) {
-      console.log(event.target.files[0]?.size + " exceeds file size");
-      
-    }
-    else {
-      console.log("file size is valid");
-    }
-
-    console.log("------")
   }
 
+  // initialize default values for all dropdown controls
+  loadDropdownValues() {
 
+    // load all active teams into the "Team" dropdown
+    this.loadAllActiveTeams()
 
-  // selectFile(event: any): void {
-  //   this.selectedFiles = event.target.files;
-  // }
+    // load all active categories into the "Category" dropdown
+    this.loadAllActiveCategories();
 
-  // upload(): void {
-  //   this.progress = 0;
+    // load all acitve priorities into the "Priority" dropdown
+    this.loadAllActivePriorities()
 
-  //   if (this.selectedFiles) {
-  //     const file: File | null = this.selectedFiles.item(0);
-
-  //     if (file) {
-  //       this.currentFile = file;
-
-  //       this.fileService.upload(this.currentFile).subscribe({
-  //         next: (event: any) => {
-  //           if (event.type === HttpEventType.UploadProgress) {
-  //             this.progress = Math.round(100 * event.loaded / event.total);
-  //           } else if (event instanceof HttpResponse) {
-  //             this.message = event.body.message;
-  //             this.fileInfos = this.fileService.getFiles();
-  //           }
-  //         },
-  //         error: (err: any) => {
-  //           console.log(err);
-  //           this.progress = 0;
-
-  //           if (err.error && err.error.message) {
-  //             this.message = err.error.message;
-  //           } else {
-  //             this.message = 'Could not upload the file!';
-  //           }
-
-  //           this.currentFile = undefined;
-  //         }
-  //       });
-  //     }
-
-  //     this.selectedFiles = undefined;
-  //   }
-  // }
+  } // end of loadDropdownValues()
 
 
   // create ticket.
@@ -322,7 +313,7 @@ export class TicketCreateComponent {
       // create ticket
       this.ticketService.createTicket(this.ticketForm.value).subscribe({
 
-        // create user successful
+        // create ticket successful
         next: (data: Ticket) => {
 
           this.ticket = data;
@@ -333,11 +324,11 @@ export class TicketCreateComponent {
           // hide spinner(circle)
           this.showSpinner = false;
 
-          // navigate to the "user-list" page
+          // navigate to the "ticket-list" page
           this.router.navigateByUrl("/ticket-list");
         },
 
-        // create user failure(ex: email already existed,...)
+        // create ticket failure
         error: (errorResponse: HttpErrorResponse) => {
 
           // show the error message to user
@@ -349,7 +340,101 @@ export class TicketCreateComponent {
       })
     );
 
-  } // end of createUser()
+  } // end of createTicket()
+
+
+  // load all active teams
+  loadAllActiveTeams() {
+
+    // push into the subscriptions array to unsubscibe them easily later
+    this.subscriptions.push(
+
+      // get all active teams
+      this.ticketService.getAllActiveTeams()
+
+        .subscribe({
+
+          // get all active teams successful
+          next: (data: DropdownResponse[]) => {
+
+            // all active teams
+            this.teams = data;
+
+          },
+
+          // there are some errors when get teams
+          error: (errorResponse: HttpErrorResponse) => {
+
+            // show the error message to user
+            this.sendNotification(NotificationType.ERROR, errorResponse.error.message);
+
+          }
+        })
+    );
+
+  } // end of loadAllActiveTeams()
+
+  // load all active categories
+  loadAllActiveCategories() {
+
+    // push into the subscriptions array to unsubscibe them easily later
+    this.subscriptions.push(
+
+      // get all active categories
+      this.ticketService.getAllActiveCategories()
+
+        .subscribe({
+
+          // get all active categories successful
+          next: (data: DropdownResponse[]) => {
+
+            // all active categories
+            this.categories = data;
+
+          },
+
+          // there are some errors when get teams
+          error: (errorResponse: HttpErrorResponse) => {
+
+            // show the error message to user
+            this.sendNotification(NotificationType.ERROR, errorResponse.error.message);
+
+          }
+        })
+    );
+
+  } // end of loadAllActiveCategories()
+
+  // load all active priorities
+  loadAllActivePriorities() {
+
+    // push into the subscriptions array to unsubscibe them easily later
+    this.subscriptions.push(
+
+      // get all active priorities
+      this.ticketService.getAllActivePriorities()
+
+        .subscribe({
+
+          // get all active priorities successful
+          next: (data: DropdownResponse[]) => {
+
+            // all active priorities
+            this.priorities = data;
+
+          },
+
+          // there are some errors when get teams
+          error: (errorResponse: HttpErrorResponse) => {
+
+            // show the error message to user
+            this.sendNotification(NotificationType.ERROR, errorResponse.error.message);
+
+          }
+        })
+    );
+
+  } // end of loadAllActivePriorities()
 
   // send notification to user
   private sendNotification(notificationType: NotificationType, message: string): void {
@@ -360,9 +445,9 @@ export class TicketCreateComponent {
     }
   }
 
-  // unsubscribe all subscriptions from this component "UserComponent"
+  // unsubscribe all subscriptions from this component "TicketCreateComponent"
   ngOnDestroy(): void {
     this.subscriptions.forEach(sub => sub.unsubscribe());
   }
 
-} // end of the UserCreateComponent class
+} // end of the TicketCreateComponent class

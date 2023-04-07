@@ -13,7 +13,7 @@
         <div class="row">
 
             <!-- the "Left" column -->
-            <div class="col-md-7">
+            <div class="col-md-6">
                 <div class="container-fluid">
 
                     <!-- Subject -->
@@ -49,8 +49,9 @@
                         </div>
                         <!-- dropdown -->
                         <div class="col-10" tooltip="Ticket content" theme="light" placement="left">
+                            <!-- ngx-quill -->
                             <quill-editor [modules]="modules" [placeholder]="'Ticket body'"
-                                [styles]="{'height': '200px'}" formControlName="content">
+                                [styles]="{'height': '200px', 'width': '100%'}" formControlName="content">
                             </quill-editor>
                             <!-- error messages -->
                             <div class="text-danger" *ngFor="let e of errorMessages.content">
@@ -66,7 +67,7 @@
             </div>
 
             <!-- the "Right" column -->
-            <div class="col-md-5">
+            <div class="col-md-6">
                 <div class="container-fluid">
 
                     <!-- Team -->
@@ -77,11 +78,11 @@
                         </div>
                         <!-- dropdown -->
                         <div class="col-9">
-                            <!-- default value = "ROLE_CUSTOMER"(is set in the typecript code) -->
-                            <select id="teamid" class="form-control" formControlName="teamid" tooltip="Team"
-                                theme="light" placement="top">
-                                <option value="ROLE_CUSTOMER">ROLE_CUSTOMER</option>
-                                <option value="ROLE_SUPPORTER">ROLE_SUPPORTER</option>
+                            <select id="teamid" class="form-control" formControlName="teamid"
+                                tooltip="- Team.<br>- Values include: ID + name + Assignment method.<br>- Assignment method:<br>    + Auto: system will assign ticket to supporter automatically.<br>    + Manual: Suppoter assigns ticket to assignee(supporter) manually"
+                                theme="light" placement="left">
+                                <option *ngFor="let e of teams" [value]="e.id">
+                                    {{e.description}}</option>
                             </select>
                             <!-- error messages -->
                             <div class="text-danger" *ngFor="let e of errorMessages.teamid">
@@ -103,11 +104,11 @@
                         </div>
                         <!-- dropdown -->
                         <div class="col-9">
-                            <!-- default value = "ROLE_CUSTOMER"(is set in the typecript code) -->
                             <select id="categoryid" class="form-control" formControlName="categoryid"
-                                placeholder="Category" tooltip="Category" theme="light" placement="top">
-                                <option value="ROLE_CUSTOMER">ROLE_CUSTOMER</option>
-                                <option value="ROLE_SUPPORTER">ROLE_SUPPORTER</option>
+                                placeholder="Category" tooltip="- Category.<br>- Values include: ID + name."
+                                theme="light" placement="top">
+                                <option *ngFor="let e of categories" [value]="e.id">
+                                    {{e.description}}</option>
                             </select>
                             <!-- error messages -->
                             <div class="text-danger" *ngFor="let e of errorMessages.categoryid">
@@ -129,11 +130,11 @@
                         </div>
                         <!-- dropdown -->
                         <div class="col-9">
-                            <!-- default value = "ROLE_CUSTOMER"(is set in the typecript code) -->
                             <select id="priorityid" class="form-control" formControlName="priorityid"
-                                placeholder="Priority" tooltip="Priority" theme="light" placement="top">
-                                <option value="ROLE_CUSTOMER">ROLE_CUSTOMER</option>
-                                <option value="ROLE_SUPPORTER">ROLE_SUPPORTER</option>
+                                placeholder="Priority" tooltip="- Priority.<br>- Values include: ID + name + number of hours to resolve ticket."
+                                theme="light" placement="top">
+                                <option *ngFor="let e of priorities" [value]="e.id">
+                                    {{e.description}}</option>
                             </select>
                             <!-- error messages -->
                             <div class="text-danger" *ngFor="let e of errorMessages.priorityid">
@@ -146,70 +147,41 @@
                         </div>
                     </div>
 
-                    <!-- File -->
-                    <!-- <div class="row mb-3"> -->
-                        <!-- label -->
-                        <!-- <div class="col-12"> -->
-                            <!-- (max file size <=10 MB) -->
-                            <!-- <label class="col-form-label" for="attachment">File(&lt;=10MB) </label> -->
-                        <!-- </div> -->
-                        
-                    <!-- </div> -->
+                    <!-- file -->
                     <div class="row mb-3">
                         <!-- label -->
                         <div class="col-3">
                             <!-- (max file size <=10 MB) -->
-                            <label class="col-form-label" for="attachment">File(&lt;=10MB) </label>
+                            <label class="col-form-label" for="attachment">File(&lt;={{((maxFileSize/1024)/1024) |
+                                number: '.0-2'}} MB) </label>
                         </div>
-                       
+
                         <!-- dropdown -->
                         <div class="col-9">
-                            <input type="file" ng2FileSelect [uploader]="uploader" (change)="changeFile($event)" style="width:100%"/>
-                            <div
-                                *ngIf="uploader.queue[lastIndex]?.progress > 0 && !isExceedMaxFileSize && fileUploadStatus === HAS_ATTACHED_FILE ">
-                                <!-- <div> -->
+                            <input type="file" ng2FileSelect [uploader]="uploader" (change)="changeFile($event)"
+                                style="width:100%" />
+                            <!-- only display progress bar if (there is file to upload) and (file size is valid) and   -->
+                            <!-- file is uploading   -->
+                            <div *ngIf="uploadStatus === HAS_ATTACHED_FILE && !isExceedMaxFileSize &&
+                            uploader.queue[lastIndex]?.progress > 0 ">
+                                <!-- progress bar -->
                                 <div class="progress-bar progress-bar-info" role="progressbar"
                                     attr.aria-valuenow="{{ uploader.queue[lastIndex]?.progress }}" aria-valuemin="0"
                                     aria-valuemax="100"
                                     [ngStyle]="{ 'width': uploader.queue[lastIndex]?.progress + '%' }">
                                     Uploaded {{ uploader.queue[lastIndex]?.progress}}%
                                 </div>
-
-                                <!-- <button class="btn btn-danger btn-sm" style="width: 65px">Remove</button> -->
-                                <div>
-                                    lastIndex: {{lastIndex}}
-                                </div>
                             </div>
                             <!-- error messages -->
+                            <!-- if file size exceeds max allowed file size -->
                             <div class="text-danger" *ngIf="isExceedMaxFileSize">
-                                <!-- <div *ngIf="ticketForm.get('priorityid').hasError(e.type) && 
-                                    (ticketForm.get('priorityid').dirty || ticketForm.get('priorityid').touched)"> -->
-
-                                <small>File is too big!</small>
-                                <!-- </div> -->
+                                <small>File size is too large(={{((actualFileSize/1024)/1024) | number: '.0-2'}} MB).
+                                    This file will not be uploaded to server. Please choose a
+                                    file has its size &lt;= {{((maxFileSize/1024)/1024) |
+                                    number: '.0-2'}} MB. </small>
                             </div>
-                            
                         </div>
                     </div>
-                    <!-- <div *ngIf="currentFile" class="progress my-3">
-                        <div class="progress-bar progress-bar-info progress-bar-striped" role="progressbar"
-                            attr.aria-valuenow="{{ progress }}" aria-valuemin="0" aria-valuemax="100"
-                            [ngStyle]="{ width: progress + '%' }">
-                            {{ progress }}%
-                        </div>
-                    </div>
-
-                    <div *ngIf="message" class="alert alert-secondary" role="alert">{{ message }}</div> -->
-
-                    <!-- <div class="card mt-3">
-                        <div class="card-header">List of Files</div>
-                        <ul class="list-group list-group-flush">
-                            <li *ngFor="let file of fileInfos | async" class="list-group-item">
-                                <a href="{{ file.url }}">{{ file.name }}</a>
-                            </li>
-                        </ul>
-                    </div> -->
-
                 </div>
             </div>
         </div>
