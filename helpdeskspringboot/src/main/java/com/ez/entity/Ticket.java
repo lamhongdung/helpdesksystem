@@ -4,10 +4,7 @@ import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import javax.validation.constraints.*;
 import java.io.Serializable;
 import java.util.Date;
@@ -18,6 +15,7 @@ import java.util.Date;
 @Getter
 @Setter
 @Entity
+@Table(name = "ticket")
 public class Ticket implements Serializable {
 
     @Id
@@ -26,7 +24,7 @@ public class Ticket implements Serializable {
 //    @Min(value = 1, message = "Value of id must be greater than or equal to 1")
     private Long ticketid;
 
-    @Size(min = 1, message = "Please input the subject")
+    @Size(min = 1, message = "Please input a subject")
     private String subject;
 
     @Min(value = 1, message = "Value of category id must be greater than or equal to 1")
@@ -41,34 +39,43 @@ public class Ticket implements Serializable {
     @Min(value = 1, message = "Value of priority id must be greater than or equal to 1")
     private long priorityid;
 
-    //    @Min(value = 1, message = "Value of assignee id must be greater than or equal to 1")
+    // - assigneeid = null: if assignment method = 'M'(manual).
+    // - assigneeid = supporterid(userid): if assignment method = 'A'(Auto).
     private long assigneeid;
 
+    // - ticketStatusid = 1(Open): if assigneeid = null
+    // - ticketStatusid = 2(Assigned): if assigneeid = supporterid(userid)
     @Pattern(regexp = "^[1-5]", message = "Value of the ticket status must be 1 of 5 following values: Open, Assigned, Resolved, Closed, Cancel")
     private long ticketStatusid;
 
-    @Size(min = 1, message = "Please input the content")
+    @Size(min = 1, message = "Please input a content")
     private String content;
 
-//    @Size(min = 1, message = "Please input the content")
-    private String fileUrl;
+    // - customFilename = "": if user did not attach file.
+    // - customFilename = timestamp + UUID + extension(ex: .jpg): if user has attached file
+    // ex: customFilename = "20230405143231_3ed7c8ea-114e-4c1f-a3d3-8e5a439e9aff.jpg".
+    private String customFilename;
 
+    // ticket is created on this datetime
     @CreationTimestamp
     private Date createDatetime;
 
+    // last time ticket is updated
     @UpdateTimestamp
     private Date lastUpdateDatetime;
 
+    public Ticket(String subject, long categoryid, long creatorid, long teamid, long priorityid,
+                  long ticketStatusid, String content, String customFilename) {
 
+        this.subject = subject;
+        this.categoryid = categoryid;
+        this.creatorid = creatorid;
+        this.teamid = teamid;
+        this.priorityid = priorityid;
+        this.ticketStatusid = ticketStatusid;
+        this.content = content;
+        this.customFilename = customFilename;
 
-//
-//    //    public Team(String name, String assignmentMethod, long calendarid, String status) {
-//    public Team(String name, String assignmentMethod, String status) {
-//
-//        this.name = name;
-//        this.assignmentMethod = assignmentMethod;
-////        this.calendarid = calendarid;
-//        this.status = status;
-//
-//    }
+    }
+
 }

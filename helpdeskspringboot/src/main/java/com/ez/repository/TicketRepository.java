@@ -4,6 +4,7 @@ import com.ez.dto.DropdownResponse;
 import com.ez.dto.TicketResponse;
 import com.ez.entity.Ticket;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
@@ -182,5 +183,27 @@ public interface TicketRepository extends JpaRepository<Ticket, Long> {
                                   @Param("assigneeid") String assigneeid,
                                   @Param("sla") String sla,
                                   @Param("ticketStatusid") String ticketStatusid);
+
+    // save ticket into database
+    @Modifying
+    @Query(value = "" +
+            " {call sp_saveTicket( " +
+            "                             :creatorid, " +
+            "                             :subject, " +
+            "                             :content, " +
+            "                             :teamid, " +
+            "                             :categoryid, " +
+            "                             :priorityid, " +
+            "                             :customFilename " +
+            "                             )} "
+            , nativeQuery = true)
+    public void saveTicket(@Param("creatorid") long creatorid,
+                              @Param("subject") String subject,
+                              @Param("content") String content,
+                              @Param("teamid") long teamid,
+                              @Param("categoryid") long categoryid,
+                              @Param("priorityid") long priorityid,
+                              @Param("customFilename") String customFilename);
+
 
 }

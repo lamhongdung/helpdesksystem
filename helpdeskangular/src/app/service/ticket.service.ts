@@ -6,6 +6,7 @@ import { DropdownResponse } from '../entity/DropdownResponse';
 import { Ticket } from '../entity/Ticket';
 import { TicketResponse } from '../entity/TicketResponse';
 import { ShareService } from './share.service';
+import { CustomHttpRespone } from '../entity/CustomHttpRespone';
 
 @Injectable({
   providedIn: 'root'
@@ -141,8 +142,8 @@ export class TicketService {
   }
 
   // create a new team
-  public createTicket(ticket: Ticket): Observable<Ticket> {
-    return this.http.post<Ticket>(`${this.host}/ticket-create`, ticket);
+  public createTicket(ticket: Ticket): Observable<CustomHttpRespone> {
+    return this.http.post<CustomHttpRespone>(`${this.host}/ticket-create`, ticket);
   }
 
   //  // edit an existing team

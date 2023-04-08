@@ -3,7 +3,7 @@
     <hr width="100%">
 </div>
 
-{{ticketForm.value | json}}
+<!-- {{ticketForm.value | json}} -->
 
 <div class="container-fluid">
 
@@ -131,7 +131,8 @@
                         <!-- dropdown -->
                         <div class="col-9">
                             <select id="priorityid" class="form-control" formControlName="priorityid"
-                                placeholder="Priority" tooltip="- Priority.<br>- Values include: ID + name + number of hours to resolve ticket."
+                                placeholder="Priority"
+                                tooltip="- Priority.<br>- Values include: ID + name + number of hours to resolve ticket."
                                 theme="light" placement="top">
                                 <option *ngFor="let e of priorities" [value]="e.id">
                                     {{e.description}}</option>
@@ -156,14 +157,20 @@
                                 number: '.0-2'}} MB) </label>
                         </div>
 
-                        <!-- dropdown -->
+                        <!--  -->
                         <div class="col-9">
+
+                            <!-- Choose File -->
                             <input type="file" ng2FileSelect [uploader]="uploader" (change)="changeFile($event)"
                                 style="width:100%" />
+                                
                             <!-- only display progress bar if (there is file to upload) and (file size is valid) and   -->
                             <!-- file is uploading   -->
-                            <div *ngIf="uploadStatus === HAS_ATTACHED_FILE && !isExceedMaxFileSize &&
-                            uploader.queue[lastIndex]?.progress > 0 ">
+
+                            <!-- <div *ngIf="uploadStatus === HAS_ATTACHED_FILE && !isExceedMaxFileSize &&
+                            uploader.queue[lastIndex]?.progress > 0 "> -->
+                            <div *ngIf="ticketForm.get('hasAttachedFile').value && !isExceedMaxFileSize &&
+                                uploader.queue[lastIndex]?.progress> 0">
                                 <!-- progress bar -->
                                 <div class="progress-bar progress-bar-info" role="progressbar"
                                     attr.aria-valuenow="{{ uploader.queue[lastIndex]?.progress }}" aria-valuemin="0"
@@ -175,10 +182,25 @@
                             <!-- error messages -->
                             <!-- if file size exceeds max allowed file size -->
                             <div class="text-danger" *ngIf="isExceedMaxFileSize">
-                                <small>File size is too large(={{((actualFileSize/1024)/1024) | number: '.0-2'}} MB).
+                                <small>File size is too large(={{((actualFileSize/1024)/1024) | number: '.0-2'}}
+                                    MB).
                                     This file will not be uploaded to server. Please choose a
                                     file has its size &lt;= {{((maxFileSize/1024)/1024) |
                                     number: '.0-2'}} MB. </small>
+                            </div>
+
+                            <!--  -->
+                            <!-- hidden fields -->
+                            <!--  -->
+
+                            <!-- these 2 fields help to disable "Submit" button while the upload file is in progress(not yet completed)  -->
+                            <div>
+                                <!-- check whether user attachs file or not -->
+                                <input type="checkbox" class="form-check-input" id="hasAttachedFile"
+                                    formControlName="hasAttachedFile" hidden>
+                                <!-- customFilename -->
+                                <input class="form-control" type="text" formControlName="customFilename"
+                                    id="customFilename" hidden>
                             </div>
                         </div>
                     </div>

@@ -1,19 +1,25 @@
 package com.ez.controller;
 
-import com.ez.dto.DropdownResponse;
-import com.ez.dto.TicketResponse;
+import com.ez.dto.*;
+import com.ez.entity.Team;
+import com.ez.entity.Ticket;
+import com.ez.exception.OldPasswordIsNotMatchException;
 import com.ez.service.TicketService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.validation.BindException;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.*;
 
+import javax.persistence.EntityNotFoundException;
+import javax.validation.Valid;
 import java.util.List;
 
+import static org.springframework.http.HttpStatus.BAD_REQUEST;
 import static org.springframework.http.HttpStatus.OK;
 
 @RestController
@@ -205,5 +211,74 @@ public class TicketController {
 
         return new ResponseEntity<>(totalOfTickets, HttpStatus.OK);
     }
+
+    //
+    // create a new ticket.
+    @PostMapping("/ticket-create")
+    // all authenticated users can access this resource
+//    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
+    public ResponseEntity<HttpResponse> createTicket(@RequestBody @Valid TicketRequest ticketRequest, BindingResult bindingResult)
+            throws BindException {
+
+        LOGGER.info("validate data");
+
+        // if ticketRequest data is invalid then throw exception
+        if (bindingResult.hasErrors()) {
+
+            LOGGER.error("TicketRequest data is invalid");
+
+            throw new BindException(bindingResult);
+        }
+
+        // save ticket
+        HttpResponse httpResponse = ticketService.createTicket(ticketRequest);
+
+//        LOGGER.info(newTicket.toString());
+
+        return new ResponseEntity<>(httpResponse, OK);
+    }
+
+//    // find team by id.
+//    // this method is used for "Edit team" and "View team".
+//    //
+//    // return:
+//    //  - TeamRequest: team + supporters
+//    @GetMapping("/team-list/{id}")
+//    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
+//    public ResponseEntity<TeamRequest> findById(@PathVariable Long id) throws EntityNotFoundException {
+//
+//        LOGGER.info("find team by id: " + id);
+//
+//        TeamRequest teamRequest = teamService.findById(id);
+//
+//        return new ResponseEntity<>(teamRequest, OK);
+//    }
+//
+//    // edit existing team.
+//    //
+//    // parameters:
+//    //  - TeamRequest: team + supporters
+//    @PutMapping("/team-edit")
+//    // only the ROLE_ADMIN can access this address
+//    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
+//    public ResponseEntity<Team> editTeam(@RequestBody @Valid TeamRequest teamRequest, BindingResult bindingResult)
+//            throws EntityNotFoundException, BindException {
+//
+//        LOGGER.info("validate data");
+//
+//        // if teamRequest data is invalid then throw exception
+//        if (bindingResult.hasErrors()) {
+//
+//            LOGGER.error("TeamRequest data is invalid");
+//
+//            throw new BindException(bindingResult);
+//        }
+//
+//        // save teamRequest(includes supporters)
+//        // and return team(not includes supporters)
+//        Team currentTeam = teamService.updateTeam(teamRequest);
+//
+//        return new ResponseEntity<>(currentTeam, OK);
+//    }
 
 }
