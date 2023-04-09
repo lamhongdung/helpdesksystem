@@ -39,19 +39,27 @@ public class Ticket implements Serializable {
     @Min(value = 1, message = "Value of priority id must be greater than or equal to 1")
     private long priorityid;
 
+    // when ticket has just created:
     // - assigneeid = null: if assignment method = 'M'(manual).
     // - assigneeid = supporterid(userid): if assignment method = 'A'(Auto).
+    // when ticket has just modified:
+    // - assigneeid = supporterid
     private long assigneeid;
 
-    // - ticketStatusid = 1(Open): if assigneeid = null
-    // - ticketStatusid = 2(Assigned): if assigneeid = supporterid(userid)
+    // ticketStatusid:
+    // - 1(Open): if assigneeid = null
+    // - 2(Assigned): if assigneeid = supporterid(userid)
+    // - 3(Resolved)
+    // - 4(Closed)
+    // - 5(Cancel)
     @Pattern(regexp = "^[1-5]", message = "Value of the ticket status must be 1 of 5 following values: Open, Assigned, Resolved, Closed, Cancel")
     private long ticketStatusid;
 
     @Size(min = 1, message = "Please input a content")
     private String content;
 
-    // - customFilename = "": if user did not attach file.
+    // - customFilename = "": if user did not attach file or
+    //                          attached file size exceeds max allowed file size
     // - customFilename = timestamp + UUID + extension(ex: .jpg): if user has attached file
     // ex: customFilename = "20230405143231_3ed7c8ea-114e-4c1f-a3d3-8e5a439e9aff.jpg".
     private String customFilename;

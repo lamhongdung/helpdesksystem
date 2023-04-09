@@ -22,8 +22,8 @@ export class AuthService {
   // the logged in email
   public loggedInEmail: string;
 
-
   public loggedInUsername: string;
+
   public jwtHelper = new JwtHelperService();
 
   constructor(private http: HttpClient) { }
@@ -115,13 +115,15 @@ export class AuthService {
         }
       }
     } else {
+
       this.logOut();
       return false;
+
     }
 
     return false;
-    
-  }
+
+  } // end of isLoggedInUser()
 
   // get id of the logged in user
   public getIdFromLocalStorage(): string {
@@ -134,7 +136,8 @@ export class AuthService {
     }
 
     return "";
-  }
+
+  } // end of getIdFromLocalStorage()
 
   // get email of the logged in user
   public getEmailFromLocalStorage(): string {
@@ -147,7 +150,8 @@ export class AuthService {
     }
 
     return "";
-  }
+
+  } // end of getEmailFromLocalStorage()
 
   // get role of the logged in user
   public getRoleFromLocalStorage(): string {
@@ -161,14 +165,29 @@ export class AuthService {
 
     return "";
 
-  }
+  } // end of getRoleFromLocalStorage()
+
+  // get full name of the logged in user
+  public getFullnameFromLocalStorage(): string {
+
+    // if user is existing in the local storage
+    if (JSON.parse(localStorage.getItem('user')) != null) {
+
+      return JSON.parse(localStorage.getItem('user')).lastName + ' ' +
+        JSON.parse(localStorage.getItem('user')).firstName;
+
+    }
+
+    return "";
+
+  } // end ofgetFullnameFromLocalStorage()
 
   // get token from local storage
   public getTokenFromLocalStorage(): string {
 
     return localStorage.getItem("token");
 
-  }
+  } // end of getTokenFromLocalStorage()
 
 }
 

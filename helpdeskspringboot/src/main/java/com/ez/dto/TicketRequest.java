@@ -37,9 +37,10 @@ public class TicketRequest {
 
     // - hasAttachedFile = true: there is attached file.
     // - hasAttachedFile = false: there is no attached file.
-//    @Pattern(regexp = "1|0", message = "Value of the hasAttachedFile must be TRUE or FALSE")
+    //
+    // This 'hasAttachedFile' field is only used in front end for validation.
+    // Spring boot backend will not use this field, so do not need validates in backend
     private boolean hasAttachedFile;
-//    private String aaa;
 
     // - customFilename = "": if user did not attach file.
     // - customFilename = timestamp + UUID + extension(ex: .jpg): if user has attached file

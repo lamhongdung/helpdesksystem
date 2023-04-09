@@ -8,14 +8,14 @@ delimiter $$
 -- save ticket.
 --
 -- Input parameters:
--- - in_creatorid: those who creates this ticket.
+-- - in_creatorid: those who creates ticket.
 -- 		if creator is also supporter and this supporter is in team 
 -- 		then assignee will be self-creator
 -- - in_subject: ticket subject
 -- - in_content: ticket content
 -- - in_teamid: team id. a team has 1 or multi supporters.
 -- 		if (assignment method of team) = 'A'(Auto) 
--- 			then assignee will be person has at least in current date
+-- 			then assignee will be person has at least tickets on current date
 -- 		if (assignment method of team) = 'M'(Manual) 
 -- 			then assignee will be null
 -- - in_categoryid: category id
@@ -41,7 +41,7 @@ begin
 
 -- assignment method = 'A'(Auto) or 'M'(Manual)
 declare assignmentMethod varchar(255);
--- assignee id
+-- assignee id(supporter id)
 declare assigneeid int;
 
 -- ticket status id:
@@ -83,7 +83,7 @@ if assignmentMethod = 'M' then
 	insert into `ticket`(subject, categoryid, creatorid, teamid, priorityid, 
 						assigneeid, ticketStatusid, 
 						content, customFilename, createDatetime, lastUpdateDatetime) values 
-	(in_subject, in_categoryid, in_creatorid, in_teamid, in_priorityid, 
+						(in_subject, in_categoryid, in_creatorid, in_teamid, in_priorityid, 
 						assigneeid, ticketStatusid,
 						in_content, in_customFilename, now(), now()); 
              
@@ -102,10 +102,10 @@ if assignmentMethod = 'A' then
 	-- get supporters belong to teamid
 	--
     
-	-- drop the temporary "supporterBelongTeam" table if it exists
-	drop temporary table if exists supporterBelongTeam;
+	-- drop the temporary "_supporterBelongTeamTbl" table if it exists
+	drop temporary table if exists _supporterBelongTeamTbl;
 
-	create temporary table supporterBelongTeam
+	create temporary table _supporterBelongTeamTbl
 	select a.supporterid
 	from teamSupporter a
 	where a.teamid = in_teamid;
@@ -119,7 +119,7 @@ if assignmentMethod = 'A' then
 
 	-- if creator is also supporter then assign assignee to that supporter
     if exists(	select *
-				from supporterBelongTeam a
+				from _supporterBelongTeamTbl a
                 where a.supporterid = in_creatorid) then
 		
         set assigneeid = in_creatorid;
@@ -128,7 +128,7 @@ if assignmentMethod = 'A' then
 		insert into `ticket`(subject, categoryid, creatorid, teamid, priorityid, 
 							assigneeid, ticketStatusid, 
 							content, customFilename, createDatetime, lastUpdateDatetime) values 
-		(in_subject, in_categoryid, in_creatorid, in_teamid, in_priorityid, 
+							(in_subject, in_categoryid, in_creatorid, in_teamid, in_priorityid, 
 							assigneeid, ticketStatusid,
 							in_content, in_customFilename, now(), now());
                             
@@ -138,22 +138,22 @@ if assignmentMethod = 'A' then
     end if; -- end of check exists
     
 	-- ----------------------------------------------------------------------------
-	-- Case 3: assign ticket to supporter who has at least ticket on current date
+	-- Case 3: assign ticket to supporter who has at least tickets on current date
 	-- -->
-	-- - assigneeid = (supporter has at least ticket)
+	-- - assigneeid = (supporter has at least tickets)
 	-- - ticketStatusid = 'Assigned'
 	-- ----------------------------------------------------------------------------  
 
 	--
 	-- get number of tickets of each supporter on current date
 	--
-	-- drop the temporary "supporterNumOfTicket" table if it exists
-	drop temporary table if exists supporterNumOfTicket;
+	-- drop the temporary "_supporterNumOfTicketTbl" table if it exists
+	drop temporary table if exists _supporterNumOfTicketTbl;
 
-	create temporary table supporterNumOfTicket
+	create temporary table _supporterNumOfTicketTbl
 	select 	a.supporterid,
 			count(coalesce(b.ticketid, null)) as numOfTickets
-	from supporterBelongTeam a
+	from _supporterBelongTeamTbl a
 		left join ticket b on 	a.supporterid = b.assigneeid and 
 								-- only consider on current date
 								left(coalesce(b.createDatetime,''),10) = left(now(),10)
@@ -161,23 +161,23 @@ if assignmentMethod = 'A' then
 
 	-- get minimum of tickets
 	set minNumOfTickets = (	select min(numOfTickets) 
-							from supporterNumOfTicket a
+							from _supporterNumOfTicketTbl a
 							);
 
-	-- drop the temporary "supporterMinNumOfTicket" table if it exists
-	drop temporary table if exists supporterMinNumOfTicket;
+	-- drop the temporary "_supporterMinNumOfTicketTbl" table if it exists
+	drop temporary table if exists _supporterMinNumOfTicketTbl;
 
-	create temporary table supporterMinNumOfTicket
+	create temporary table _supporterMinNumOfTicketTbl
     -- get supporters have the same at least number of tickets on current date
 	select a.*
-	from supporterNumOfTicket a
+	from _supporterNumOfTicketTbl a
 	where a.numOfTickets = minNumOfTickets;
 
-	-- get supporter who has at least tickets of current date.
+	-- get 1 supporter who has at least tickets of current date.
 	-- in case there are many supporters who have the same at least tickets 
 	-- then get random 1 supporter of them
 	set assigneeid = (	select a.supporterid
-						from supporterMinNumOfTicket a
+						from _supporterMinNumOfTicketTbl a
 						order by rand()
 						limit 1
 						);
@@ -186,7 +186,7 @@ if assignmentMethod = 'A' then
 		insert into `ticket`(subject, categoryid, creatorid, teamid, priorityid, 
 							assigneeid, ticketStatusid, 
 							content, customFilename, createDatetime, lastUpdateDatetime) values 
-		(in_subject, in_categoryid, in_creatorid, in_teamid, in_priorityid, 
+							(in_subject, in_categoryid, in_creatorid, in_teamid, in_priorityid, 
 							assigneeid, ticketStatusid,
 							in_content, in_customFilename, now(), now());
                     

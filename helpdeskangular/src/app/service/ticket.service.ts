@@ -20,8 +20,8 @@ export class TicketService {
   pageSize = environment.pageSize;
 
 
-
-  constructor(private http: HttpClient,
+  constructor(
+    private http: HttpClient,
     private shareService: ShareService
   ) { }
 

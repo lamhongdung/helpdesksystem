@@ -21,7 +21,7 @@ delimiter $$
 create procedure sp_getCategoriesByUserid(in_userid int)
 begin
   
-	-- create temporary "ticketTbl" table contains tickets by user id and by user role
+	-- create temporary "_ticketTbl" table contains tickets by user id and by user role
  	call sp_ticketTbl(in_userid);
 
 	-- get categories have tickets by user id and by user role
@@ -34,7 +34,7 @@ begin
 		select 	distinct
 				a.categoryid as id,
 				concat(a.categoryid,' - ', coalesce(b.name,'')) as description
-		from ticketTbl a
+		from _ticketTbl a
 			left join category b on a.categoryid = b.id
 	) a
     order by a.id, a.description;

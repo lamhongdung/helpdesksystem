@@ -6,7 +6,7 @@ drop procedure if exists sp_searchTicketTbl;
 delimiter $$
 
 -- -----------------------------------------------------
--- create temporary "searchTicketTbl" table which contains
+-- create temporary "_searchTicketTbl" table which contains
 -- tickets based on search conditions(and based on user id, user role as well).
 --
 -- Input parameters:
@@ -54,7 +54,7 @@ begin
 -- user role
 declare userRole varchar(255);
 
--- create temporary "ticketTbl" table contains tickets by user id and by user role
+-- create temporary "_ticketTbl" table contains tickets by user id and by user role
 call sp_ticketTbl(in_userid);
 
 -- get user role by user id
@@ -67,25 +67,25 @@ set userRole = (select a.role
 -- search tickets based on searchTerm of each user role
 --
 
--- drop the temporary "ticketTbl_searchTerm" table if it exists
-drop temporary table if exists ticketTbl_searchTerm;
+-- drop the temporary "_ticketTbl_searchTerm" table if it exists
+drop temporary table if exists _ticketTbl_searchTerm;
     
 -- role "customer"
 if userRole = "ROLE_CUSTOMER" then
 
-	-- create temporary "ticketTbl_searchTerm" table based on "in_searchTerm"
-	create temporary table ticketTbl_searchTerm
+	-- create temporary "_ticketTbl_searchTerm" table based on "in_searchTerm"
+	create temporary table _ticketTbl_searchTerm
 	SELECT a.*
-	FROM ticketTbl a
+	FROM _ticketTbl a
 	where concat(a.ticketid,' ', a.subject,' ', a.content) like concat('%',in_searchTerm,'%');
 	
 -- role "supporter" or "admin"
 else
 
-	-- create temporary "ticketTbl_searchTerm" table based on "in_searchTerm"
-	create temporary table ticketTbl_searchTerm
+	-- create temporary "_ticketTbl_searchTerm" table based on "in_searchTerm"
+	create temporary table _ticketTbl_searchTerm
 	SELECT a.*
-	FROM ticketTbl a
+	FROM _ticketTbl a
 		left join user b on a.creatorid = b.id
 	where concat(a.ticketid,' ', a.subject,' ', a.content,' ', 
 					coalesce(b.phone,''), ' ',coalesce(b.email,'')
@@ -93,13 +93,13 @@ else
 	
 end if;
 
--- drop the temporary "ticketTbl_allParameters_withoutSLA" table if it exists
-drop temporary table if exists ticketTbl_allParameters_withoutSLA;
+-- drop the temporary "_ticketTbl_allParameters_withoutSLA" table if it exists
+drop temporary table if exists _ticketTbl_allParameters_withoutSLA;
 
--- create temporary "ticketTbl_allParameters_withoutSLA" table based on all criteria except SLA
-create temporary table ticketTbl_allParameters_withoutSLA
+-- create temporary "_ticketTbl_allParameters_withoutSLA" table based on all criteria except SLA
+create temporary table _ticketTbl_allParameters_withoutSLA
 SELECT a.*
-FROM ticketTbl_searchTerm a
+FROM _ticketTbl_searchTerm a
 where 	
 		-- fromDate
         case
@@ -164,11 +164,11 @@ where
             else ticketStatusid = in_ticketStatusid
         end;
 
--- drop the temporary "ticketTbl_spendHour" table if it exists
-drop temporary table if exists ticketTbl_spendHour;
+-- drop the temporary "_ticketTbl_spendHour" table if it exists
+drop temporary table if exists _ticketTbl_spendHour;
 
--- create temporary "ticketTbl_spendHour"
-create temporary table ticketTbl_spendHour
+-- create temporary "_ticketTbl_spendHour"
+create temporary table _ticketTbl_spendHour
 select 	a.ticketid as ticketid, 
 		a.subject as subject,
 		concat(coalesce(b.lastName,''),' ',coalesce(b.firstName,'')) as creatorName,
@@ -216,7 +216,7 @@ select 	a.ticketid as ticketid,
 				sec_to_time(timestampdiff(second, a.createDatetime, now()))
 		end as spendHourHhmmss,        
 		a.ticketStatusid as ticketStatusid
-from ticketTbl_allParameters_withoutSLA a
+from _ticketTbl_allParameters_withoutSLA a
 	-- creator
 	left join user b on a.creatorid = b.id
 	-- assignee
@@ -226,11 +226,11 @@ from ticketTbl_allParameters_withoutSLA a
 	left join category f on a.categoryid = f.id
 	left join priority g on a.priorityid = g.id;    
 
--- drop the temporary "ticketTbl_sla" table if it exists
-drop temporary table if exists ticketTbl_sla;
+-- drop the temporary "_ticketTbl_sla" table if it exists
+drop temporary table if exists _ticketTbl_sla;
 
--- create temporary "ticketTbl_sla"
-create temporary table ticketTbl_sla
+-- create temporary "_ticketTbl_sla"
+create temporary table _ticketTbl_sla
 select 	a.ticketid as ticketid, 
 		a.subject as subject,
 		a.creatorName as creatorName,
@@ -255,17 +255,17 @@ select 	a.ticketid as ticketid,
         end as sla,
         a.currentDatetime,
 		a.ticketStatusid as ticketStatusid
-from ticketTbl_spendHour a;
+from _ticketTbl_spendHour a;
 
 --
 -- main select
 --
 
--- drop the temporary "searchTicketTbl" table if exists
-drop temporary table if exists searchTicketTbl;
+-- drop the temporary "_searchTicketTbl" table if exists
+drop temporary table if exists _searchTicketTbl;
 
--- create new temporary "searchTicketTbl" table
-create temporary table searchTicketTbl(
+-- create new temporary "_searchTicketTbl" table
+create temporary table _searchTicketTbl(
 	`ticketid` int,
 	`subject` varchar(2000),
 	`creatorName` varchar(255),
@@ -289,8 +289,8 @@ create temporary table searchTicketTbl(
 	`ticketStatusid` int
 );
 
--- create temporary "searchTicketTbl" table
-insert into searchTicketTbl
+-- create temporary "_searchTicketTbl" table
+insert into _searchTicketTbl
 select 	a.ticketid as ticketid, 
 		a.subject as subject,
 		a.creatorName as creatorName,
@@ -310,7 +310,7 @@ select 	a.ticketid as ticketid,
 		a.resolveIn as resolveIn,
         a.currentDatetime as currentDatetime,
         a.ticketStatusid as ticketStatusid
-from ticketTbl_sla a
+from _ticketTbl_sla a
 where
 	case
 		-- in_sla = '': means all SLAs(both Ontime and Late)

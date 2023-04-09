@@ -21,7 +21,7 @@ delimiter $$
 create procedure sp_getCreatorsByUserid(in_userid int)
 begin
 
-	-- create temporary "ticketTbl" table contains tickets by user id and by user role
+	-- create temporary "_ticketTbl" table contains tickets by user id and by user role
  	call sp_ticketTbl(in_userid);
 
 	-- get creators by user id, user role
@@ -34,7 +34,7 @@ begin
 		select 	distinct
 				a.creatorid as id,
 				concat(a.creatorid,' - ', coalesce(b.lastName,''),' ', coalesce(b.firstName,'')) as description
-		from ticketTbl a
+		from _ticketTbl a
 			left join user b on a.creatorid = b.id
 	) a
     order by a.id, a.description;

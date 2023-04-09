@@ -21,7 +21,7 @@ delimiter $$
 create procedure sp_getAssigneesByUserid(in_userid int)
 begin
 
-	-- create temporary "ticketTbl" table contains tickets by user id and by user role
+	-- create temporary "_ticketTbl" table contains tickets by user id and by user role
  	call sp_ticketTbl(in_userid);
 
 	-- get assignees have tickets by user id, user role
@@ -34,7 +34,7 @@ begin
 		select 	distinct
 				coalesce(a.assigneeid,-1) as id,
 				concat(coalesce(a.assigneeid,-1),' - ',coalesce(b.lastName,'unassigned'),' ',coalesce(b.firstName,'')) as description
-		from ticketTbl a
+		from _ticketTbl a
 			left join user b on a.assigneeid = b.id
 	) a
     order by a.id, a.description;

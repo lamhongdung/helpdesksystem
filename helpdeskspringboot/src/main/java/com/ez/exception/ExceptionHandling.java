@@ -84,9 +84,7 @@ public class ExceptionHandling implements ErrorController {
 
     @ExceptionHandler(MaxUploadSizeExceededException.class)
     public ResponseEntity<HttpResponse> handleMaxSizeException(MaxUploadSizeExceededException exception) {
-//        return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(new ResponseMessage("File too large!"));
 
-//        return createHttpResponse(EXPECTATION_FAILED, exception.getMessage());
         return createHttpResponse(EXPECTATION_FAILED, "File too large!");
     }
 

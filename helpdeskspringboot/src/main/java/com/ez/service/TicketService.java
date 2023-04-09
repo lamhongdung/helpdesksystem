@@ -58,7 +58,7 @@ public class TicketService {
         return ticketRepository.getTeamsByUserid(userid);
     }
 
-    // get active teams
+    // get all active teams
     public List<DropdownResponse> getAllActiveTeams() {
 
         LOGGER.info("Get all active teams)");
@@ -82,7 +82,7 @@ public class TicketService {
         return ticketRepository.getCategoriesByUserid(userid);
     }
 
-    // get active categories
+    // get all active categories
     public List<DropdownResponse> getAllActiveCategories() {
 
         LOGGER.info("Get all active categories)");
@@ -98,7 +98,7 @@ public class TicketService {
         return ticketRepository.getPrioritiesByUserid(userid);
     }
 
-    // get active priorities
+    // get all active priorities
     public List<DropdownResponse> getAllActivePriorities() {
 
         LOGGER.info("Get all active priorities)");
@@ -145,7 +145,6 @@ public class TicketService {
 
         LOGGER.info("create a new ticket");
         LOGGER.info("Ticket is sent from client: " + ticketRequest.toString());
-
 
         // save new ticket into the "ticket" table in database.
         ticketRepository.saveTicket(

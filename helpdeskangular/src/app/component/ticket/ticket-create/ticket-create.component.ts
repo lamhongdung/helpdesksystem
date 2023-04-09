@@ -11,7 +11,6 @@ import { TicketService } from 'src/app/service/ticket.service';
 import { AuthService } from 'src/app/service/auth.service';
 import { ShareService } from 'src/app/service/share.service';
 import { FileService } from 'src/app/service/file.service';
-import { Constant } from 'src/app/constant/constant';
 import { DropdownResponse } from 'src/app/entity/DropdownResponse';
 import { validFile } from 'src/app/validator/validator';
 import { CustomHttpRespone } from 'src/app/entity/CustomHttpRespone';
@@ -23,11 +22,6 @@ import { CustomHttpRespone } from 'src/app/entity/CustomHttpRespone';
 })
 export class TicketCreateComponent {
 
-  // has no attached file
-  // NO_ATTACHED_FILE = Constant.NO_ATTACHED_FILE;
-  // has attached file
-  // HAS_ATTACHED_FILE = Constant.HAS_ATTACHED_FILE;
-
   // allow display spinner icon or not
   // =true: allow to display spinner in the "Submit" button
   // =false: do not allow to display spinner in the "Submit" button
@@ -37,7 +31,6 @@ export class TicketCreateComponent {
   subscriptions: Subscription[] = [];
 
   ticketForm: FormGroup;
-  ticket: Ticket;
 
   // error messages
   errorMessages = {
@@ -101,6 +94,9 @@ export class TicketCreateComponent {
   // config for ng2-file-upload
   //
 
+  // component from ng2-file-upload
+  uploader: FileUploader;
+
   // allow to upload file up to 10MB
   maxFileSize: number = this.shareService.maxFileSize;
 
@@ -108,25 +104,17 @@ export class TicketCreateComponent {
   actualFileSize: number = 0;
 
   // check an uploaded file exceeds maxFileSize or not?
-  isExceedMaxFileSize: boolean = false;
-
-  // component from ng2-file-upload
-  uploader: FileUploader;
-
-  // response result of uploading file
-  uploadResponse: string;
+  // - exceedMaxFileSize = true: exceeded max allowed file size
+  // - exceedMaxFileSize = false: has not yet exceeded max allowed file size
+  exceedMaxFileSize: boolean = false;
 
   // last index of the valid upload file.
   // last index of array uploader.queue.
   lastIndex: number;
 
-  // status of uploading file.
-  // posible values:
-  //  - NO_ATTACHED_FILE: has no attached file
-  //  - HAS_ATTACHED_FILE: has attached file
-  uploadStatus: number;
-
   // check whether user has attached file or not?
+  // - hasAttachedFile = true: user has attached file
+  // - hasAttachedFile = false: user has not yet attached file
   hasAttachedFile: boolean = false;
 
   // customFilename = timestamp + UUID + extension(ex: .jpg)
@@ -160,7 +148,6 @@ export class TicketCreateComponent {
     // initial form
     this.ticketForm = this.formBuilder.group(
       {
-
         // person creates ticket
         creatorid: [+this.authService.getIdFromLocalStorage()],
 
@@ -183,9 +170,6 @@ export class TicketCreateComponent {
         // ex: customFilename = "20230405143231_3ed7c8ea-114e-4c1f-a3d3-8e5a439e9aff.jpg"
         customFilename: ['']
 
-        //
-        // chooseFile: ['']
-
       },
       {
         //
@@ -196,6 +180,7 @@ export class TicketCreateComponent {
         // an attached file is consider as valid if it satisfies:
         //  - (Has no attached file) or
         //  - (Has attached file) and (this file was uploaded to server successful(customFilename != ''))
+        // note: if attached file size exceeds max allowed file size then it is considered as has no attached file
         validators: [validFile]
       }
     );
@@ -213,6 +198,7 @@ export class TicketCreateComponent {
 
       isHTML5: true,
 
+      // authenticate with jwt
       headers: this.headers,
 
       // max file size = 10 MB.
@@ -226,88 +212,84 @@ export class TicketCreateComponent {
     //  - priorities
     this.loadDropdownValues();
 
-    // upload response is a json string
-    this.uploadResponse = '';
-
-    // this.uploader.response.subscribe(res => this.uploadResponse = res);
-
     // last index of the valid upload file.
     // last index of array uploader.queue.
     this.lastIndex = this.uploader.queue.length > 0 ? this.uploader.queue.length - 1 : this.uploader.queue.length;
 
-    // if there are errors when uploading file
-    this.uploader.onErrorItem = (item, response, status, headers) => this.onErrorItem(item, response, status, headers);
+    // upload file in progress
+    this.uploader.onProgressItem = (fileItem, progress) => this.onProgressItem(fileItem, progress);
 
     // if upload file successful
     this.uploader.onSuccessItem = (item, response, status, headers) => this.onSuccessItem(item, response, status, headers);
 
-    // upload file in progress
-    this.uploader.onProgressItem = (fileItem, progress) => this.onProgressItem(fileItem, progress);
+    // if there are errors when uploading file
+    this.uploader.onErrorItem = (item, response, status, headers) => this.onErrorItem(item, response, status, headers);
 
   } // end of ngOnInit()
-
-  // in case upload file success
-  onSuccessItem(item: FileItem, response: string, status: number, headers: ParsedResponseHeaders): any {
-
-    //success server response
-    let data = JSON.parse(response);
-    console.log(data.customFilename);
-
-    this.ticketForm.controls['hasAttachedFile'].setValue(true);
-    this.ticketForm.controls['customFilename'].setValue(data.customFilename);
-
-  }
-
-  // in case upload file failure
-  onErrorItem(item: FileItem, response: string, status: number, headers: ParsedResponseHeaders): any {
-
-    // error server response
-
-    // let error = JSON.parse(response); 
-
-  }
 
   // upload file in progress
   onProgressItem(fileItem: FileItem, progress: any) {
 
     // render progress bar.
-    // few old browser needs this command to render progress bar 
+    // few old browsers needs this command to render progress bar 
     this.changeDetector.detectChanges();
 
   }
 
+  // in case upload file success
+  onSuccessItem(item: FileItem, response: string, status: number, headers: ParsedResponseHeaders): any {
+
+    // success server response
+    let data = JSON.parse(response);
+    // console.log(data.customFilename);
+
+    // has attached file
+    this.ticketForm.controls['hasAttachedFile'].setValue(true);
+    // set new file name
+    this.ticketForm.controls['customFilename'].setValue(data.customFilename);
+
+  } // end of onSuccessItem()
+
+  // in case upload file failure
+  onErrorItem(item: FileItem, response: string, status: number, headers: ParsedResponseHeaders): any {
+
+    // failure server response
+    let error = JSON.parse(response);
+
+    // show the error message to user
+    this.sendNotification(NotificationType.ERROR, error.message);
+
+    // hide spinner(circle)
+    this.showSpinner = false;
+
+  } // end of onErrorItem()
+
   // fires when user changes file at the "Choose File" button
   changeFile(event: any) {
 
-    // if user presses the "Choose File" button but they did not select any file.
+    // if user presses the "Choose File" button but user did not select any file.
     // There is no attached file
     if (event.target.files[0] === undefined) {
-
-      // has not attached file
-      // this.uploadStatus = this.NO_ATTACHED_FILE;
 
       // has no attached file
       this.ticketForm.controls['hasAttachedFile'].setValue(false);
       // customFilename = ''
       this.ticketForm.controls['customFilename'].setValue("");
-      // 
+      // actual file size
       this.actualFileSize = 0
       // does not exceeds maxFileSize
-      this.isExceedMaxFileSize = false;
+      this.exceedMaxFileSize = false;
 
     } else {
 
-      // has attached file
-      // this.uploadStatus = this.HAS_ATTACHED_FILE;
-
-      // actual upload file size in bytes
+      // actual uploaded file size in bytes
       this.actualFileSize = event.target.files[0]?.size;
 
       // check if the uploaded file exceeds max allowed file size or not?
-      this.isExceedMaxFileSize = (event.target.files[0]?.size > this.maxFileSize);
+      this.exceedMaxFileSize = (event.target.files[0]?.size > this.maxFileSize);
 
       // if actual file size exceeds max file size
-      if (this.isExceedMaxFileSize) {
+      if (this.exceedMaxFileSize) {
         // has no attached file
         this.ticketForm.controls['hasAttachedFile'].setValue(false);
 
@@ -316,7 +298,7 @@ export class TicketCreateComponent {
         this.ticketForm.controls['hasAttachedFile'].setValue(true);
       }
 
-      // customFilename = ''
+      // temporary set customFilename = ''
       this.ticketForm.controls['customFilename'].setValue("");
 
     } // end of changeFile()
@@ -329,7 +311,7 @@ export class TicketCreateComponent {
     //  - choose an invalid file(file size > maxFileSize)
     this.lastIndex = this.uploader.queue.length > 0 ? this.uploader.queue.length - 1 : this.uploader.queue.length;
 
-  }
+  } // end of changeFile()
 
   // initialize default values for all dropdown controls
   loadDropdownValues() {
@@ -347,7 +329,9 @@ export class TicketCreateComponent {
 
 
   // create ticket.
-  // when user clicks the "Submit" button in the "Create ticket"
+  // when user clicks the "Submit" button in the "Create ticket" screen.
+  // note: in case there is an attched file then 
+  //        the "Submit" button will be disabled until attached file loaded 100% to server
   createTicket() {
 
     // allow to show spinner(circle)
@@ -361,8 +345,6 @@ export class TicketCreateComponent {
 
         // create ticket successful
         next: (data: CustomHttpRespone) => {
-
-          // this.ticket = data;
 
           // show successful message to user 
           this.sendNotification(NotificationType.SUCCESS, data.message);

@@ -59,14 +59,14 @@ create procedure sp_searchTickets(	in_userid int,
 											)
 begin
 
--- create temporary "searchTicketTbl" table contains tickets by user id, user role
+-- create temporary "_searchTicketTbl" table contains tickets by user id, user role
 -- and by search criteria
 call sp_searchTicketTbl(in_userid, in_searchTerm, in_fromDate, in_toDate, in_categoryid,
 						in_priorityid, in_creatorid, in_teamid, in_assigneeid, in_sla,
 						in_ticketStatusid);
     
 select a.*
-from searchTicketTbl a
+from _searchTicketTbl a
 order by a.createDatetime desc, a.assigneeName asc, a.subject asc
 -- only 1 page with 5 elements
 limit in_pageNumber, in_pageSize;

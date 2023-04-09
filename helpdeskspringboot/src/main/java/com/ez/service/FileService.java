@@ -37,7 +37,7 @@ public class FileService {
     // save file information to database
     public FileStorage save(MultipartFile file) throws IOException {
 
-        // file extension. ex: jpg, txt,...
+        // file extension(without point mark). ex: jpg, txt,...
         String fileExtension;
 
         // customFilename = yyyyMMddHHmmss + UUID + extension
@@ -67,17 +67,20 @@ public class FileService {
         Files.copy(file.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
 
         // save file information to database
-        FileStorage fileStorage = new FileStorage(customFilename, file.getOriginalFilename(), file.getContentType());
+        FileStorage fileStorage = new FileStorage(customFilename,
+                file.getOriginalFilename(), file.getContentType());
 
+        // save uploaded file server local machine and
+        // also save file information into database
         return fileRepository.save(fileStorage);
 
     } // end of save()
 
-    public FileStorage getFile(long id) {
-        return fileRepository.findById(id).get();
-    }
-
-    public Stream<FileStorage> getAllFiles() {
-        return fileRepository.findAll().stream();
-    }
+//    public FileStorage getFile(long id) {
+//        return fileRepository.findById(id).get();
+//    }
+//
+//    public Stream<FileStorage> getAllFiles() {
+//        return fileRepository.findAll().stream();
+//    }
 }

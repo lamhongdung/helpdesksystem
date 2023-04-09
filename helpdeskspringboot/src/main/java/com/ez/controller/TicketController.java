@@ -233,8 +233,6 @@ public class TicketController {
         // save ticket
         HttpResponse httpResponse = ticketService.createTicket(ticketRequest);
 
-//        LOGGER.info(newTicket.toString());
-
         return new ResponseEntity<>(httpResponse, OK);
     }
 

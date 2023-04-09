@@ -5,7 +5,7 @@ drop procedure if exists sp_ticketTbl;
 delimiter $$
 
 -- -----------------------------------------------------
--- Create temporary "ticketTbl" table contains tickets based on user id and user role.
+-- Create temporary "_ticketTbl" table contains tickets based on user id and user role.
 --
 -- Input parameters:
 -- 	- in_userid: user id
@@ -21,11 +21,11 @@ begin
 -- user role
 declare userRole varchar(255);
 
--- drop the temporary "ticketTbl" table if exists
-drop temporary table if exists ticketTbl;
+-- drop the temporary "_ticketTbl" table if exists
+drop temporary table if exists _ticketTbl;
 
--- create new temporary table "ticketTbl"
-create temporary table ticketTbl(
+-- create new temporary table "_ticketTbl"
+create temporary table _ticketTbl(
 
 	`ticketid` int,
 	`subject` varchar(255),
@@ -57,7 +57,7 @@ if userRole = "ROLE_CUSTOMER" then
 
 	-- get all tickets of the creator "in_userid"
   
-	insert into ticketTbl
+	insert into _ticketTbl
 	select 	a.*
 	from ticket a
 	where a.creatorid = in_userid;
@@ -71,7 +71,7 @@ elseif userRole = "ROLE_SUPPORTER" then
    
 	-- get all tickets of teams that the supporter "in_userid" belongs to
    
-	insert into ticketTbl
+	insert into _ticketTbl
 	select 	a.*
 	from ticket a
 		-- get teams that the supporter "in_userid" belongs to
@@ -88,7 +88,7 @@ else
 
     -- get all tickets
     
-	insert into ticketTbl
+	insert into _ticketTbl
 	select 	a.*
     from ticket a;
 

@@ -49,14 +49,15 @@ create procedure sp_getTotalOfTickets(in_userid int,
 	in_ticketStatusid varchar(255))
 begin
 
--- create temporary "searchTicketTbl" table contains tickets by user id, user role
+-- create temporary "_searchTicketTbl" table contains tickets by user id, user role
 -- and based on search criterias
 call sp_searchTicketTbl(in_userid, in_searchTerm, in_fromDate, in_toDate, in_categoryid,
 						in_priorityid, in_creatorid, in_teamid, in_assigneeid, in_sla,
 						in_ticketStatusid);
 
+-- count total of tickets based on user id and search criteria
 select 	count(a.ticketid) as totalOfTickets
-from searchTicketTbl a;
+from _searchTicketTbl a;
 
 end $$
 

@@ -53,7 +53,7 @@ insert into `user`(id, email, password, firstName, lastName, phone, address, rol
 (15,'dunglh+supporter5@gmail.com','$2a$12$CR0useg0GQlwrYMvylhHROZg0Vq5nr7jRILz14lc.ArB9iuw1wsEC','Hoài Linh','Võ','0222222225','','ROLE_SUPPORTER','Active'),
 (16,'dunglh+supporter6@gmail.com','$2a$12$CR0useg0GQlwrYMvylhHROZg0Vq5nr7jRILz14lc.ArB9iuw1wsEC','Thị Nguyệt','Lê','0222222226','','ROLE_SUPPORTER','Active'),
 (17,'dunglh+supporter7@gmail.com','$2a$12$CR0useg0GQlwrYMvylhHROZg0Vq5nr7jRILz14lc.ArB9iuw1wsEC','Thị Ngọc Yến','Nguyễn','0222222227','','ROLE_SUPPORTER','Active'),
-(18,'dunglh+supporter8@gmail.com','$2a$12$CR0useg0GQlwrYMvylhHROZg0Vq5nr7jRILz14lc.ArB9iuw1wsEC','Thiện','Diệu','0222222228','','ROLE_SUPPORTER','Active'),
+(18,'dunglh+supporter8@gmail.com','$2a$12$CR0useg0GQlwrYMvylhHROZg0Vq5nr7jRILz14lc.ArB9iuw1wsEC','Yến Quyên','Lý','0222222228','','ROLE_SUPPORTER','Active'),
 (19,'dunglh+supporter9@gmail.com','$2a$12$CR0useg0GQlwrYMvylhHROZg0Vq5nr7jRILz14lc.ArB9iuw1wsEC','Ngọc Tư','Nguyễn','0222222229','','ROLE_SUPPORTER','Active'),
 -- admin
 (20,'dunglh+admin@gmail.com','$2a$12$CR0useg0GQlwrYMvylhHROZg0Vq5nr7jRILz14lc.ArB9iuw1wsEC','Công Phượng','Nguyễn','0333333330','','ROLE_ADMIN','Active'),

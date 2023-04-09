@@ -15,8 +15,11 @@ export class HeaderComponent implements OnInit {
   userid: number;
   loggedInEmail: string;
   loggedInRole: string;
+  loggedInFullname: string;
 
-  constructor(private router: Router, private authService: AuthService,
+  constructor(
+    private router: Router,
+    private authService: AuthService,
     private shareService: ShareService,
     private notificationService: NotificationService) {
 
@@ -28,16 +31,18 @@ export class HeaderComponent implements OnInit {
   }
 
   loadHeader() {
+
     this.userid = +this.authService.getIdFromLocalStorage();
     this.loggedInEmail = this.authService.getEmailFromLocalStorage();
     this.loggedInRole = this.authService.getRoleFromLocalStorage();
-    // console.log(this.loggedInEmail);
+    this.loggedInFullname = this.authService.getFullnameFromLocalStorage();
   }
 
   ngOnInit(): void {
     this.loadHeader();
   }
 
+  // user clicks on the "logout" menu
   logOut() {
     this.authService.logOut();
     this.router.navigate(['/login']);
@@ -53,8 +58,8 @@ export class HeaderComponent implements OnInit {
   } // end of sendNotification()
 
   // display brief profile at the top-right corner of the screen.
-  // ex: Admin: 20 - abc@xyz.com
-  displayBriefProfile(userid: number, role: string, email: string): string {
+  // ex: Admin: 20 - fullname
+  displayBriefProfile(userid: number, role: string, fullname: string): string {
 
     let briefProfile: string = "";
     let id: string;
@@ -62,18 +67,19 @@ export class HeaderComponent implements OnInit {
     id = userid + "";
 
     if (['ROLE_CUSTOMER'].indexOf(role) !== -1) {
-      briefProfile = `Customer: ${id} - ${email}`;
+      briefProfile = `Customer: ${id} - ${fullname}`;
     }
     else if (['ROLE_SUPPORTER'].indexOf(role) !== -1) {
-      briefProfile = `Supporter: ${id} - ${email}`;
+      briefProfile = `Supporter: ${id} - ${fullname}`;
 
     } else {
-      briefProfile = `Admin: ${id} - ${email}`;
+      briefProfile = `Admin: ${id} - ${fullname}`;
 
     }
 
     return briefProfile;
-  }
+
+  } // end of displayBriefProfile()
 
 }
 

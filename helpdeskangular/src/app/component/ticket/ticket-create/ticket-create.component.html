@@ -41,17 +41,18 @@
                     </div>
 
                     <!-- Content -->
-                    <div class="row mb-3">
+                    <!-- <div class="row mb-3"> -->
+                    <div class="row mb-2">
                         <!-- label -->
                         <div class="col-2">
-                            <label class="col-form-label" for="categoryid">Content<small
+                            <label class="col-form-label" for="content">Content<small
                                     class="text-danger">*</small></label>
                         </div>
                         <!-- dropdown -->
-                        <div class="col-10" tooltip="Ticket content" theme="light" placement="left">
+                        <div class="col-10" tooltip="Ticket content" theme="light" placement="left" id="content">
                             <!-- ngx-quill -->
                             <quill-editor [modules]="modules" [placeholder]="'Ticket body'"
-                                [styles]="{'height': '200px', 'width': '100%'}" formControlName="content">
+                                [styles]="{'height': '250px', 'width': '100%'}" formControlName="content">
                             </quill-editor>
                             <!-- error messages -->
                             <div class="text-danger" *ngFor="let e of errorMessages.content">
@@ -70,7 +71,7 @@
             <div class="col-md-6">
                 <div class="container-fluid">
 
-                    <!-- Team -->
+                    <!-- teamid -->
                     <div class="row mb-3">
                         <!-- label -->
                         <div class="col-3">
@@ -79,7 +80,7 @@
                         <!-- dropdown -->
                         <div class="col-9">
                             <select id="teamid" class="form-control" formControlName="teamid"
-                                tooltip="- Team.<br>- Values include: ID + name + Assignment method.<br>- Assignment method:<br>    + Auto: system will assign ticket to supporter automatically.<br>    + Manual: Suppoter assigns ticket to assignee(supporter) manually"
+                                tooltip="- <b>Team</b>.<br>- <b>Values include</b>: <i>ID + name + Assignment method</i>.<br>- <b>Assignment method</b>:<br>    <i>+ Auto: system will assign ticket to supporter automatically.<br>    + Manual: Suppoter assigns ticket to assignee(supporter) manually</i>"
                                 theme="light" placement="left">
                                 <option *ngFor="let e of teams" [value]="e.id">
                                     {{e.description}}</option>
@@ -95,7 +96,7 @@
                         </div>
                     </div>
 
-                    <!-- Category -->
+                    <!-- categoryid -->
                     <div class="row mb-3">
                         <!-- label -->
                         <div class="col-3">
@@ -105,8 +106,9 @@
                         <!-- dropdown -->
                         <div class="col-9">
                             <select id="categoryid" class="form-control" formControlName="categoryid"
-                                placeholder="Category" tooltip="- Category.<br>- Values include: ID + name."
-                                theme="light" placement="top">
+                                placeholder="Category"
+                                tooltip="- <b>Category</b>.<br>- <b>Values include</b>: <i>ID + name</i>." theme="light"
+                                placement="top">
                                 <option *ngFor="let e of categories" [value]="e.id">
                                     {{e.description}}</option>
                             </select>
@@ -132,7 +134,7 @@
                         <div class="col-9">
                             <select id="priorityid" class="form-control" formControlName="priorityid"
                                 placeholder="Priority"
-                                tooltip="- Priority.<br>- Values include: ID + name + number of hours to resolve ticket."
+                                tooltip="- <b>Priority</b>.<br>- <b>Values include</b>: <i>ID + name + number of hours to resolve ticket</i>."
                                 theme="light" placement="top">
                                 <option *ngFor="let e of priorities" [value]="e.id">
                                     {{e.description}}</option>
@@ -148,7 +150,7 @@
                         </div>
                     </div>
 
-                    <!-- file -->
+                    <!-- Choose file -->
                     <div class="row mb-3">
                         <!-- label -->
                         <div class="col-3">
@@ -157,36 +159,31 @@
                                 number: '.0-2'}} MB) </label>
                         </div>
 
-                        <!--  -->
+                        <!-- file browser -->
                         <div class="col-9">
 
                             <!-- Choose File -->
                             <input type="file" ng2FileSelect [uploader]="uploader" (change)="changeFile($event)"
                                 style="width:100%" />
-                                
-                            <!-- only display progress bar if (there is file to upload) and (file size is valid) and   -->
-                            <!-- file is uploading   -->
 
-                            <!-- <div *ngIf="uploadStatus === HAS_ATTACHED_FILE && !isExceedMaxFileSize &&
-                            uploader.queue[lastIndex]?.progress > 0 "> -->
-                            <div *ngIf="ticketForm.get('hasAttachedFile').value && !isExceedMaxFileSize &&
+                            <!-- only display progress bar if (there is file to upload) and (file size is valid) and   -->
+                            <!-- (progress > 0)   -->
+                            <div *ngIf="ticketForm.get('hasAttachedFile').value && !exceedMaxFileSize &&
                                 uploader.queue[lastIndex]?.progress> 0">
                                 <!-- progress bar -->
                                 <div class="progress-bar progress-bar-info" role="progressbar"
                                     attr.aria-valuenow="{{ uploader.queue[lastIndex]?.progress }}" aria-valuemin="0"
                                     aria-valuemax="100"
                                     [ngStyle]="{ 'width': uploader.queue[lastIndex]?.progress + '%' }">
-                                    Uploaded {{ uploader.queue[lastIndex]?.progress}}%
+                                    Loaded {{ uploader.queue[lastIndex]?.progress}}%
                                 </div>
                             </div>
                             <!-- error messages -->
                             <!-- if file size exceeds max allowed file size -->
-                            <div class="text-danger" *ngIf="isExceedMaxFileSize">
+                            <div class="text-danger" *ngIf="exceedMaxFileSize">
                                 <small>File size is too large(={{((actualFileSize/1024)/1024) | number: '.0-2'}}
-                                    MB).
-                                    This file will not be uploaded to server. Please choose a
-                                    file has its size &lt;= {{((maxFileSize/1024)/1024) |
-                                    number: '.0-2'}} MB. </small>
+                                    MB). This file will not be uploaded to server. Please choose a file that its size
+                                    &lt;= {{((maxFileSize/1024)/1024) | number: '.0-2'}} MB. </small>
                             </div>
 
                             <!--  -->

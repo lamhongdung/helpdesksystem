@@ -184,7 +184,7 @@ public interface TicketRepository extends JpaRepository<Ticket, Long> {
                                   @Param("sla") String sla,
                                   @Param("ticketStatusid") String ticketStatusid);
 
-    // save ticket into database
+    // save ticket into 'ticket' table
     @Modifying
     @Query(value = "" +
             " {call sp_saveTicket( " +

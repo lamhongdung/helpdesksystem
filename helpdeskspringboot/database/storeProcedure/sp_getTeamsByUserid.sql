@@ -21,7 +21,7 @@ delimiter $$
 create procedure sp_getTeamsByUserid(in_userid int)
 begin
 
-	-- create temporary "ticketTbl" table contains tickets by user id and by user role
+	-- create temporary "_ticketTbl" table contains tickets by user id and by user role
  	call sp_ticketTbl(in_userid);
 
 	-- get teams have tickets by user id, user role
@@ -34,7 +34,7 @@ begin
 		select 	distinct
 				a.teamid as id,
 				concat(a.teamid,' - ', coalesce(b.name,'')) as description
-		from ticketTbl a
+		from _ticketTbl a
 			left join team b on a.teamid = b.id
 	) a
     order by a.id, a.description;

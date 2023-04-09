@@ -26,35 +26,35 @@ public class FileController {
 
     // upload ticket's attached file to server
     @PostMapping("/upload")
-    public ResponseEntity<FileStorage> uploadFile(@RequestParam("file") MultipartFile file) throws MaxUploadSizeExceededException, IOException {
+    public ResponseEntity<FileStorage> uploadFile(@RequestParam("file") MultipartFile file)
+            throws MaxUploadSizeExceededException, IOException {
 
         // save file to server local directory and
         // save file information to database
         FileStorage fileStorage = fileService.save(file);
 
-//        return response(OK, "Uploaded the file successfully: " + file.getOriginalFilename());
         return new ResponseEntity<>(fileStorage, OK);
     }
 
-    @GetMapping("/files")
-    public ResponseEntity<List<FileStorageResponse>> getListFiles() {
-        List<FileStorageResponse> files = fileService.getAllFiles().map(dbFile -> {
-            String fileDownloadUri = ServletUriComponentsBuilder
-                    .fromCurrentContextPath()
-//                    .path("/files/")
-                    .path("/download/")
-                    .path(dbFile.getCustomFilename())
-                    .toUriString();
-
-            return new FileStorageResponse(
-                    dbFile.getOriginalFilename(),
-                    fileDownloadUri,
-                    dbFile.getFileType(),
-                    0);
-        }).collect(Collectors.toList());
-
-        return ResponseEntity.status(HttpStatus.OK).body(files);
-    }
+//    @GetMapping("/files")
+//    public ResponseEntity<List<FileStorageResponse>> getListFiles() {
+//        List<FileStorageResponse> files = fileService.getAllFiles().map(dbFile -> {
+//            String fileDownloadUri = ServletUriComponentsBuilder
+//                    .fromCurrentContextPath()
+////                    .path("/files/")
+//                    .path("/download/")
+//                    .path(dbFile.getCustomFilename())
+//                    .toUriString();
+//
+//            return new FileStorageResponse(
+//                    dbFile.getOriginalFilename(),
+//                    fileDownloadUri,
+//                    dbFile.getFileType(),
+//                    0);
+//        }).collect(Collectors.toList());
+//
+//        return ResponseEntity.status(HttpStatus.OK).body(files);
+//    }
 
 //    @GetMapping("/download/{id}")
 //    public ResponseEntity<byte[]> getFile(@PathVariable String id) {
