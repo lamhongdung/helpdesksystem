@@ -38,8 +38,8 @@ create temporary table _ticketTbl(
 	`content` text,
 	`customFilename` varchar(255) default null,
 	`createDatetime` datetime,
-	`lastUpdateDatetime` datetime
-    
+	`lastUpdateDatetime` datetime,
+	`lastUpdateByUserid` int
 );
     
 -- get user role by user id

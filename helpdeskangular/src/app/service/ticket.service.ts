@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { DropdownResponse } from '../entity/DropdownResponse';
 import { Ticket } from '../entity/Ticket';
-import { TicketResponse } from '../entity/TicketResponse';
+import { SearchTicketResponse } from '../entity/SearchTicketResponse';
 import { ShareService } from './share.service';
 import { CustomHttpRespone } from '../entity/CustomHttpRespone';
 
@@ -38,10 +38,10 @@ export class TicketService {
     teamid: string,
     assigneeid: string,
     sla: string,
-    ticketStatusid: string): Observable<TicketResponse[]> {
+    ticketStatusid: string): Observable<SearchTicketResponse[]> {
 
     // console.log(`${this.shareService.host}/ticket-search?userid=${userid}&pageNumber=${pageNumber}&pageSize=${this.shareService.pageSize}&searchTerm=${searchTerm}&fromDate=${fromDate}&toDate=${toDate}&categoryid=${categoryid}&priorityid=${priorityid}&creatorid=${creatorid}&teamid=${teamid}&assigneeid=${assigneeid}&sla=${sla}&ticketStatusid=${ticketStatusid}`);
-    return this.http.get<TicketResponse[]>(
+    return this.http.get<SearchTicketResponse[]>(
 
       `${this.shareService.host}/ticket-search?userid=${userid}&pageNumber=${pageNumber}&pageSize=${this.shareService.pageSize}&searchTerm=${searchTerm}&fromDate=${fromDate}&toDate=${toDate}&categoryid=${categoryid}&priorityid=${priorityid}&creatorid=${creatorid}&teamid=${teamid}&assigneeid=${assigneeid}&sla=${sla}&ticketStatusid=${ticketStatusid}`
     )
@@ -146,14 +146,14 @@ export class TicketService {
     return this.http.post<CustomHttpRespone>(`${this.host}/ticket-create`, ticket);
   }
 
-  //  // edit an existing team
-  //  public editTeam(team: Team): Observable<Team> {
-  //    return this.http.put<Team>(`${this.host}/team-edit`, team);
-  //  }
+   // edit an existing ticket
+   public editTicket(ticket: Ticket): Observable<CustomHttpRespone> {
+     return this.http.put<CustomHttpRespone>(`${this.host}/ticket-edit`, ticket);
+   }
 
-  //  // find team by id
-  //  findById(id: number): Observable<Team> {
-  //    return this.http.get<Team>(`${this.host}/team-list/${id}`);
-  //  }
+   // find team by id
+   findById(id: number): Observable<Ticket> {
+     return this.http.get<Ticket>(`${this.host}/ticket-list/${id}`);
+   }
 
 } // end of class TicketService

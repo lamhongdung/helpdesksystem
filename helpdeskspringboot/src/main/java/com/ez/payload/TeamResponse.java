@@ -1,4 +1,4 @@
-package com.ez.dto;
+package com.ez.payload;
 
 // contain data for display table in the "Team list" screen.
 public interface TeamResponse {

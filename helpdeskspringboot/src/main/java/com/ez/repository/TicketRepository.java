@@ -1,7 +1,7 @@
 package com.ez.repository;
 
-import com.ez.dto.DropdownResponse;
-import com.ez.dto.TicketResponse;
+import com.ez.payload.DropdownResponse;
+import com.ez.payload.SearchTicketResponse;
 import com.ez.entity.Ticket;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -141,19 +141,19 @@ public interface TicketRepository extends JpaRepository<Ticket, Long> {
             "                        :ticketStatusid " +
             "                        )} "
             , nativeQuery = true)
-    public List<TicketResponse> searchTicketsByUserid(@Param("userid") long userid,
-                                                      @Param("pageNumber") long pageNumber,
-                                                      @Param("pageSize") long pageSize,
-                                                      @Param("searchTerm") String searchTerm,
-                                                      @Param("fromDate") String fromDate,
-                                                      @Param("toDate") String toDate,
-                                                      @Param("categoryid") String categoryid,
-                                                      @Param("priorityid") String priorityid,
-                                                      @Param("creatorid") String creatorid,
-                                                      @Param("teamid") String teamid,
-                                                      @Param("assigneeid") String assigneeid,
-                                                      @Param("sla") String sla,
-                                                      @Param("ticketStatusid") String ticketStatusid
+    public List<SearchTicketResponse> searchTicketsByUserid(@Param("userid") long userid,
+                                                            @Param("pageNumber") long pageNumber,
+                                                            @Param("pageSize") long pageSize,
+                                                            @Param("searchTerm") String searchTerm,
+                                                            @Param("fromDate") String fromDate,
+                                                            @Param("toDate") String toDate,
+                                                            @Param("categoryid") String categoryid,
+                                                            @Param("priorityid") String priorityid,
+                                                            @Param("creatorid") String creatorid,
+                                                            @Param("teamid") String teamid,
+                                                            @Param("assigneeid") String assigneeid,
+                                                            @Param("sla") String sla,
+                                                            @Param("ticketStatusid") String ticketStatusid
                                                       );
 
     // calculate total of tickets based on search criteria for pagination

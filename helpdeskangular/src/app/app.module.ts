@@ -42,8 +42,7 @@ import { EditorModule, TINYMCE_SCRIPT_SRC } from '@tinymce/tinymce-angular';
 import { FileUploadModule } from 'ng2-file-upload';
 import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
 import { QuillModule } from 'ngx-quill';
-// import { CalendarEditComponent } from './component/calendar/calendar-edit/calendar-edit.component';
-// import { CalendarViewComponent } from './component/calendar/calendar-view/calendar-view.component';
+import { NgxEditorModule } from 'ngx-editor';
 
 @NgModule({
   declarations: [
@@ -86,7 +85,8 @@ import { QuillModule } from 'ngx-quill';
     EditorModule,
     FileUploadModule,
     CKEditorModule,
-    QuillModule.forRoot()
+    QuillModule.forRoot(),
+    NgxEditorModule
   ],
   providers: [NotificationService, AuthGuard, AuthService, UserService,
     { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },

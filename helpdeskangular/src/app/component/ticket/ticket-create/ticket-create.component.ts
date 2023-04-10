@@ -14,6 +14,7 @@ import { FileService } from 'src/app/service/file.service';
 import { DropdownResponse } from 'src/app/entity/DropdownResponse';
 import { validFile } from 'src/app/validator/validator';
 import { CustomHttpRespone } from 'src/app/entity/CustomHttpRespone';
+import { Editor, Toolbar } from 'ngx-editor';
 
 @Component({
   selector: 'app-ticket-create',
@@ -52,30 +53,44 @@ export class TicketCreateComponent {
     ]
   };
 
-  // toolbar for the "ngx-quills" rich text editor
-  modules = {
-    toolbar: [
-      ['bold', 'italic', 'underline', 'strike'],        // toggled buttons
-      ['blockquote', 'code-block'],
+  // // toolbar for the "ngx-quills" rich text editor
+  // modules = {
+  //   toolbar: [
+  //     ['bold', 'italic', 'underline', 'strike'],        // toggled buttons
+  //     ['blockquote', 'code-block'],
 
-      [{ 'header': 1 }, { 'header': 2 }],               // custom button values
-      [{ 'list': 'ordered' }, { 'list': 'bullet' }],
-      [{ 'script': 'sub' }, { 'script': 'super' }],      // superscript/subscript
-      [{ 'indent': '-1' }, { 'indent': '+1' }],          // outdent/indent
-      [{ 'direction': 'rtl' }],                         // text direction
+  //     [{ 'header': 1 }, { 'header': 2 }],               // custom button values
+  //     [{ 'list': 'ordered' }, { 'list': 'bullet' }],
+  //     [{ 'script': 'sub' }, { 'script': 'super' }],      // superscript/subscript
+  //     [{ 'indent': '-1' }, { 'indent': '+1' }],          // outdent/indent
+  //     [{ 'direction': 'rtl' }],                         // text direction
 
-      [{ 'size': ['small', false, 'large', 'huge'] }],  // custom dropdown
-      [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
+  //     [{ 'size': ['small', false, 'large', 'huge'] }],  // custom dropdown
+  //     [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
 
-      [{ 'color': [] }, { 'background': [] }],          // dropdown with defaults from theme
-      [{ 'font': [] }],
-      [{ 'align': [] }],
+  //     [{ 'color': [] }, { 'background': [] }],          // dropdown with defaults from theme
+  //     [{ 'font': [] }],
+  //     [{ 'align': [] }],
 
-      ['clean'],                                         // remove formatting button
+  //     ['clean'],                                         // remove formatting button
 
-      ['link', 'image', 'video']
-    ],
-  }
+  //     ['link', 'image', 'video']
+  //   ],
+  // }
+
+  editor: Editor;
+
+  toolbar: Toolbar = [
+    ['bold', 'italic'],
+    ['underline', 'strike'],
+    // ['code', 'blockquote'],
+    ['ordered_list', 'bullet_list'],
+    ['text_color', 'background_color'],
+    [{ heading: ['h1', 'h2', 'h3', 'h4', 'h5', 'h6'] }],
+    // ['link', 'image'],
+    // ['align_left', 'align_center', 'align_right', 'align_justify'],
+    // ['horizontal_rule', 'format_clear'],
+  ];
 
   // user who has logged in the system
   userid: number;
@@ -145,6 +160,8 @@ export class TicketCreateComponent {
   // this method ngOnInit() is run after the component "TicketCreateComponent" is contructed
   ngOnInit(): void {
 
+    this.editor = new Editor();
+    
     // initial form
     this.ticketForm = this.formBuilder.group(
       {

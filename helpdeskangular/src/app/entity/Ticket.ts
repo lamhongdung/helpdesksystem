@@ -24,6 +24,8 @@ export class Ticket {
         // // customFilename = timestamp + userid + UUID + extension(ex: .jpg)
         public customFilename: string,
         
+        public originalFilename: string,
+
         // date creates ticket
         public createDatetime: Date,
         // last datetime ticket is updated

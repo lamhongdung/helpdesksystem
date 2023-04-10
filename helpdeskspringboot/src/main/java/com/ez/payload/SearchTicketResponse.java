@@ -1,8 +1,8 @@
-package com.ez.dto;
+package com.ez.payload;
 
 import java.util.Date;
 
-public interface TicketResponse {
+public interface SearchTicketResponse {
 
     // "ticketid" column
     Long getTicketid();
@@ -28,13 +28,13 @@ public interface TicketResponse {
     // "lastUpdateDatetime" column
     Date getLastUpdateDatetime();
 
-    // "spendHour" column
+    // "spentHour" column
     // ex: 1.5 hours
-    float getSpendHour();
+    float getSpentHour();
 
-    // "spendHourHhmmss" column
+    // "spentHourHhmmss" column
     // hours in hh:mm:ss(ex: 01:30:00)
-    String getSpendHourHhmmss();
+    String getSpentHourHhmmss();
 
     // "creatorPhone" column
     String getCreatorPhone();

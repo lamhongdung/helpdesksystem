@@ -1,4 +1,4 @@
-package com.ez.dto;
+package com.ez.payload;
 
 public interface DropdownResponse {
 

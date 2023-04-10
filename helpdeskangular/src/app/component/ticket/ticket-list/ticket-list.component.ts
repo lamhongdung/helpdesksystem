@@ -5,7 +5,7 @@ import { FormBuilder } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { DropdownResponse } from 'src/app/entity/DropdownResponse';
-import { TicketResponse } from 'src/app/entity/TicketResponse';
+import { SearchTicketResponse } from 'src/app/entity/SearchTicketResponse';
 import { NotificationType } from 'src/app/enum/NotificationType.enum';
 import { AuthService } from 'src/app/service/auth.service';
 import { NotificationService } from 'src/app/service/notification.service';
@@ -30,7 +30,7 @@ export class TicketListComponent {
   totalOfTickets: number;
 
   // ticket list(the grid of the team table)
-  tickets: TicketResponse[] = [];
+  searchTicketResponses: SearchTicketResponse[] = [];
   // number of tickets per page(default = 5)
   pageSize: number;
 
@@ -232,8 +232,8 @@ export class TicketListComponent {
         .subscribe({
 
           // get tickets from database successful.
-          next: (data: TicketResponse[]) => {
-            return this.tickets = data
+          next: (data: SearchTicketResponse[]) => {
+            return this.searchTicketResponses = data
           },
 
           // there are some errors when get tickets from database
@@ -564,7 +564,7 @@ export class TicketListComponent {
   } // end of loadTooltipPlaceholder()
 
   tooltipSlaDetail(ticketStatusid: number, createTime: Date, lastUpdateDatetime: Date,
-    currentDatetime: Date, limitTimeToResolve: string, spendHourHhmmss: string,
+    currentDatetime: Date, limitTimeToResolve: string, spentHourHhmmss: string,
     sla: string): string {
 
     // SLA datetime
@@ -593,7 +593,7 @@ export class TicketListComponent {
     tooltipSlaDetail = tooltipSlaDetail + `<br>- From datetime: <b>${formatDate(createTime.toLocaleString(), "yyyy-MM-dd HH:mm:ss", "en-US")} </b>`
     tooltipSlaDetail = tooltipSlaDetail + `<br>- To datetime: <b>${formatDate(slaDatetime.toLocaleString(), "yyyy-MM-dd HH:mm:ss", "en-US")} </b>`
     tooltipSlaDetail = tooltipSlaDetail + `<br>- Limit time to resolve ticket: <b>${limitTimeToResolve}</b> hours`
-    tooltipSlaDetail = tooltipSlaDetail + `<br>- Spent hours(HH:mm:ss): <b>${spendHourHhmmss}</b>`
+    tooltipSlaDetail = tooltipSlaDetail + `<br>- Spent hours(HH:mm:ss): <b>${spentHourHhmmss}</b>`
     tooltipSlaDetail = tooltipSlaDetail + `<br>-> <b>SLA</b>: ${sla}`
 
     return tooltipSlaDetail;

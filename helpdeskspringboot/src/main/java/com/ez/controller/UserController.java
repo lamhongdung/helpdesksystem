@@ -1,6 +1,6 @@
 package com.ez.controller;
 
-import com.ez.dto.*;
+import com.ez.payload.*;
 import com.ez.entity.*;
 import com.ez.exception.*;
 import com.ez.service.UserService;

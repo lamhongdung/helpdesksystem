@@ -1,1 +1,309 @@
-<p>ticket-edit works!</p>
+<div class="text-center">
+    <h3>Edit ticket</h3>
+    <hr width="100%">
+</div>
+
+<!-- {{ticketForm.value | json}} -->
+
+<div class="container-fluid">
+
+    <!-- ticket form -->
+    <form [formGroup]="ticketForm" (ngSubmit)="editTicket()">
+
+        <div class="row">
+
+            <!-- the "Left" column -->
+            <div class="col-md-6">
+                <div class="container-fluid">
+
+                    <!-- Ticket id -->
+                    <div class="row mb-3">
+                        <!-- label -->
+                        <div class="col-3">
+                            <label class="col-form-label" for="ticketid">Ticket ID<small>*</small></label>
+                        </div>
+                        <!-- textbox -->
+                        <div class="col-9">
+                            <input class="form-control" type="text" formControlName="ticketid" id="ticketid"
+                                tooltip="Ticket ID" theme="light" placement="top" readonly>
+                        </div>
+                    </div>
+
+                    <!-- Creator(id + fullname) -->
+                    <div class="row mb-3">
+                        <!-- label -->
+                        <div class="col-3">
+                            <label class="col-form-label" for="creatorName">Creator<small>*</small></label>
+                        </div>
+                        <!-- textbox -->
+                        <div class="col-9">
+                            <input class="form-control" type="text" formControlName="creator" id="creator"
+                                tooltip="Creator id + full name" theme="light" placement="top" readonly>
+                        </div>
+                    </div>
+
+                    <!-- Creator phone -->
+                    <div class="row mb-3">
+                        <!-- label -->
+                        <div class="col-3">
+                            <label class="col-form-label" for="creatorPhone">Creator phone<small>*</small></label>
+                        </div>
+                        <!-- textbox -->
+                        <div class="col-9">
+                            <input class="form-control" type="text" formControlName="creatorPhone" id="creatorPhone"
+                                tooltip="Creator phone number" theme="light" placement="top" readonly>
+                        </div>
+                    </div>
+
+                    <!-- Creator email -->
+                    <div class="row mb-3">
+                        <!-- label -->
+                        <div class="col-3">
+                            <label class="col-form-label" for="creatorEmail">Creator email<small>*</small></label>
+                        </div>
+                        <!-- textbox -->
+                        <div class="col-9">
+                            <input class="form-control" type="text" formControlName="creatorEmail" id="creatorEmail"
+                                tooltip="Creator email" theme="light" placement="top" readonly>
+                        </div>
+                    </div>
+
+                    <!-- Subject -->
+                    <div class="row mb-3">
+                        <!-- label -->
+                        <div class="col-3">
+                            <label class="col-form-label" for="subject">Subject*</label>
+                        </div>
+                        <!-- textbox -->
+                        <div class="col-9">
+                            <input class="form-control" type="text" formControlName="subject" id="subject"
+                                tooltip="Subject" theme="light" placement="top" readonly>
+                        </div>
+                    </div>
+
+                    <!-- Content -->
+                    <div class="row mb-3">
+                        <!-- label -->
+                        <div class="col-3">
+                            <label class="col-form-label" for="content">Content<small>*</small></label>
+                        </div>
+                        <!-- rich text editor -->
+                        <div class="col-9">
+                            <!-- ngx-quill -->
+                            <!-- <quill-editor class="content-editor" [modules]="modules" [placeholder]="'Ticket body'"
+                                [styles]="{'height': '250px', 'width': '100%'}" formControlName="content">
+                            </quill-editor> -->
+                            <div class="NgxEditor__Wrapper ngxEditor">
+                                <!-- menu -->
+                                <ngx-editor-menu [editor]="contentEditor" [toolbar]="contentToolbar"
+                                    style="color: darkgray;" [disabled]="true">
+                                </ngx-editor-menu>
+                                <!-- editor -->
+                                <ngx-editor [editor]="contentEditor" formControlName="content"
+                                    [placeholder]="'Ticket body'">
+                                </ngx-editor>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- the "Right" column -->
+            <div class="col-md-6">
+                <div class="container-fluid">
+
+                    <!-- Team -->
+                    <div class="row mb-3">
+                        <!-- label -->
+                        <div class="col-3">
+                            <label class="col-form-label" for="team">Team<small>*</small></label>
+                        </div>
+                        <!-- textbox -->
+                        <div class="col-9">
+                            <input class="form-control" type="text" formControlName="team" id="team"
+                                tooltip="Team id + team name" theme="light" placement="top" readonly>
+                        </div>
+                    </div>
+
+                    <!-- Create datetime -->
+                    <div class="row mb-3">
+                        <!-- label -->
+                        <div class="col-3">
+                            <label class="col-form-label" for="createDatetime">Create time<small>*</small></label>
+                        </div>
+                        <!-- textbox -->
+                        <div class="col-9">
+                            <input class="form-control" type="text" formControlName="createDatetime" id="createDatetime"
+                                tooltip="Ticket is created on this date time" theme="light" placement="top" readonly>
+                        </div>
+                    </div>
+
+                    <!-- Last update datetime -->
+                    <div class="row mb-3">
+                        <!-- label -->
+                        <div class="col-3">
+                            <label class="col-form-label" for="lastUpdateDatetime">Update time<small>*</small></label>
+                        </div>
+                        <!-- textbox -->
+                        <div class="col-9">
+                            <input class="form-control" type="text" formControlName="lastUpdateDatetime"
+                                id="lastUpdateDatetime" tooltip="Last update date time" theme="light" placement="top"
+                                readonly>
+                        </div>
+                    </div>
+
+                    <!-- Last update by user -->
+                    <div class="row mb-3">
+                        <!-- label -->
+                        <div class="col-3">
+                            <label class="col-form-label" for="lastUpdateByUser">Update by<small>*</small></label>
+                        </div>
+                        <!-- textbox -->
+                        <div class="col-9">
+                            <input class="form-control" type="text" formControlName="lastUpdateByUser"
+                                id="lastUpdateByUser" tooltip="Last update by user" theme="light" placement="top"
+                                readonly>
+                        </div>
+                    </div>
+
+                    <!-- Spent hours + SLA -->
+                    <div class="row mb-3">
+                        <!-- label -->
+                        <div class="col-3">
+                            <label class="col-form-label" for="spentHour">Spent hours<small>*</small></label>
+                        </div>
+                        <!-- textbox -->
+                        <div class="col-9">
+                            <input class="form-control" type="text" formControlName="spendHour" id="spendHour"
+                                tooltip="Spent hours + SLA" theme="light" placement="top" readonly>
+                        </div>
+                    </div>
+
+                    <!-- priorityid -->
+                    <div class="row mb-3">
+                        <!-- label -->
+                        <div class="col-3">
+                            <label class="col-form-label" for="priorityid">Priority<small
+                                    class="text-danger">*</small></label>
+                        </div>
+                        <!-- dropdown -->
+                        <div class="col-9">
+                            <select id="priorityid" class="form-control" formControlName="priorityid"
+                                placeholder="Priority" tooltip="Priority" theme="light" placement="top">
+                                <option value="ROLE_CUSTOMER">ROLE_CUSTOMER</option>
+                                <option value="ROLE_SUPPORTER">ROLE_SUPPORTER</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- categoryid -->
+                    <div class="row mb-3">
+                        <!-- label -->
+                        <div class="col-3">
+                            <label class="col-form-label" for="categoryid">Category<small
+                                    class="text-danger">*</small></label>
+                        </div>
+                        <!-- dropdown -->
+                        <div class="col-9">
+                            <select id="categoryid" class="form-control" formControlName="categoryid"
+                                placeholder="Category" tooltip="Category" theme="light" placement="top">
+                                <option value="ROLE_CUSTOMER">ROLE_CUSTOMER</option>
+                                <option value="ROLE_SUPPORTER">ROLE_SUPPORTER</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- assigneeid -->
+                    <div class="row mb-3">
+                        <!-- label -->
+                        <div class="col-3">
+                            <label class="col-form-label" for="assigneeid">Assignee<small
+                                    class="text-danger">*</small></label>
+                        </div>
+                        <!-- dropdown -->
+                        <div class="col-9">
+                            <select id="assigneeid" class="form-control" formControlName="assigneeid"
+                                placeholder="Assignee" tooltip="Ticket is assigned to this supporter" theme="light"
+                                placement="top">
+                                <option value="ROLE_CUSTOMER">ROLE_CUSTOMER</option>
+                                <option value="ROLE_SUPPORTER">ROLE_SUPPORTER</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- status -->
+                    <div class="row mb-3">
+                        <!-- label -->
+                        <div class="col-3">
+                            <label class="col-form-label" for="ticketStatusid">Ticket status<small
+                                    class="text-danger">*</small></label>
+                        </div>
+                        <!-- dropdown -->
+                        <div class="col-9">
+                            <select id="ticketStatusid" class="form-control" formControlName="ticketStatusid"
+                                placeholder="Ticket status" tooltip="Ticket status" theme="light" placement="top">
+                                <option value="ROLE_CUSTOMER">ROLE_CUSTOMER</option>
+                                <option value="ROLE_SUPPORTER">ROLE_SUPPORTER</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- ticket file -->
+                    <div class="row mb-3">
+                        <!-- label -->
+                        <div class="col-3">
+                            <label class="col-form-label" for="file">File</label>
+                        </div>
+                        <!-- textbox -->
+                        <div class="col-9">
+                            <a href="{{ ticket?.customFilename }}">{{ ticket?.originalFilename }}</a>
+                        </div>
+                    </div>
+
+                    <!-- Comment -->
+                    <!-- <div class="row mb-3">
+                        <div class="col-3">
+                            <label class="col-form-label" for="content">Comment<small
+                                    class="text-danger">*</small></label>
+                        </div>
+                        <div class="col-9">
+                            <div class="NgxEditor__Wrapper ngxEditor">
+                                <ngx-editor-menu [editor]="commentEditor" [toolbar]="commentToolbar">
+                                </ngx-editor-menu>
+                                <ngx-editor [editor]="commentEditor" formControlName="comment"
+                                    [placeholder]="'Ticket comment'">
+                                </ngx-editor>
+                            </div>
+                        </div>
+                    </div> -->
+
+                </div>
+            </div>
+        </div>
+
+        <!-- buttons: "Save" and "Cancel" -->
+        <div class="d-flex justify-content-center">
+            <div>
+
+                <!-- the "Save" button -->
+                <!-- if ticketForm is invalid then disabled the button "Save" -->
+                <button type="submit" [disabled]="ticketForm.invalid" style="width: 150px" class="btn btn-primary mr-2"
+                    tooltip="Save ticket" theme="light" placement="bottom">
+                    <!-- show the spinner icon in the "Save" button -->
+                    <i *ngIf="showSpinner" class="fas fa-spinner fa-spin"></i>
+                    <!-- Change label button "Save" to "Saving.." -->
+                    <span *ngIf="showSpinner">Saving...</span>
+                    <!-- after save finished then re-changes the button to "Save"  -->
+                    <span *ngIf="!showSpinner">Save</span>
+                </button>
+
+                <!-- the "Cancel" button -->
+                <!-- re-directs to the "ticket-list" page -->
+                <button class="btn btn-dark" routerLink="/ticket-list" style="width: 150px"
+                    tooltip="Cancel and go back to the 'Ticket list' screen" theme="light"
+                    placement="bottom">Cancel</button>
+            </div>
+        </div>
+    </form>
+</div>

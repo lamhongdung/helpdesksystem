@@ -1,7 +1,7 @@
 package com.ez.filter;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.ez.dto.HttpResponse;
+import com.ez.payload.HttpResponse;
 import static org.springframework.http.HttpStatus.FORBIDDEN;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.Http403ForbiddenEntryPoint;

@@ -1,8 +1,6 @@
 package com.ez.service;
 
-import com.ez.dto.*;
-import com.ez.entity.Team;
-import com.ez.entity.Ticket;
+import com.ez.payload.*;
 import com.ez.repository.TicketRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,12 +9,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import javax.persistence.EntityNotFoundException;
-import java.util.ArrayList;
 import java.util.List;
 
-import static com.ez.constant.Constant.NO_TEAM_FOUND_BY_ID;
-import static org.springframework.http.HttpStatus.BAD_REQUEST;
 import static org.springframework.http.HttpStatus.OK;
 
 @Service
@@ -107,11 +101,11 @@ public class TicketService {
     }
 
     // search tickets by userid(and by user role).
-    public List<TicketResponse> searchTickets(long userid, long pageNumber, long pageSize,
-                                              String searchTerm, String fromDate, String toDate,
-                                              String categoryid, String priorityid, String creatorid,
-                                              String teamid, String assigneeid, String sla,
-                                              String ticketStatusid
+    public List<SearchTicketResponse> searchTickets(long userid, long pageNumber, long pageSize,
+                                                    String searchTerm, String fromDate, String toDate,
+                                                    String categoryid, String priorityid, String creatorid,
+                                                    String teamid, String assigneeid, String sla,
+                                                    String ticketStatusid
     ) {
 
         LOGGER.info("Get tickets by user id(and by user role)");

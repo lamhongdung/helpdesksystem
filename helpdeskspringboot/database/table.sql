@@ -216,6 +216,7 @@ create table `ticket` (
 	`customFilename` varchar(255) default null,
 	`createDatetime` datetime not null,
 	`lastUpdateDatetime` datetime not null,
+	`lastUpdateByUserid` int not null,
     
 	primary key (`ticketid`),
     
@@ -224,22 +225,24 @@ create table `ticket` (
 	key `FK_teamid_ticket` (`teamid`),
 	key `FK_priorityid_ticket` (`priorityid`),
 	key `FK_ticketStatusid_ticket` (`ticketStatusid`),
+	key `FK_lastUpdateByUserid_ticket` (`lastUpdateByUserid`),
     
 	constraint `FK_categoryid_ticket` foreign key (`categoryid`) references `category` (`id`),
 	constraint `FK_creatorid_ticket` foreign key (`creatorid`) references `user` (`id`),
 	constraint `FK_priorityid_ticket` foreign key (`priorityid`) references `priority` (`id`),
 	constraint `FK_teamid_ticket` foreign key (`teamid`) references `team` (`id`),
-	constraint `FK_ticketStatusid_ticket` foreign key (`ticketStatusid`) references `ticketstatus` (`statusid`)
+	constraint `FK_ticketStatusid_ticket` foreign key (`ticketStatusid`) references `ticketstatus` (`statusid`),
+	constraint `FK_lastUpdateByUserid_ticket` foreign key (`lastUpdateByUserid`) references `user` (`id`)
   
 ) engine=InnoDB auto_increment=101 default charset=utf8mb4 collate=utf8mb4_0900_ai_ci;
 
-insert into `ticket`(ticketid, subject, categoryid, creatorid, teamid, priorityid, assigneeid, ticketStatusid, content, customFilename, createDatetime, lastUpdateDatetime) values 
-(1,'Laptop bị hỏng',1,1,1,1,10,3,'Laptop bị hỏng. Vui lòng thay laptop mới',null,'2023-03-18 08:30:00','2023-03-18 11:30:00'),
-(2,'Máy in bị hết mực',3,1,1,1,null,1,'Máy in bị hết mực. Đề nghị thay mực máy in',null,'2023-03-23 22:05:00','2023-03-23 22:05:00'),
-(3,'Không thể kết nối mạng wifi',4,2,1,2,11,3,'Không tìm thấy mạng wifi nên không thể kết nối internet qua wifi',null,'2023-03-26 11:18:00','2023-03-27 15:18:00'),
-(4,'Không thể xuất báo cáo từ phần mềm',6,2,1,3,11,4,'Không thể xuất báo cáo từ phần. Nhờ đợi kỹ thuật kiểm tra giúp',null,'2023-03-28 08:00:00','2023-03-28 10:00:00'),
-(5,'Xin cài phần mềm Visio cho laptop',6,1,1,2,11,5,'Nhờ IT cài phần mềm Visio cho máy laptop cá nhân',null,'2023-03-29 10:40:00','2023-03-29 11:00:00'),
-(6,'Nhờ reset password email account: abc@xyz.com',5,2,1,2,10,2,'Nhờ IT reset password cho email account abc@xyz.com. Cảm ơn IT nhiều!',null,'2023-03-30 21:30:00','2023-03-31 10:00:00');
+insert into `ticket`(ticketid, subject, categoryid, creatorid, teamid, priorityid, assigneeid, ticketStatusid, content, customFilename, createDatetime, lastUpdateDatetime, lastUpdateByUserid) values 
+(1,'Laptop bị hỏng',1,1,1,1,10,3,'Laptop bị hỏng. Vui lòng thay laptop mới',null,'2023-03-18 08:30:00','2023-03-18 11:30:00',1),
+(2,'Máy in bị hết mực',3,1,1,1,null,1,'Máy in bị hết mực. Đề nghị thay mực máy in',null,'2023-03-23 22:05:00','2023-03-23 22:05:00',1),
+(3,'Không thể kết nối mạng wifi',4,2,1,2,11,3,'Không tìm thấy mạng wifi nên không thể kết nối internet qua wifi',null,'2023-03-26 11:18:00','2023-03-27 15:18:00',2),
+(4,'Không thể xuất báo cáo từ phần mềm',6,2,1,3,11,4,'Không thể xuất báo cáo từ phần. Nhờ đợi kỹ thuật kiểm tra giúp',null,'2023-03-28 08:00:00','2023-03-28 10:00:00',2),
+(5,'Xin cài phần mềm Visio cho laptop',6,1,1,2,11,5,'Nhờ IT cài phần mềm Visio cho máy laptop cá nhân',null,'2023-03-29 10:40:00','2023-03-29 11:00:00',1),
+(6,'Nhờ reset password email account: abc@xyz.com',5,2,1,2,10,2,'Nhờ IT reset password cho email account abc@xyz.com. Cảm ơn IT nhiều!',null,'2023-03-30 21:30:00','2023-03-31 10:00:00',2);
 
 
 -- -----------------------------------------------------

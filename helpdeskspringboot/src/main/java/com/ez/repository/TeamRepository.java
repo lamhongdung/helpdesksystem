@@ -1,7 +1,7 @@
 package com.ez.repository;
 
-import com.ez.dto.DropdownResponse;
-import com.ez.dto.TeamResponse;
+import com.ez.payload.DropdownResponse;
+import com.ez.payload.TeamResponse;
 import com.ez.entity.Team;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;

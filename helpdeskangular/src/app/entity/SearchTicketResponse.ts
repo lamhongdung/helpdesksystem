@@ -1,4 +1,4 @@
-export class TicketResponse {
+export class SearchTicketResponse {
 
     constructor(
 
@@ -18,10 +18,10 @@ export class TicketResponse {
         public sla: string,
         // last update date time
         public lastUpdateDatetime: Date,
-        // spend hours. ex: 1.5 hours
-        public spendHour: number,
-        // spend hours in hh:mm:ss format. ex: 01:30:00
-        public spendHourHhmmss: string,
+        // spent hours. ex: 1.5 hours
+        public spentHour: number,
+        // spent hours in hh:mm:ss format. ex: 01:30:00
+        public spentHourHhmmss: string,
         // creator phone number
         public creatorPhone: string,
         // creator email

@@ -1,25 +1,19 @@
 package com.ez.controller;
 
-import com.ez.dto.*;
-import com.ez.entity.Team;
-import com.ez.entity.Ticket;
-import com.ez.exception.OldPasswordIsNotMatchException;
+import com.ez.payload.*;
 import com.ez.service.TicketService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
-import javax.persistence.EntityNotFoundException;
 import javax.validation.Valid;
 import java.util.List;
 
-import static org.springframework.http.HttpStatus.BAD_REQUEST;
 import static org.springframework.http.HttpStatus.OK;
 
 @RestController
@@ -156,23 +150,23 @@ public class TicketController {
     @GetMapping("/ticket-search")
     // all authenticated users can access this resource
 //    @PreAuthorize("hasAnyRole('ROLE_CUSTOMER','ROLE_SUPPORTER','ROLE_ADMIN')")
-    public ResponseEntity<List<TicketResponse>> searchTickets(@RequestParam long userid,
-                                                              @RequestParam long pageNumber,
-                                                              @RequestParam long pageSize,
-                                                              @RequestParam String searchTerm,
-                                                              @RequestParam String fromDate,
-                                                              @RequestParam String toDate,
-                                                              @RequestParam String categoryid,
-                                                              @RequestParam String priorityid,
-                                                              @RequestParam String creatorid,
-                                                              @RequestParam String teamid,
-                                                              @RequestParam String assigneeid,
-                                                              @RequestParam String sla,
-                                                              @RequestParam String ticketStatusid
+    public ResponseEntity<List<SearchTicketResponse>> searchTickets(@RequestParam long userid,
+                                                                    @RequestParam long pageNumber,
+                                                                    @RequestParam long pageSize,
+                                                                    @RequestParam String searchTerm,
+                                                                    @RequestParam String fromDate,
+                                                                    @RequestParam String toDate,
+                                                                    @RequestParam String categoryid,
+                                                                    @RequestParam String priorityid,
+                                                                    @RequestParam String creatorid,
+                                                                    @RequestParam String teamid,
+                                                                    @RequestParam String assigneeid,
+                                                                    @RequestParam String sla,
+                                                                    @RequestParam String ticketStatusid
     ) {
 
         // get tickets by userid(and by user role) and based on search criteria
-        List<TicketResponse> ticketResponses = ticketService.searchTickets(userid, pageNumber, pageSize,
+        List<SearchTicketResponse> ticketResponses = ticketService.searchTickets(userid, pageNumber, pageSize,
                 searchTerm, fromDate, toDate,
                 categoryid, priorityid, creatorid,
                 teamid, assigneeid, sla,

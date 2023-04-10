@@ -82,10 +82,12 @@ if assignmentMethod = 'M' then
     -- save ticket into 'ticket' table
 	insert into `ticket`(subject, categoryid, creatorid, teamid, priorityid, 
 						assigneeid, ticketStatusid, 
-						content, customFilename, createDatetime, lastUpdateDatetime) values 
+						content, customFilename, createDatetime, lastUpdateDatetime,
+                        lastUpdateByUserid) values 
 						(in_subject, in_categoryid, in_creatorid, in_teamid, in_priorityid, 
 						assigneeid, ticketStatusid,
-						in_content, in_customFilename, now(), now()); 
+						in_content, in_customFilename, now(), now(),
+                        creatorid); 
              
 	-- exit store procedure
 	leave sp;
@@ -127,10 +129,12 @@ if assignmentMethod = 'A' then
 		-- save ticket into 'ticket' table
 		insert into `ticket`(subject, categoryid, creatorid, teamid, priorityid, 
 							assigneeid, ticketStatusid, 
-							content, customFilename, createDatetime, lastUpdateDatetime) values 
+							content, customFilename, createDatetime, lastUpdateDatetime,
+                            lastUpdateByUserid) values 
 							(in_subject, in_categoryid, in_creatorid, in_teamid, in_priorityid, 
 							assigneeid, ticketStatusid,
-							in_content, in_customFilename, now(), now());
+							in_content, in_customFilename, now(), now(),
+                            creatorid);
                             
 		-- exit store procedure
 		leave sp;
@@ -185,10 +189,12 @@ if assignmentMethod = 'A' then
 		-- save ticket into 'ticket' table
 		insert into `ticket`(subject, categoryid, creatorid, teamid, priorityid, 
 							assigneeid, ticketStatusid, 
-							content, customFilename, createDatetime, lastUpdateDatetime) values 
+							content, customFilename, createDatetime, lastUpdateDatetime,
+                            lastUpdateByUserid) values 
 							(in_subject, in_categoryid, in_creatorid, in_teamid, in_priorityid, 
 							assigneeid, ticketStatusid,
-							in_content, in_customFilename, now(), now());
+							in_content, in_customFilename, now(), now(),
+                            creatorid);
                     
 end if;
 

@@ -1,7 +1,7 @@
 package com.ez.exception;
 
 import com.auth0.jwt.exceptions.TokenExpiredException;
-import com.ez.dto.HttpResponse;
+import com.ez.payload.HttpResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.web.servlet.error.ErrorController;

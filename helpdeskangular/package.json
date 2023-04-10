@@ -26,6 +26,7 @@
     "ng-multiselect-dropdown": "^0.3.9",
     "ng2-file-upload": "^3.0.0",
     "ng2-tooltip-directive": "^2.10.3",
+    "ngx-editor": "^15.3.0",
     "ngx-quill": "^20.0.1",
     "rxjs": "~7.8.0",
     "tinymce": "^6.4.1",

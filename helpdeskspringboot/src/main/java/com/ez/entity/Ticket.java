@@ -72,8 +72,11 @@ public class Ticket implements Serializable {
     @UpdateTimestamp
     private Date lastUpdateDatetime;
 
+    @Min(value = 1, message = "User id of last person has updated the ticket must be greater than or equal to 1")
+    private long lastUpdateByUserid;
+
     public Ticket(String subject, long categoryid, long creatorid, long teamid, long priorityid,
-                  long ticketStatusid, String content, String customFilename) {
+                  long ticketStatusid, String content, String customFilename, long lastUpdateByUserid) {
 
         this.subject = subject;
         this.categoryid = categoryid;
@@ -83,6 +86,7 @@ public class Ticket implements Serializable {
         this.ticketStatusid = ticketStatusid;
         this.content = content;
         this.customFilename = customFilename;
+        this.lastUpdateByUserid = lastUpdateByUserid;
 
     }
 

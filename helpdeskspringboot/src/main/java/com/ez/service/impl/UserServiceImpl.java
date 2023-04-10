@@ -1,7 +1,7 @@
 package com.ez.service.impl;
 
-import com.ez.dto.ChangePassword;
-import com.ez.dto.EditProfile;
+import com.ez.payload.ChangePassword;
+import com.ez.payload.EditProfile;
 import com.ez.entity.*;
 import com.ez.exception.*;
 import com.ez.repository.UserRepository;

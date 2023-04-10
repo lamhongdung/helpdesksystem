@@ -282,8 +282,8 @@
             tooltip="- Last update date time.<br>- Last update date time the ticket is updated its status."
             theme="light" placement="bottom">Last update datetime</th>
 
-          <!-- Spend hours -->
-          <th scope="col" tooltip="- Spent hours in hh:mm:ss format" theme="light" placement="bottom">Spend hours</th>
+          <!-- Spent hours -->
+          <th scope="col" tooltip="- Spent hours in hh:mm:ss format" theme="light" placement="bottom">Spent hours</th>
 
           <!-- creator phone -->
           <!-- if role is 'supporter' or 'admin' then display 'Creator phone' -->
@@ -314,7 +314,7 @@
 
       <tbody style="text-align: center">
 
-        <tr *ngFor="let ticket of tickets, index as i">
+        <tr *ngFor="let ticket of searchTicketResponses, index as i">
 
           <!-- column: order(line number) -->
           <!-- navigate to the "/ticket-view/{ticketid}" when user clicks on the table(except the column "Action") -->
@@ -372,7 +372,7 @@
           <!-- column: SLA -->
           <!-- navigate to the "/ticket-view/{ticketid}" when user clicks on the table(except the column "Action") -->
           <td class="pointer-link" (click)="viewTicket(ticket.ticketid)"
-            [tooltip]="tooltipSlaDetail(ticket.ticketStatusid,ticket.createDatetime,ticket.lastUpdateDatetime,ticket.currentDatetime,ticket.resolveIn,ticket.spendHourHhmmss,ticket.sla)"
+            [tooltip]="tooltipSlaDetail(ticket.ticketStatusid,ticket.createDatetime,ticket.lastUpdateDatetime,ticket.currentDatetime,ticket.resolveIn,ticket.spentHourHhmmss,ticket.sla)"
             theme="light">
             {{ticket.sla}}</td>
 
@@ -381,9 +381,9 @@
           <td class="pointer-link" (click)="viewTicket(ticket.ticketid)">
             {{ticket.lastUpdateDatetime | date:'yyyy-MM-dd HH:mm:ss'}}</td>
 
-          <!-- column: spend hours in format 'HH:mm:ss' -->
+          <!-- column: spent hours in format 'HH:mm:ss' -->
           <!-- navigate to the "/ticket-view/{ticketid}" when user clicks on the table(except the column "Action") -->
-          <td class="pointer-link" (click)="viewTicket(ticket.ticketid)">{{ticket.spendHourHhmmss}}</td>
+          <td class="pointer-link" (click)="viewTicket(ticket.ticketid)">{{ticket.spentHourHhmmss}}</td>
 
           <!-- column: Creator phone. -->
           <!-- if role is 'supporter' or 'admin' then display 'Creator phone'. -->

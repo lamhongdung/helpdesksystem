@@ -42,7 +42,7 @@
 
                     <!-- Content -->
                     <!-- <div class="row mb-3"> -->
-                    <div class="row mb-2">
+                    <div class="row mb-3">
                         <!-- label -->
                         <div class="col-2">
                             <label class="col-form-label" for="content">Content<small
@@ -51,9 +51,15 @@
                         <!-- dropdown -->
                         <div class="col-10" tooltip="Ticket content" theme="light" placement="left" id="content">
                             <!-- ngx-quill -->
-                            <quill-editor [modules]="modules" [placeholder]="'Ticket body'"
+                            <!-- <quill-editor [modules]="modules" [placeholder]="'Ticket body'"
                                 [styles]="{'height': '250px', 'width': '100%'}" formControlName="content">
-                            </quill-editor>
+                            </quill-editor> -->
+                            <div class="NgxEditor__Wrapper ngxEditor">
+                                <ngx-editor-menu [editor]="editor" [toolbar]="toolbar">
+                                </ngx-editor-menu>
+                                <ngx-editor [editor]="editor" formControlName="content" [placeholder]="'Ticket body'">
+                                </ngx-editor>
+                            </div>
                             <!-- error messages -->
                             <div class="text-danger" *ngFor="let e of errorMessages.content">
                                 <div *ngIf="ticketForm.get('content').hasError(e.type) && 

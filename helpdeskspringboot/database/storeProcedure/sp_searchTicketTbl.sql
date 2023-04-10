@@ -164,22 +164,27 @@ where
             else ticketStatusid = in_ticketStatusid
         end;
 
--- drop the temporary "_ticketTbl_spendHour" table if it exists
-drop temporary table if exists _ticketTbl_spendHour;
+-- drop the temporary "_ticketTbl_spentHour" table if it exists
+drop temporary table if exists _ticketTbl_spentHour;
 
--- create temporary "_ticketTbl_spendHour"
-create temporary table _ticketTbl_spendHour
+-- create temporary "_ticketTbl_spentHour"
+create temporary table _ticketTbl_spentHour
 select 	a.ticketid as ticketid, 
 		a.subject as subject,
+        a.creatorid as creatorid,
 		concat(coalesce(b.lastName,''),' ',coalesce(b.firstName,'')) as creatorName,
+        coalesce(a.assigneeid, -1) as assigneeid,
 		concat(coalesce(c.lastName,''),' ',coalesce(c.firstName,'')) as assigneeName,
         -- 2023-03-29 10:40:00
 		a.createDatetime as createDatetime,
 		coalesce(d.name,'') as ticketStatusName,
 		coalesce(b.phone,'') as creatorPhone,
 		coalesce(b.email,'') as creatorEmail,
+        a.teamid as teamid,
 		coalesce(e.name,'') as teamName,
+        a.categoryid as categoryid,
 		coalesce(f.name,'') as categoryName,
+        a.priorityid as priorityid,
 		-- priority + hours to resovle the ticket
 		concat(coalesce(g.name,''),' - ', coalesce(g.resolveIn, 0),' hours') as priorityName,
 		--  
@@ -189,7 +194,7 @@ select 	a.ticketid as ticketid,
         -- 2023-03-29 11:00:00
 		a.lastUpdateDatetime as lastUpdateDatetime,
         now() as currentDatetime,
-        -- count spend hours of ticket. note: 1 hour = 3600 seconds.
+        -- count spent hours of ticket. note: 1 hour = 3600 seconds.
 		case
 			-- if status is "Closed"(4) or "Cancel"(5) then (a.lastUpdateDatetime - a.createDatetime)
 			when (coalesce(d.statusid,0) = 4 or coalesce(d.statusid,0) = 5) then
@@ -200,8 +205,8 @@ select 	a.ticketid as ticketid,
 			else 
 				-- number of hours between createDatetime and now()
 				timestampdiff(second, a.createDatetime, now())/3600.0
-		end as spendHour,
-        -- count spend hours of ticket in hh:mm:ss format
+		end as spentHour,
+        -- count spent hours of ticket in hh:mm:ss format
 		case
 			-- if status is "Closed"(4) or "Cancel"(5) then (a.lastUpdateDatetime - a.createDatetime)
 			when (coalesce(d.statusid,0) = 4 or coalesce(d.statusid,0) = 5) then
@@ -214,17 +219,23 @@ select 	a.ticketid as ticketid,
 				-- number of hours between createDatetime and now() in format HH:mm:ss
                 -- ex: sec_to_time(3600) = 01:00:00            
 				sec_to_time(timestampdiff(second, a.createDatetime, now()))
-		end as spendHourHhmmss,        
-		a.ticketStatusid as ticketStatusid
+		end as spentHourHhmmss,        
+		a.ticketStatusid as ticketStatusid,
+        a.lastupdatebyuserid as lastupdatebyuserid,
+        concat(coalesce(h.lastName,''),' ',coalesce(h.firstName,'')) as lastupdatebyfullname,
+        a.customFilename as customFilename,
+        coalesce(i.originalFilename,'') as originalFilename
 from _ticketTbl_allParameters_withoutSLA a
 	-- creator
 	left join user b on a.creatorid = b.id
 	-- assignee
-	left join user c on coalesce(a.assigneeid,'') = c.id
+	left join user c on coalesce(a.assigneeid,-1) = c.id
 	left join ticketStatus d on a.ticketStatusid = d.statusid
 	left join team e on a.teamid = e.id
 	left join category f on a.categoryid = f.id
-	left join priority g on a.priorityid = g.id;    
+	left join priority g on a.priorityid = g.id
+    left join user h on a.lastupdatebyuserid = h.id
+    left join filestorage i on a.customFilename = i.customFilename;
 
 -- drop the temporary "_ticketTbl_sla" table if it exists
 drop temporary table if exists _ticketTbl_sla;
@@ -233,29 +244,38 @@ drop temporary table if exists _ticketTbl_sla;
 create temporary table _ticketTbl_sla
 select 	a.ticketid as ticketid, 
 		a.subject as subject,
+        a.creatorid as creatorid,
 		a.creatorName as creatorName,
+        a.assigneeid as assigneeid,
 		a.assigneeName as assigneeName,
 		a.createDatetime as createDatetime,
 		a.ticketStatusName as ticketStatusName,
 		a.creatorPhone as creatorPhone,
 		a.creatorEmail as creatorEmail,
+        a.teamid as teamid,
 		a.teamName as teamName,
+        a.categoryid as categoryid,
 		a.categoryName as categoryName,
+        a.priorityid as priorityid,
 		a.priorityName as priorityName,
 		a.content as content,
 		a.resolveIn as resolveIn,
 		a.lastUpdateDatetime as lastUpdateDatetime,
-        a.spendHour as spendHour,
-        a.spendHourHhmmss as spendHourHhmmss,
+        a.spentHour as spentHour,
+        a.spentHourHhmmss as spentHourHhmmss,
         case
 			-- resolveIn = 0: means all tickets are on time
 			when a.resolveIn = 0 then 'Ontime'
-            when a.resolveIn < a.spendHour then 'Late'
+            when a.resolveIn < a.spentHour then 'Late'
             else 'Ontime'
         end as sla,
         a.currentDatetime,
-		a.ticketStatusid as ticketStatusid
-from _ticketTbl_spendHour a;
+		a.ticketStatusid as ticketStatusid,
+        a.lastupdatebyuserid,
+        a.lastupdatebyfullname,
+        a.customFilename,
+        a.originalFilename
+from _ticketTbl_spentHour a;
 
 --
 -- main select
@@ -268,48 +288,66 @@ drop temporary table if exists _searchTicketTbl;
 create temporary table _searchTicketTbl(
 	`ticketid` int,
 	`subject` varchar(2000),
+    `creatorid` int,
 	`creatorName` varchar(255),
+    `assigneeid` int,
 	`assigneeName` varchar(255),
 	`createDatetime` datetime,
     `ticketStatusName` varchar(255),
     `sla` varchar(255),
     `lastUpdateDatetime` datetime,
     -- ex: 1.5 hours
-	`spendHour` float,
+	`spentHour` float,
     -- ex: 01:30:00
-    `spendHourHhmmss` varchar(255),
+    `spentHourHhmmss` varchar(255),
 	`creatorPhone` varchar(255),
 	`creatorEmail` varchar(255),
+    `teamid` int,
 	`teamName` varchar(255),
+    `categoryid` int,
 	`categoryName` varchar(255),
+    `priorityid` int,
 	`priorityName` varchar(255),
 	`content` text,
     `resolveIn` int,
 	`currentDatetime` datetime,
-	`ticketStatusid` int
+	`ticketStatusid` int,
+    `lastupdatebyuserid` int,
+    `lastupdatebyfullname` varchar(255),
+    `customFilename` varchar(255),
+    `originalFilename` varchar(255)
 );
 
 -- create temporary "_searchTicketTbl" table
 insert into _searchTicketTbl
 select 	a.ticketid as ticketid, 
 		a.subject as subject,
+        a.creatorid as creatorid,
 		a.creatorName as creatorName,
+        a.assigneeid as assigneeid,
 		a.assigneeName as assigneeName,
 		a.createDatetime as createDatetime,
 		a.ticketStatusName as ticketStatusName,
         a.sla as sla,	
 		a.lastUpdateDatetime as lastUpdateDatetime,
-		a.spendHour as spendHour,
-        a.spendHourHhmmss as spendHourHhmmss,
+		a.spentHour as spentHour,
+        a.spentHourHhmmss as spentHourHhmmss,
 		a.creatorPhone as creatorPhone,
 		a.creatorEmail as creatorEmail,
+        a.teamid as teamid,
 		a.teamName as teamName,
+        a.categoryid as categoryid,
 		a.categoryName as categoryName,
+        a.priorityid as priorityid,
 		a.priorityName as priorityName,
 		a.content as content,
 		a.resolveIn as resolveIn,
         a.currentDatetime as currentDatetime,
-        a.ticketStatusid as ticketStatusid
+        a.ticketStatusid as ticketStatusid,
+        a.lastupdatebyuserid as lastupdatebyuserid,
+        a.lastupdatebyfullname as lastupdatebyfullname,
+        a.customFilename as customFilename,
+        a.originalFilename as originalFilename
 from _ticketTbl_sla a
 where
 	case

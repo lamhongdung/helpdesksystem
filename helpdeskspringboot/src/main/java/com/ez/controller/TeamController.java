@@ -1,8 +1,8 @@
 package com.ez.controller;
 
-import com.ez.dto.DropdownResponse;
-import com.ez.dto.TeamRequest;
-import com.ez.dto.TeamResponse;
+import com.ez.payload.DropdownResponse;
+import com.ez.payload.TeamRequest;
+import com.ez.payload.TeamResponse;
 import com.ez.entity.Team;
 import com.ez.service.TeamService;
 import org.slf4j.Logger;

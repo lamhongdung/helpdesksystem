@@ -1,8 +1,7 @@
-package com.ez.dto;
+package com.ez.payload;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
-import org.springframework.http.HttpStatus;
 
 import java.util.Date;
 
