@@ -2,11 +2,13 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
-import { DropdownResponse } from '../entity/DropdownResponse';
-import { Ticket } from '../entity/Ticket';
-import { SearchTicketResponse } from '../entity/SearchTicketResponse';
+import { DropdownResponse } from '../payload/DropdownResponse';
+import { TicketSearchResponse } from '../payload/TicketSearchResponse';
 import { ShareService } from './share.service';
-import { CustomHttpRespone } from '../entity/CustomHttpRespone';
+import { CustomHttpRespone } from '../payload/CustomHttpRespone';
+import { TicketCreateRequest } from '../payload/TicketCreateRequest';
+import { TicketEditViewResponse } from '../payload/TicketEditViewResponse';
+import { TicketEditRequest } from '../payload/TicketEditRequest';
 
 @Injectable({
   providedIn: 'root'
@@ -38,10 +40,10 @@ export class TicketService {
     teamid: string,
     assigneeid: string,
     sla: string,
-    ticketStatusid: string): Observable<SearchTicketResponse[]> {
+    ticketStatusid: string): Observable<TicketSearchResponse[]> {
 
     // console.log(`${this.shareService.host}/ticket-search?userid=${userid}&pageNumber=${pageNumber}&pageSize=${this.shareService.pageSize}&searchTerm=${searchTerm}&fromDate=${fromDate}&toDate=${toDate}&categoryid=${categoryid}&priorityid=${priorityid}&creatorid=${creatorid}&teamid=${teamid}&assigneeid=${assigneeid}&sla=${sla}&ticketStatusid=${ticketStatusid}`);
-    return this.http.get<SearchTicketResponse[]>(
+    return this.http.get<TicketSearchResponse[]>(
 
       `${this.shareService.host}/ticket-search?userid=${userid}&pageNumber=${pageNumber}&pageSize=${this.shareService.pageSize}&searchTerm=${searchTerm}&fromDate=${fromDate}&toDate=${toDate}&categoryid=${categoryid}&priorityid=${priorityid}&creatorid=${creatorid}&teamid=${teamid}&assigneeid=${assigneeid}&sla=${sla}&ticketStatusid=${ticketStatusid}`
     )
@@ -141,19 +143,35 @@ export class TicketService {
     )
   }
 
-  // create a new team
-  public createTicket(ticket: Ticket): Observable<CustomHttpRespone> {
-    return this.http.post<CustomHttpRespone>(`${this.host}/ticket-create`, ticket);
+  // get active supporters belong team
+  getActiveSupportersBelongTeam(ticketid: number): Observable<DropdownResponse[]> {
+
+    return this.http.get<DropdownResponse[]>(
+      `${this.shareService.host}/active-supporters-belong-team?ticketid=${ticketid}`
+    )
   }
 
-   // edit an existing ticket
-   public editTicket(ticket: Ticket): Observable<CustomHttpRespone> {
-     return this.http.put<CustomHttpRespone>(`${this.host}/ticket-edit`, ticket);
-   }
+  // get next ticket status
+  getNextTicketStatus(ticketid: number): Observable<DropdownResponse[]> {
 
-   // find team by id
-   findById(id: number): Observable<Ticket> {
-     return this.http.get<Ticket>(`${this.host}/ticket-list/${id}`);
-   }
+    return this.http.get<DropdownResponse[]>(
+      `${this.shareService.host}/next-ticket-status?ticketid=${ticketid}`
+    )
+  }
+
+  // create a new team
+  public createTicket(ticketCreateRequest: TicketCreateRequest): Observable<CustomHttpRespone> {
+    return this.http.post<CustomHttpRespone>(`${this.host}/ticket-create`, ticketCreateRequest);
+  }
+
+  // edit an existing ticket
+  public editTicket(TicketEditRequest: TicketEditRequest): Observable<CustomHttpRespone> {
+    return this.http.put<CustomHttpRespone>(`${this.host}/ticket-edit`, TicketEditRequest);
+  }
+
+  // find ticket by id
+  findById(id: number): Observable<TicketEditViewResponse> {
+    return this.http.get<TicketEditViewResponse>(`${this.host}/ticket-list/${id}`);
+  }
 
 } // end of class TicketService

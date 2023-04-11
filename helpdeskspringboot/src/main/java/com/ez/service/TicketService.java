@@ -36,6 +36,15 @@ public class TicketService {
         return ticketRepository.getAllTicketStatus();
     }
 
+    // get next appropriate ticket status
+    // for loading ticket status in the "Ticket status" dropdown control in the "Edit ticket" screen
+    public List<DropdownResponse> getNextTicketStatus(long ticketid) {
+
+        LOGGER.info("get next appropriate ticket status");
+
+        return ticketRepository.getNextTicketStatus(ticketid);
+    }
+
     // get creators by userid(and by user role).
     public List<DropdownResponse> getCreatorsByUserid(int userid) {
 
@@ -95,13 +104,21 @@ public class TicketService {
     // get all active priorities
     public List<DropdownResponse> getAllActivePriorities() {
 
-        LOGGER.info("Get all active priorities)");
+        LOGGER.info("Get all active priorities");
 
         return ticketRepository.getAllActivePriorities();
     }
 
+    // get active supporters belong team
+    public List<DropdownResponse> getActiveSupportersBelongTeam(long ticketid) {
+
+        LOGGER.info("get active supporters belong team");
+
+        return ticketRepository.getActiveSupportersBelongTeam(ticketid);
+    }
+
     // search tickets by userid(and by user role).
-    public List<SearchTicketResponse> searchTickets(long userid, long pageNumber, long pageSize,
+    public List<TicketSearchResponse> searchTickets(long userid, long pageNumber, long pageSize,
                                                     String searchTerm, String fromDate, String toDate,
                                                     String categoryid, String priorityid, String creatorid,
                                                     String teamid, String assigneeid, String sla,
@@ -135,84 +152,30 @@ public class TicketService {
     }
 
     // create a new ticket.
-    public HttpResponse createTicket(TicketRequest ticketRequest) {
+    public HttpResponse createTicket(TicketCreateRequest ticketCreateRequest) {
 
         LOGGER.info("create a new ticket");
-        LOGGER.info("Ticket is sent from client: " + ticketRequest.toString());
+        LOGGER.info("Ticket is sent from client: " + ticketCreateRequest.toString());
 
         // save new ticket into the "ticket" table in database.
         ticketRepository.saveTicket(
-                ticketRequest.getCreatorid(),
-                ticketRequest.getSubject(),
-                ticketRequest.getContent(),
-                ticketRequest.getTeamid(),
-                ticketRequest.getCategoryid(),
-                ticketRequest.getPriorityid(),
-                ticketRequest.getCustomFilename()
+                ticketCreateRequest.getCreatorid(),
+                ticketCreateRequest.getSubject(),
+                ticketCreateRequest.getContent(),
+                ticketCreateRequest.getTeamid(),
+                ticketCreateRequest.getCategoryid(),
+                ticketCreateRequest.getPriorityid(),
+                ticketCreateRequest.getCustomFilename()
         );
 
         return new HttpResponse(OK.value(), "Ticket is created successful!");
     }
 
-//    // find team by team id.
-//    // note:
-//    //  - class Team: not include supporters
-//    //  - class TeamRequest: include supporters
-//    //  - interface DropdownResponse: include 2 columns:
-//    //      id(getId()) and description(getDescription() = "id" + "lastName" + "firstName" + "email" + "status")
-//    //  - class Supporter: include 2 columns: id and description
-//    public TeamRequest findById(Long id) throws EntityNotFoundException {
-//
-//        // team without supporters
-//        Team team;
-//
-//        // team includes supporters
-//        TeamRequest teamRequest = new TeamRequest();
-//
-//        //  interface Supporter: include 2 columns: id(getId()) and description(getDescription()).
-//        //  selected(assigned) supporters
-//        List<DropdownResponse> selectedSupporters;
-//
-//        // class Supporter: include 2 columns: id and description
-//        List<Supporter> supporters = new ArrayList<>();
-//
-//        // return team without supporters
-//        team = teamRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(NO_TEAM_FOUND_BY_ID + id));
-//        LOGGER.info("found team with id " + team.getId());
-//        LOGGER.info("team is in string format: " + team.toString());
-//
-//        //
-//        // convert from list of selectedSupporters(interface) to list of supporters(class).
-//        // (convert from functions to columns).
-//        //
-//
-//        // get selected supporters.
-//        // selectedSupporters = list of {id, description}
-//        selectedSupporters = teamRepository.getSelectedSupporters(id);
-//
-//        // convert list of selectedSupporters(interface SupporterResponse) to list of supporters(class).
-//        // selectedSupporters(interface): list of {id(getId()), description(getDescription())}.
-//        // supporters(class): list of {id, description}.
-//        // decription = id + lastName + firstName + email + status
-//        selectedSupporters.forEach(selectedSupporter ->
-//                supporters.add(new Supporter(selectedSupporter.getId(), selectedSupporter.getDescription())));
-//
-//        //
-//        // convert "team(without supporters) + supporters" to teamRequest(includes supporters)
-//        //
-//        teamRequest.setId(team.getId());
-//        teamRequest.setName(team.getName());
-//        teamRequest.setAssignmentMethod(team.getAssignmentMethod());
-////        teamRequest.setCalendarid(team.getCalendarid());
-//        teamRequest.setStatus(team.getStatus());
-//
-//        // add supporters to the "teamRequest".
-//        // note: supporters = list of {id, description}
-//        teamRequest.setSupporters(supporters);
-//
-//        // return teamRequest(include supporters)
-//        return teamRequest;
-//    }
+    // get ticket by ticket id.
+    public TicketEditViewResponse getTicketById(Long id) {
+
+        return ticketRepository.getTicketById(id);
+    }
 //
 //    // update existing team.
 //    // save team in both tables:

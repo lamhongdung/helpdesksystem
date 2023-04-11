@@ -3,8 +3,8 @@ import { Injectable } from '@angular/core';
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
-import { LoginUser } from '../entity/LoginUser';
-import { User } from '../entity/User';
+import { LoginUser } from '../payload/LoginUser';
+import { User } from '../payload/User';
 
 @Injectable({
   providedIn: 'root'

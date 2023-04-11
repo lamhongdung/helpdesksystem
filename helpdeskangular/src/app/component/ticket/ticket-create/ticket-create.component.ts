@@ -4,16 +4,15 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { FileItem, FileLikeObject, FileUploader, ParsedResponseHeaders } from 'ng2-file-upload';
 import { Observable, Subscription, filter } from 'rxjs';
-import { Ticket } from 'src/app/entity/Ticket';
 import { NotificationType } from 'src/app/enum/NotificationType.enum';
 import { NotificationService } from 'src/app/service/notification.service';
 import { TicketService } from 'src/app/service/ticket.service';
 import { AuthService } from 'src/app/service/auth.service';
 import { ShareService } from 'src/app/service/share.service';
 import { FileService } from 'src/app/service/file.service';
-import { DropdownResponse } from 'src/app/entity/DropdownResponse';
+import { DropdownResponse } from 'src/app/payload/DropdownResponse';
 import { validFile } from 'src/app/validator/validator';
-import { CustomHttpRespone } from 'src/app/entity/CustomHttpRespone';
+import { CustomHttpRespone } from 'src/app/payload/CustomHttpRespone';
 import { Editor, Toolbar } from 'ngx-editor';
 
 @Component({

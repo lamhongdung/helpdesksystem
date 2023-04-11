@@ -172,27 +172,6 @@ const routes: Routes = [
       roles: ['ROLE_CUSTOMER', 'ROLE_SUPPORTER', 'ROLE_ADMIN']
     }
   },
-  // download file
-  {
-    path: 'files/**', component: TicketCreateComponent, canActivate: [AuthGuard],
-    data: {
-      roles: ['ROLE_CUSTOMER', 'ROLE_SUPPORTER', 'ROLE_ADMIN']
-    }
-  },
-  // // Calendar menu
-  // {
-  //   path: 'calendar-list', component: CalendarListComponent, canActivate: [AuthGuard],
-  //   data: {
-  //     roles: ['ROLE_ADMIN']
-  //   }
-  // },
-  // {
-  //   path: 'calendar-create', component: CalendarCreateComponent, canActivate: [AuthGuard],
-  //   data: {
-  //     roles: ['ROLE_ADMIN']
-  //   }
-  // },
-
   // if paths are not in the above list then redirects to path '/users-list'
   { path: '**', redirectTo: '/ticket-list', pathMatch: 'full' }
 ];

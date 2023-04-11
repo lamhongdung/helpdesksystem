@@ -95,12 +95,11 @@
                             </quill-editor> -->
                             <div class="NgxEditor__Wrapper ngxEditor">
                                 <!-- menu -->
-                                <ngx-editor-menu [editor]="contentEditor" [toolbar]="contentToolbar"
-                                    style="color: darkgray;" [disabled]="true">
+                                <ngx-editor-menu [editor]="editor" [toolbar]="toolbar" style="color: darkgray;"
+                                    [disabled]="true">
                                 </ngx-editor-menu>
                                 <!-- editor -->
-                                <ngx-editor [editor]="contentEditor" formControlName="content"
-                                    [placeholder]="'Ticket body'">
+                                <ngx-editor [editor]="editor" formControlName="content" [placeholder]="'Ticket body'">
                                 </ngx-editor>
                             </div>
                         </div>
@@ -175,7 +174,7 @@
                         </div>
                         <!-- textbox -->
                         <div class="col-9">
-                            <input class="form-control" type="text" formControlName="spendHour" id="spendHour"
+                            <input class="form-control" type="text" formControlName="spentHour" id="spentHour"
                                 tooltip="Spent hours + SLA" theme="light" placement="top" readonly>
                         </div>
                     </div>
@@ -191,9 +190,18 @@
                         <div class="col-9">
                             <select id="priorityid" class="form-control" formControlName="priorityid"
                                 placeholder="Priority" tooltip="Priority" theme="light" placement="top">
-                                <option value="ROLE_CUSTOMER">ROLE_CUSTOMER</option>
-                                <option value="ROLE_SUPPORTER">ROLE_SUPPORTER</option>
+                                <option *ngFor="let e of priorities" [value]="e.id">
+                                    {{e.description}}</option>
                             </select>
+                            <!-- error messages -->
+                            <div class="text-danger" *ngFor="let e of errorMessages.priorityid">
+                                <div
+                                    *ngIf="ticketForm.get('priorityid').hasError(e.type) && 
+                                            (ticketForm.get('priorityid').dirty || ticketForm.get('priorityid').touched)">
+
+                                    <small>{{e.message}}</small>
+                                </div>
+                            </div>
                         </div>
                     </div>
 
@@ -208,9 +216,18 @@
                         <div class="col-9">
                             <select id="categoryid" class="form-control" formControlName="categoryid"
                                 placeholder="Category" tooltip="Category" theme="light" placement="top">
-                                <option value="ROLE_CUSTOMER">ROLE_CUSTOMER</option>
-                                <option value="ROLE_SUPPORTER">ROLE_SUPPORTER</option>
+                                <option *ngFor="let e of categories" [value]="e.id">
+                                    {{e.description}}</option>
                             </select>
+                            <!-- error messages -->
+                            <div class="text-danger" *ngFor="let e of errorMessages.categoryid">
+                                <div
+                                    *ngIf="ticketForm.get('categoryid').hasError(e.type) && 
+                                            (ticketForm.get('categoryid').dirty || ticketForm.get('categoryid').touched)">
+
+                                    <small>{{e.message}}</small>
+                                </div>
+                            </div>
                         </div>
                     </div>
 
@@ -226,10 +243,19 @@
                             <select id="assigneeid" class="form-control" formControlName="assigneeid"
                                 placeholder="Assignee" tooltip="Ticket is assigned to this supporter" theme="light"
                                 placement="top">
-                                <option value="ROLE_CUSTOMER">ROLE_CUSTOMER</option>
-                                <option value="ROLE_SUPPORTER">ROLE_SUPPORTER</option>
+                                <option *ngFor="let e of assignees" [value]="e.id">
+                                    {{e.description}}</option>
                             </select>
+                            <!-- error messages -->
+                            <div class="text-danger" *ngFor="let e of errorMessages.assigneeid">
+                                <div *ngIf="ticketForm.get('assigneeid').hasError(e.type) && 
+                                        (ticketForm.get('assigneeid').dirty || ticketForm.get('assigneeid').touched)">
+
+                                    <small>{{e.message}}</small>
+                                </div>
+                            </div>
                         </div>
+
                     </div>
 
                     <!-- status -->
@@ -243,9 +269,18 @@
                         <div class="col-9">
                             <select id="ticketStatusid" class="form-control" formControlName="ticketStatusid"
                                 placeholder="Ticket status" tooltip="Ticket status" theme="light" placement="top">
-                                <option value="ROLE_CUSTOMER">ROLE_CUSTOMER</option>
-                                <option value="ROLE_SUPPORTER">ROLE_SUPPORTER</option>
+                                <option *ngFor="let e of ticketStatus" [value]="e.id">
+                                    {{e.description}}</option>
                             </select>
+                            <!-- error messages -->
+                            <div class="text-danger" *ngFor="let e of errorMessages.ticketStatusid">
+                                <div
+                                    *ngIf="ticketForm.get('ticketStatusid').hasError(e.type) && 
+                                        (ticketForm.get('ticketStatusid').dirty || ticketForm.get('ticketStatusid').touched)">
+
+                                    <small>{{e.message}}</small>
+                                </div>
+                            </div>
                         </div>
                     </div>
 
@@ -257,7 +292,8 @@
                         </div>
                         <!-- textbox -->
                         <div class="col-9">
-                            <a href="{{ ticket?.customFilename }}">{{ ticket?.originalFilename }}</a>
+                            <a href="{{ ticketEditViewResponse?.customFilename }}">{{
+                                ticketEditViewResponse?.originalFilename }}</a>
                         </div>
                     </div>
 

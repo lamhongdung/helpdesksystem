@@ -1,4 +1,4 @@
-export class SearchTicketResponse {
+export class TicketSearchResponse {
 
     constructor(
 

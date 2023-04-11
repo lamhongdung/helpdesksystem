@@ -2,11 +2,11 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
-import { ChangePassword } from '../entity/ChangePassword';
-import { CustomHttpRespone } from '../entity/CustomHttpRespone';
-import { EditProfile } from '../entity/EditProfile';
-import { ResetPassword } from '../entity/ResetPassword';
-import { User } from '../entity/User';
+import { ChangePassword } from '../payload/ChangePassword';
+import { CustomHttpRespone } from '../payload/CustomHttpRespone';
+import { EditProfile } from '../payload/EditProfile';
+import { ResetPassword } from '../payload/ResetPassword';
+import { User } from '../payload/User';
 
 @Injectable({
   providedIn: 'root'

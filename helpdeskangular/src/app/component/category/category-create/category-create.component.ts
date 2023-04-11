@@ -3,7 +3,7 @@ import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { Category } from 'src/app/entity/Category';
+import { Category } from 'src/app/payload/Category';
 import { NotificationType } from 'src/app/enum/NotificationType.enum';
 import { CategoryService } from 'src/app/service/category.service';
 import { NotificationService } from 'src/app/service/notification.service';

@@ -1,7 +1,8 @@
 package com.ez.repository;
 
 import com.ez.payload.DropdownResponse;
-import com.ez.payload.SearchTicketResponse;
+import com.ez.payload.TicketEditViewResponse;
+import com.ez.payload.TicketSearchResponse;
 import com.ez.entity.Ticket;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -123,6 +124,31 @@ public interface TicketRepository extends JpaRepository<Ticket, Long> {
             , nativeQuery = true)
     public List<DropdownResponse> getAllActivePriorities();
 
+    // get active supporters belong team.
+    // notes:
+    // interface DropdownResponse contains 2 fields:
+    //  - id: getId()
+    //  - description: getDescription()
+    @Query(value = "" +
+            " {call sp_getActiveSupportersBelongTeam( " +
+            "                                           :ticketid " +
+            "                                       )} "
+            , nativeQuery = true)
+    public List<DropdownResponse> getActiveSupportersBelongTeam(@Param("ticketid") long ticketid);
+
+    // get next appropriate ticket status
+    // for loading ticket status in the "Ticket status" dropdown control in the "Edit ticket" screen
+    // notes:
+    // interface DropdownResponse contains 2 fields:
+    //  - id: getId()
+    //  - description: getDescription()
+    @Query(value = "" +
+            " {call sp_getNextTicketStatus( " +
+            "                               :ticketid " +
+            "                              )} "
+            , nativeQuery = true)
+    public List<DropdownResponse> getNextTicketStatus(@Param("ticketid") long ticketid);
+
     // get tickets by user id, user role, and based on search criteria
     @Query(value = "" +
             " {call sp_searchTickets( " +
@@ -141,7 +167,7 @@ public interface TicketRepository extends JpaRepository<Ticket, Long> {
             "                        :ticketStatusid " +
             "                        )} "
             , nativeQuery = true)
-    public List<SearchTicketResponse> searchTicketsByUserid(@Param("userid") long userid,
+    public List<TicketSearchResponse> searchTicketsByUserid(@Param("userid") long userid,
                                                             @Param("pageNumber") long pageNumber,
                                                             @Param("pageSize") long pageSize,
                                                             @Param("searchTerm") String searchTerm,
@@ -205,5 +231,10 @@ public interface TicketRepository extends JpaRepository<Ticket, Long> {
                               @Param("priorityid") long priorityid,
                               @Param("customFilename") String customFilename);
 
+    // get ticket by ticketid.
+    @Query(value = "" +
+            " {call sp_getTicketById(:ticketid)} "
+            , nativeQuery = true)
+    public TicketEditViewResponse getTicketById(@Param("ticketid") long ticketid);
 
 }

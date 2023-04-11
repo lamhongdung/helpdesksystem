@@ -2,7 +2,7 @@ package com.ez.payload;
 
 import java.util.Date;
 
-public interface SearchTicketResponse {
+public interface TicketSearchResponse {
 
     // "ticketid" column
     Long getTicketid();

@@ -2,9 +2,9 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
-import { DropdownResponse } from '../entity/DropdownResponse';
+import { DropdownResponse } from '../payload/DropdownResponse';
 // import { Supporter } from '../entity/Supporter';
-import { Team } from '../entity/Team';
+import { Team } from '../payload/Team';
 
 @Injectable({
   providedIn: 'root'

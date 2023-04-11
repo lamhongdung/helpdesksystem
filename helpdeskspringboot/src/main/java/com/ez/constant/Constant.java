@@ -63,5 +63,10 @@ public class Constant {
     //
     public static final String NO_TEAM_FOUND_BY_ID = "No team found for id: ";
 
+    //
+    // ticket constants
+    //
+    public static final String NO_TICKET_FOUND_BY_ID = "No ticket found for id: ";
+
 
 }

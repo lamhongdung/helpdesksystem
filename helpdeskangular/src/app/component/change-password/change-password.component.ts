@@ -3,7 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { CustomHttpRespone } from 'src/app/entity/CustomHttpRespone';
+import { CustomHttpRespone } from 'src/app/payload/CustomHttpRespone';
 import { NotificationType } from 'src/app/enum/NotificationType.enum';
 import { AuthService } from 'src/app/service/auth.service';
 import { NotificationService } from 'src/app/service/notification.service';

@@ -10,7 +10,7 @@ import javax.validation.constraints.Size;
 @ToString
 @Getter
 @Setter
-public class TicketRequest {
+public class TicketCreateRequest {
 
     @Min(value = 1, message = "Value of creator id must be greater than or equal to 1")
     private long creatorid;
@@ -29,13 +29,6 @@ public class TicketRequest {
 
     @Min(value = 1, message = "Value of priority id must be greater than or equal to 1")
     private long priorityid;
-
-    // - hasAttachedFile = true: there is attached file.
-    // - hasAttachedFile = false: there is no attached file.
-    //
-    // This 'hasAttachedFile' field is only used in front end for validation.
-    // Spring boot backend will not use this field, so do not need validates in backend
-    private boolean hasAttachedFile;
 
     // - customFilename = "": if user did not attach file.
     // - customFilename = timestamp + UUID + extension(ex: .jpg): if user has attached file

@@ -1,4 +1,4 @@
-export class EditTicketResponse {
+export class TicketEditViewResponse {
 
     constructor(
 
@@ -15,7 +15,7 @@ export class EditTicketResponse {
         // ticket content
         public content: string,
 
-        // team id + team name
+        // team id + team name + assignment method
         public team: string,
         // create date time
         public createDatetime: Date,
@@ -37,8 +37,18 @@ export class EditTicketResponse {
         public customFilename: string,
         // originalFilename
         public originalFilename: string,
+
+        //
+        // the following fields are for tooltips
+        //
+
         // currentDatetime
         public currentDatetime: Date,
+        // resolveIn
+        public resolveIn: number,
+        // currentDatetime
+        public sla: string
+
 
     ) {
 

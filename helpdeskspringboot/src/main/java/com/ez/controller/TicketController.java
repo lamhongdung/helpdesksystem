@@ -11,6 +11,7 @@ import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import javax.persistence.EntityNotFoundException;
 import javax.validation.Valid;
 import java.util.List;
 
@@ -35,13 +36,25 @@ public class TicketController {
     //  - 5: Cancel
     @GetMapping("/ticketStatus")
     // all authenticated users can access this resource
-//    @PreAuthorize("hasAnyRole('ROLE_CUSTOMER','ROLE_SUPPORTER','ROLE_ADMIN')")
     public ResponseEntity<List<DropdownResponse>> getAllTicketStatus() {
 
         // get all ticket status
         List<DropdownResponse> allTicketStatus = ticketService.getAllTicketStatus();
 
         return new ResponseEntity<>(allTicketStatus, OK);
+    }
+
+    // get next appropriate ticket status
+    // for loading ticket status in the "Ticket status" dropdown control in the "Edit ticket" screen
+    @GetMapping("/next-ticket-status")
+    // all authenticated users can access this resource
+    public ResponseEntity<List<DropdownResponse>> getNextTicketStatus(
+            @RequestParam long ticketid) {
+
+        // get next appropriate ticket status
+        List<DropdownResponse> ticketStatus = ticketService.getNextTicketStatus(ticketid);
+
+        return new ResponseEntity<>(ticketStatus, OK);
     }
 
     // get creators by userid(and by user role)
@@ -86,7 +99,6 @@ public class TicketController {
     // for loading assignees in the "Assignee" dropdown control in the "Ticket list" screen
     @GetMapping("/assignees")
     // all authenticated users can access this resource
-//    @PreAuthorize("hasAnyRole('ROLE_CUSTOMER','ROLE_SUPPORTER','ROLE_ADMIN')")
     public ResponseEntity<List<DropdownResponse>> getAssigneesByUserid(@RequestParam int userid) {
 
         // get assignees by userid(and by user role)
@@ -95,11 +107,23 @@ public class TicketController {
         return new ResponseEntity<>(assigneesResponses, OK);
     }
 
+    // get active supporters belong to team
+    // for loading assignees in the "Assignee" dropdown control in the "Edit ticket" screen
+    @GetMapping("/active-supporters-belong-team")
+    // all authenticated users can access this resource
+    public ResponseEntity<List<DropdownResponse>> getActiveSupportersBelongTeam(
+            @RequestParam long ticketid) {
+
+        // get active supporters belong to team
+        List<DropdownResponse> supporters = ticketService.getActiveSupportersBelongTeam(ticketid);
+
+        return new ResponseEntity<>(supporters, OK);
+    }
+
     // get categories by userid(and by user role)
     // for loading categories in the "Category" dropdown control in the "Ticket list" screen
     @GetMapping("/categories")
     // all authenticated users can access this resource
-//    @PreAuthorize("hasAnyRole('ROLE_CUSTOMER','ROLE_SUPPORTER','ROLE_ADMIN')")
     public ResponseEntity<List<DropdownResponse>> getCategoriesByUserid(@RequestParam int userid) {
 
         // get all categories
@@ -108,10 +132,11 @@ public class TicketController {
         return new ResponseEntity<>(categoryResponses, OK);
     }
 
-    // get all active categories
+    // get all active categories.
+    // for loading categories in the "Category" dropdown control
+    // in the "Ticket list", "Edit ticket" screens.
     @GetMapping("/active-categories")
     // all authenticated users can access this resource
-//    @PreAuthorize("hasAnyRole('ROLE_CUSTOMER','ROLE_SUPPORTER','ROLE_ADMIN')")
     public ResponseEntity<List<DropdownResponse>> getAllActiveCategories() {
 
         // get all active categories
@@ -133,10 +158,11 @@ public class TicketController {
         return new ResponseEntity<>(priorityResponses, OK);
     }
 
-    // get all active priorities
+    // get all active priorities.
+    // for loading priorities in the "Priority" dropdown control
+    // in the "Ticket list", "Edit ticket" screens.
     @GetMapping("/active-priorities")
     // all authenticated users can access this resource
-//    @PreAuthorize("hasAnyRole('ROLE_CUSTOMER','ROLE_SUPPORTER','ROLE_ADMIN')")
     public ResponseEntity<List<DropdownResponse>> getAllActivePriorities() {
 
         // get all active priorities
@@ -150,7 +176,7 @@ public class TicketController {
     @GetMapping("/ticket-search")
     // all authenticated users can access this resource
 //    @PreAuthorize("hasAnyRole('ROLE_CUSTOMER','ROLE_SUPPORTER','ROLE_ADMIN')")
-    public ResponseEntity<List<SearchTicketResponse>> searchTickets(@RequestParam long userid,
+    public ResponseEntity<List<TicketSearchResponse>> searchTickets(@RequestParam long userid,
                                                                     @RequestParam long pageNumber,
                                                                     @RequestParam long pageSize,
                                                                     @RequestParam String searchTerm,
@@ -166,7 +192,7 @@ public class TicketController {
     ) {
 
         // get tickets by userid(and by user role) and based on search criteria
-        List<SearchTicketResponse> ticketResponses = ticketService.searchTickets(userid, pageNumber, pageSize,
+        List<TicketSearchResponse> ticketResponses = ticketService.searchTickets(userid, pageNumber, pageSize,
                 searchTerm, fromDate, toDate,
                 categoryid, priorityid, creatorid,
                 teamid, assigneeid, sla,
@@ -210,9 +236,9 @@ public class TicketController {
     // create a new ticket.
     @PostMapping("/ticket-create")
     // all authenticated users can access this resource
-//    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
-    public ResponseEntity<HttpResponse> createTicket(@RequestBody @Valid TicketRequest ticketRequest, BindingResult bindingResult)
-            throws BindException {
+    public ResponseEntity<HttpResponse> createTicket(
+            @RequestBody @Valid TicketCreateRequest ticketCreateRequest,
+            BindingResult bindingResult) throws BindException {
 
         LOGGER.info("validate data");
 
@@ -225,26 +251,23 @@ public class TicketController {
         }
 
         // save ticket
-        HttpResponse httpResponse = ticketService.createTicket(ticketRequest);
+        HttpResponse httpResponse = ticketService.createTicket(ticketCreateRequest);
 
         return new ResponseEntity<>(httpResponse, OK);
     }
 
-//    // find team by id.
-//    // this method is used for "Edit team" and "View team".
-//    //
-//    // return:
-//    //  - TeamRequest: team + supporters
-//    @GetMapping("/team-list/{id}")
-//    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
-//    public ResponseEntity<TeamRequest> findById(@PathVariable Long id) throws EntityNotFoundException {
-//
-//        LOGGER.info("find team by id: " + id);
-//
-//        TeamRequest teamRequest = teamService.findById(id);
-//
-//        return new ResponseEntity<>(teamRequest, OK);
-//    }
+    // find ticket by id.
+    // this method is used for "Edit ticket" and "View ticket".
+    @GetMapping("/ticket-list/{id}")
+    public ResponseEntity<TicketEditViewResponse> getTicketById(@PathVariable Long id)
+            throws EntityNotFoundException {
+
+        LOGGER.info("find ticket by id: " + id);
+
+        TicketEditViewResponse ticketEditViewResponse = ticketService.getTicketById(id);
+
+        return new ResponseEntity<>(ticketEditViewResponse, OK);
+    }
 //
 //    // edit existing team.
 //    //

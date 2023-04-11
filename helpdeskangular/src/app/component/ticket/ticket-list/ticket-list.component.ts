@@ -4,8 +4,8 @@ import { Component } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { DropdownResponse } from 'src/app/entity/DropdownResponse';
-import { SearchTicketResponse } from 'src/app/entity/SearchTicketResponse';
+import { DropdownResponse } from 'src/app/payload/DropdownResponse';
+import { TicketSearchResponse } from 'src/app/payload/TicketSearchResponse';
 import { NotificationType } from 'src/app/enum/NotificationType.enum';
 import { AuthService } from 'src/app/service/auth.service';
 import { NotificationService } from 'src/app/service/notification.service';
@@ -30,7 +30,7 @@ export class TicketListComponent {
   totalOfTickets: number;
 
   // ticket list(the grid of the team table)
-  searchTicketResponses: SearchTicketResponse[] = [];
+  searchTicketResponses: TicketSearchResponse[] = [];
   // number of tickets per page(default = 5)
   pageSize: number;
 
@@ -232,7 +232,7 @@ export class TicketListComponent {
         .subscribe({
 
           // get tickets from database successful.
-          next: (data: SearchTicketResponse[]) => {
+          next: (data: TicketSearchResponse[]) => {
             return this.searchTicketResponses = data
           },
 

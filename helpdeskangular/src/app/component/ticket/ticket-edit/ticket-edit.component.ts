@@ -1,14 +1,16 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 import { Editor, Toolbar } from 'ngx-editor';
 import { Subscription } from 'rxjs';
-import { CustomHttpRespone } from 'src/app/entity/CustomHttpRespone';
-import { Ticket } from 'src/app/entity/Ticket';
+import { CustomHttpRespone } from 'src/app/payload/CustomHttpRespone';
+import { TicketEditViewResponse } from 'src/app/payload/TicketEditViewResponse';
 import { NotificationType } from 'src/app/enum/NotificationType.enum';
 import { NotificationService } from 'src/app/service/notification.service';
 import { TicketService } from 'src/app/service/ticket.service';
+import { formatDate } from '@angular/common';
+import { DropdownResponse } from 'src/app/payload/DropdownResponse';
 
 @Component({
   selector: 'app-ticket-edit',
@@ -26,56 +28,47 @@ export class TicketEditComponent {
   subscriptions: Subscription[] = [];
 
   ticketForm: FormGroup;
-  ticket: Ticket;
 
   // ticketid
   ticketid: number;
 
+  // all active priorities
+  priorities: DropdownResponse[] = [];
+
+  // all active categories
+  categories: DropdownResponse[] = [];
+
+  // all active supporters
+  assignees: DropdownResponse[] = [];
+
+  // all ticket status
+  ticketStatus: DropdownResponse[] = [];
+
+
+  ticketEditViewResponse: TicketEditViewResponse;
+
   // error messages
   errorMessages = {
 
-    // lastName: [
-    //   { type: 'required', message: 'Please input the last name' },
-    //   { type: 'maxlength', message: 'Last name cannot be longer than 50 characters' },
-    // ],
-    // phone: [
-    //   { type: 'required', message: 'Please input phone number' },
-    //   { type: 'pattern', message: 'Phone number must be 10 digits length' }
-    // ],
-    // address: [
-    //   { type: 'maxlength', message: 'Address cannot be longer than 300 characters' }
-    // ]
+    priorityid: [
+      { type: 'required', message: 'Please select a priority' }
+    ],
+    categoryid: [
+      { type: 'required', message: 'Please select a category' }
+    ],
+    assigneeid: [
+      { type: 'required', message: 'Please select an assignee' },
+      { type: 'min', message: 'Please select an assignee' }
+    ],
+    ticketStatusid: [
+      { type: 'required', message: 'Please select a status' }
+    ]
   };
 
-  // // toolbar for the "ngx-quills" rich text editor
-  // modules = {
-  //   toolbar: [
-  //     ['bold', 'italic', 'underline', 'strike'],        // toggled buttons
-  //     ['blockquote', 'code-block'],
+  editor: Editor;
+  // commentEditor: Editor;
 
-  //     // [{ 'header': 1 }, { 'header': 2 }],               // custom button values
-  //     // [{ 'list': 'ordered' }, { 'list': 'bullet' }],
-  //     // [{ 'script': 'sub' }, { 'script': 'super' }],      // superscript/subscript
-  //     // [{ 'indent': '-1' }, { 'indent': '+1' }],          // outdent/indent
-  //     // [{ 'direction': 'rtl' }],                         // text direction
-
-  //     // [{ 'size': ['small', false, 'large', 'huge'] }],  // custom dropdown
-  //     // [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
-
-  //     // [{ 'color': [] }, { 'background': [] }],          // dropdown with defaults from theme
-  //     // [{ 'font': [] }],
-  //     // [{ 'align': [] }],
-
-  //     // ['clean'],                                         // remove formatting button
-
-  //     ['link', 'image', 'video']
-  //   ],
-  // }
-
-  contentEditor: Editor;
-  commentEditor: Editor;
-
-  contentToolbar: Toolbar = [
+  toolbar: Toolbar = [
     ['bold', 'italic'],
     ['underline', 'strike'],
     // ['code', 'blockquote'],
@@ -87,17 +80,17 @@ export class TicketEditComponent {
     // ['horizontal_rule', 'format_clear'],
   ];
 
-  commentToolbar: Toolbar = [
-    ['bold', 'italic'],
-    ['underline', 'strike'],
-    // ['code', 'blockquote'],
-    ['ordered_list', 'bullet_list'],
-    ['text_color', 'background_color'],
-    [{ heading: ['h1', 'h2', 'h3', 'h4', 'h5', 'h6'] }],
-    // ['link', 'image'],
-    // ['align_left', 'align_center', 'align_right', 'align_justify'],
-    // ['horizontal_rule', 'format_clear'],
-  ];
+  // commentToolbar: Toolbar = [
+  //   ['bold', 'italic'],
+  //   ['underline', 'strike'],
+  //   // ['code', 'blockquote'],
+  //   ['ordered_list', 'bullet_list'],
+  //   ['text_color', 'background_color'],
+  //   [{ heading: ['h1', 'h2', 'h3', 'h4', 'h5', 'h6'] }],
+  //   // ['link', 'image'],
+  //   // ['align_left', 'align_center', 'align_right', 'align_justify'],
+  //   // ['horizontal_rule', 'format_clear'],
+  // ];
 
 
 
@@ -113,34 +106,37 @@ export class TicketEditComponent {
   // initial values
   ngOnInit(): void {
 
-    this.contentEditor = new Editor();
-    this.commentEditor = new Editor();
+    this.editor = new Editor();
 
     this.ticketForm = this.formBuilder.group({
 
-      // do not need validate id because this "ticketid" field is read only
       ticketid: [''],
-      subject: [''],
-      categoryid: [''],
+      // creator id + creator fullname
       creator: [''],
+
       creatorPhone: [''],
       creatorEmail: [''],
-      // editorMenu: [{ disabled: true }],
-      content: [{ value: 'dsdsd', disabled: true }],
-      comment: [''],
-      // content:[''],
+      subject: [''],
+      content: [{ value: '', disabled: true }],
+
+      // team id + team name
       team: [''],
-      priorityid: [''],
-      assigneeid: [''],
-      ticketStatusid: [''],
       createDatetime: [''],
-      lastUpdateDatetime: ['']
+      lastUpdateDatetime: [''],
+      // user id + fullname
+      lastUpdateByUser: [''],
+      // spent hours + SLA
+      spentHour: [''],
+      priorityid: ['',[Validators.required]],
+      categoryid: ['', [Validators.required]],
+      assigneeid: ['', [Validators.required, Validators.min(1)]],
+      ticketStatusid: ['', [Validators.required]],
+      fileUrl: [''],
+      originalFilename: ['']
     });
 
-
-
-    // get user id from params of active route(from address path).
-    // and then get user based on user id from database
+    // get ticket id from params of active route(from address path).
+    // and then get ticket based on ticket id from database
     this.activatedRoute.paramMap.subscribe({
 
       next: (params: ParamMap) => {
@@ -149,16 +145,18 @@ export class TicketEditComponent {
         // The "+"" sign: convert string to number. 
         this.ticketid = +params.get('id');
 
-        // get user by user id
+        // get ticket by ticket id
         this.ticketService.findById(this.ticketid).subscribe({
 
           // get data successful from database
-          next: (data: Ticket) => {
+          next: (data: TicketEditViewResponse) => {
 
-            this.ticket = data;
+            this.ticketEditViewResponse = data;
 
-            // load user information to the userForm
+            // load ticket information to the ticketForm
             this.ticketForm.patchValue(data);
+            this.ticketForm.get("createDatetime").patchValue(formatDate(data.createDatetime.toLocaleString(), "yyyy-MM-dd HH:mm:ss", "en-US"));
+            this.ticketForm.get("lastUpdateDatetime").patchValue(formatDate(data.lastUpdateDatetime.toLocaleString(), "yyyy-MM-dd HH:mm:ss", "en-US"));
 
           },
           // there are some errors when get data from database
@@ -169,7 +167,27 @@ export class TicketEditComponent {
       }
     });
 
+    this.loadDropdownValues();
+
   } // end of ngOnInit()
+
+  // initialize default values for all dropdown controls
+  loadDropdownValues() {
+
+
+    // load all acitve priorities into the "Priority" dropdown
+    this.loadAllActivePriorities()
+
+    // load all active categories into the "Category" dropdown
+    this.loadAllActiveCategories();
+
+    // load active supporters belong team into the "Assignee" dropdown
+    this.loadActiveSupportersBelongTeam(this.ticketid);
+
+    // load next appropriate ticket status into the "Ticket status" dropdown
+    this.loadNextTicketStatus(this.ticketid);
+
+  } // end of loadDropdownValues()
 
   // edit user.
   // when user clicks the "Save" button in the "Edit user"
@@ -212,6 +230,130 @@ export class TicketEditComponent {
 
   } // end of editUser()
 
+  // load all active categories
+  loadAllActiveCategories() {
+
+    // push into the subscriptions array to unsubscibe them easily later
+    this.subscriptions.push(
+
+      // get all active categories
+      this.ticketService.getAllActiveCategories()
+
+        .subscribe({
+
+          // get all active categories successful
+          next: (data: DropdownResponse[]) => {
+
+            // all active categories
+            this.categories = data;
+
+          },
+
+          // there are some errors when get teams
+          error: (errorResponse: HttpErrorResponse) => {
+
+            // show the error message to user
+            this.sendNotification(NotificationType.ERROR, errorResponse.error.message);
+
+          }
+        })
+    );
+
+  } // end of loadAllActiveCategories()
+
+  // load all active priorities
+  loadAllActivePriorities() {
+
+    // push into the subscriptions array to unsubscibe them easily later
+    this.subscriptions.push(
+
+      // get all active priorities
+      this.ticketService.getAllActivePriorities()
+
+        .subscribe({
+
+          // get all active priorities successful
+          next: (data: DropdownResponse[]) => {
+
+            // all active priorities
+            this.priorities = data;
+
+          },
+
+          // there are some errors when get teams
+          error: (errorResponse: HttpErrorResponse) => {
+
+            // show the error message to user
+            this.sendNotification(NotificationType.ERROR, errorResponse.error.message);
+
+          }
+        })
+    );
+
+  } // end of loadAllActivePriorities()
+
+  // load active supporters belong team
+  loadActiveSupportersBelongTeam(ticketid: number) {
+
+    // push into the subscriptions array to unsubscibe them easily later
+    this.subscriptions.push(
+
+      // get active supporters belong team
+      this.ticketService.getActiveSupportersBelongTeam(ticketid)
+
+        .subscribe({
+
+          // get active supporters belong team successful
+          next: (data: DropdownResponse[]) => {
+
+            // active supporters belong team
+            this.assignees = data;
+
+          },
+
+          // there are some errors when get teams
+          error: (errorResponse: HttpErrorResponse) => {
+
+            // show the error message to user
+            this.sendNotification(NotificationType.ERROR, errorResponse.error.message);
+
+          }
+        })
+    );
+
+  } // end of loadActiveSupportersBelongTeam()
+
+  // load next appropriate ticket status
+  loadNextTicketStatus(ticketid: number) {
+
+    // push into the subscriptions array to unsubscibe them easily later
+    this.subscriptions.push(
+
+      // get next appropriate ticket status 
+      this.ticketService.getNextTicketStatus(ticketid)
+
+        .subscribe({
+
+          // get next appropriate ticket status successful
+          next: (data: DropdownResponse[]) => {
+
+            // next ticket status
+            this.ticketStatus = data;
+
+          },
+
+          // there are some errors when get teams
+          error: (errorResponse: HttpErrorResponse) => {
+
+            // show the error message to user
+            this.sendNotification(NotificationType.ERROR, errorResponse.error.message);
+
+          }
+        })
+    );
+
+  } // end of loadActiveSupportersBelongTeam()
+
   // send notification to user
   private sendNotification(notificationType: NotificationType, message: string): void {
     if (message) {
@@ -225,8 +367,8 @@ export class TicketEditComponent {
   ngOnDestroy(): void {
     this.subscriptions.forEach(sub => sub.unsubscribe());
 
-    this.contentEditor.destroy();
-    this.commentEditor.destroy();
+    this.editor.destroy();
+    // this.commentEditor.destroy();
   }
 
 } // end of the TicketEditComponent

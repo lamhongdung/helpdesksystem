@@ -3,7 +3,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { User } from 'src/app/entity/User';
+import { User } from 'src/app/payload/User';
 import { HeaderType } from 'src/app/enum/HeaderType.enum';
 import { NotificationType } from 'src/app/enum/NotificationType.enum';
 import { AuthService } from 'src/app/service/auth.service';
