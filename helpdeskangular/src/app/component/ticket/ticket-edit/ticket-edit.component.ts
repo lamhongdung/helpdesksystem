@@ -1,9 +1,9 @@
-import { HttpErrorResponse } from '@angular/common/http';
+import { HttpErrorResponse, HttpEvent, HttpEventType } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 import { Editor, Toolbar } from 'ngx-editor';
-import { Subscription } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { CustomHttpRespone } from 'src/app/payload/CustomHttpRespone';
 import { TicketEditViewResponse } from 'src/app/payload/TicketEditViewResponse';
 import { NotificationType } from 'src/app/enum/NotificationType.enum';
@@ -11,6 +11,9 @@ import { NotificationService } from 'src/app/service/notification.service';
 import { TicketService } from 'src/app/service/ticket.service';
 import { formatDate } from '@angular/common';
 import { DropdownResponse } from 'src/app/payload/DropdownResponse';
+import { FileService } from 'src/app/service/file.service';
+import { saveAs } from 'file-saver';
+import { TicketStatus } from 'src/app/enum/TicketStatus';
 
 @Component({
   selector: 'app-ticket-edit',
@@ -46,6 +49,8 @@ export class TicketEditComponent {
 
 
   ticketEditViewResponse: TicketEditViewResponse;
+
+  fileStatus = { status: '', requestType: '', percent: 0 };
 
   // error messages
   errorMessages = {
@@ -98,6 +103,7 @@ export class TicketEditComponent {
     private ticketService: TicketService,
     private notificationService: NotificationService,
     private formBuilder: FormBuilder,
+    private fileService: FileService,
     private activatedRoute: ActivatedRoute
   ) {
 
@@ -106,6 +112,7 @@ export class TicketEditComponent {
   // initial values
   ngOnInit(): void {
 
+    TicketStatus.Closed
     this.editor = new Editor();
 
     this.ticketForm = this.formBuilder.group({
@@ -127,7 +134,7 @@ export class TicketEditComponent {
       lastUpdateByUser: [''],
       // spent hours + SLA
       spentHour: [''],
-      priorityid: ['',[Validators.required]],
+      priorityid: ['', [Validators.required]],
       categoryid: ['', [Validators.required]],
       assigneeid: ['', [Validators.required, Validators.min(1)]],
       ticketStatusid: ['', [Validators.required]],
@@ -153,10 +160,21 @@ export class TicketEditComponent {
 
             this.ticketEditViewResponse = data;
 
+            // console.log(this.ticketEditViewResponse.ticketStatusid);
+            // console.log(this.ticketEditViewResponse.ticketStatusid == 4);
+
+            if (this.ticketEditViewResponse.ticketStatusid == TicketStatus.Closed ||
+              this.ticketEditViewResponse.ticketStatusid == TicketStatus.Cancel) {
+              // if (true){
+              // navigate to the "/ticket-list" page
+              this.router.navigateByUrl('/ticket-list');
+            }
+
             // load ticket information to the ticketForm
             this.ticketForm.patchValue(data);
             this.ticketForm.get("createDatetime").patchValue(formatDate(data.createDatetime.toLocaleString(), "yyyy-MM-dd HH:mm:ss", "en-US"));
             this.ticketForm.get("lastUpdateDatetime").patchValue(formatDate(data.lastUpdateDatetime.toLocaleString(), "yyyy-MM-dd HH:mm:ss", "en-US"));
+
 
           },
           // there are some errors when get data from database
@@ -168,6 +186,8 @@ export class TicketEditComponent {
     });
 
     this.loadDropdownValues();
+
+
 
   } // end of ngOnInit()
 
@@ -353,6 +373,55 @@ export class TicketEditComponent {
     );
 
   } // end of loadActiveSupportersBelongTeam()
+
+  // define a function to download files
+  onDownloadFile(customFilename: string): void {
+
+    this.fileService.download(customFilename).subscribe({
+
+      next: (event) => {
+        // console.log(event);
+        this.resportProgress(event);
+      },
+      error: (errorResponse: HttpErrorResponse) => {
+        // show the error message to user
+        this.sendNotification(NotificationType.ERROR, errorResponse.error.message);
+      }
+    });
+  }
+
+  private resportProgress(httpEvent: HttpEvent<Blob>): void {
+
+    switch (httpEvent.type) {
+
+      // case HttpEventType.DownloadProgress:
+      //   this.updateStatus(httpEvent.loaded, httpEvent.total!, 'Downloading... ');
+      //   break;
+
+      // case HttpEventType.ResponseHeader:
+      //   console.log('Header returned', httpEvent);
+      //   break;
+
+      case HttpEventType.Response:
+
+        saveAs(new File([httpEvent.body!], httpEvent.headers.get('originalFilename')!,
+          { type: `${httpEvent.headers.get('Content-Type')};charset=utf-8` }));
+        this.fileStatus.status = 'done';
+
+        break;
+
+      default:
+        // console.log(httpEvent);
+        break;
+
+    }
+  }
+
+  // private updateStatus(loaded: number, total: number, requestType: string): void {
+  //   this.fileStatus.status = 'progress';
+  //   this.fileStatus.requestType = requestType;
+  //   this.fileStatus.percent = Math.round(100 * loaded / total);
+  // }
 
   // send notification to user
   private sendNotification(notificationType: NotificationType, message: string): void {

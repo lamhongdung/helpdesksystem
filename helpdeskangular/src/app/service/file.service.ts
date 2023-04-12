@@ -13,21 +13,21 @@ export class FileService {
 
   constructor(private http: HttpClient) { }
 
-  // upload(file: File): Observable<HttpEvent<any>> {
 
-  //   const formData: FormData = new FormData();
+  getFile(customerFilename: string): Observable<any> {
+    return this.http.get(`${this.host}/downloads/${customerFilename}`);
+  }
 
-  //   formData.append('file', file);
+  // define function to download files
+  download(customFilename: string): Observable<HttpEvent<Blob>> {
 
-  //   const req = new HttpRequest('POST', `${this.host}/upload`, formData, {
-  //     reportProgress: true,
-  //     responseType: 'json'
-  //   });
+    return this.http.get(`${this.host}/download/${customFilename}/`, {
+      reportProgress: true,
+      observe: 'events',
+      responseType: 'blob'
+    });
 
-  //   return this.http.request(req);
-  // }
+  }
 
-  // getFiles(): Observable<any> {
-  //   return this.http.get(`${this.host}/files`);
-  // }
+
 }

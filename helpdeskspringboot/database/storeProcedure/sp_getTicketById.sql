@@ -13,7 +13,7 @@ delimiter $$
 -- 	- in_id: ticket id
 -- -----------------------------------------------------
 
--- call sp_getTicketById(1)
+-- call sp_getTicketById(4)
 
 create procedure sp_getTicketById(
 									in_id int

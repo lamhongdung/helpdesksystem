@@ -18,7 +18,8 @@ import java.nio.file.StandardCopyOption;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.UUID;
-import java.util.stream.Stream;
+
+import static java.nio.file.Paths.get;
 
 @Service
 public class FileService {
@@ -76,11 +77,8 @@ public class FileService {
 
     } // end of save()
 
-//    public FileStorage getFile(long id) {
-//        return fileRepository.findById(id).get();
-//    }
-//
-//    public Stream<FileStorage> getAllFiles() {
-//        return fileRepository.findAll().stream();
-//    }
+    public FileStorage getFileStorage(String customFilename) {
+
+        return fileRepository.getOriginalFilename(customFilename);
+    }
 }
