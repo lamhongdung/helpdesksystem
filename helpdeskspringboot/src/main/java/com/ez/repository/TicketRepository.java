@@ -238,4 +238,22 @@ public interface TicketRepository extends JpaRepository<Ticket, Long> {
             , nativeQuery = true)
     public TicketEditViewResponse getTicketById(@Param("ticketid") long ticketid);
 
+    // update ticket
+    @Modifying
+    @Query(value = "" +
+            " update ticket a set a.lastUpdateByUserid = :lastUpdateByUserid, " +
+            "               a.categoryid = :categoryid, " +
+            "               a.priorityid = :priorityid, " +
+            "               a.assigneeid = :assigneeid, " +
+            "               a.ticketStatusid = :ticketStatusid, " +
+            "               a.lastUpdateDatetime = now() " +
+            " where a.ticketid = :ticketid "
+            , nativeQuery = true)
+    void updateTicket(@Param("ticketid") long ticketid,
+                      @Param("lastUpdateByUserid") long lastUpdateByUserid,
+                      @Param("categoryid") long categoryid,
+                      @Param("priorityid") long priorityid,
+                      @Param("assigneeid") long assigneeid,
+                      @Param("ticketStatusid") long ticketStatusid);
+
 }

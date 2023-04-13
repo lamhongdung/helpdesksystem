@@ -1,5 +1,7 @@
 package com.ez.service;
 
+import com.ez.entity.Ticket;
+import com.ez.exception.BadDataException;
 import com.ez.payload.*;
 import com.ez.repository.TicketRepository;
 import org.slf4j.Logger;
@@ -8,9 +10,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.validation.BindException;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.List;
 
+import static com.ez.constant.Constant.*;
+import static org.springframework.http.HttpStatus.NOT_FOUND;
 import static org.springframework.http.HttpStatus.OK;
 
 @Service
@@ -176,53 +182,51 @@ public class TicketService {
 
         return ticketRepository.getTicketById(id);
     }
-//
-//    // update existing team.
-//    // save team in both tables:
-//    //  - table team: contains columns (id, name, assignmentMethod, status)
-//    //  - table teamSupporter: contains 2 columns (teamid, supporterid)
-//    // note:
-//    //  - class Team: not include supporters
-//    //  - class TeamRequest: include supporters
-//    public Team updateTeam(TeamRequest teamRequest) throws EntityNotFoundException {
-//
-//        LOGGER.info("Update team");
-//        LOGGER.info("Team is sent from client: " + teamRequest.toString());
-//
-//        // get existing team(persistent)
-//        Team existingTeam = teamRepository.findById(teamRequest.getId())
-//                .orElseThrow(() -> new EntityNotFoundException(NO_TEAM_FOUND_BY_ID + teamRequest.getId()));
-//
-//        // set new values to existing team
-//        existingTeam.setName(teamRequest.getName());
-//        existingTeam.setAssignmentMethod(teamRequest.getAssignmentMethod());
-////        existingTeam.setCalendarid(teamRequest.getCalendarid());
-//        existingTeam.setStatus(teamRequest.getStatus());
-//
-//        // update existing team without supporters
-//        teamRepository.save(existingTeam);
-//
-//        //
-//        // update (teamid and supporterid) in the "teamSupporter" table in database.
-//        //
-//
-//        // delete old data by teamid in the "teamSupporter" table
-//        teamRepository.deleteTeamSupporter(teamRequest.getId());
-//
-//        //
-//        // save relation between team and supporters into the "teamSupporter" table.
-//        //
-//
-//        // loop through all supporters in the teamRequest.
-//        teamRequest.getSupporters().forEach(supporter -> teamRepository.saveTeamSupporter(teamRequest.getId(), supporter.getId()));
-//
-//        return existingTeam;
-//    }
 
-    private ResponseEntity<HttpResponse> createHttpResponse(HttpStatus httpStatus, String message) {
+    // update existing ticket.
+    public HttpResponse updateTicket(TicketEditRequest ticketEditRequest) throws EntityNotFoundException, BadDataException {
 
-        return new ResponseEntity<>(new HttpResponse(httpStatus.value(), message), httpStatus);
+        LOGGER.info("Update ticket");
+        LOGGER.info("Ticket is sent from client: " + ticketEditRequest.toString());
+
+        // get existing team(persistent)
+        Ticket existingTicket = ticketRepository.findById(ticketEditRequest.getTicketid())
+                .orElseThrow(() -> new EntityNotFoundException(NO_TICKET_FOUND_BY_ID + ticketEditRequest.getTicketid()));
+
+        if (existingTicket.getTicketStatusid() == TICKET_STATUS_CLOSED){
+            throw new BadDataException("Ticket status is 'Closed', so you cannot modify this ticket.");
+        }
+
+        if (existingTicket.getTicketStatusid() == TICKET_STATUS_CANCEL){
+            throw new BadDataException("Ticket status is 'Cancel', so you cannot modify this ticket.");
+        }
+
+        // set new values to existing ticket
+//        existingTicket.setLastUpdateByUserid(ticketEditRequest.getLastUpdateByUserid());
+//        existingTicket.setCategoryid(ticketEditRequest.getCategoryid());
+//        existingTicket.setPriorityid(ticketEditRequest.getPriorityid());
+//        existingTicket.setAssigneeid(ticketEditRequest.getAssigneeid());
+//        existingTicket.setTicketStatusid(ticketEditRequest.getTicketStatusid());
+
+        // update existing team without supporters
+//        ticketRepository.save(existingTicket);
+        ticketRepository.updateTicket(
+                ticketEditRequest.getTicketid(),
+                ticketEditRequest.getLastUpdateByUserid(),
+                ticketEditRequest.getCategoryid(),
+                ticketEditRequest.getPriorityid(),
+                ticketEditRequest.getAssigneeid(),
+                ticketEditRequest.getTicketStatusid());
+
+        return new HttpResponse(OK.value(),
+                "Ticket " + ticketEditRequest.getTicketid() + " is updated successful.");
 
     }
+
+//    private ResponseEntity<HttpResponse> createHttpResponse(HttpStatus httpStatus, String message) {
+//
+//        return new ResponseEntity<>(new HttpResponse(httpStatus.value(), message), httpStatus);
+//
+//    }
 
 }

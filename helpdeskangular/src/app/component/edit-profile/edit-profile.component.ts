@@ -3,7 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { CustomHttpRespone } from 'src/app/payload/CustomHttpRespone';
+import { CustomHttpResponse } from 'src/app/payload/CustomHttpResponse';
 import { EditProfile } from 'src/app/payload/EditProfile';
 import { User } from 'src/app/payload/User';
 import { NotificationType } from 'src/app/enum/NotificationType.enum';
@@ -37,7 +37,7 @@ export class EditProfileComponent implements OnInit {
 
   editProfile: EditProfile;
 
-  response: CustomHttpRespone;
+  response: CustomHttpResponse;
 
   // email of the logged in user
   loggedInEmail: string;

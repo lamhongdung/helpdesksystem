@@ -66,6 +66,11 @@ public class Constant {
     //
     // ticket constants
     //
+    public static final long TICKET_STATUS_OPEN = 1;
+    public static final long TICKET_STATUS_ASSIGNED = 2;
+    public static final long TICKET_STATUS_RESOLVED = 3;
+    public static final long TICKET_STATUS_CLOSED = 4;
+    public static final long TICKET_STATUS_CANCEL = 5;
     public static final String NO_TICKET_FOUND_BY_ID = "No ticket found for id: ";
 
 

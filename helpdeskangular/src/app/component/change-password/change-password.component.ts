@@ -3,7 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { CustomHttpRespone } from 'src/app/payload/CustomHttpRespone';
+import { CustomHttpResponse } from 'src/app/payload/CustomHttpResponse';
 import { NotificationType } from 'src/app/enum/NotificationType.enum';
 import { AuthService } from 'src/app/service/auth.service';
 import { NotificationService } from 'src/app/service/notification.service';
@@ -32,7 +32,7 @@ export class ChangePasswordComponent implements OnInit {
   //  - Confirm new password
   changePasswordForm: FormGroup;
 
-  response: CustomHttpRespone;
+  response: CustomHttpResponse;
 
   // email of the logged in user
   loggedInEmail: string;
@@ -95,7 +95,7 @@ export class ChangePasswordComponent implements OnInit {
       this.userService.changePassword(this.changePasswordForm.value).subscribe({
 
         // change password successful
-        next: (response: CustomHttpRespone) => {
+        next: (response: CustomHttpResponse) => {
 
           this.response = response;
 

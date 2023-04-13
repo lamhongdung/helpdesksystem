@@ -4,7 +4,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 import { Editor, Toolbar } from 'ngx-editor';
 import { Observable, Subscription } from 'rxjs';
-import { CustomHttpRespone } from 'src/app/payload/CustomHttpRespone';
+import { CustomHttpResponse } from 'src/app/payload/CustomHttpResponse';
 import { TicketEditViewResponse } from 'src/app/payload/TicketEditViewResponse';
 import { NotificationType } from 'src/app/enum/NotificationType.enum';
 import { NotificationService } from 'src/app/service/notification.service';
@@ -14,6 +14,7 @@ import { DropdownResponse } from 'src/app/payload/DropdownResponse';
 import { FileService } from 'src/app/service/file.service';
 import { saveAs } from 'file-saver';
 import { TicketStatus } from 'src/app/enum/TicketStatus';
+import { AuthService } from 'src/app/service/auth.service';
 
 @Component({
   selector: 'app-ticket-edit',
@@ -47,6 +48,7 @@ export class TicketEditComponent {
   // all ticket status
   ticketStatus: DropdownResponse[] = [];
 
+  userid: number;
 
   ticketEditViewResponse: TicketEditViewResponse;
 
@@ -104,7 +106,8 @@ export class TicketEditComponent {
     private notificationService: NotificationService,
     private formBuilder: FormBuilder,
     private fileService: FileService,
-    private activatedRoute: ActivatedRoute
+    private activatedRoute: ActivatedRoute,
+    private authService: AuthService
   ) {
 
   }
@@ -112,7 +115,6 @@ export class TicketEditComponent {
   // initial values
   ngOnInit(): void {
 
-    TicketStatus.Closed
     this.editor = new Editor();
 
     this.ticketForm = this.formBuilder.group({
@@ -141,6 +143,7 @@ export class TicketEditComponent {
       fileUrl: [''],
       originalFilename: ['']
     });
+
 
     // get ticket id from params of active route(from address path).
     // and then get ticket based on ticket id from database
@@ -185,6 +188,8 @@ export class TicketEditComponent {
       }
     });
 
+    this.userid = +this.authService.getIdFromLocalStorage();
+    
     this.loadDropdownValues();
 
 
@@ -220,10 +225,10 @@ export class TicketEditComponent {
     this.subscriptions.push(
 
       // edit exsting user
-      this.ticketService.editTicket(this.ticketForm.value).subscribe({
+      this.ticketService.editTicket(this.ticketForm.value, this.userid).subscribe({
 
         // update user successful
-        next: (data: CustomHttpRespone) => {
+        next: (data: CustomHttpResponse) => {
 
           // this.ticket = data;
 
@@ -233,7 +238,7 @@ export class TicketEditComponent {
           // hide spinner(circle)
           this.showSpinner = false;
 
-          // after update user successful then navigate to the "user-list" page
+          // after update user successful then navigate to the "ticket-list" page
           this.router.navigateByUrl("/ticket-list");
         },
         // there are some errors when update user
@@ -384,8 +389,12 @@ export class TicketEditComponent {
         this.resportProgress(event);
       },
       error: (errorResponse: HttpErrorResponse) => {
+      // error: (errorResponse: CustomHttpResponse) => {
+        console.log("There is error!");
+        console.log(errorResponse);
         // show the error message to user
-        this.sendNotification(NotificationType.ERROR, errorResponse.error.message);
+        // this.sendNotification(NotificationType.ERROR, errorResponse.message);
+        this.sendNotification(NotificationType.ERROR, "File has not found on server!");
       }
     });
   }

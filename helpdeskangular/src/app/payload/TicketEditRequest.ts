@@ -4,8 +4,8 @@ export class TicketEditRequest {
 
         // ticket id
         public ticketid: number,
-        // last update by user id + full name
-        public lastUpdateByUser: string,
+        // last update by user id
+        public lastUpdateByUserid: number,
         // category id
         public categoryid: number,
         // priority id
@@ -16,7 +16,7 @@ export class TicketEditRequest {
         public ticketStatusid: number,
 
     ) {
-
+        
     }
 
 }

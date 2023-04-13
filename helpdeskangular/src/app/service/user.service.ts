@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { ChangePassword } from '../payload/ChangePassword';
-import { CustomHttpRespone } from '../payload/CustomHttpRespone';
+import { CustomHttpResponse } from '../payload/CustomHttpResponse';
 import { EditProfile } from '../payload/EditProfile';
 import { ResetPassword } from '../payload/ResetPassword';
 import { User } from '../payload/User';
@@ -51,9 +51,9 @@ export class UserService {
   }
 
   // reset password
-  public resetPassword(resetPassword: ResetPassword): Observable<CustomHttpRespone> {
+  public resetPassword(resetPassword: ResetPassword): Observable<CustomHttpResponse> {
 
-    return this.http.put<CustomHttpRespone>(`${this.host}/reset-password`, resetPassword);
+    return this.http.put<CustomHttpResponse>(`${this.host}/reset-password`, resetPassword);
 
   }
 
@@ -63,8 +63,8 @@ export class UserService {
   }
 
   // change password
-  public changePassword(changePassword: ChangePassword): Observable<CustomHttpRespone> {
-    return this.http.put<CustomHttpRespone>(`${this.host}/change-password`, changePassword);
+  public changePassword(changePassword: ChangePassword): Observable<CustomHttpResponse> {
+    return this.http.put<CustomHttpResponse>(`${this.host}/change-password`, changePassword);
   }
 
   // find user by user id

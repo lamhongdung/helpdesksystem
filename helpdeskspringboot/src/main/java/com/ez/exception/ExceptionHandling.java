@@ -19,6 +19,7 @@ import org.springframework.web.multipart.MaxUploadSizeExceededException;
 
 import javax.persistence.EntityNotFoundException;
 import javax.persistence.NoResultException;
+import java.io.FileNotFoundException;
 import java.util.Objects;
 
 import static org.springframework.http.HttpStatus.*;
@@ -72,6 +73,11 @@ public class ExceptionHandling implements ErrorController {
         return createHttpResponse(BAD_REQUEST, exception.getMessage());
     }
 
+    @ExceptionHandler(FileNotFoundException.class)
+    public ResponseEntity<HttpResponse> fileNotFoundException(FileNotFoundException exception) {
+        return createHttpResponse(BAD_REQUEST, exception.getMessage());
+    }
+
     @ExceptionHandler(OldPasswordIsNotMatchException.class)
     public ResponseEntity<HttpResponse> oldPasswordIsNotMatchException(OldPasswordIsNotMatchException exception) {
         return createHttpResponse(BAD_REQUEST, exception.getMessage());
@@ -79,6 +85,11 @@ public class ExceptionHandling implements ErrorController {
 
     @ExceptionHandler(NewPasswordIsNotMatchException.class)
     public ResponseEntity<HttpResponse> newPasswordIsNotMatchException(NewPasswordIsNotMatchException exception) {
+        return createHttpResponse(BAD_REQUEST, exception.getMessage());
+    }
+
+    @ExceptionHandler(BadDataException.class)
+    public ResponseEntity<HttpResponse> badDataException(BadDataException exception) {
         return createHttpResponse(BAD_REQUEST, exception.getMessage());
     }
 

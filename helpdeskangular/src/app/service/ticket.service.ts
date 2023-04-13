@@ -5,7 +5,7 @@ import { environment } from 'src/environments/environment';
 import { DropdownResponse } from '../payload/DropdownResponse';
 import { TicketSearchResponse } from '../payload/TicketSearchResponse';
 import { ShareService } from './share.service';
-import { CustomHttpRespone } from '../payload/CustomHttpRespone';
+import { CustomHttpResponse } from '../payload/CustomHttpResponse';
 import { TicketCreateRequest } from '../payload/TicketCreateRequest';
 import { TicketEditViewResponse } from '../payload/TicketEditViewResponse';
 import { TicketEditRequest } from '../payload/TicketEditRequest';
@@ -160,13 +160,26 @@ export class TicketService {
   }
 
   // create a new team
-  public createTicket(ticketCreateRequest: TicketCreateRequest): Observable<CustomHttpRespone> {
-    return this.http.post<CustomHttpRespone>(`${this.host}/ticket-create`, ticketCreateRequest);
+  public createTicket(ticketCreateRequest: TicketCreateRequest): Observable<CustomHttpResponse> {
+    return this.http.post<CustomHttpResponse>(`${this.host}/ticket-create`, ticketCreateRequest);
   }
 
   // edit an existing ticket
-  public editTicket(TicketEditRequest: TicketEditRequest): Observable<CustomHttpRespone> {
-    return this.http.put<CustomHttpRespone>(`${this.host}/ticket-edit`, TicketEditRequest);
+  public editTicket(ticketEditRequest: TicketEditRequest, userid: number): Observable<CustomHttpResponse> {
+
+    console.log("userid :" + userid);
+    
+    const newTicketEditRequest: TicketEditRequest =
+      new TicketEditRequest(
+        ticketEditRequest.ticketid,
+        userid,
+        ticketEditRequest.categoryid, 
+        ticketEditRequest.priorityid, 
+        ticketEditRequest.assigneeid, 
+        ticketEditRequest.ticketStatusid);
+
+
+    return this.http.put<CustomHttpResponse>(`${this.host}/ticket-edit`, newTicketEditRequest);
   }
 
   // find ticket by id

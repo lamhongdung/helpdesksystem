@@ -3,7 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { CustomHttpRespone } from 'src/app/payload/CustomHttpRespone';
+import { CustomHttpResponse } from 'src/app/payload/CustomHttpResponse';
 import { User } from 'src/app/payload/User';
 import { NotificationType } from 'src/app/enum/NotificationType.enum';
 import { NotificationService } from 'src/app/service/notification.service';
@@ -69,7 +69,7 @@ export class ResetPasswordComponent implements OnInit {
       this.userService.resetPassword(this.resetPasswordForm.value).subscribe({
 
         // reset password success
-        next: (response: CustomHttpRespone) => {
+        next: (response: CustomHttpResponse) => {
 
           this.showSpinner = false;
           this.sendNotification(NotificationType.SUCCESS, response.message);

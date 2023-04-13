@@ -12,7 +12,7 @@ import { ShareService } from 'src/app/service/share.service';
 import { FileService } from 'src/app/service/file.service';
 import { DropdownResponse } from 'src/app/payload/DropdownResponse';
 import { validFile } from 'src/app/validator/validator';
-import { CustomHttpRespone } from 'src/app/payload/CustomHttpRespone';
+import { CustomHttpResponse } from 'src/app/payload/CustomHttpResponse';
 import { Editor, Toolbar } from 'ngx-editor';
 
 @Component({
@@ -360,7 +360,7 @@ export class TicketCreateComponent {
       this.ticketService.createTicket(this.ticketForm.value).subscribe({
 
         // create ticket successful
-        next: (data: CustomHttpRespone) => {
+        next: (data: CustomHttpResponse) => {
 
           // show successful message to user 
           this.sendNotification(NotificationType.SUCCESS, data.message);

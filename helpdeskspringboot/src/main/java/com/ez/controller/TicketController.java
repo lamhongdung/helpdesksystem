@@ -1,5 +1,7 @@
 package com.ez.controller;
 
+import com.ez.entity.Ticket;
+import com.ez.exception.BadDataException;
 import com.ez.payload.*;
 import com.ez.service.TicketService;
 import org.slf4j.Logger;
@@ -7,6 +9,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -268,32 +271,29 @@ public class TicketController {
 
         return new ResponseEntity<>(ticketEditViewResponse, OK);
     }
-//
-//    // edit existing team.
-//    //
-//    // parameters:
-//    //  - TeamRequest: team + supporters
-//    @PutMapping("/team-edit")
-//    // only the ROLE_ADMIN can access this address
-//    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
-//    public ResponseEntity<Team> editTeam(@RequestBody @Valid TeamRequest teamRequest, BindingResult bindingResult)
-//            throws EntityNotFoundException, BindException {
-//
-//        LOGGER.info("validate data");
-//
-//        // if teamRequest data is invalid then throw exception
-//        if (bindingResult.hasErrors()) {
-//
-//            LOGGER.error("TeamRequest data is invalid");
-//
-//            throw new BindException(bindingResult);
-//        }
-//
-//        // save teamRequest(includes supporters)
-//        // and return team(not includes supporters)
-//        Team currentTeam = teamService.updateTeam(teamRequest);
-//
-//        return new ResponseEntity<>(currentTeam, OK);
-//    }
+
+    // edit existing ticket.
+    @PutMapping("/ticket-edit")
+    // only the ROLE_SUPPORTER or ROLE_ADMIN can access this address
+    @PreAuthorize("hasAnyRole('ROLE_SUPPORTER','ROLE_ADMIN')")
+    public ResponseEntity<HttpResponse> editTeam(@RequestBody @Valid TicketEditRequest ticketEditRequest, BindingResult bindingResult)
+            throws EntityNotFoundException, BindException, BadDataException {
+
+        LOGGER.info("validate data");
+
+        // if ticketEditRequest data is invalid then throw exception
+        if (bindingResult.hasErrors()) {
+
+            LOGGER.error("TicketEditRequest data is invalid");
+
+            throw new BindException(bindingResult);
+        }
+
+        // save teamRequest(includes supporters)
+        // and return team(not includes supporters)
+        HttpResponse httpResponse = ticketService.updateTicket(ticketEditRequest);
+
+        return new ResponseEntity<>(httpResponse, OK);
+    }
 
 }

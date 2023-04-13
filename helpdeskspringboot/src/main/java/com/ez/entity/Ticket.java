@@ -65,11 +65,11 @@ public class Ticket implements Serializable {
     private String customFilename;
 
     // ticket is created on this datetime
-    @CreationTimestamp
+//    @CreationTimestamp
     private Date createDatetime;
 
     // last time ticket is updated
-    @UpdateTimestamp
+//    @UpdateTimestamp
     private Date lastUpdateDatetime;
 
     @Min(value = 1, message = "User id of last person has updated the ticket must be greater than or equal to 1")
