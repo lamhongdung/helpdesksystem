@@ -241,19 +241,19 @@ public interface TicketRepository extends JpaRepository<Ticket, Long> {
     // update ticket
     @Modifying
     @Query(value = "" +
-            " update ticket a set a.lastUpdateByUserid = :lastUpdateByUserid, " +
-            "               a.categoryid = :categoryid, " +
-            "               a.priorityid = :priorityid, " +
-            "               a.assigneeid = :assigneeid, " +
-            "               a.ticketStatusid = :ticketStatusid, " +
-            "               a.lastUpdateDatetime = now() " +
+            " update ticket a set   a.categoryid = :categoryid, " +
+            "                       a.priorityid = :priorityid, " +
+            "                       a.assigneeid = :assigneeid, " +
+            "                       a.ticketStatusid = :ticketStatusid, " +
+            "                       a.lastUpdateByUserid = :toBeUpdatedByUserid, " +
+            "                       a.lastUpdateDatetime = now() " +
             " where a.ticketid = :ticketid "
             , nativeQuery = true)
     void updateTicket(@Param("ticketid") long ticketid,
-                      @Param("lastUpdateByUserid") long lastUpdateByUserid,
                       @Param("categoryid") long categoryid,
                       @Param("priorityid") long priorityid,
                       @Param("assigneeid") long assigneeid,
-                      @Param("ticketStatusid") long ticketStatusid);
+                      @Param("ticketStatusid") long ticketStatusid,
+                      @Param("toBeUpdatedByUserid") long toBeUpdatedByUserid);
 
 }

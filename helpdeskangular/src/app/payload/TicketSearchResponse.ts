@@ -20,8 +20,8 @@ export class TicketSearchResponse {
         public lastUpdateDatetime: Date,
         // spent hours. ex: 1.5 hours
         public spentHour: number,
-        // spent hours in hh:mm:ss format. ex: 01:30:00
-        public spentHourHhmmss: string,
+        // count spent 'days-hours-minutes'. ex: spentDayHhmm = '3 days 15 hours 22 minutes'
+        public spentDayHhmm: string,
         // creator phone number
         public creatorPhone: string,
         // creator email

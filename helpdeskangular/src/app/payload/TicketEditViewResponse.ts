@@ -47,7 +47,11 @@ export class TicketEditViewResponse {
         // resolveIn
         public resolveIn: number,
         // currentDatetime
-        public sla: string
+        public sla: string,
+        
+        // currentDatetime
+        public spentDayHhmm: string
+
 
 
     ) {

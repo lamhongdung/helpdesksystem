@@ -212,11 +212,12 @@ public class TicketService {
 //        ticketRepository.save(existingTicket);
         ticketRepository.updateTicket(
                 ticketEditRequest.getTicketid(),
-                ticketEditRequest.getLastUpdateByUserid(),
                 ticketEditRequest.getCategoryid(),
                 ticketEditRequest.getPriorityid(),
                 ticketEditRequest.getAssigneeid(),
-                ticketEditRequest.getTicketStatusid());
+                ticketEditRequest.getTicketStatusid(),
+                ticketEditRequest.getToBeUpdatedByUserid()
+        );
 
         return new HttpResponse(OK.value(),
                 "Ticket " + ticketEditRequest.getTicketid() + " is updated successful.");

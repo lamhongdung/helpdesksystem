@@ -39,16 +39,16 @@ public interface TicketEditViewResponse {
     String getSpentHour();
 
     // "categoryid" column
-    String getCategoryid();
+    long getCategoryid();
 
     // "priorityid" column
-    String getPriorityid();
+    long getPriorityid();
 
     // "assigneeid" column
-    String getAssigneeid();
+    long getAssigneeid();
 
     // "ticketStatusid" column
-    String getTicketStatusid();
+    long getTicketStatusid();
 
     // custom filename
     String getCustomFilename();
@@ -58,7 +58,8 @@ public interface TicketEditViewResponse {
     // "currentDatetime" column
     Date getCurrentDatetime();
 
-    String getResolveIn();
+    long getResolveIn();
 
     String getSla();
+    String getSpentDayHhmm();
 }

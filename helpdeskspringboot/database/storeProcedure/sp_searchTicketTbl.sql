@@ -194,32 +194,11 @@ select 	a.ticketid as ticketid,
         -- 2023-03-29 11:00:00
 		a.lastUpdateDatetime as lastUpdateDatetime,
         now() as currentDatetime,
-        -- count spent hours of ticket. note: 1 hour = 3600 seconds.
-		case
-			-- if status is "Closed"(4) or "Cancel"(5) then (a.lastUpdateDatetime - a.createDatetime)
-			when (coalesce(d.statusid,0) = 4 or coalesce(d.statusid,0) = 5) then
-				-- number of hours between createDatetime and lastUpdateDatetime
-				timestampdiff(second, a.createDatetime, a.lastUpdateDatetime)/3600.0
-                
-			-- else: (current date time - a.createDatetime)
-			else 
-				-- number of hours between createDatetime and now()
-				timestampdiff(second, a.createDatetime, now())/3600.0
-		end as spentHour,
-        -- count spent hours of ticket in hh:mm:ss format
-		case
-			-- if status is "Closed"(4) or "Cancel"(5) then (a.lastUpdateDatetime - a.createDatetime)
-			when (coalesce(d.statusid,0) = 4 or coalesce(d.statusid,0) = 5) then
-				-- number of hours between createDatetime and lastUpdateDatetime in format HH:mm:ss
-                -- ex: sec_to_time(3600) = 01:00:00
-				sec_to_time(timestampdiff(second, a.createDatetime, a.lastUpdateDatetime))
-                
-			-- else: (current date time - a.createDatetime)
-			else 
-				-- number of hours between createDatetime and now() in format HH:mm:ss
-                -- ex: sec_to_time(3600) = 01:00:00            
-				sec_to_time(timestampdiff(second, a.createDatetime, now()))
-		end as spentHourHhmmss,        
+        
+		-- count spent hours. ex: spentHour = 1.3 (hours)
+        fn_spentHour(coalesce(d.statusid,0), a.createDatetime, a.lastUpdateDatetime) as spentHour,
+		-- count spent 'days-hours-minutes'. ex: spentDayHhmm = '3 days 15 hours 22 minutes'
+        fn_spentDayHhmm(coalesce(d.statusid,0), a.createDatetime, a.lastUpdateDatetime) as spentDayHhmm,       
 		a.ticketStatusid as ticketStatusid,
         a.lastupdatebyuserid as lastupdatebyuserid,
         concat(coalesce(h.lastName,''),' ',coalesce(h.firstName,'')) as lastupdatebyfullname,
@@ -262,7 +241,7 @@ select 	a.ticketid as ticketid,
 		a.resolveIn as resolveIn,
 		a.lastUpdateDatetime as lastUpdateDatetime,
         a.spentHour as spentHour,
-        a.spentHourHhmmss as spentHourHhmmss,
+        a.spentDayHhmm as spentDayHhmm,
         case
 			-- resolveIn = 0: means all tickets are on time
 			when a.resolveIn = 0 then 'Ontime'
@@ -299,7 +278,7 @@ create temporary table _searchTicketTbl(
     -- ex: 1.5 hours
 	`spentHour` float,
     -- ex: 01:30:00
-    `spentHourHhmmss` varchar(255),
+    `spentDayHhmm` varchar(255),
 	`creatorPhone` varchar(255),
 	`creatorEmail` varchar(255),
     `teamid` int,
@@ -331,7 +310,7 @@ select 	a.ticketid as ticketid,
         a.sla as sla,	
 		a.lastUpdateDatetime as lastUpdateDatetime,
 		a.spentHour as spentHour,
-        a.spentHourHhmmss as spentHourHhmmss,
+        a.spentDayHhmm as spentDayHhmm,
 		a.creatorPhone as creatorPhone,
 		a.creatorEmail as creatorEmail,
         a.teamid as teamid,

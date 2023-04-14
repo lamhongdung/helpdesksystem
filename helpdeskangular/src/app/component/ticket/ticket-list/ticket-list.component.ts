@@ -563,41 +563,7 @@ export class TicketListComponent {
 
   } // end of loadTooltipPlaceholder()
 
-  tooltipSlaDetail(ticketStatusid: number, createTime: Date, lastUpdateDatetime: Date,
-    currentDatetime: Date, limitTimeToResolve: string, spentHourHhmmss: string,
-    sla: string): string {
 
-    // SLA datetime
-    let slaDatetime: Date
-
-    // tooltip SLA detail
-    let tooltipSlaDetail: string;
-
-    let ticketStatus: { [key: number]: string; } = {
-      1: "Open",
-      2: "Assigned",
-      3: "Resolved",
-      4: "Closed",
-      5: "Cancel"
-    }
-
-    // if ticketStatusid === 4(Closed) or ticketStatusid === 5(Cancel) then slaDatetime = lastUpdateDatetime
-    // else slaDatetime = currentDatetime
-    slaDatetime = (ticketStatusid === 4 || ticketStatusid === 5) ? lastUpdateDatetime : currentDatetime
-
-    // ticketStatus[1]: "Open"
-    // ticketStatus[2]: "Assigned"
-    // ...
-    tooltipSlaDetail = "";
-    tooltipSlaDetail = tooltipSlaDetail + `- Status: <b>${ticketStatus[ticketStatusid]}</b>`
-    tooltipSlaDetail = tooltipSlaDetail + `<br>- From datetime: <b>${formatDate(createTime.toLocaleString(), "yyyy-MM-dd HH:mm:ss", "en-US")} </b>`
-    tooltipSlaDetail = tooltipSlaDetail + `<br>- To datetime: <b>${formatDate(slaDatetime.toLocaleString(), "yyyy-MM-dd HH:mm:ss", "en-US")} </b>`
-    tooltipSlaDetail = tooltipSlaDetail + `<br>- Limit time to resolve ticket: <b>${limitTimeToResolve}</b> hours`
-    tooltipSlaDetail = tooltipSlaDetail + `<br>- Spent hours(HH:mm:ss): <b>${spentHourHhmmss}</b>`
-    tooltipSlaDetail = tooltipSlaDetail + `<br>-> <b>SLA</b>: ${sla}`
-
-    return tooltipSlaDetail;
-  } // end of tooltipSlaDetail()
 
   // count index for current page
   // ex:  page 1: ord 1 --> ord 5
@@ -767,12 +733,28 @@ export class TicketListComponent {
     this.router.navigate(['/ticket-view', id]);
   }
 
+
   // display total of elements is on the top-right of the table
   displayTotalOfElements(totalOfElements: number, singleElement: string, pluralElement: string): string {
 
     return this.shareService.displayTotalOfElements(totalOfElements, singleElement, pluralElement);
 
   } // end of displayTotalOfElements()
+
+  // display total of elements is on the top-right of the table
+  tooltipSlaDetail(ticketStatusid: number, createTime: Date, lastUpdateDatetime: Date,
+    currentDatetime: Date, limitTimeToResolve: string, spentDayHhmm: string, sla: string): string {
+
+    return this.shareService.tooltipSlaDetail(ticketStatusid, createTime, lastUpdateDatetime, currentDatetime,
+      limitTimeToResolve, spentDayHhmm, sla);
+
+  } // end of tooltipSlaDetail()
+
+  // tooltipSlaDetail(ticketStatusid: number, createTime: Date, lastUpdateDatetime: Date,
+  //   currentDatetime: Date, limitTimeToResolve: string, spentHourHhmmss: string,
+  //   sla: string): string {
+
+  // tooltipSlaDetail(ticket.ticketStatusid,ticket.createDatetime,ticket.lastUpdateDatetime,ticket.currentDatetime,ticket.resolveIn,ticket.spentHourHhmmss,ticket.sla
 
   // send notification to user
   private sendNotification(notificationType: NotificationType, message: string): void {

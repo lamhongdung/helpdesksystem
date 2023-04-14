@@ -6,7 +6,7 @@ export class DropdownResponse {
         public id: number,
 
         // description = id + name +...
-        public description: string,
+        public description: string
 
     ) {
 

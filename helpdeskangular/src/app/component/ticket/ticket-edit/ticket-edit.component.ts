@@ -15,6 +15,9 @@ import { FileService } from 'src/app/service/file.service';
 import { saveAs } from 'file-saver';
 import { TicketStatus } from 'src/app/enum/TicketStatus';
 import { AuthService } from 'src/app/service/auth.service';
+import { ShareService } from 'src/app/service/share.service';
+import { CommentService } from 'src/app/service/comment.service';
+import { CommentResponse } from 'src/app/payload/CommentResponse';
 
 @Component({
   selector: 'app-ticket-edit',
@@ -48,11 +51,19 @@ export class TicketEditComponent {
   // all ticket status
   ticketStatus: DropdownResponse[] = [];
 
-  userid: number;
+  // all ticket status
+  commentReponses: CommentResponse[] = [];
 
   ticketEditViewResponse: TicketEditViewResponse;
 
   fileStatus = { status: '', requestType: '', percent: 0 };
+
+  // tooltips for "Search form" and "table"
+  // ex:  tooltips.set('key', 'value');
+  //      tooltips.get('key') --> return 'value';
+  tooltips = new Map<string, string>();
+
+  htmlContent = '<h1>hello</h1>';
 
   // error messages
   errorMessages = {
@@ -107,7 +118,10 @@ export class TicketEditComponent {
     private formBuilder: FormBuilder,
     private fileService: FileService,
     private activatedRoute: ActivatedRoute,
-    private authService: AuthService
+    private shareService: ShareService,
+    private authService: AuthService,
+    private commentService: CommentService
+
   ) {
 
   }
@@ -136,14 +150,14 @@ export class TicketEditComponent {
       lastUpdateByUser: [''],
       // spent hours + SLA
       spentHour: [''],
-      priorityid: ['', [Validators.required]],
-      categoryid: ['', [Validators.required]],
+      priorityid: ['', [Validators.required, Validators.min(1)]],
+      categoryid: ['', [Validators.required, Validators.min(1)]],
       assigneeid: ['', [Validators.required, Validators.min(1)]],
-      ticketStatusid: ['', [Validators.required]],
-      fileUrl: [''],
-      originalFilename: ['']
+      ticketStatusid: ['', [Validators.required, Validators.min(1)]],
+      toBeUpdatedByUserid: [this.authService.getIdFromLocalStorage(),[Validators.min(1)]]
     });
 
+    this.tooltips.set("ticketStatusid", "- Ticket status.<br>- <b>Open</b>: ticket has not yet assigned to supporter.<br>- <b>Assigned</b>: ticket has been assigned to supporter.<br>- <b>Resolved</b>: ticket has been resolved.<br>- <b>Closed</b>: ticket has been closed.<br>- <b>Cancel</b>: ticket has been canceled.");
 
     // get ticket id from params of active route(from address path).
     // and then get ticket based on ticket id from database
@@ -185,11 +199,26 @@ export class TicketEditComponent {
             this.sendNotification(NotificationType.ERROR, errorResponse.error.message);
           }
         });
+
+        this.commentService.getAllCommentsByTicketid(this.ticketid).subscribe({
+
+          // get data successful from database
+          next: (data: CommentResponse[]) => {
+
+            this.commentReponses = data;
+
+          },
+          // there are some errors when get data from database
+          error: (errorResponse: HttpErrorResponse) => {
+            this.sendNotification(NotificationType.ERROR, errorResponse.error.message);
+          }
+        });
+
       }
     });
 
-    this.userid = +this.authService.getIdFromLocalStorage();
-    
+    // this.userid = +this.authService.getIdFromLocalStorage();
+
     this.loadDropdownValues();
 
 
@@ -225,7 +254,7 @@ export class TicketEditComponent {
     this.subscriptions.push(
 
       // edit exsting user
-      this.ticketService.editTicket(this.ticketForm.value, this.userid).subscribe({
+      this.ticketService.editTicket(this.ticketForm.value).subscribe({
 
         // update user successful
         next: (data: CustomHttpResponse) => {
@@ -389,7 +418,7 @@ export class TicketEditComponent {
         this.resportProgress(event);
       },
       error: (errorResponse: HttpErrorResponse) => {
-      // error: (errorResponse: CustomHttpResponse) => {
+        // error: (errorResponse: CustomHttpResponse) => {
         console.log("There is error!");
         console.log(errorResponse);
         // show the error message to user
@@ -431,6 +460,15 @@ export class TicketEditComponent {
   //   this.fileStatus.requestType = requestType;
   //   this.fileStatus.percent = Math.round(100 * loaded / total);
   // }
+
+  // display reason why a ticket is 'on time' or 'late'
+  tooltipSlaDetail(ticketStatusid: number, createTime: Date, lastUpdateDatetime: Date,
+    currentDatetime: Date, limitTimeToResolve: string, spentDayHhmm: string, sla: string): string {
+
+    return this.shareService.tooltipSlaDetail(ticketStatusid, createTime, lastUpdateDatetime, currentDatetime,
+      limitTimeToResolve, spentDayHhmm, sla);
+
+  } // end of tooltipSlaDetail()
 
   // send notification to user
   private sendNotification(notificationType: NotificationType, message: string): void {

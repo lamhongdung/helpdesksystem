@@ -372,7 +372,7 @@
           <!-- column: SLA -->
           <!-- navigate to the "/ticket-view/{ticketid}" when user clicks on the table(except the column "Action") -->
           <td class="pointer-link" (click)="viewTicket(ticket.ticketid)"
-            [tooltip]="tooltipSlaDetail(ticket.ticketStatusid,ticket.createDatetime,ticket.lastUpdateDatetime,ticket.currentDatetime,ticket.resolveIn,ticket.spentHourHhmmss,ticket.sla)"
+            [tooltip]="tooltipSlaDetail(ticket.ticketStatusid,ticket.createDatetime,ticket.lastUpdateDatetime,ticket.currentDatetime,ticket.resolveIn,ticket.spentDayHhmm,ticket.sla)"
             theme="light">
             {{ticket.sla}}</td>
 
@@ -383,7 +383,7 @@
 
           <!-- column: spent hours in format 'HH:mm:ss' -->
           <!-- navigate to the "/ticket-view/{ticketid}" when user clicks on the table(except the column "Action") -->
-          <td class="pointer-link" (click)="viewTicket(ticket.ticketid)">{{ticket.spentHourHhmmss}}</td>
+          <td class="pointer-link" (click)="viewTicket(ticket.ticketid)">{{ticket.spentDayHhmm}}</td>
 
           <!-- column: Creator phone. -->
           <!-- if role is 'supporter' or 'admin' then display 'Creator phone'. -->

@@ -38,7 +38,7 @@
                         <!-- textbox -->
                         <div class="col-9">
                             <input class="form-control" type="text" formControlName="creator" id="creator"
-                                tooltip="Creator id + full name" theme="light" placement="top" readonly>
+                                tooltip="Creator id + creator full name" theme="light" placement="top" readonly>
                         </div>
                     </div>
 
@@ -93,7 +93,8 @@
                             <!-- <quill-editor class="content-editor" [modules]="modules" [placeholder]="'Ticket body'"
                                 [styles]="{'height': '250px', 'width': '100%'}" formControlName="content">
                             </quill-editor> -->
-                            <div class="NgxEditor__Wrapper ngxEditor">
+                            <div class="NgxEditor__Wrapper ngxEditor" tooltip="Ticket content" theme="light"
+                                placement="top">
                                 <!-- menu -->
                                 <ngx-editor-menu [editor]="editor" [toolbar]="toolbar" style="color: darkgray;"
                                     [disabled]="true">
@@ -129,12 +130,13 @@
                     <div class="row mb-3">
                         <!-- label -->
                         <div class="col-3">
-                            <label class="col-form-label" for="createDatetime">Create time<small>*</small></label>
+                            <label class="col-form-label" for="createDatetime">Created time<small>*</small></label>
                         </div>
                         <!-- textbox -->
                         <div class="col-9">
                             <input class="form-control" type="text" formControlName="createDatetime" id="createDatetime"
-                                tooltip="Ticket is created on this date time" theme="light" placement="top" readonly>
+                                tooltip="- Ticket is created on this date time.<br>- Format: yyyy-mm-dd hh:mm:ss"
+                                theme="light" placement="top" readonly>
                         </div>
                     </div>
 
@@ -142,13 +144,14 @@
                     <div class="row mb-3">
                         <!-- label -->
                         <div class="col-3">
-                            <label class="col-form-label" for="lastUpdateDatetime">Update time<small>*</small></label>
+                            <label class="col-form-label" for="lastUpdateDatetime">Updated time<small>*</small></label>
                         </div>
                         <!-- textbox -->
                         <div class="col-9">
                             <input class="form-control" type="text" formControlName="lastUpdateDatetime"
-                                id="lastUpdateDatetime" tooltip="Last update date time" theme="light" placement="top"
-                                readonly>
+                                id="lastUpdateDatetime"
+                                tooltip="- Last updated date time.<br>- Format: yyyy-mm-dd hh:mm:ss" theme="light"
+                                placement="top" readonly>
                         </div>
                     </div>
 
@@ -156,13 +159,14 @@
                     <div class="row mb-3">
                         <!-- label -->
                         <div class="col-3">
-                            <label class="col-form-label" for="lastUpdateByUser">Update by<small>*</small></label>
+                            <label class="col-form-label" for="lastUpdateByUser">Updated by<small>*</small></label>
                         </div>
                         <!-- textbox -->
                         <div class="col-9">
                             <input class="form-control" type="text" formControlName="lastUpdateByUser"
-                                id="lastUpdateByUser" tooltip="Last update by user" theme="light" placement="top"
-                                readonly>
+                                id="lastUpdateByUser"
+                                tooltip="- Last updated by user.<br>- Values include: user id + user fullname"
+                                theme="light" placement="top" readonly>
                         </div>
                     </div>
 
@@ -175,7 +179,9 @@
                         <!-- textbox -->
                         <div class="col-9">
                             <input class="form-control" type="text" formControlName="spentHour" id="spentHour"
-                                tooltip="Spent hours + SLA" theme="light" placement="top" readonly>
+                                tooltip="- Spent hours(hh:mm:ss) + SLA"
+                                [tooltip]="tooltipSlaDetail(ticketEditViewResponse?.ticketStatusid,ticketEditViewResponse?.createDatetime,ticketEditViewResponse?.lastUpdateDatetime,ticketEditViewResponse?.currentDatetime,ticketEditViewResponse?.resolveIn + '',ticketEditViewResponse?.spentDayHhmm,ticketEditViewResponse?.sla)"
+                                theme="light" theme="light" placement="top" readonly>
                         </div>
                     </div>
 
@@ -189,7 +195,9 @@
                         <!-- dropdown -->
                         <div class="col-9">
                             <select id="priorityid" class="form-control" formControlName="priorityid"
-                                placeholder="Priority" tooltip="Priority" theme="light" placement="top">
+                                placeholder="Priority"
+                                tooltip="- <b>Priority</b>.<br>- <b>Values include</b>: <i>ID + name + number of hours to resolve ticket</i>."
+                                theme="light" placement="top">
                                 <option *ngFor="let e of priorities" [value]="e.id">
                                     {{e.description}}</option>
                             </select>
@@ -215,7 +223,9 @@
                         <!-- dropdown -->
                         <div class="col-9">
                             <select id="categoryid" class="form-control" formControlName="categoryid"
-                                placeholder="Category" tooltip="Category" theme="light" placement="top">
+                                placeholder="Category"
+                                tooltip="- <b>Category</b>.<br>- <b>Values include</b>: <i>ID + name</i>." theme="light"
+                                placement="top">
                                 <option *ngFor="let e of categories" [value]="e.id">
                                     {{e.description}}</option>
                             </select>
@@ -241,8 +251,9 @@
                         <!-- dropdown -->
                         <div class="col-9">
                             <select id="assigneeid" class="form-control" formControlName="assigneeid"
-                                placeholder="Assignee" tooltip="Ticket is assigned to this supporter" theme="light"
-                                placement="top">
+                                placeholder="Assignee"
+                                tooltip="- Ticket is assigned to this supporter.<br>- Values include: supporter id + supporter fullname"
+                                theme="light" placement="top">
                                 <option *ngFor="let e of assignees" [value]="e.id">
                                     {{e.description}}</option>
                             </select>
@@ -268,7 +279,8 @@
                         <!-- dropdown -->
                         <div class="col-9">
                             <select id="ticketStatusid" class="form-control" formControlName="ticketStatusid"
-                                placeholder="Ticket status" tooltip="Ticket status" theme="light" placement="top">
+                                placeholder="Ticket status" [tooltip]="tooltips.get('ticketStatusid')" theme="light"
+                                placement="top">
                                 <option *ngFor="let e of ticketStatus" [value]="e.id">
                                     {{e.description}}</option>
                             </select>
@@ -285,13 +297,14 @@
                     </div>
 
                     <!-- ticket file -->
-                    <div class="row mb-3">
+                    <div class="row mb-3"
+                        *ngIf="ticketEditViewResponse?.customFilename != '' || ticketEditViewResponse?.customFilename != null">
                         <!-- label -->
                         <div class="col-3">
                             <label class="col-form-label" for="file">File</label>
                         </div>
                         <!-- textbox -->
-                        <div class="col-9">
+                        <div class="col-9" tooltip="Click on filename to download" theme="light" placement="top">
                             <a (click)="onDownloadFile(ticketEditViewResponse?.customFilename)"
                                 style="cursor: pointer;">{{
                                 ticketEditViewResponse?.originalFilename }}
@@ -321,7 +334,7 @@
         </div>
 
         <!-- buttons: "Save" and "Cancel" -->
-        <div class="d-flex justify-content-center">
+        <div class="d-flex justify-content-center mb-3">
             <div>
 
                 <!-- the "Save" button -->
@@ -343,5 +356,32 @@
                     placement="bottom">Cancel</button>
             </div>
         </div>
+
+        <div class="container-fluid">
+            <div class="card mb-3" *ngFor="let e of commentReponses">
+                <div class="card-header" style="background-color: #e9ecef;">Commented by
+                    <span
+                        tooltip="- <b>Commenter id</b>: <i>{{e.commenterid}}</i>.<br>- <b>Commenter name</b>: <i>{{e.commenterName}}</i>.<br>- <b>Commenter phone</b>: <i>{{e.commenterPhone}}</i>.<br>- <b>Commenter email</b>: <i>{{e.commenterEmail}}</i>"
+                        theme="light" placement="bottom"><b>{{e.commenter}}</b></span>
+                    <span class="float-right" tooltip="Created date time" theme="light"
+                        placement="bottom">{{e.commentDatetime | date:'yyyy-MM-dd HH:mm:ss'}}</span>
+                </div>
+                <div class="card-body">
+                    <p class="card-text" [innerHtml]="e.commentDescription" tooltip="Comment description" theme="light"
+                        placement="bottom"></p>
+                </div>
+                <div class="card-footer bg-transparent">
+                    <a (click)="onDownloadFile(e?.customFilename)" style="cursor: pointer;" tooltip="Click to download file" theme="light"
+                    placement="bottom">{{
+                        e?.originalFilename }}
+                    </a>
+                    <span class="float-right" tooltip="Comment id" theme="light" placement="bottom">Comment id:
+                        {{e.commentid}}</span>
+                </div>
+            </div>
+        </div>
+
     </form>
+
+
 </div>

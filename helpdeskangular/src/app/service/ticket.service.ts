@@ -165,21 +165,9 @@ export class TicketService {
   }
 
   // edit an existing ticket
-  public editTicket(ticketEditRequest: TicketEditRequest, userid: number): Observable<CustomHttpResponse> {
+  public editTicket(ticketEditRequest: TicketEditRequest): Observable<CustomHttpResponse> {
 
-    console.log("userid :" + userid);
-    
-    const newTicketEditRequest: TicketEditRequest =
-      new TicketEditRequest(
-        ticketEditRequest.ticketid,
-        userid,
-        ticketEditRequest.categoryid, 
-        ticketEditRequest.priorityid, 
-        ticketEditRequest.assigneeid, 
-        ticketEditRequest.ticketStatusid);
-
-
-    return this.http.put<CustomHttpResponse>(`${this.host}/ticket-edit`, newTicketEditRequest);
+    return this.http.put<CustomHttpResponse>(`${this.host}/ticket-edit`, ticketEditRequest);
   }
 
   // find ticket by id

@@ -15,9 +15,6 @@ public class TicketEditRequest {
     @Min(value = 1, message = "Value of ticket id must be greater than or equal to 1")
     private long ticketid;
 
-    @Min(value = 1, message = "Value of 'last update by user id' must be greater than or equal to 1")
-    private long lastUpdateByUserid;
-
     @Min(value = 1, message = "Value of category id must be greater than or equal to 1")
     private long categoryid;
 
@@ -29,4 +26,7 @@ public class TicketEditRequest {
 
     @Min(value = 1, message = "Value of ticket status id must be greater than or equal to 1")
     private long ticketStatusid;
+
+    @Min(value = 1, message = "Value of 'last update by user id' must be greater than or equal to 1")
+    private long toBeUpdatedByUserid;
 }

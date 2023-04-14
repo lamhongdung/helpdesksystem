@@ -32,9 +32,9 @@ public interface TicketSearchResponse {
     // ex: 1.5 hours
     float getSpentHour();
 
-    // "spentHourHhmmss" column
-    // hours in hh:mm:ss(ex: 01:30:00)
-    String getSpentHourHhmmss();
+    // -- count spent 'days-hours-minutes'.
+    // ex: spentDayHhmm = '3 days 15 hours 22 minutes'
+    String getSpentDayHhmm();
 
     // "creatorPhone" column
     String getCreatorPhone();

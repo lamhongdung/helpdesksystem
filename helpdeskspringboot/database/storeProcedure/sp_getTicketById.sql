@@ -13,18 +13,15 @@ delimiter $$
 -- 	- in_id: ticket id
 -- -----------------------------------------------------
 
--- call sp_getTicketById(4)
+-- call sp_getTicketById(101)
 
 create procedure sp_getTicketById(
 									in_id int
 									)
 begin
 
--- drop the temporary "_ticketTbl_spentHour" table if it exists
-drop temporary table if exists _ticketTbl_spentHour;
-
--- create temporary "_ticketTbl_spentHour"
-create temporary table _ticketTbl_spentHour
+-- get ticket and count spent hours
+with _ticket_spentHour as(
 select 	a.ticketid as ticketid,
 		-- creator id + fullname
 		concat(a.creatorid, ' - ', coalesce(b.lastName,''),' ',coalesce(b.firstName,'')) as creator,
@@ -32,7 +29,7 @@ select 	a.ticketid as ticketid,
 		coalesce(b.email,'') as creatorEmail,
 		a.subject as subject,
 		a.content as content,
-
+        
         -- team id + team name + assignment method
 		concat(a.teamid, ' - ', coalesce(e.name,''), ' - ',
 			case
@@ -47,44 +44,20 @@ select 	a.ticketid as ticketid,
 		a.lastupdatebyuserid as lastupdatebyuserid,
         concat(a.lastupdatebyuserid, ' - ', 
 			coalesce(h.lastName,''),' ',coalesce(h.firstName,'')) as lastUpdateByUser,
-        -- count spent hours of ticket in hh:mm:ss format
-		case
-			-- if status is "Closed"(4) or "Cancel"(5) then (a.lastUpdateDatetime - a.createDatetime)
-			when (coalesce(d.statusid,0) = 4 or coalesce(d.statusid,0) = 5) then
-				-- number of hours between createDatetime and lastUpdateDatetime in format HH:mm:ss
-                -- ex: sec_to_time(3600) = 01:00:00
-				sec_to_time(timestampdiff(second, a.createDatetime, a.lastUpdateDatetime))
-                
-			-- else: (current date time - a.createDatetime)
-			else 
-				-- number of hours between createDatetime and now() in format HH:mm:ss
-                -- ex: sec_to_time(3600) = 01:00:00            
-				sec_to_time(timestampdiff(second, a.createDatetime, now()))
-		end as spentHourHhmmss,        
+        -- count spent hours. ex: spentHour = 1.3 (hours)
+        fn_spentHour(coalesce(d.statusid,0), a.createDatetime, a.lastUpdateDatetime) as spentHour,
+		-- count spent 'days-hours-minutes'. ex: spentDayHhmm = '3 days 15 hours 22 minutes'
+        fn_spentDayHhmm(coalesce(d.statusid,0), a.createDatetime, a.lastUpdateDatetime) as spentDayHhmm,
 		a.categoryid as categoryid,
         a.priorityid as priorityid,
         coalesce(a.assigneeid, -1) as assigneeid,
 		a.ticketStatusid as ticketStatusid,
-        
 		a.customFilename as customFilename,
         coalesce(i.originalFilename,'') as originalFilename,
-
 		--  
 		-- limit hours need to resolve the ticket
 		coalesce(g.resolveIn, 0) as resolveIn,
-        now() as currentDatetime,
-        -- count spent hours of ticket. note: 1 hour = 3600 seconds.
-		case
-			-- if status is "Closed"(4) or "Cancel"(5) then (a.lastUpdateDatetime - a.createDatetime)
-			when (coalesce(d.statusid,0) = 4 or coalesce(d.statusid,0) = 5) then
-				-- number of hours between createDatetime and lastUpdateDatetime
-				timestampdiff(second, a.createDatetime, a.lastUpdateDatetime)/3600.0
-                
-			-- else: (current date time - a.createDatetime)
-			else 
-				-- number of hours between createDatetime and now()
-				timestampdiff(second, a.createDatetime, now())/3600.0
-		end as spentHour
+        now() as currentDatetime
 from ticket a
 	-- creator
 	left join user b on a.creatorid = b.id
@@ -96,43 +69,51 @@ from ticket a
 	left join priority g on a.priorityid = g.id
     left join user h on a.lastupdatebyuserid = h.id
     left join filestorage i on a.customFilename = i.customFilename
-where a.ticketid = in_id;
+where a.ticketid = in_id
+),
 
--- drop the temporary "_ticketTbl_sla" table if it exists
-drop temporary table if exists _ticketTbl_sla;
-
--- create temporary "_ticketTbl_sla"
-create temporary table _ticketTbl_sla
+_ticket_sla as(
 select 	a.ticketid as ticketid,
-		a.creator as creator, 
+		-- id + fullname
+		a.creator as creator,
 		a.creatorPhone as creatorPhone,
 		a.creatorEmail as creatorEmail,
 		a.subject as subject,
 		a.content as content,
         
+        -- team id + team name + assignment method
 		a.team as team,
-		a.createDatetime as createDatetime,                
+		-- 2023-03-29 10:40:00
+		a.createDatetime as createDatetime,
+        -- 2023-03-29 11:00:00
 		a.lastUpdateDatetime as lastUpdateDatetime,
+		a.lastupdatebyuserid as lastupdatebyuserid,
         a.lastUpdateByUser as lastUpdateByUser,
-        a.spentHourHhmmss,
-        a.categoryid as categoryid,
-        a.priorityid as priorityid,        
+        -- count spent hours. ex: spentHour = 1.3 (hours)
+        a.spentHour as spentHour,
+		-- count spent 'days-hours-minutes'. ex: spentDayHhmm = '3 days 15 hours 22 minutes'
+        a.spentDayHhmm as spentDayHhmm,
+		a.categoryid as categoryid,
+        a.priorityid as priorityid,
         a.assigneeid as assigneeid,
 		a.ticketStatusid as ticketStatusid,
-        a.customFilename,
-        a.originalFilename,        
-        --
-        --
-        --
-		a.resolveIn as resolveIn,
-        case
+        
+		a.customFilename as customFilename,
+        a.originalFilename as originalFilename,
+		--  
+		-- limit hours need to resolve the ticket
+		a.resolveIn,
+        a.currentDatetime,
+		case
 			-- resolveIn = 0: means all tickets are on time
 			when a.resolveIn = 0 then 'Ontime'
-            when a.resolveIn < a.spentHour then 'Late'
-            else 'Ontime'
-        end as sla,
-        a.currentDatetime
-from _ticketTbl_spentHour a;
+			when a.resolveIn < a.spentHour then 'Late'
+			else 'Ontime'
+		end as sla
+from _ticket_spentHour a
+)
+
+-- call sp_getTicketById(101)
 
 --
 -- main select
@@ -148,25 +129,23 @@ select 	a.ticketid as ticketid,
 		a.createDatetime as createDatetime,                
 		a.lastUpdateDatetime as lastUpdateDatetime,
         a.lastUpdateByUser as lastUpdateByUser,
-        concat(a.spentHourHhmmss,' --> ', a.sla) as spentHour,
+        concat(a.spentDayHhmm,' --> ', a.sla) as spentHour,
         a.categoryid as categoryid,
         a.priorityid as priorityid,        
         a.assigneeid as assigneeid,
 		a.ticketStatusid as ticketStatusid,
         a.customFilename,
         a.originalFilename,        
-        --
-        --
-        --
 		a.currentDatetime,
 		a.resolveIn as resolveIn,
-        a.sla as sla
-from _ticketTbl_sla a;
+        a.sla as sla,
+        a.spentDayHhmm as spentDayHhmm
+from _ticket_sla a;
 
     
 end $$
 
--- call sp_getTicketById(1)
+-- call sp_getTicketById(101)
 
 delimiter ;
 
