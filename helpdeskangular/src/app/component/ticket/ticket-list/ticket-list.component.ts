@@ -537,16 +537,16 @@ export class TicketListComponent {
     // if user role is "Customer"
     if (this.loggedInRole === "ROLE_CUSTOMER") {
 
-      this.placeholders.set("searchTerm", "Ticket id, subject, content");
-      this.tooltips.set("searchTerm", "- Search term(ticket id, subject, content).<br>- Blank means search all ticket IDs, subjects, contents");
+      this.placeholders.set("searchTerm", "Ticket id, subject");
+      this.tooltips.set("searchTerm", "- Search term(ticket id, subject).<br>- Blank means search all ticket IDs, subjects");
 
     }
 
     // if user role is "Admin" or "Supporter"
     else {
 
-      this.placeholders.set("searchTerm", "Ticket id, subject, creator phone/email, content");
-      this.tooltips.set("searchTerm", "- Search term(ticket id, subject, creator phone, creator email, content).<br>- Blank means search all ticket IDs, subjects, creator phones, creator emails, contents");
+      this.placeholders.set("searchTerm", "Ticket id, subject, creator phone/email");
+      this.tooltips.set("searchTerm", "- Search term(ticket id, subject, creator phone, creator email).<br>- Blank means search all ticket IDs, subjects, creator phones, creator emails");
     }
 
     //

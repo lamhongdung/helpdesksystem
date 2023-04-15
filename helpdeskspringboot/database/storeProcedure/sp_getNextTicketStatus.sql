@@ -16,13 +16,18 @@ delimiter $$
 create procedure sp_getNextTicketStatus(in_ticketid int)
 begin
 
--- current ticket status
-declare currentTicketStatus int;
+-- current ticket status id
+declare currentTicketStatusid int;
 
--- get current ticket status
-set currentTicketStatus = (	select a.ticketStatusid 
-							from ticket a
-							where a.ticketid = in_ticketid
+-- get current ticket status id:
+--  - 1: Open
+--  - 2: Assigned
+--  - 3: Resolved
+--  - 4: Closed
+--  - 5: Cancel
+set currentTicketStatusid = (	select a.ticketStatusid 
+								from ticket a
+								where a.ticketid = in_ticketid
 							);
 
 -- drop the temporary "_ticketStatus" table if it exists
@@ -34,17 +39,27 @@ select	a.statusid as id,
 		concat(a.statusid, ' - ', a.name) as description
 from ticketStatus a;
 
-if (currentTicketStatus = 1) then
+-- if current ticket status = 'Open'(1) then get all ticket status
+if (currentTicketStatusid = 1) then
+
 	select a.id, a.description
     from _ticketStatus a;
-elseif (currentTicketStatus = 4 or currentTicketStatus = 5) then
+    
+-- if current ticket status = 'Closed'(4) or = 'Cancel'(5) then only get that ticket status
+elseif (currentTicketStatusid = 4 or currentTicketStatusid = 5) then
+
 	select a.id, a.description
     from _ticketStatus a
-    where a.id = currentTicketStatus;
+    where a.id = currentTicketStatusid;
+
+-- if current ticket status id = 'Assigned'(2) or = 'Resolved'(3) 
+-- then get all ticket status except ticket status 'Open'(1)
 else
+
 	select a.id, a.description
     from _ticketStatus a
     where a.id >= 2;
+    
 end if;
 
   

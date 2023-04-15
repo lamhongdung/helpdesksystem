@@ -53,7 +53,7 @@ public class CommentController {
 //        // if ticketRequest data is invalid then throw exception
 //        if (bindingResult.hasErrors()) {
 //
-//            LOGGER.error("TicketRequest data is invalid");
+//            LOGGER.info("TicketRequest data is invalid");
 //
 //            throw new BindException(bindingResult);
 //        }

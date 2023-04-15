@@ -14,16 +14,12 @@ import java.util.List;
 
 @Repository
 @Transactional
-public interface CommentRepository  extends JpaRepository<Comment, Long> {
+public interface CommentRepository extends JpaRepository<Comment, Long> {
 
-    // get creators by userid(and by user role).
-    // notes:
-    // interface DropdownResponse contains 2 fields:
-    //  - id: getId()
-    //  - description: getDescription()
+    // get all comments by ticket id
     @Query(value = "{call sp_getAllCommentsByTicketid(:ticketid)}"
             , nativeQuery = true)
-    public List<CommentResponse> getAllCommentsByTicketid(@Param("ticketid")  long ticketid);
+    public List<CommentResponse> getAllCommentsByTicketid(@Param("ticketid") long ticketid);
 
 
 }

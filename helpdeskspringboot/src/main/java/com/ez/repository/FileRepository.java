@@ -10,7 +10,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface FileRepository extends JpaRepository<FileStorage, Long> {
 
-    // get originalFilename
+    // get file information
     @Query(value = "" +
             " select    a.id as id, " +
             "           a.customFilename as customFilename, " +

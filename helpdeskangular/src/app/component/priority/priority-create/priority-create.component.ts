@@ -34,7 +34,7 @@ export class PriorityCreateComponent implements OnInit {
     ],
     resolveIn: [
       { type: 'required', message: 'Please input Resolve in(hours)' },
-      { type: 'pattern', message: 'Value of the Resolve In must be greater than or equal to zero' }
+      { type: 'pattern', message: 'Value of the Resolve In must be an integer greater than or equal to zero.' }
     ]
   };
 

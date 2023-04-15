@@ -119,7 +119,12 @@ public interface TicketRepository extends JpaRepository<Ticket, Long> {
     //  - description: getDescription()
     @Query(value = "" +
             " select a.id as id, " + // priority id
-            "        concat(a.id, ' - ', a.name, ' - ', a.resolveIn, ' hours') as description " +
+            "        concat(a.id, ' - ', a.name, ' - ', a.resolveIn, " +
+            "                   case " +
+            "                       when a.resolveIn < 2 then ' hour' " +
+            "                       else ' hours' " +
+            "                   end " +
+            "               ) as description " +
             " from priority a " +
             " where a.status = 'Active' "
             , nativeQuery = true)
@@ -211,7 +216,7 @@ public interface TicketRepository extends JpaRepository<Ticket, Long> {
                                   @Param("sla") String sla,
                                   @Param("ticketStatusid") String ticketStatusid);
 
-    // save ticket into 'ticket' table
+    // save ticket into the 'ticket' table
     @Modifying
     @Query(value = "" +
             " {call sp_saveTicket( " +

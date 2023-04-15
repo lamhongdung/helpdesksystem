@@ -77,7 +77,7 @@ public class CategoryController {
         // if category data is invalid then throw exception
         if (bindingResult.hasErrors()) {
 
-            LOGGER.error("Category data is invalid");
+            LOGGER.info("Category data is invalid");
 
             throw new BindException(bindingResult);
         }
@@ -112,7 +112,7 @@ public class CategoryController {
         // if category data is invalid then throw exception
         if (bindingResult.hasErrors()) {
 
-            LOGGER.error("Category data is invalid");
+            LOGGER.info("Category data is invalid");
 
             throw new BindException(bindingResult);
         }

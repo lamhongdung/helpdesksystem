@@ -35,14 +35,15 @@ public interface TicketEditViewResponse {
     // "last update by user id + fullname" column
     String getLastUpdateByUser();
 
-    // "spentHourHhmmss + SLA" column
+    // "spentDayHhmm + SLA" column.
+    // ex: spentHour = "5 hours 41 minutes  --> Ontime"
     String getSpentHour();
-
-    // "categoryid" column
-    long getCategoryid();
 
     // "priorityid" column
     long getPriorityid();
+
+    // "categoryid" column
+    long getCategoryid();
 
     // "assigneeid" column
     long getAssigneeid();
@@ -50,16 +51,28 @@ public interface TicketEditViewResponse {
     // "ticketStatusid" column
     long getTicketStatusid();
 
-    // custom filename
+    // "customFilename" column
+    // - customFilename = "": if user did not attach file or
+    //                          attached file size exceeds max allowed file size(>10MB)
+    // - customFilename = timestamp + UUID + extension(ex: .jpg): if user has attached file
+    // ex: customFilename = "20230405143231_3ed7c8ea-114e-4c1f-a3d3-8e5a439e9aff.jpg".
     String getCustomFilename();
 
+    // "originalFilename" column.
+    // ex: originalFilename = 'abc.png'
     String getOriginalFilename();
 
     // "currentDatetime" column
     Date getCurrentDatetime();
 
+    // "resolveIn" column
     long getResolveIn();
 
+    // "sla"(service level agreement) column
     String getSla();
+
+    // "spentDayHhmm" column.
+    // ex: spentDayHhmm = "3 days 5 hours 41 minutes"
     String getSpentDayHhmm();
+
 }

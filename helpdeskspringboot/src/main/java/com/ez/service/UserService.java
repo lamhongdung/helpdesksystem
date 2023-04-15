@@ -30,17 +30,17 @@ public interface UserService {
     // return:
     //  - not null: inactive user
     //  - null: not inactive user
-    public User isInactiveUser(String email) throws InactiveUserException;
+    public User isInactiveUser(String email) throws BadDataException;
 
     // calculate total of users based on the search criteria.
     // based on this total of users we can calculate total pages
     public long getTotalOfUsers(String searchTerm, String role, String status);
 
     // create new user
-    public User createUser(User user) throws MessagingException, EmailExistException;
+    public User createUser(User user) throws MessagingException, BadDataException;
 
     // update existing user
-    public User updateUser(User user) throws MessagingException, EmailExistException, EntityNotFoundException;
+    public User updateUser(User user) throws MessagingException, BadDataException, EntityNotFoundException;
 
     // update user profile
     public User updateProfile(EditProfile editProfile) throws MessagingException, EntityNotFoundException;
@@ -49,6 +49,6 @@ public interface UserService {
     public void resetPassword(String email) throws MessagingException, EntityNotFoundException;
 
     // change password
-    public void changePassword(ChangePassword changePassword) throws MessagingException, EntityNotFoundException, OldPasswordIsNotMatchException, NewPasswordIsNotMatchException;
+    public void changePassword(ChangePassword changePassword) throws MessagingException, EntityNotFoundException, BadDataException, BadDataException;
 
 }

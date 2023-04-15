@@ -45,14 +45,14 @@ public class UserController extends ExceptionHandling {
 
     // login to the Help Desk system
     @PostMapping("/login")
-    public ResponseEntity<User> login(@RequestBody @Valid LoginUser loginUser, BindingResult bindingResult) throws BindException, InactiveUserException {
+    public ResponseEntity<User> login(@RequestBody @Valid LoginUser loginUser, BindingResult bindingResult) throws BindException, BadDataException {
 
         LOGGER.info("validate data");
 
         // if loginUser data is invalid then throw exception
         if (bindingResult.hasErrors()) {
 
-            LOGGER.error("LoginUser data is invalid");
+            LOGGER.info("LoginUser data is invalid");
 
             throw new BindException(bindingResult);
         }
@@ -60,9 +60,9 @@ public class UserController extends ExceptionHandling {
         // if user is inactive then show error to user
         if (userService.isInactiveUser(loginUser.getEmail()) != null) {
 
-            LOGGER.error("User is inactive");
+            LOGGER.info("User is inactive");
 
-            throw new InactiveUserException(USER_IS_INACTIVE);
+            throw new BadDataException(USER_IS_INACTIVE);
         }
 
         // if username or password is invalid then throw an exception
@@ -121,14 +121,14 @@ public class UserController extends ExceptionHandling {
     // only the ROLE_ADMIN can access this address
     @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
     public ResponseEntity<User> createUser(@RequestBody @Valid User user, BindingResult bindingResult)
-            throws EmailExistException, MessagingException, BindException {
+            throws BadDataException, MessagingException, BindException {
 
         LOGGER.info("validate data");
 
         // if user data is invalid then throw exception
         if (bindingResult.hasErrors()) {
 
-            LOGGER.error("User data is invalid");
+            LOGGER.info("User data is invalid");
 
             throw new BindException(bindingResult);
         }
@@ -156,7 +156,7 @@ public class UserController extends ExceptionHandling {
     // only the ROLE_ADMIN can access this address
     @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
     public ResponseEntity<User> editUser(@RequestBody @Valid User user, BindingResult bindingResult)
-            throws EmailExistException, MessagingException, EntityNotFoundException, BindException {
+            throws BadDataException, MessagingException, EntityNotFoundException, BindException {
 
         LOGGER.info("validate data");
 
@@ -204,7 +204,7 @@ public class UserController extends ExceptionHandling {
         // if email is invalid then throw exception
         if (bindingResult.hasErrors()) {
 
-            LOGGER.error("ResetPassword data is invalid");
+            LOGGER.info("ResetPassword data is invalid");
 
             throw new BindException(bindingResult);
         }
@@ -218,14 +218,14 @@ public class UserController extends ExceptionHandling {
     @PutMapping("/change-password")
     @PreAuthorize("hasAnyRole('ROLE_CUSTOMER','ROLE_SUPPORTER','ROLE_ADMIN')")
     public ResponseEntity<HttpResponse> changePassword(@RequestBody @Valid ChangePassword changePassword, BindingResult bindingResult)
-            throws MessagingException, EntityNotFoundException, OldPasswordIsNotMatchException, NewPasswordIsNotMatchException, BindException {
+            throws MessagingException, EntityNotFoundException, BadDataException, BadDataException, BindException {
 
         LOGGER.info("validate data");
 
         // if changePassword object(email, oldPassword, newPassword and confirmNewPassword) is invalid then throw exception
         if (bindingResult.hasErrors()) {
 
-            LOGGER.error("ChangePassword data is invalid");
+            LOGGER.info("ChangePassword data is invalid");
 
             throw new BindException(bindingResult);
         }

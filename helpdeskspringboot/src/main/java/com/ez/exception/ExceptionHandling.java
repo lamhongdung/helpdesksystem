@@ -62,34 +62,13 @@ public class ExceptionHandling implements ErrorController {
         return createHttpResponse(UNAUTHORIZED, exception.getMessage());
     }
 
-    // handle for error of duplicate email when creating new user
-    @ExceptionHandler(EmailExistException.class)
-    public ResponseEntity<HttpResponse> emailExistException(EmailExistException exception) {
-        return createHttpResponse(BAD_REQUEST, exception.getMessage());
-    }
-
-    @ExceptionHandler(InactiveUserException.class)
-    public ResponseEntity<HttpResponse> userIsInactiveException(InactiveUserException exception) {
+    @ExceptionHandler(BadDataException.class)
+    public ResponseEntity<HttpResponse> badDataException(BadDataException exception) {
         return createHttpResponse(BAD_REQUEST, exception.getMessage());
     }
 
     @ExceptionHandler(FileNotFoundException.class)
     public ResponseEntity<HttpResponse> fileNotFoundException(FileNotFoundException exception) {
-        return createHttpResponse(BAD_REQUEST, exception.getMessage());
-    }
-
-    @ExceptionHandler(OldPasswordIsNotMatchException.class)
-    public ResponseEntity<HttpResponse> oldPasswordIsNotMatchException(OldPasswordIsNotMatchException exception) {
-        return createHttpResponse(BAD_REQUEST, exception.getMessage());
-    }
-
-    @ExceptionHandler(NewPasswordIsNotMatchException.class)
-    public ResponseEntity<HttpResponse> newPasswordIsNotMatchException(NewPasswordIsNotMatchException exception) {
-        return createHttpResponse(BAD_REQUEST, exception.getMessage());
-    }
-
-    @ExceptionHandler(BadDataException.class)
-    public ResponseEntity<HttpResponse> badDataException(BadDataException exception) {
         return createHttpResponse(BAD_REQUEST, exception.getMessage());
     }
 
@@ -115,13 +94,13 @@ public class ExceptionHandling implements ErrorController {
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<HttpResponse> internalServerErrorException(Exception exception) {
-        LOGGER.error(exception.getMessage());
+        LOGGER.info(exception.getMessage());
         return createHttpResponse(INTERNAL_SERVER_ERROR, INTERNAL_SERVER_ERROR_MSG);
     }
 
     @ExceptionHandler(NoResultException.class)
     public ResponseEntity<HttpResponse> notFoundException(NoResultException exception) {
-        LOGGER.error(exception.getMessage());
+        LOGGER.info(exception.getMessage());
         return createHttpResponse(NOT_FOUND, exception.getMessage());
     }
 

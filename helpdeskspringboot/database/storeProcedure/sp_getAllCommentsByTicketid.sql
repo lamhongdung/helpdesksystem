@@ -23,16 +23,19 @@ begin
 select 	a.commentid as commentid,
         a.commentDescription as commentDescription,
         a.commenterid as commenterid,
+        -- commenter fullname
         concat(coalesce(b.lastName,''),' ', coalesce(b.firstName,'')) as commenterName,
         coalesce(b.phone,'') as commenterPhone,
         coalesce(b.email,'') as commenterEmail,
+        -- 
         concat(a.commenterid, ' - ', 
 				coalesce(b.lastName,''),' ', coalesce(b.firstName,''),
-				'(',coalesce(b.phone,''), ' - ',
-                coalesce(b.email,''), ')'
+				'(', coalesce(b.phone,''), ' - ', coalesce(b.email,''), ')'
                 ) as commenter,
         a.commentDatetime as commentDatetime,
+        -- ex: customFilename = 20230413161647_f1f239a9-6fed-48ff-a84b-43cea7ffde88.jpg
         a.customFilename as customFilename,
+        -- ex: originalFilename = abc.jpg
         coalesce(c.originalFilename,'') as originalFilename
 from comment a
 	left join user b on a.commenterid = b.id

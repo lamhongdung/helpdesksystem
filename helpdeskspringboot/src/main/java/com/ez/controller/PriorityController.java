@@ -86,7 +86,7 @@ public class PriorityController {
         // if priority data is invalid then throw exception
         if (bindingResult.hasErrors()) {
 
-            LOGGER.error("Priority data is invalid");
+            LOGGER.info("Priority data is invalid");
 
             throw new BindException(bindingResult);
         }
@@ -121,7 +121,7 @@ public class PriorityController {
         // if priority data is invalid then throw exception
         if (bindingResult.hasErrors()) {
 
-            LOGGER.error("Priority data is invalid");
+            LOGGER.info("Priority data is invalid");
 
             throw new BindException(bindingResult);
         }

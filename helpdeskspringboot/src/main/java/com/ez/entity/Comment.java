@@ -25,27 +25,31 @@ public class Comment {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long commentid;
 
+    // comment content
     @Size(min = 1, message = "Please input a description")
     private String commentDescription;
 
     @Min(value = 1, message = "Value of commenter id must be greater than or equal to 1")
     private long commenterid;
 
-    // ticket is created on this datetime
+    // comment is created on this datetime
 //    @CreationTimestamp
     private Date commentDatetime;
 
     // - customFilename = "": if user did not attach file or
-    //                          attached file size exceeds max allowed file size
+    //                          attached file size exceeds max allowed file size(>10MB)
     // - customFilename = timestamp + UUID + extension(ex: .jpg): if user has attached file
     // ex: customFilename = "20230405143231_3ed7c8ea-114e-4c1f-a3d3-8e5a439e9aff.jpg".
     private String customFilename;
 
-    public Comment(Long ticketid, String commentDescription, long commenterid, Date commentDatetime, String customFilename) {
+    public Comment(Long ticketid, String commentDescription, long commenterid,
+                   Date commentDatetime, String customFilename) {
+
         this.ticketid = ticketid;
         this.commentDescription = commentDescription;
         this.commenterid = commenterid;
         this.commentDatetime = commentDatetime;
         this.customFilename = customFilename;
+
     }
 }

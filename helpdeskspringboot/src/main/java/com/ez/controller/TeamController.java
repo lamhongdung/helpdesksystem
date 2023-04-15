@@ -100,7 +100,7 @@ public class TeamController {
         // if teamRequest data is invalid then throw exception
         if (bindingResult.hasErrors()) {
 
-            LOGGER.error("TeamRequest data is invalid");
+            LOGGER.info("TeamRequest data is invalid");
 
             throw new BindException(bindingResult);
         }
@@ -145,7 +145,7 @@ public class TeamController {
         // if teamRequest data is invalid then throw exception
         if (bindingResult.hasErrors()) {
 
-            LOGGER.error("TeamRequest data is invalid");
+            LOGGER.info("TeamRequest data is invalid");
 
             throw new BindException(bindingResult);
         }

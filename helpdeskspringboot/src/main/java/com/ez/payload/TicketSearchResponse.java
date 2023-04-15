@@ -29,7 +29,7 @@ public interface TicketSearchResponse {
     Date getLastUpdateDatetime();
 
     // "spentHour" column
-    // ex: 1.5 hours
+    // ex: 1.5 (hours)
     float getSpentHour();
 
     // -- count spent 'days-hours-minutes'.

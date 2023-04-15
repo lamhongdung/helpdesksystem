@@ -5,7 +5,7 @@ drop procedure if exists sp_getActiveSupportersBelongTeam;
 delimiter $$
 
 -- -----------------------------------------------------
--- Get active supporters belong team.
+-- Get active supporters belong specific team.
 --
 -- Input parameters:
 -- 	- in_ticketid: ticket id
@@ -16,14 +16,16 @@ delimiter $$
 create procedure sp_getActiveSupportersBelongTeam(in_ticketid int)
 begin
 
+-- get active supporters belong a specific team
 select 	e.id as id,
 		concat(e.id, ' - ', e.lastName, ' ', e.firstName) as description
 from user e
 	inner join(
+				-- get supporters belong to specific team
 				select c.supporterid
 				from teamSupporter c
 					inner join (
-								-- get team value of ticket
+								-- get a team value of a specific ticket id
 								select a.teamid
 								from ticket a
 								where a.ticketid = in_ticketid

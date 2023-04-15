@@ -177,11 +177,16 @@
                             <label class="col-form-label" for="spentHour">Spent hours<small>*</small></label>
                         </div>
                         <!-- textbox -->
-                        <div class="col-9">
+                        <!-- <div class="col-9">
                             <input class="form-control" type="text" formControlName="spentHour" id="spentHour"
                                 tooltip="- Spent hours(hh:mm:ss) + SLA"
                                 [tooltip]="tooltipSlaDetail(ticketEditViewResponse?.ticketStatusid,ticketEditViewResponse?.createDatetime,ticketEditViewResponse?.lastUpdateDatetime,ticketEditViewResponse?.currentDatetime,ticketEditViewResponse?.resolveIn + '',ticketEditViewResponse?.spentDayHhmm,ticketEditViewResponse?.sla)"
                                 theme="light" theme="light" placement="top" readonly>
+                        </div> -->
+                        <div class="col-9">
+                            <input class="form-control" type="text" formControlName="spentHour" id="spentHour"
+                                tooltip="- Spent hours(days-hours-minutes) + SLA" theme="light" theme="light" placement="top"
+                                readonly>
                         </div>
                     </div>
 
@@ -312,23 +317,6 @@
                         </div>
                     </div>
 
-                    <!-- Comment -->
-                    <!-- <div class="row mb-3">
-                        <div class="col-3">
-                            <label class="col-form-label" for="content">Comment<small
-                                    class="text-danger">*</small></label>
-                        </div>
-                        <div class="col-9">
-                            <div class="NgxEditor__Wrapper ngxEditor">
-                                <ngx-editor-menu [editor]="commentEditor" [toolbar]="commentToolbar">
-                                </ngx-editor-menu>
-                                <ngx-editor [editor]="commentEditor" formControlName="comment"
-                                    [placeholder]="'Ticket comment'">
-                                </ngx-editor>
-                            </div>
-                        </div>
-                    </div> -->
-
                 </div>
             </div>
         </div>
@@ -371,8 +359,8 @@
                         placement="bottom"></p>
                 </div>
                 <div class="card-footer bg-transparent">
-                    <a (click)="onDownloadFile(e?.customFilename)" style="cursor: pointer;" tooltip="Click to download file" theme="light"
-                    placement="bottom">{{
+                    <a (click)="onDownloadFile(e?.customFilename)" style="cursor: pointer;"
+                        tooltip="Click to download file" theme="light" placement="bottom">{{
                         e?.originalFilename }}
                     </a>
                     <span class="float-right" tooltip="Comment id" theme="light" placement="bottom">Comment id:

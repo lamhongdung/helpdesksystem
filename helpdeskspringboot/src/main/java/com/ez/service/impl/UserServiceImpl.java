@@ -52,7 +52,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
         // not found user by email
         if (user == null) {
-            LOGGER.error(NO_USER_FOUND_BY_EMAIL + email);
+            LOGGER.info(NO_USER_FOUND_BY_EMAIL + email);
             try {
                 throw new EntityNotFoundException(NO_USER_FOUND_BY_EMAIL + email);
             } catch (EntityNotFoundException e) {
@@ -137,7 +137,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     // change password
     @Override
-    public void changePassword(ChangePassword changePassword) throws EntityNotFoundException, OldPasswordIsNotMatchException, NewPasswordIsNotMatchException {
+    public void changePassword(ChangePassword changePassword) throws EntityNotFoundException, BadDataException, BadDataException {
 
         // find user by email
         LOGGER.info("find user by email.");
@@ -146,7 +146,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         // if email has not found in the database
         if (user == null) {
 
-            LOGGER.error("No user found for email: " + changePassword.getEmail());
+            LOGGER.info("No user found for email: " + changePassword.getEmail());
 
             throw new EntityNotFoundException(NO_USER_FOUND_BY_EMAIL + changePassword.getEmail());
         }
@@ -154,17 +154,17 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         // if old password is not match then throw an exception
         if (!passwordEncoder.matches(changePassword.getOldPassword(), user.getPassword())) {
 
-            LOGGER.error("Old password for email " + changePassword.getEmail() + " is not match. Please try again.");
+            LOGGER.info("Old password for email " + changePassword.getEmail() + " is not match. Please try again.");
 
-            throw new OldPasswordIsNotMatchException("Old password for email " + changePassword.getEmail() + " is not match. Please try again.");
+            throw new BadDataException("Old password for email " + changePassword.getEmail() + " is not match. Please try again.");
         }
 
         // if "new password" is not match with "confirm new password" then throw an exception
         if (!StringUtils.equals(changePassword.getNewPassword(), changePassword.getConfirmNewPassword())) {
 
-            LOGGER.error("New password is not match with Confirm new password. Please try again.");
+            LOGGER.info("New password is not match with Confirm new password. Please try again.");
 
-            throw new NewPasswordIsNotMatchException(NEW_PASSWORD_IS_NOT_MATCH);
+            throw new BadDataException(NEW_PASSWORD_IS_NOT_MATCH);
         }
 
         LOGGER.info("Change password");
@@ -212,7 +212,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     // create new user
     @Override
-    public User createUser(User user) throws EmailExistException {
+    public User createUser(User user) throws BadDataException {
 
         LOGGER.info("create new user");
 
@@ -231,9 +231,9 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         // if email already existed then inform to user "Email already exists. Please choose another email."
         if (existEmail(user.getEmail())) {
 
-            LOGGER.error("Email already exists. Please choose another email.");
+            LOGGER.info("Email already exists. Please choose another email.");
 
-            throw new EmailExistException(EMAIL_ALREADY_EXISTS);
+            throw new BadDataException(EMAIL_ALREADY_EXISTS);
         }
 
         // set email

@@ -18,8 +18,8 @@ delimiter $$
 -- 	- in_categoryid: category id
 -- 	- in_priorityid: priority id
 -- 	- in_creatorid: creator id(who created ticket)
--- 	- in_teamid: team id(a team may have multi-supporters)
--- 	- in_assignee: assignee is person will resove the ticket
+-- 	- in_teamid: team id(a team may have 1 or multi-supporters)
+-- 	- in_assignee: assignee is person will resolve the ticket
 -- 	- in_sla: service level agreement. Check whether a certain ticket is on time or late
 -- 	- in_ticketStatusid: ticket status id: has 5 status: 
 --      - 1: Open
@@ -77,7 +77,8 @@ if userRole = "ROLE_CUSTOMER" then
 	create temporary table _ticketTbl_searchTerm
 	SELECT a.*
 	FROM _ticketTbl a
-	where concat(a.ticketid,' ', a.subject,' ', a.content) like concat('%',in_searchTerm,'%');
+	-- where concat(a.ticketid,' ', a.subject,' ', a.content) like concat('%',in_searchTerm,'%');
+    where concat(a.ticketid,' ', a.subject) like concat('%',in_searchTerm,'%');
 	
 -- role "supporter" or "admin"
 else
@@ -87,7 +88,8 @@ else
 	SELECT a.*
 	FROM _ticketTbl a
 		left join user b on a.creatorid = b.id
-	where concat(a.ticketid,' ', a.subject,' ', a.content,' ', 
+	-- where concat(a.ticketid,' ', a.subject,' ', a.content,' ', 
+    where concat(a.ticketid,' ', a.subject,' ', 
 					coalesce(b.phone,''), ' ',coalesce(b.email,'')
 				) like concat('%',in_searchTerm,'%');
 	
@@ -134,7 +136,7 @@ where
         end and
         
 		-- creator.
-        -- note: if role = 'customer' then creatorid = hime-self always
+        -- note: if role = 'customer' then creatorid = him-self always
         case
 			-- in_creatorid = '0': means search all creators
 			when in_creatorid = '0' then true

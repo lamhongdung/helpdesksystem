@@ -248,7 +248,7 @@ public class TicketController {
         // if ticketRequest data is invalid then throw exception
         if (bindingResult.hasErrors()) {
 
-            LOGGER.error("TicketRequest data is invalid");
+            LOGGER.info("TicketRequest data is invalid");
 
             throw new BindException(bindingResult);
         }
@@ -284,7 +284,7 @@ public class TicketController {
         // if ticketEditRequest data is invalid then throw exception
         if (bindingResult.hasErrors()) {
 
-            LOGGER.error("TicketEditRequest data is invalid");
+            LOGGER.info("TicketEditRequest data is invalid");
 
             throw new BindException(bindingResult);
         }

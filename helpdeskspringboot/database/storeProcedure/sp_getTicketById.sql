@@ -6,7 +6,7 @@ drop procedure if exists sp_getTicketById;
 delimiter $$
 
 -- -----------------------------------------------------
--- get ticket by ticket id for edit/view ticket
+-- get ticket by ticket id for edit/view ticket/create comment
 --
 -- Input parameters:
 --
@@ -23,8 +23,10 @@ begin
 -- get ticket and count spent hours
 with _ticket_spentHour as(
 select 	a.ticketid as ticketid,
+
 		-- creator id + fullname
 		concat(a.creatorid, ' - ', coalesce(b.lastName,''),' ',coalesce(b.firstName,'')) as creator,
+        
 		coalesce(b.phone,'') as creatorPhone,
 		coalesce(b.email,'') as creatorEmail,
 		a.subject as subject,
@@ -33,16 +35,21 @@ select 	a.ticketid as ticketid,
         -- team id + team name + assignment method
 		concat(a.teamid, ' - ', coalesce(e.name,''), ' - ',
 			case
+				-- ticket will be assigned to a certain supporter automatically
 				when coalesce(e.assignmentMethod,'') = 'A' then 'Auto'
+                -- a supporter will assign ticket to a certain supporter manually
                 else 'Manual'
             end
         ) as team,
+        
 		-- 2023-03-29 10:40:00
 		a.createDatetime as createDatetime,
         -- 2023-03-29 11:00:00
 		a.lastUpdateDatetime as lastUpdateDatetime,
-		a.lastupdatebyuserid as lastupdatebyuserid,
-        concat(a.lastupdatebyuserid, ' - ', 
+        -- last updated by user id
+		a.lastUpdateByUserid as lastUpdateByUserid,
+        -- user id + fullname
+        concat(a.lastUpdateByUserid, ' - ', 
 			coalesce(h.lastName,''),' ',coalesce(h.firstName,'')) as lastUpdateByUser,
         -- count spent hours. ex: spentHour = 1.3 (hours)
         fn_spentHour(coalesce(d.statusid,0), a.createDatetime, a.lastUpdateDatetime) as spentHour,
@@ -52,7 +59,10 @@ select 	a.ticketid as ticketid,
         a.priorityid as priorityid,
         coalesce(a.assigneeid, -1) as assigneeid,
 		a.ticketStatusid as ticketStatusid,
+        -- customFilename = yyyyMMddHHmmss + UUID + file extension
+        -- ex: 20230413161647_f1f239a9-6fed-48ff-a84b-43cea7ffde88.jpg
 		a.customFilename as customFilename,
+        -- ex: abc.jpg
         coalesce(i.originalFilename,'') as originalFilename,
 		--  
 		-- limit hours need to resolve the ticket
@@ -67,15 +77,17 @@ from ticket a
 	left join team e on a.teamid = e.id
 	left join category f on a.categoryid = f.id
 	left join priority g on a.priorityid = g.id
-    left join user h on a.lastupdatebyuserid = h.id
+    left join user h on a.lastUpdateByUserid = h.id
     left join filestorage i on a.customFilename = i.customFilename
 where a.ticketid = in_id
 ),
 
 _ticket_sla as(
 select 	a.ticketid as ticketid,
-		-- id + fullname
+
+		-- creator id + fullname
 		a.creator as creator,
+        
 		a.creatorPhone as creatorPhone,
 		a.creatorEmail as creatorEmail,
 		a.subject as subject,
@@ -87,7 +99,8 @@ select 	a.ticketid as ticketid,
 		a.createDatetime as createDatetime,
         -- 2023-03-29 11:00:00
 		a.lastUpdateDatetime as lastUpdateDatetime,
-		a.lastupdatebyuserid as lastupdatebyuserid,
+		a.lastUpdateByUserid as lastUpdateByUserid,
+        -- user id + fullname
         a.lastUpdateByUser as lastUpdateByUser,
         -- count spent hours. ex: spentHour = 1.3 (hours)
         a.spentHour as spentHour,
@@ -98,7 +111,10 @@ select 	a.ticketid as ticketid,
         a.assigneeid as assigneeid,
 		a.ticketStatusid as ticketStatusid,
         
+		-- customFilename = yyyyMMddHHmmss + UUID + file extension
+        -- ex: 20230413161647_f1f239a9-6fed-48ff-a84b-43cea7ffde88.jpg
 		a.customFilename as customFilename,
+        -- ex: abc.jpg
         a.originalFilename as originalFilename,
 		--  
 		-- limit hours need to resolve the ticket
@@ -119,26 +135,38 @@ from _ticket_spentHour a
 -- main select
 --
 select 	a.ticketid as ticketid,
+
+		-- creator id + fullname
 		a.creator as creator, 
+        
 		a.creatorPhone as creatorPhone,
 		a.creatorEmail as creatorEmail,
 		a.subject as subject,
 		a.content as content,
         
+		-- team id + team name + assignment method
 		a.team as team,
-		a.createDatetime as createDatetime,                
+        -- 2023-03-29 10:40:00
+		a.createDatetime as createDatetime,
+        -- 2023-03-29 11:00:00
 		a.lastUpdateDatetime as lastUpdateDatetime,
+        -- user id + fullname
         a.lastUpdateByUser as lastUpdateByUser,
+        -- ex: "0 hour 24 minutes  --> Ontime"
         concat(a.spentDayHhmm,' --> ', a.sla) as spentHour,
         a.categoryid as categoryid,
         a.priorityid as priorityid,        
         a.assigneeid as assigneeid,
 		a.ticketStatusid as ticketStatusid,
+		-- customFilename = yyyyMMddHHmmss + UUID + file extension
+        -- ex: 20230413161647_f1f239a9-6fed-48ff-a84b-43cea7ffde88.jpg
         a.customFilename,
+        -- abc.jpg
         a.originalFilename,        
 		a.currentDatetime,
 		a.resolveIn as resolveIn,
         a.sla as sla,
+        -- ex: spentDayHhmm = '3 days 15 hours 22 minutes'
         a.spentDayHhmm as spentDayHhmm
 from _ticket_sla a;
 
