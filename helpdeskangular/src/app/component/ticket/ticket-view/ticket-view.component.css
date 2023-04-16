@@ -1,0 +1,9 @@
+.ngxEditor {
+
+    /* height of rich text editor */
+    height: 250px;
+
+    /* allow scroll vertical */
+    overflow-y: scroll;
+
+}

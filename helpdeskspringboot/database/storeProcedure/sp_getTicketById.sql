@@ -55,10 +55,29 @@ select 	a.ticketid as ticketid,
         fn_spentHour(coalesce(d.statusid,0), a.createDatetime, a.lastUpdateDatetime) as spentHour,
 		-- count spent 'days-hours-minutes'. ex: spentDayHhmm = '3 days 15 hours 22 minutes'
         fn_spentDayHhmm(coalesce(d.statusid,0), a.createDatetime, a.lastUpdateDatetime) as spentDayHhmm,
-		a.categoryid as categoryid,
+        
         a.priorityid as priorityid,
+        -- priority = priorityid + name + resolveIn
+        concat(a.priorityid, ' - ', coalesce(g.name,''), ' - ', 
+			coalesce(g.resolveIn, 0), 
+				case
+					when coalesce(g.resolveIn, 0) < 2 then ' hour'
+                    else ' hours'
+                end) as priority,
+        
+		a.categoryid as categoryid,
+        -- category = categoryid + name
+        concat(a.categoryid, ' - ', coalesce(f.name,'')) as category,        
+        
         coalesce(a.assigneeid, -1) as assigneeid,
+        -- assignee = assigneeid + fullname
+        concat(coalesce(a.assigneeid, -1), ' - ', 
+			coalesce(c.lastName,''), ' ', coalesce(c.firstName,'')) as assignee,          
+        
 		a.ticketStatusid as ticketStatusid,
+		-- ticketStatus = ticketStatusid + name
+        concat(a.ticketStatusid, ' - ', coalesce(d.name,'')) as ticketStatus, 
+        
         -- customFilename = yyyyMMddHHmmss + UUID + file extension
         -- ex: 20230413161647_f1f239a9-6fed-48ff-a84b-43cea7ffde88.jpg
 		a.customFilename as customFilename,
@@ -106,10 +125,18 @@ select 	a.ticketid as ticketid,
         a.spentHour as spentHour,
 		-- count spent 'days-hours-minutes'. ex: spentDayHhmm = '3 days 15 hours 22 minutes'
         a.spentDayHhmm as spentDayHhmm,
-		a.categoryid as categoryid,
+
         a.priorityid as priorityid,
+        a.priority as priority,
+        
+		a.categoryid as categoryid,
+        a.category as category,
+        
         a.assigneeid as assigneeid,
+        a.assignee as assignee,
+        
 		a.ticketStatusid as ticketStatusid,
+        a.ticketStatus as ticketStatus,
         
 		-- customFilename = yyyyMMddHHmmss + UUID + file extension
         -- ex: 20230413161647_f1f239a9-6fed-48ff-a84b-43cea7ffde88.jpg
@@ -154,10 +181,19 @@ select 	a.ticketid as ticketid,
         a.lastUpdateByUser as lastUpdateByUser,
         -- ex: "0 hour 24 minutes  --> Ontime"
         concat(a.spentDayHhmm,' --> ', a.sla) as spentHour,
-        a.categoryid as categoryid,
-        a.priorityid as priorityid,        
+        
+        a.priorityid as priorityid,
+        a.priority as priority,
+        
+		a.categoryid as categoryid,
+        a.category as category,
+        
         a.assigneeid as assigneeid,
+        a.assignee as assignee,
+        
 		a.ticketStatusid as ticketStatusid,
+        a.ticketStatus as ticketStatus,
+        
 		-- customFilename = yyyyMMddHHmmss + UUID + file extension
         -- ex: 20230413161647_f1f239a9-6fed-48ff-a84b-43cea7ffde88.jpg
         a.customFilename,

@@ -1,7 +1,5 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-// import { CalendarCreateComponent } from './component/calendar/calendar-create/calendar-create.component';
-// import { CalendarListComponent } from './component/calendar/calendar-list/calendar-list.component';
 import { CategoryCreateComponent } from './component/category/category-create/category-create.component';
 import { CategoryEditComponent } from './component/category/category-edit/category-edit.component';
 import { CategoryListComponent } from './component/category/category-list/category-list.component';
@@ -27,6 +25,7 @@ import { UserEditComponent } from './component/user/user-edit/user-edit.componen
 import { UserListComponent } from './component/user/user-list/user-list.component';
 import { UserViewComponent } from './component/user/user-view/user-view.component';
 import { AuthGuard } from './guard/auth.guard';
+import { CommentCreateComponent } from './component/ticket/comment-create/comment-create.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '/login', pathMatch: 'full' },
@@ -148,6 +147,7 @@ const routes: Routes = [
       roles: ['ROLE_ADMIN']
     }
   },
+  // ticket menu
   {
     path: 'ticket-list', component: TicketListComponent, canActivate: [AuthGuard],
     data: {
@@ -168,6 +168,13 @@ const routes: Routes = [
   },
   {
     path: 'ticket-view/:id', component: TicketViewComponent, canActivate: [AuthGuard],
+    data: {
+      roles: ['ROLE_CUSTOMER', 'ROLE_SUPPORTER', 'ROLE_ADMIN']
+    }
+  },
+  // comment-create
+  {
+    path: 'tickets/:ticketid/comment-create', component: CommentCreateComponent, canActivate: [AuthGuard],
     data: {
       roles: ['ROLE_CUSTOMER', 'ROLE_SUPPORTER', 'ROLE_ADMIN']
     }

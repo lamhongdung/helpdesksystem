@@ -41,15 +41,23 @@ public interface TicketEditViewResponse {
 
     // "priorityid" column
     long getPriorityid();
+    // "priority id + priority name + resolveIn + hours" column
+    String getPriority();
 
     // "categoryid" column
     long getCategoryid();
+    // "category id + category name" column
+    String getCategory();
 
     // "assigneeid" column
     long getAssigneeid();
+    // "supporter id + fullname" column
+    String getAssignee();
 
     // "ticketStatusid" column
     long getTicketStatusid();
+    // "ticketStatusid + name" column
+    String getTicketStatus();
 
     // "customFilename" column
     // - customFilename = "": if user did not attach file or

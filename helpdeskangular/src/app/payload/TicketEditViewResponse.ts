@@ -27,14 +27,27 @@ export class TicketEditViewResponse {
         // spentDayHhmm + sla(service level agreement)
         // ex: spentHour = "5 hours 41 minutes  --> Ontime"
         public spentHour: string,
+
         // priority id
         public priorityid: number,
+        // priority id + priority name + resolveIn + hours
+        public priority: string,
+
         // category id
         public categoryid: number,
+        // category id + category name
+        public category: string,
+
         // assignee id
         public assigneeid: number,
+        // supporter id + fullname 
+        public assignee: string,
+
         // ticket status id
         public ticketStatusid: number,
+        // ticket status id + name
+        public ticketStatus: string,
+
 
         // - customFilename = "": if user did not attach file or
         //                          attached file size exceeds max allowed file size(>10MB)
