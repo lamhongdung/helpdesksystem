@@ -27,14 +27,14 @@ public class CommentController {
     @Autowired
     CommentService commentService;
 
-    // get all comments by ticket id
+    // get all comments by ticket id.
     @GetMapping("/{ticketid}/comments")
     // all authenticated users can access this resource
     @PreAuthorize("hasAnyRole('ROLE_CUSTOMER','ROLE_SUPPORTER','ROLE_ADMIN')")
     public ResponseEntity<List<CommentResponse>> getAllCommentsByTicketid(
             @PathVariable Long ticketid) {
 
-        // get tickets by userid(and by user role) and based on search criteria
+        // get all comments by ticket id
         List<CommentResponse> commentResponses = commentService.getAllCommentsByTicketid(ticketid);
 
         return new ResponseEntity<>(commentResponses, OK);

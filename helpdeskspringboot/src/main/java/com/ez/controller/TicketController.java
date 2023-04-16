@@ -36,9 +36,9 @@ public class TicketController {
     //  - 2: Assigned
     //  - 3: Resolved
     //  - 4: Closed
-    //  - 5: Cancel
+    //  - 5: Cancel.
+    // all authenticated users can access this resource.
     @GetMapping("/ticketStatus")
-    // all authenticated users can access this resource
     public ResponseEntity<List<DropdownResponse>> getAllTicketStatus() {
 
         // get all ticket status
@@ -48,9 +48,9 @@ public class TicketController {
     }
 
     // get next appropriate ticket status
-    // for loading ticket status in the "Ticket status" dropdown control in the "Edit ticket" screen
+    // for loading ticket status in the "Ticket status" dropdown control in the "Edit ticket" screen.
+    // all authenticated users can access this resource.
     @GetMapping("/next-ticket-status")
-    // all authenticated users can access this resource
     public ResponseEntity<List<DropdownResponse>> getNextTicketStatus(
             @RequestParam long ticketid) {
 
@@ -61,10 +61,9 @@ public class TicketController {
     }
 
     // get creators by userid(and by user role)
-    // for loading creators in the "Creator" dropdown control in the "Ticket list" screen
+    // for loading creators in the "Creator" dropdown control in the "Ticket list" screen.
+    // all authenticated users can access this resource.
     @GetMapping("/creators")
-    // all authenticated users can access this resource
-//    @PreAuthorize("hasAnyRole('ROLE_CUSTOMER','ROLE_SUPPORTER','ROLE_ADMIN')")
     public ResponseEntity<List<DropdownResponse>> getCreatorsByUserid(@RequestParam int userid) {
 
         // get creators by userid(and by user role)
@@ -74,10 +73,9 @@ public class TicketController {
     }
 
     // get team by userid(and by user role)
-    // for loading teams in the "Team" dropdown control in the "Ticket list" screen
+    // for loading teams in the "Team" dropdown control in the "Ticket list" screen.
+    // all authenticated users can access this resource.
     @GetMapping("/teams")
-    // all authenticated users can access this resource
-//    @PreAuthorize("hasAnyRole('ROLE_CUSTOMER','ROLE_SUPPORTER','ROLE_ADMIN')")
     public ResponseEntity<List<DropdownResponse>> getTeamsByUserid(@RequestParam int userid) {
 
         // get teams by userid(and by user role)
@@ -86,10 +84,9 @@ public class TicketController {
         return new ResponseEntity<>(teamsResponses, OK);
     }
 
-    // get all active teams
+    // get all active teams.
+    // all authenticated users can access this resource.
     @GetMapping("/active-teams")
-    // all authenticated users can access this resource
-//    @PreAuthorize("hasAnyRole('ROLE_CUSTOMER','ROLE_SUPPORTER','ROLE_ADMIN')")
     public ResponseEntity<List<DropdownResponse>> getAllActiveTeams() {
 
         // get all active teams
@@ -99,7 +96,7 @@ public class TicketController {
     }
 
     // get assignees by userid(and by user role)
-    // for loading assignees in the "Assignee" dropdown control in the "Ticket list" screen
+    // for loading assignees in the "Assignee" dropdown control in the "Ticket list" screen.
     @GetMapping("/assignees")
     // all authenticated users can access this resource
     public ResponseEntity<List<DropdownResponse>> getAssigneesByUserid(@RequestParam int userid) {
@@ -111,9 +108,9 @@ public class TicketController {
     }
 
     // get active supporters belong to team
-    // for loading assignees in the "Assignee" dropdown control in the "Edit ticket" screen
+    // for loading assignees in the "Assignee" dropdown control in the "Edit ticket" screen.
+    // all authenticated users can access this resource.
     @GetMapping("/active-supporters-belong-team")
-    // all authenticated users can access this resource
     public ResponseEntity<List<DropdownResponse>> getActiveSupportersBelongTeam(
             @RequestParam long ticketid) {
 
@@ -124,9 +121,9 @@ public class TicketController {
     }
 
     // get categories by userid(and by user role)
-    // for loading categories in the "Category" dropdown control in the "Ticket list" screen
+    // for loading categories in the "Category" dropdown control in the "Ticket list" screen.
+    // all authenticated users can access this resource.
     @GetMapping("/categories")
-    // all authenticated users can access this resource
     public ResponseEntity<List<DropdownResponse>> getCategoriesByUserid(@RequestParam int userid) {
 
         // get all categories
@@ -138,8 +135,9 @@ public class TicketController {
     // get all active categories.
     // for loading categories in the "Category" dropdown control
     // in the "Ticket list", "Edit ticket" screens.
+    //
+    // all authenticated users can access this resource.
     @GetMapping("/active-categories")
-    // all authenticated users can access this resource
     public ResponseEntity<List<DropdownResponse>> getAllActiveCategories() {
 
         // get all active categories
@@ -149,10 +147,10 @@ public class TicketController {
     }
 
     // get priorities by userid(and by user role)
-    // for loading priorities in the "Priority" dropdown control in the "Ticket list" screen
+    // for loading priorities in the "Priority" dropdown control in the "Ticket list" screen.
+    //
+    // all authenticated users can access this resource.
     @GetMapping("/priorities")
-    // all authenticated users can access this resource
-//    @PreAuthorize("hasAnyRole('ROLE_CUSTOMER','ROLE_SUPPORTER','ROLE_ADMIN')")
     public ResponseEntity<List<DropdownResponse>> getPrioritiesByUserid(@RequestParam int userid) {
 
         // get all priorities
@@ -163,9 +161,10 @@ public class TicketController {
 
     // get all active priorities.
     // for loading priorities in the "Priority" dropdown control
-    // in the "Ticket list", "Edit ticket" screens.
+    // in the "Edit ticket" screen.
+    //
+    // all authenticated users can access this resource.
     @GetMapping("/active-priorities")
-    // all authenticated users can access this resource
     public ResponseEntity<List<DropdownResponse>> getAllActivePriorities() {
 
         // get all active priorities
@@ -175,10 +174,10 @@ public class TicketController {
     }
 
     // search tickets based on the search criteria
-    // for loading tickets in table in the "Ticket list" screen
+    // for loading tickets in table in the "Ticket list" screen.
+    //
+    // all authenticated users can access this resource.
     @GetMapping("/ticket-search")
-    // all authenticated users can access this resource
-//    @PreAuthorize("hasAnyRole('ROLE_CUSTOMER','ROLE_SUPPORTER','ROLE_ADMIN')")
     public ResponseEntity<List<TicketSearchResponse>> searchTickets(@RequestParam long userid,
                                                                     @RequestParam long pageNumber,
                                                                     @RequestParam long pageSize,
@@ -195,11 +194,10 @@ public class TicketController {
     ) {
 
         // get tickets by userid(and by user role) and based on search criteria
-        List<TicketSearchResponse> ticketResponses = ticketService.searchTickets(userid, pageNumber, pageSize,
-                searchTerm, fromDate, toDate,
-                categoryid, priorityid, creatorid,
-                teamid, assigneeid, sla,
-                ticketStatusid
+        List<TicketSearchResponse> ticketResponses = ticketService.searchTickets(
+                userid, pageNumber, pageSize, searchTerm, fromDate,
+                toDate, categoryid, priorityid, creatorid, teamid,
+                assigneeid, sla, ticketStatusid
         );
 
         return new ResponseEntity<>(ticketResponses, OK);
@@ -210,9 +208,9 @@ public class TicketController {
     // use this total of tickets value to calculate total pages for pagination.
     //
     // url: ex: /total-of-tickets?userid=20&searchTerm=&fromDate=2023-01-01&toDate=2023-03-28&categoryid=0&priorityid=0&creatorid=0&teamid=0&assigneeid=0&sla=&ticketStatusid=0
-    @GetMapping("/total-of-tickets")
+    //
     // all authenticated users can access this resource
-//    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
+    @GetMapping("/total-of-tickets")
     public ResponseEntity<Long> getTotalOfTickets(@RequestParam long userid,
                                                   @RequestParam String searchTerm,
                                                   @RequestParam String fromDate,
@@ -237,8 +235,9 @@ public class TicketController {
 
     //
     // create a new ticket.
+    //
+    // all authenticated users can access this resource.
     @PostMapping("/ticket-create")
-    // all authenticated users can access this resource
     public ResponseEntity<HttpResponse> createTicket(
             @RequestBody @Valid TicketCreateRequest ticketCreateRequest,
             BindingResult bindingResult) throws BindException {
@@ -273,10 +272,12 @@ public class TicketController {
     }
 
     // edit existing ticket.
+    //
     @PutMapping("/ticket-edit")
     // only the ROLE_SUPPORTER or ROLE_ADMIN can access this address
     @PreAuthorize("hasAnyRole('ROLE_SUPPORTER','ROLE_ADMIN')")
-    public ResponseEntity<HttpResponse> editTeam(@RequestBody @Valid TicketEditRequest ticketEditRequest, BindingResult bindingResult)
+    public ResponseEntity<HttpResponse> editTeam(
+            @RequestBody @Valid TicketEditRequest ticketEditRequest, BindingResult bindingResult)
             throws EntityNotFoundException, BindException, BadDataException {
 
         LOGGER.info("validate data");
@@ -289,8 +290,7 @@ public class TicketController {
             throw new BindException(bindingResult);
         }
 
-        // save teamRequest(includes supporters)
-        // and return team(not includes supporters)
+        // update ticket with new values
         HttpResponse httpResponse = ticketService.updateTicket(ticketEditRequest);
 
         return new ResponseEntity<>(httpResponse, OK);

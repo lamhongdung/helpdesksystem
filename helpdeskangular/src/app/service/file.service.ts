@@ -14,16 +14,11 @@ export class FileService {
 
   constructor(private http: HttpClient) { }
 
-
-  getFile(customerFilename: string): Observable<any> {
-    return this.http.get(`${this.host}/downloads/${customerFilename}`);
-  }
-
-  // define function to download files
+  // download file from server
   download(customFilename: string): Observable<HttpEvent<Blob>> {
 
     return this.http.get(`${this.host}/download/${customFilename}/`, {
-      reportProgress: true,
+      // reportProgress: true,
       observe: 'events',
       responseType: 'blob'
     });

@@ -184,7 +184,8 @@ public class TicketService {
     }
 
     // update existing ticket.
-    public HttpResponse updateTicket(TicketEditRequest ticketEditRequest) throws EntityNotFoundException, BadDataException {
+    public HttpResponse updateTicket(TicketEditRequest ticketEditRequest)
+            throws EntityNotFoundException, BadDataException {
 
         LOGGER.info("Update ticket");
         LOGGER.info("Ticket is sent from client: " + ticketEditRequest.toString());
@@ -193,10 +194,12 @@ public class TicketService {
         Ticket existingTicket = ticketRepository.findById(ticketEditRequest.getTicketid())
                 .orElseThrow(() -> new EntityNotFoundException(NO_TICKET_FOUND_BY_ID + ticketEditRequest.getTicketid()));
 
+        // do not allow user modifies the 'Closed' tickets
         if (existingTicket.getTicketStatusid() == TICKET_STATUS_CLOSED){
             throw new BadDataException("Ticket status is 'Closed', so you cannot modify this ticket.");
         }
 
+        // do not allow user modifies the 'Cancel' tickets
         if (existingTicket.getTicketStatusid() == TICKET_STATUS_CANCEL){
             throw new BadDataException("Ticket status is 'Cancel', so you cannot modify this ticket.");
         }
@@ -207,9 +210,9 @@ public class TicketService {
 //        existingTicket.setPriorityid(ticketEditRequest.getPriorityid());
 //        existingTicket.setAssigneeid(ticketEditRequest.getAssigneeid());
 //        existingTicket.setTicketStatusid(ticketEditRequest.getTicketStatusid());
-
-        // update existing team without supporters
 //        ticketRepository.save(existingTicket);
+
+        // save changes of ticket
         ticketRepository.updateTicket(
                 ticketEditRequest.getTicketid(),
                 ticketEditRequest.getCategoryid(),
@@ -220,14 +223,8 @@ public class TicketService {
         );
 
         return new HttpResponse(OK.value(),
-                "Ticket " + ticketEditRequest.getTicketid() + " is updated successful.");
+                "Ticket '" + ticketEditRequest.getTicketid() + "' is updated successful.");
 
     }
-
-//    private ResponseEntity<HttpResponse> createHttpResponse(HttpStatus httpStatus, String message) {
-//
-//        return new ResponseEntity<>(new HttpResponse(httpStatus.value(), message), httpStatus);
-//
-//    }
 
 }

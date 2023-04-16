@@ -98,24 +98,58 @@ end if;
 
 -- if assignment method is Auto('A')
 if assignmentMethod = 'A' then
-
-    -- set ticket status = 2('Assigned')
-    set ticketStatusid = 2;
     
 	--
-	-- get supporters belong to teamid
+	-- get active supporters belong to teamid
 	--
     
-	-- drop the temporary "_supporterBelongTeamTbl" table if it exists
-	drop temporary table if exists _supporterBelongTeamTbl;
+	-- drop the temporary "_activeSupportersBelongTeam" table if it exists
+	drop temporary table if exists _activeSupportersBelongTeam;
 
-	create temporary table _supporterBelongTeamTbl
+	create temporary table _activeSupportersBelongTeam
 	select a.supporterid
 	from teamSupporter a
+		inner join user b on a.supporterid = b.id and b.status = 'Active'
 	where a.teamid = in_teamid;
 
 	-- -------------------------------------------------
-	-- Case 2: creator is also a supporter
+	-- Case 2: could not find any active supporters because although supporters belong team
+    -- 			but their status may be 'Inactive'
+	-- -->
+	-- - assigneeid = null
+	-- - ticketStatusid = 'Open'
+	-- -------------------------------------------------
+    
+	-- could not find any active supporters because although supporters belong team
+    -- but their status may be 'Inactive'
+    if not exists(	select *
+					from _activeSupportersBelongTeam a
+					) then
+                
+		-- let supporter assigns ticket to a certain supporter manually
+		set assigneeid = null;
+		
+		-- set ticket status = 1('Open')
+		set ticketStatusid = 1;
+		
+		-- save ticket into the 'ticket' table
+		insert into `ticket`(subject, categoryid, creatorid, teamid, priorityid, 
+							assigneeid, ticketStatusid, 
+							content, customFilename, createDatetime, lastUpdateDatetime,
+							lastUpdateByUserid) values
+							
+							(in_subject, in_categoryid, in_creatorid, in_teamid, in_priorityid, 
+							assigneeid, ticketStatusid,
+							in_content, in_customFilename, now(), now(),
+							creatorid); 
+				 
+		-- exit store procedure
+		leave sp;
+    
+	end if;
+
+	-- -------------------------------------------------
+	-- Case 3: creator is also a supporter
 	-- -->
 	-- - assigneeid = in_creatorid
 	-- - ticketStatusid = 'Assigned'
@@ -123,11 +157,15 @@ if assignmentMethod = 'A' then
 
 	-- if creator is also a supporter then assign assignee to that supporter(creator)
     if exists(	select *
-				from _supporterBelongTeamTbl a
+				from _activeSupportersBelongTeam a
                 where a.supporterid = in_creatorid) then
 		
+        -- assign assignee to creator(is also supporter)
         set assigneeid = in_creatorid;
         
+		-- set ticket status = 2('Assigned')
+		set ticketStatusid = 2;
+    
 		-- save ticket into the 'ticket' table
 		insert into `ticket`(subject, categoryid, creatorid, teamid, priorityid, 
 							assigneeid, ticketStatusid, 
@@ -145,7 +183,7 @@ if assignmentMethod = 'A' then
     end if; -- end of check exists
     
 	-- ----------------------------------------------------------------------------
-	-- Case 3: assign ticket to supporter who has at least tickets in team on current date
+	-- Case 4: assign ticket to supporter who has at least tickets in team on current date
 	-- -->
 	-- - assigneeid = (supporter has at least tickets in team)
 	-- - ticketStatusid = 'Assigned'
@@ -155,15 +193,15 @@ if assignmentMethod = 'A' then
 	-- ----------------------------------------------------------------------------  
 
 	--
-	-- get number of tickets belong to specific team of each supporter on current date
+	-- get number of tickets belong to specific team of each active supporter on current date
 	--
-	-- drop the temporary "_supporterNumOfTicketTbl" table if it exists
-	drop temporary table if exists _supporterNumOfTicketTbl;
+	-- drop the temporary "_activeSupportersNumOfTicket" table if it exists
+	drop temporary table if exists _activeSupportersNumOfTicket;
 
-	create temporary table _supporterNumOfTicketTbl
+	create temporary table _activeSupportersNumOfTicket
 	select 	a.supporterid,
 			count(coalesce(b.ticketid, null)) as numOfTickets
-	from _supporterBelongTeamTbl a
+	from _activeSupportersBelongTeam a
 		left join ticket b on 	b.teamid = in_teamid and
 								a.supporterid = b.assigneeid and
 								-- only consider on current date
@@ -172,38 +210,44 @@ if assignmentMethod = 'A' then
 
 	-- get minimum of tickets belong to specific team
 	set minNumOfTickets = (	select min(numOfTickets) 
-							from _supporterNumOfTicketTbl a
+							from _activeSupportersNumOfTicket a
 							);
 
-	-- drop the temporary "_supporterMinNumOfTicketTbl" table if it exists
-	drop temporary table if exists _supporterMinNumOfTicketTbl;
+	-- drop the temporary "_activeSupportersMinNumOfTicket" table if it exists
+	drop temporary table if exists _activeSupportersMinNumOfTicket;
 
-	create temporary table _supporterMinNumOfTicketTbl
-    -- get supporters have the same at least number of tickets on current date
+	create temporary table _activeSupportersMinNumOfTicket
+    -- get active supporters who have the same at least number of tickets on current date
 	select a.*
-	from _supporterNumOfTicketTbl a
+	from _activeSupportersNumOfTicket a
 	where a.numOfTickets = minNumOfTickets;
 
-	-- get 1 supporter who has at least tickets in specific team on current date.
+	-- get only 1 supporter who has at least tickets in specific team on current date.
 	-- in case there are many supporters who have the same at least tickets 
 	-- then get random 1 supporter of them
 	set assigneeid = (	select a.supporterid
-						from _supporterMinNumOfTicketTbl a
+						from _activeSupportersMinNumOfTicket a
 						order by rand()
 						limit 1
 						);
 
-		-- save ticket into the 'ticket' table
-		insert into `ticket`(subject, categoryid, creatorid, teamid, priorityid, 
-							assigneeid, ticketStatusid, 
-							content, customFilename, createDatetime, lastUpdateDatetime,
-                            lastUpdateByUserid) values
-                            
-							(in_subject, in_categoryid, in_creatorid, in_teamid, in_priorityid, 
-							assigneeid, ticketStatusid,
-							in_content, in_customFilename, now(), now(),
-                            creatorid);
-                    
+	-- set ticket status = 2('Assigned')
+	set ticketStatusid = 2;
+        
+	-- save ticket into the 'ticket' table
+	insert into `ticket`(subject, categoryid, creatorid, teamid, priorityid, 
+						assigneeid, ticketStatusid, 
+						content, customFilename, createDatetime, lastUpdateDatetime,
+						lastUpdateByUserid) values
+						
+						(in_subject, in_categoryid, in_creatorid, in_teamid, in_priorityid, 
+						assigneeid, ticketStatusid,
+						in_content, in_customFilename, now(), now(),
+						creatorid);
+         
+	-- exit store procedure
+	leave sp;
+        
 end if;
 
 end $$

@@ -54,38 +54,39 @@ export class TicketEditComponent {
   // all ticket status
   commentReponses: CommentResponse[] = [];
 
+  // response data from backend
   ticketEditViewResponse: TicketEditViewResponse;
 
-  fileStatus = { status: '', requestType: '', percent: 0 };
-
-  // tooltips for "Search form" and "table"
+  // tooltips for "ticketForm"
   // ex:  tooltips.set('key', 'value');
   //      tooltips.get('key') --> return 'value';
   tooltips = new Map<string, string>();
-
-  htmlContent = '<h1>hello</h1>';
 
   // error messages
   errorMessages = {
 
     priorityid: [
-      { type: 'required', message: 'Please select a priority' }
+      { type: 'required', message: 'Please select a priority' },
+      { type: 'min', message: 'Value of priority id must be greater than or equal to 1' }
     ],
     categoryid: [
-      { type: 'required', message: 'Please select a category' }
+      { type: 'required', message: 'Please select a category' },
+      { type: 'min', message: 'Value of category id must be greater than or equal to 1' }
     ],
     assigneeid: [
       { type: 'required', message: 'Please select an assignee' },
-      { type: 'min', message: 'Please select an assignee' }
+      { type: 'min', message: 'Value of assignee id must be greater than or equal to 1' }
     ],
     ticketStatusid: [
-      { type: 'required', message: 'Please select a status' }
+      { type: 'required', message: 'Please select a status' },
+      { type: 'min', message: 'Value of ticket status id must be greater than or equal to 1' }
     ]
   };
 
+  // Rich text editor contains ticket content
   editor: Editor;
-  // commentEditor: Editor;
 
+  // toolbar of rich text editor
   toolbar: Toolbar = [
     ['bold', 'italic'],
     ['underline', 'strike'],
@@ -97,19 +98,6 @@ export class TicketEditComponent {
     // ['align_left', 'align_center', 'align_right', 'align_justify'],
     // ['horizontal_rule', 'format_clear'],
   ];
-
-  // commentToolbar: Toolbar = [
-  //   ['bold', 'italic'],
-  //   ['underline', 'strike'],
-  //   // ['code', 'blockquote'],
-  //   ['ordered_list', 'bullet_list'],
-  //   ['text_color', 'background_color'],
-  //   [{ heading: ['h1', 'h2', 'h3', 'h4', 'h5', 'h6'] }],
-  //   // ['link', 'image'],
-  //   // ['align_left', 'align_center', 'align_right', 'align_justify'],
-  //   // ['horizontal_rule', 'format_clear'],
-  // ];
-
 
 
   constructor(private router: Router,
@@ -129,6 +117,7 @@ export class TicketEditComponent {
   // initial values
   ngOnInit(): void {
 
+    // 
     this.editor = new Editor();
 
     this.ticketForm = this.formBuilder.group({
@@ -140,24 +129,38 @@ export class TicketEditComponent {
       creatorPhone: [''],
       creatorEmail: [''],
       subject: [''],
+
+      // disable ticket content(rich text editor)
       content: [{ value: '', disabled: true }],
 
-      // team id + team name
+      // team id + team name + assignment method 
       team: [''],
+      // ticket was created on this datetime
       createDatetime: [''],
+      // last time ticket was updated
       lastUpdateDatetime: [''],
       // user id + fullname
       lastUpdateByUser: [''],
-      // spent hours + SLA
+      // spent hours + SLA.
+      // ex: "29 days 5 hours 46 minutes  --> Late"
       spentHour: [''],
+      // required and value must be >= 1
       priorityid: ['', [Validators.required, Validators.min(1)]],
+      // required and value must be >= 1
       categoryid: ['', [Validators.required, Validators.min(1)]],
+      // required and value must be >= 1
       assigneeid: ['', [Validators.required, Validators.min(1)]],
+      // required and value must be >= 1
       ticketStatusid: ['', [Validators.required, Validators.min(1)]],
-      toBeUpdatedByUserid: [this.authService.getIdFromLocalStorage(),[Validators.min(1)]]
-    });
 
-    this.tooltips.set("ticketStatusid", "- Ticket status.<br>- <b>Open</b>: ticket has not yet assigned to supporter.<br>- <b>Assigned</b>: ticket has been assigned to supporter.<br>- <b>Resolved</b>: ticket has been resolved.<br>- <b>Closed</b>: ticket has been closed.<br>- <b>Cancel</b>: ticket has been canceled.");
+      // user id who will update ticket.
+      // value must be >= 1.
+      toBeUpdatedByUserid: [this.authService.getIdFromLocalStorage(), [Validators.min(1)]]
+
+    }); // end of initial values for "ticketForm" form
+
+    // tooltip for "ticketStatusid" control
+    this.tooltips.set("ticketStatusid", "- Ticket status.<br>- <b>Open</b>: <i>ticket has not yet assigned to supporter</i>.<br>- <b>Assigned</b>: <i>ticket has been assigned to supporter</i>.<br>- <b>Resolved</b>: <i>ticket has been resolved</i>.<br>- <b>Closed</b>: <i>ticket has been closed</i>.<br>- <b>Cancel</b>: <i>ticket has been canceled</i>.");
 
     // get ticket id from params of active route(from address path).
     // and then get ticket based on ticket id from database
@@ -177,57 +180,72 @@ export class TicketEditComponent {
 
             this.ticketEditViewResponse = data;
 
-            // console.log(this.ticketEditViewResponse.ticketStatusid);
-            // console.log(this.ticketEditViewResponse.ticketStatusid == 4);
-
+            // if ticket status is 'Closed' or 'Cancel' then navigate to 'ticket-list' screen.
+            // avoid user tricks by manually input ticket id for 'Closed'/'Cancel' tickets in adrress bar
             if (this.ticketEditViewResponse.ticketStatusid == TicketStatus.Closed ||
               this.ticketEditViewResponse.ticketStatusid == TicketStatus.Cancel) {
-              // if (true){
+
               // navigate to the "/ticket-list" page
               this.router.navigateByUrl('/ticket-list');
+
             }
 
             // load ticket information to the ticketForm
             this.ticketForm.patchValue(data);
-            this.ticketForm.get("createDatetime").patchValue(formatDate(data.createDatetime.toLocaleString(), "yyyy-MM-dd HH:mm:ss", "en-US"));
-            this.ticketForm.get("lastUpdateDatetime").patchValue(formatDate(data.lastUpdateDatetime.toLocaleString(), "yyyy-MM-dd HH:mm:ss", "en-US"));
+
+            // convert UTC to local time
+            this.ticketForm.get("createDatetime").patchValue(
+              formatDate(data.createDatetime.toLocaleString(), "yyyy-MM-dd HH:mm:ss", "en-US"));
+            this.ticketForm.get("lastUpdateDatetime").patchValue(
+              formatDate(data.lastUpdateDatetime.toLocaleString(), "yyyy-MM-dd HH:mm:ss", "en-US"));
 
 
           },
-          // there are some errors when get data from database
-          error: (errorResponse: HttpErrorResponse) => {
-            this.sendNotification(NotificationType.ERROR, errorResponse.error.message);
-          }
-        });
 
+          // there are some errors when get ticket by ticket id
+          error: (errorResponse: HttpErrorResponse) => {
+
+            this.sendNotification(NotificationType.ERROR, errorResponse.error.message);
+
+          }
+        }); // end of this.ticketService.findById()
+
+        // get all comments by ticket id
         this.commentService.getAllCommentsByTicketid(this.ticketid).subscribe({
 
-          // get data successful from database
+          // get all comments successful from database
           next: (data: CommentResponse[]) => {
 
             this.commentReponses = data;
 
           },
-          // there are some errors when get data from database
+
+          // there are some errors when get comments from database
           error: (errorResponse: HttpErrorResponse) => {
+
             this.sendNotification(NotificationType.ERROR, errorResponse.error.message);
+
           }
-        });
+        }); // end of this.commentService.getAllCommentsByTicketid()
+
+      },
+
+      // there are some errors when get id from address bar
+      error: (errorResponse: HttpErrorResponse) => {
+
+        this.sendNotification(NotificationType.ERROR, errorResponse.error.message);
 
       }
+
     });
 
-    // this.userid = +this.authService.getIdFromLocalStorage();
-
+    // load values for 4 dropdowns "Priority", "Category", "Assignee", "Ticket status"
     this.loadDropdownValues();
-
-
 
   } // end of ngOnInit()
 
-  // initialize default values for all dropdown controls
+  // load values for 4 dropdowns "Priority", "Category", "Assignee", "Ticket status"
   loadDropdownValues() {
-
 
     // load all acitve priorities into the "Priority" dropdown
     this.loadAllActivePriorities()
@@ -256,10 +274,8 @@ export class TicketEditComponent {
       // edit exsting user
       this.ticketService.editTicket(this.ticketForm.value).subscribe({
 
-        // update user successful
+        // update ticket successful
         next: (data: CustomHttpResponse) => {
-
-          // this.ticket = data;
 
           // send notification to user
           this.sendNotification(NotificationType.SUCCESS, data.message);
@@ -267,10 +283,12 @@ export class TicketEditComponent {
           // hide spinner(circle)
           this.showSpinner = false;
 
-          // after update user successful then navigate to the "ticket-list" page
+          // after update ticket successful then navigate to the "ticket-list" page
           this.router.navigateByUrl("/ticket-list");
+
         },
-        // there are some errors when update user
+
+        // there are some errors when update ticket
         error: (errorResponse: HttpErrorResponse) => {
 
           // send failure message to user
@@ -280,9 +298,10 @@ export class TicketEditComponent {
           this.showSpinner = false;
         }
       })
+
     );
 
-  } // end of editUser()
+  } // end of editTicket()
 
   // load all active categories
   loadAllActiveCategories() {
@@ -291,26 +310,24 @@ export class TicketEditComponent {
     this.subscriptions.push(
 
       // get all active categories
-      this.ticketService.getAllActiveCategories()
+      this.ticketService.getAllActiveCategories().subscribe({
 
-        .subscribe({
+        // get all active categories successful
+        next: (data: DropdownResponse[]) => {
 
-          // get all active categories successful
-          next: (data: DropdownResponse[]) => {
+          // all active categories
+          this.categories = data;
 
-            // all active categories
-            this.categories = data;
+        },
 
-          },
+        // there are some errors when get categories
+        error: (errorResponse: HttpErrorResponse) => {
 
-          // there are some errors when get teams
-          error: (errorResponse: HttpErrorResponse) => {
+          // show the error message to user
+          this.sendNotification(NotificationType.ERROR, errorResponse.error.message);
 
-            // show the error message to user
-            this.sendNotification(NotificationType.ERROR, errorResponse.error.message);
-
-          }
-        })
+        }
+      })
     );
 
   } // end of loadAllActiveCategories()
@@ -322,26 +339,24 @@ export class TicketEditComponent {
     this.subscriptions.push(
 
       // get all active priorities
-      this.ticketService.getAllActivePriorities()
+      this.ticketService.getAllActivePriorities().subscribe({
 
-        .subscribe({
+        // get all active priorities successful
+        next: (data: DropdownResponse[]) => {
 
-          // get all active priorities successful
-          next: (data: DropdownResponse[]) => {
+          // all active priorities
+          this.priorities = data;
 
-            // all active priorities
-            this.priorities = data;
+        },
 
-          },
+        // there are some errors when get priorities
+        error: (errorResponse: HttpErrorResponse) => {
 
-          // there are some errors when get teams
-          error: (errorResponse: HttpErrorResponse) => {
+          // show the error message to user
+          this.sendNotification(NotificationType.ERROR, errorResponse.error.message);
 
-            // show the error message to user
-            this.sendNotification(NotificationType.ERROR, errorResponse.error.message);
-
-          }
-        })
+        }
+      })
     );
 
   } // end of loadAllActivePriorities()
@@ -353,26 +368,24 @@ export class TicketEditComponent {
     this.subscriptions.push(
 
       // get active supporters belong team
-      this.ticketService.getActiveSupportersBelongTeam(ticketid)
+      this.ticketService.getActiveSupportersBelongTeam(ticketid).subscribe({
 
-        .subscribe({
+        // get active supporters belong team successful
+        next: (data: DropdownResponse[]) => {
 
-          // get active supporters belong team successful
-          next: (data: DropdownResponse[]) => {
+          // active supporters belong team
+          this.assignees = data;
 
-            // active supporters belong team
-            this.assignees = data;
+        },
 
-          },
+        // there are some errors when get active supporters
+        error: (errorResponse: HttpErrorResponse) => {
 
-          // there are some errors when get teams
-          error: (errorResponse: HttpErrorResponse) => {
+          // show the error message to user
+          this.sendNotification(NotificationType.ERROR, errorResponse.error.message);
 
-            // show the error message to user
-            this.sendNotification(NotificationType.ERROR, errorResponse.error.message);
-
-          }
-        })
+        }
+      })
     );
 
   } // end of loadActiveSupportersBelongTeam()
@@ -384,84 +397,62 @@ export class TicketEditComponent {
     this.subscriptions.push(
 
       // get next appropriate ticket status 
-      this.ticketService.getNextTicketStatus(ticketid)
+      this.ticketService.getNextTicketStatus(ticketid).subscribe({
 
-        .subscribe({
+        // get next appropriate ticket status successful
+        next: (data: DropdownResponse[]) => {
 
-          // get next appropriate ticket status successful
-          next: (data: DropdownResponse[]) => {
+          // next ticket status
+          this.ticketStatus = data;
 
-            // next ticket status
-            this.ticketStatus = data;
+        },
 
-          },
+        // there are some errors when get ticket status
+        error: (errorResponse: HttpErrorResponse) => {
 
-          // there are some errors when get teams
-          error: (errorResponse: HttpErrorResponse) => {
+          // show the error message to user
+          this.sendNotification(NotificationType.ERROR, errorResponse.error.message);
 
-            // show the error message to user
-            this.sendNotification(NotificationType.ERROR, errorResponse.error.message);
-
-          }
-        })
+        }
+      })
     );
 
   } // end of loadActiveSupportersBelongTeam()
 
-  // define a function to download files
-  onDownloadFile(customFilename: string): void {
+  // download file from server
+  downloadFile(customFilename: string): void {
 
     this.fileService.download(customFilename).subscribe({
 
-      next: (event) => {
-        // console.log(event);
-        this.resportProgress(event);
+
+      next: (httpEvent: HttpEvent<Blob>) => {
+
+        // if file has commpleted download from server
+        if (httpEvent.type == HttpEventType.Response) {
+
+          // save file to local computer
+          saveAs(new File([httpEvent.body!],
+            // file name after download
+            httpEvent.headers.get('originalFilename')!,
+            { type: `${httpEvent.headers.get('Content-Type')};charset=utf-8` }));
+
+        }
+
       },
+
       error: (errorResponse: HttpErrorResponse) => {
-        // error: (errorResponse: CustomHttpResponse) => {
-        console.log("There is error!");
-        console.log(errorResponse);
+
         // show the error message to user
         // this.sendNotification(NotificationType.ERROR, errorResponse.message);
         this.sendNotification(NotificationType.ERROR, "File has not found on server!");
+
       }
+
     });
-  }
 
-  private resportProgress(httpEvent: HttpEvent<Blob>): void {
+  } // end of downloadFile()
 
-    switch (httpEvent.type) {
-
-      // case HttpEventType.DownloadProgress:
-      //   this.updateStatus(httpEvent.loaded, httpEvent.total!, 'Downloading... ');
-      //   break;
-
-      // case HttpEventType.ResponseHeader:
-      //   console.log('Header returned', httpEvent);
-      //   break;
-
-      case HttpEventType.Response:
-
-        saveAs(new File([httpEvent.body!], httpEvent.headers.get('originalFilename')!,
-          { type: `${httpEvent.headers.get('Content-Type')};charset=utf-8` }));
-        this.fileStatus.status = 'done';
-
-        break;
-
-      default:
-        // console.log(httpEvent);
-        break;
-
-    }
-  }
-
-  // private updateStatus(loaded: number, total: number, requestType: string): void {
-  //   this.fileStatus.status = 'progress';
-  //   this.fileStatus.requestType = requestType;
-  //   this.fileStatus.percent = Math.round(100 * loaded / total);
-  // }
-
-  // display reason why a ticket is 'on time' or 'late'
+  // tooltip for explain reason why a ticket is 'on time' or 'late'
   tooltipSlaDetail(ticketStatusid: number, createTime: Date, lastUpdateDatetime: Date,
     currentDatetime: Date, limitTimeToResolve: string, spentDayHhmm: string, sla: string): string {
 
@@ -484,7 +475,6 @@ export class TicketEditComponent {
     this.subscriptions.forEach(sub => sub.unsubscribe());
 
     this.editor.destroy();
-    // this.commentEditor.destroy();
   }
 
 } // end of the TicketEditComponent

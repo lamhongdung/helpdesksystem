@@ -24,6 +24,7 @@ public class EditProfile {
     @Size(min = 1, max = 50, message="Length of last name must be between 1 and 50 characters")
     private String lastName;
 
+    // allow to use @Pattern because datatype of phone is String
     @Pattern(regexp = "^[0-9]{10}$", message="Phone number must be 10 digits length")
     private String phone;
     @Size(max = 100, message="Address cannot be longer than 100 characters")

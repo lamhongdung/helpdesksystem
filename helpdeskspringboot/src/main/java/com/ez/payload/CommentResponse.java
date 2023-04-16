@@ -4,21 +4,35 @@ import java.util.Date;
 
 public interface CommentResponse {
 
-    // "id" column
+    // "commentid" column
     Long getCommentid();
 
-    // "name" column
+    // "commentDescription" column
     String getCommentDescription();
 
+    // "commenterid" column
     Long getCommenterid();
+
+    // "commenterName" column
     String getCommenterName();
 
+    // "commenterPhone" column
     String getCommenterPhone();
+
+    // "commenterEmail" column
     String getCommenterEmail();
+
+    // "commenter" column.
+    // commenter = commenterid + commenterName + commenterPhone + commenterEmail
     String getCommenter();
+
+    // "commentDatetime" column
     Date getCommentDatetime();
 
+    // "customFilename" column
     String getCustomFilename();
+
+    // "originalFilename" column
     String getOriginalFilename();
 
 }

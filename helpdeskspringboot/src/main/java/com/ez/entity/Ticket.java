@@ -51,7 +51,11 @@ public class Ticket implements Serializable {
     // - 3(Resolved)
     // - 4(Closed)
     // - 5(Cancel)
-    @Pattern(regexp = "^[1-5]", message = "Value of the ticket status must be 1 of 5 following values: Open, Assigned, Resolved, Closed, Cancel")
+    @Min(value = 1, message = "Value of ticket status id must be greater than or equal to 1")
+    @Max(value = 5, message = "Value of ticket status id must be less than or equal to 5")
+    // note: we cannot use @Pattern to validate because this @Pattern only apply for string,
+    // datatype of ticketStatusid is 'long', so we cannot use @Pattern
+//    @Pattern(regexp = "^[1-5]", message = "Value of the ticket status must be 1 of 5 following values: Open, Assigned, Resolved, Closed, Cancel")
     private long ticketStatusid;
 
     @Size(min = 1, message = "Please input a content")

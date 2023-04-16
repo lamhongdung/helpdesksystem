@@ -19,10 +19,10 @@ public class CommentService {
     @Autowired
     private CommentRepository commentRepository;
 
-    // get active supporters belong team
+    // get all comments by ticket id
     public List<CommentResponse> getAllCommentsByTicketid(long ticketid) {
 
-        LOGGER.info("get active supporters belong team");
+        LOGGER.info("get all comments by ticket id");
 
         return commentRepository.getAllCommentsByTicketid(ticketid);
     }

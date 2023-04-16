@@ -23,19 +23,27 @@ export class TicketEditViewResponse {
         public lastUpdateDatetime: Date,
         // last update by user id + full name
         public lastUpdateByUser: string,
-        // spent hours + sla(service level agreement)
+
+        // spentDayHhmm + sla(service level agreement)
+        // ex: spentHour = "5 hours 41 minutes  --> Ontime"
         public spentHour: string,
-        // category id
-        public categoryid: number,
         // priority id
         public priorityid: number,
+        // category id
+        public categoryid: number,
         // assignee id
         public assigneeid: number,
         // ticket status id
         public ticketStatusid: number,
-        // customFilename
+
+        // - customFilename = "": if user did not attach file or
+        //                          attached file size exceeds max allowed file size(>10MB)
+        // - customFilename = timestamp + UUID + extension(ex: .jpg): if user has attached file
+        // ex: customFilename = "20230405143231_3ed7c8ea-114e-4c1f-a3d3-8e5a439e9aff.jpg".
         public customFilename: string,
-        // originalFilename
+
+        // originalFilename.
+        // ex: originalFilename = 'abc.png'
         public originalFilename: string,
 
         //
@@ -46,12 +54,11 @@ export class TicketEditViewResponse {
         public currentDatetime: Date,
         // resolveIn
         public resolveIn: number,
-        // currentDatetime
+        // sla(service level agreement)
         public sla: string,
-        
-        // currentDatetime
-        public spentDayHhmm: string
 
+        // ex: spentDayHhmm = "3 days 5 hours 41 minutes"
+        public spentDayHhmm: string
 
 
     ) {
