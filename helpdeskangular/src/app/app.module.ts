@@ -43,7 +43,7 @@ import { FileUploadModule } from 'ng2-file-upload';
 import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
 import { QuillModule } from 'ngx-quill';
 import { NgxEditorModule } from 'ngx-editor';
-import { CommentCreateComponent } from './component/ticket/comment-create/comment-create.component';
+import { CommentAddComponent } from './component/ticket/comment-add/comment-add.component';
 
 @NgModule({
   declarations: [
@@ -73,7 +73,7 @@ import { CommentCreateComponent } from './component/ticket/comment-create/commen
     UserViewComponent,
     TicketEditComponent,
     TicketViewComponent,
-    CommentCreateComponent,
+    CommentAddComponent,
   ],
   imports: [
     NgMultiSelectDropDownModule.forRoot(),

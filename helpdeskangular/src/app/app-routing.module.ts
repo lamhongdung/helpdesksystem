@@ -25,7 +25,7 @@ import { UserEditComponent } from './component/user/user-edit/user-edit.componen
 import { UserListComponent } from './component/user/user-list/user-list.component';
 import { UserViewComponent } from './component/user/user-view/user-view.component';
 import { AuthGuard } from './guard/auth.guard';
-import { CommentCreateComponent } from './component/ticket/comment-create/comment-create.component';
+import { CommentAddComponent } from './component/ticket/comment-add/comment-add.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '/login', pathMatch: 'full' },
@@ -172,9 +172,9 @@ const routes: Routes = [
       roles: ['ROLE_CUSTOMER', 'ROLE_SUPPORTER', 'ROLE_ADMIN']
     }
   },
-  // comment-create
+  // comment-add
   {
-    path: 'tickets/:ticketid/comment-create', component: CommentCreateComponent, canActivate: [AuthGuard],
+    path: 'tickets/:ticketid/comment-add', component: CommentAddComponent, canActivate: [AuthGuard],
     data: {
       roles: ['ROLE_CUSTOMER', 'ROLE_SUPPORTER', 'ROLE_ADMIN']
     }

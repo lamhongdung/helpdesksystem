@@ -29,8 +29,8 @@ public interface CommentResponse {
     // "commentDatetime" column
     Date getCommentDatetime();
 
-    // "customFilename" column
-    String getCustomFilename();
+    // "getCommentCustomFilename" column
+    String getCommentCustomFilename();
 
     // "originalFilename" column
     String getOriginalFilename();

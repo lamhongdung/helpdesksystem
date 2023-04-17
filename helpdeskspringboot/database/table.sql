@@ -199,6 +199,7 @@ insert into `ticketStatus`(statusid, name) values
 -- -----------------------------------------------------
 -- Table `ticket`
 -- -----------------------------------------------------
+SET foreign_key_checks = 0;
 
 drop table if exists `ticket`;
 
@@ -258,7 +259,7 @@ create table `comment` (
 	`commentDescription` text not null,
 	`commenterid` int not null,
 	`commentDatetime` datetime not null,
-	`customFilename` varchar(255) default null,
+	`commentCustomFilename` varchar(255) default null,
     
 	PRIMARY key (`commentid`),
     
@@ -269,7 +270,7 @@ create table `comment` (
   
 ) engine=InnoDB auto_increment=101 default charset=utf8mb4 collate=utf8mb4_0900_ai_ci;
 
-insert into `comment`(ticketid, commentid, commentDescription, commenterid, commentDatetime, customFilename) values 
+insert into `comment`(ticketid, commentid, commentDescription, commenterid, commentDatetime, commentCustomFilename) values 
 (1, 1, 'Sẽ thay laptop mới cho bạn', 10 , '2023-03-19 08:30:00', '20230413161647_f1f239a9-6fed-48ff-a84b-43cea7ffde88.jpg'),
 (1, 2, 'Ok cảm ơn nhiều', 1 , '2023-04-19 18:30:00', ''),
 (3, 3, 'Vui lòng khởi động lại laptop sau đó kết nối lại wifi', 11 , '2023-03-26 13:30:00', '');
@@ -292,7 +293,7 @@ create table `fileStorage` (
       
 ) engine=InnoDB default charset=utf8mb4 collate=utf8mb4_0900_ai_ci;
 
-
+SET foreign_key_checks = 1;
 
 
 

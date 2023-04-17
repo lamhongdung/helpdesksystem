@@ -4,6 +4,8 @@ import { environment } from 'src/environments/environment';
 import { ShareService } from './share.service';
 import { Observable } from 'rxjs';
 import { CommentResponse } from '../payload/CommentResponse';
+import { CustomHttpResponse } from '../payload/CustomHttpResponse';
+import { CommentRequest } from '../payload/CommentRequest';
 
 @Injectable({
   providedIn: 'root'
@@ -30,11 +32,10 @@ export class CommentService {
     )
   }
 
-
-  // create a new team
-  // public createTicket(ticketCreateRequest: TicketCreateRequest): Observable<CustomHttpResponse> {
-  //   return this.http.post<CustomHttpResponse>(`${this.host}/ticket-create`, ticketCreateRequest);
-  // }
+  // add comment
+  public addComment(commentRequest: CommentRequest): Observable<CustomHttpResponse> {
+    return this.http.post<CustomHttpResponse>(`${this.host}/tickets/${commentRequest.ticketid}/comment-add`, commentRequest);
+  }
 
 
 

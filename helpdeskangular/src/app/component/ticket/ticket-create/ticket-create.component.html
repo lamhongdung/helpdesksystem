@@ -48,15 +48,13 @@
                             <label class="col-form-label" for="content">Content<small
                                     class="text-danger">*</small></label>
                         </div>
-                        <!-- dropdown -->
+                        <!-- rich text editor -->
                         <div class="col-10" tooltip="Ticket content" theme="light" placement="left" id="content">
-                            <!-- ngx-quill -->
-                            <!-- <quill-editor [modules]="modules" [placeholder]="'Ticket body'"
-                                [styles]="{'height': '250px', 'width': '100%'}" formControlName="content">
-                            </quill-editor> -->
                             <div class="NgxEditor__Wrapper ngxEditor">
+                                <!-- menu -->
                                 <ngx-editor-menu [editor]="editor" [toolbar]="toolbar">
                                 </ngx-editor-menu>
+                                <!-- editor -->
                                 <ngx-editor [editor]="editor" formControlName="content" [placeholder]="'Ticket body'">
                                 </ngx-editor>
                             </div>

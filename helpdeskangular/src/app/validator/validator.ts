@@ -30,8 +30,8 @@ export function passwordValidator(control: AbstractControl): { [key: string]: bo
 // create ticket
 //------------------------------
 
-// validate whether attached file is valid or not.
-export function validFile(control: AbstractControl): { [key: string]: boolean } | null {
+// validate whether attached ticket file is valid or not.
+export function validTicketFile(control: AbstractControl): { [key: string]: boolean } | null {
 
     // get value of "hasAttachedFile"
     const hasAttachedFile = control.get("hasAttachedFile").value;
@@ -47,6 +47,31 @@ export function validFile(control: AbstractControl): { [key: string]: boolean } 
     }
 
     // in case there is attached file
-    return (customFilename !== '') ? null : { 'validFile': true };
+    return (customFilename !== '') ? null : { 'validTicketFile': true };
+
+}
+
+//------------------------------
+// add comment
+//------------------------------
+
+// validate whether attached comment file is valid or not.
+export function validCommentFile(control: AbstractControl): { [key: string]: boolean } | null {
+
+    // get value of "hasAttachedCommentFile"
+    const hasAttachedCommentFile = control.get("hasAttachedCommentFile").value;
+
+    // get value of "commentCustomFilename"
+    const commentCustomFilename = control.get("commentCustomFilename").value;
+
+    // if has no attached file
+    if (!hasAttachedCommentFile) {
+
+        // return data is ok(has no error)
+        return null;
+    }
+
+    // in case there is attached file
+    return (commentCustomFilename !== '') ? null : { 'validCommentFile': true };
 
 }

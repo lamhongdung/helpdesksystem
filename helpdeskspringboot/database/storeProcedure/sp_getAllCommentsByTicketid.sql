@@ -33,19 +33,19 @@ select 	a.commentid as commentid,
 				'(', coalesce(b.phone,''), ' - ', coalesce(b.email,''), ')'
                 ) as commenter,
         a.commentDatetime as commentDatetime,
-        -- ex: customFilename = 20230413161647_f1f239a9-6fed-48ff-a84b-43cea7ffde88.jpg
-        a.customFilename as customFilename,
+        -- ex: commentCustomFilename = 20230413161647_f1f239a9-6fed-48ff-a84b-43cea7ffde88.jpg
+        a.commentCustomFilename as commentCustomFilename,
         -- ex: originalFilename = abc.jpg
         coalesce(c.originalFilename,'') as originalFilename
 from comment a
 	left join user b on a.commenterid = b.id
-    left join filestorage c on a.customFilename = c.customFilename
+    left join filestorage c on a.commentCustomFilename = c.customFilename
 where a.ticketid = in_ticketid
 order by a.commentDatetime desc;
     
 end $$
 
--- call sp_getAllCommentsByTicketid(1)
+-- call sp_getAllCommentsByTicketid(101)
 
 delimiter ;
 

@@ -1,6 +1,7 @@
 package com.ez.entity;
 
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
 import javax.validation.constraints.Min;
@@ -32,24 +33,27 @@ public class Comment {
     @Min(value = 1, message = "Value of commenter id must be greater than or equal to 1")
     private long commenterid;
 
-    // comment is created on this datetime
-//    @CreationTimestamp
+    // comment is created on this datetime.
+    // annotaion @CreationTimestamp: will auto save current datetime to this field in database
+    @CreationTimestamp
     private Date commentDatetime;
 
-    // - customFilename = "": if user did not attach file or
+    // - commentCustomFilename = "": if user did not attach file or
     //                          attached file size exceeds max allowed file size(>10MB)
-    // - customFilename = timestamp + UUID + extension(ex: .jpg): if user has attached file
-    // ex: customFilename = "20230405143231_3ed7c8ea-114e-4c1f-a3d3-8e5a439e9aff.jpg".
-    private String customFilename;
+    // - commentCustomFilename = timestamp + UUID + extension(ex: .jpg): if user has attached file
+    // ex: commentCustomFilename = "20230405143231_3ed7c8ea-114e-4c1f-a3d3-8e5a439e9aff.jpg".
+    private String commentCustomFilename;
 
+
+    // do not need includes 2 fields: commentid and commentDatetime.
+    // because these 2 fields will auto save into database.
     public Comment(Long ticketid, String commentDescription, long commenterid,
-                   Date commentDatetime, String customFilename) {
+                   String commentCustomFilename) {
 
         this.ticketid = ticketid;
         this.commentDescription = commentDescription;
         this.commenterid = commenterid;
-        this.commentDatetime = commentDatetime;
-        this.customFilename = customFilename;
+        this.commentCustomFilename = commentCustomFilename;
 
     }
 }

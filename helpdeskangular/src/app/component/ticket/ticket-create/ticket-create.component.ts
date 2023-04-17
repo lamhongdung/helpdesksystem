@@ -11,7 +11,7 @@ import { AuthService } from 'src/app/service/auth.service';
 import { ShareService } from 'src/app/service/share.service';
 import { FileService } from 'src/app/service/file.service';
 import { DropdownResponse } from 'src/app/payload/DropdownResponse';
-import { validFile } from 'src/app/validator/validator';
+import { validTicketFile } from 'src/app/validator/validator';
 import { CustomHttpResponse } from 'src/app/payload/CustomHttpResponse';
 import { Editor, Toolbar } from 'ngx-editor';
 
@@ -197,7 +197,7 @@ export class TicketCreateComponent {
         //  - (Has no attached file) or
         //  - (Has attached file) and (this file was uploaded to server successful(customFilename != ''))
         // note: if attached file size exceeds max allowed file size then it is considered as has no attached file
-        validators: [validFile]
+        validators: [validTicketFile]
       }
     );
 
@@ -247,7 +247,7 @@ export class TicketCreateComponent {
   onProgressItem(fileItem: FileItem, progress: any) {
 
     // render progress bar.
-    // few old browsers needs this command to render progress bar 
+    // few old browsers need this command to render progress bar 
     this.changeDetector.detectChanges();
 
   }

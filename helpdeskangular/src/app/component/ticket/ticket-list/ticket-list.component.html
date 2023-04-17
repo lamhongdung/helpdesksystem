@@ -365,7 +365,7 @@
             <!-- all authenticated users can see the "Add comment" button. -->
             <!-- if ticketStatusid is '4'(Closed) or '5'(Cancel) then disables these 2 buttons -->
             <a [ngClass]="(ticket.ticketStatusid===4 || ticket.ticketStatusid===5)? 'disabled-link btn btn-secondary mr-1' : 'btn btn-info mr-1'"
-              [routerLink]="['/comment-add', ticket.ticketid]" tooltip="Add comment" theme="light" placement="bottom"><i
+              [routerLink]="['/tickets/', ticket.ticketid,'comment-add']" tooltip="Add comment" theme="light" placement="bottom"><i
                 class="fa fa-plus"></i></a>
           </td>
 

@@ -20,7 +20,7 @@ export class CommentResponse {
         public commenter: string,
 
         public commentDatetime: string,
-        public customFilename: string,
+        public commentCustomFilename: string,
         public originalFilename: string
 
     ) {

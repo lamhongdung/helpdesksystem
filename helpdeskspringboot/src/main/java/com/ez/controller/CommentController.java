@@ -1,5 +1,6 @@
 package com.ez.controller;
 
+import com.ez.entity.Comment;
 import com.ez.exception.BadDataException;
 import com.ez.payload.*;
 import com.ez.service.CommentService;
@@ -40,29 +41,29 @@ public class CommentController {
         return new ResponseEntity<>(commentResponses, OK);
     }
 
-//    //
-//    // create a new ticket.
-//    @PostMapping("/comment-create")
-//    // all authenticated users can access this resource
-//    public ResponseEntity<HttpResponse> createTicket(
-//            @RequestBody @Valid TicketCreateRequest ticketCreateRequest,
-//            BindingResult bindingResult) throws BindException {
-//
-//        LOGGER.info("validate data");
-//
-//        // if ticketRequest data is invalid then throw exception
-//        if (bindingResult.hasErrors()) {
-//
-//            LOGGER.info("TicketRequest data is invalid");
-//
-//            throw new BindException(bindingResult);
-//        }
-//
-//        // save ticket
-//        HttpResponse httpResponse = ticketService.createTicket(ticketCreateRequest);
-//
-//        return new ResponseEntity<>(httpResponse, OK);
-//    }
+    //
+    // add a new comment.
+    @PostMapping("tickets/{ticketid}/comment-add")
+    // all authenticated users can access this resource
+    public ResponseEntity<HttpResponse> addComment(
+            @RequestBody @Valid Comment comment,
+            BindingResult bindingResult) throws BindException {
+
+        LOGGER.info("validate data");
+
+        // if comment data is invalid then throw exception
+        if (bindingResult.hasErrors()) {
+
+            LOGGER.info("Comment data is invalid");
+
+            throw new BindException(bindingResult);
+        }
+
+        // add comment
+        HttpResponse httpResponse = commentService.addComment(comment);
+
+        return new ResponseEntity<>(httpResponse, OK);
+    }
 
 
 }

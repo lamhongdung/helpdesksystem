@@ -209,7 +209,7 @@ from _ticket_sla a;
     
 end $$
 
--- call sp_getTicketById(101)
+-- call sp_getTicketById(117)
 
 delimiter ;
 

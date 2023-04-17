@@ -1,14 +1,14 @@
 <div class="text-center">
-    <h3>View ticket/comments</h3>
+    <h3>Add comment</h3>
     <hr width="100%">
 </div>
 
-<!-- {{ticketForm.value | json}} -->
+{{commentForm.value | json}}
 
 <div class="container-fluid">
 
     <!-- ticket form -->
-    <form [formGroup]="ticketForm">
+    <form [formGroup]="commentForm" (ngSubmit)="addComment()">
 
         <div class="row">
 
@@ -81,7 +81,7 @@
                         </div>
                     </div>
 
-                    <!-- Content -->
+                    <!-- ticket Content -->
                     <div class="row mb-3">
                         <!-- label -->
                         <div class="col-3">
@@ -92,17 +92,17 @@
 
                             <div class="NgxEditor__Wrapper ngxEditor" tooltip="Ticket content" theme="light"
                                 placement="top">
-                                <!-- menu -->
-                                <ngx-editor-menu [editor]="editor" [toolbar]="toolbar" style="color: darkgray;"
+                                <!-- editor menu -->
+                                <ngx-editor-menu [editor]="ticketEditor" [toolbar]="toolbar" style="color: darkgray;"
                                     [disabled]="true">
                                 </ngx-editor-menu>
                                 <!-- editor -->
-                                <ngx-editor [editor]="editor" formControlName="content" [placeholder]="'Ticket body'">
+                                <ngx-editor [editor]="ticketEditor" formControlName="content"
+                                    [placeholder]="'Ticket body'">
                                 </ngx-editor>
                             </div>
                         </div>
                     </div>
-
                 </div>
             </div>
 
@@ -169,12 +169,15 @@
                     </div>
 
                     <!-- Spent hours + SLA -->
+                    <!-- ex: "19 hours 8 minutes ==> Ontime" -->
                     <div class="row mb-3">
                         <!-- label -->
                         <div class="col-3">
                             <label class="col-form-label" for="spentHour">Spent hours<small>*</small></label>
                         </div>
+
                         <!-- textbox -->
+
                         <!-- <div class="col-9">
                             <input class="form-control" type="text" formControlName="spentHour" id="spentHour"
                                 tooltip="- Spent hours(hh:mm:ss) + SLA"
@@ -243,7 +246,8 @@
                         </div>
                     </div>
 
-                    <!-- ticket file -->
+                    <!-- ticket file. -->
+                    <!-- only display if there is attached ticket file -->
                     <div class="row mb-3"
                         *ngIf="ticketEditViewResponse?.customFilename != '' && ticketEditViewResponse?.customFilename != null">
                         <!-- label -->
@@ -260,7 +264,134 @@
                             </a>
                         </div>
                     </div>
+                </div>
+            </div>
+        </div>
 
+        <!-- buttons: "Submit" and "Cancel" -->
+        <div class="d-flex justify-content-center mb-3">
+            <div>
+
+                <!-- the "Submit" button -->
+                <!-- if "commentForm" is invalid then disabled the button "Submit" -->
+                <button type="submit" [disabled]="commentForm.invalid" style="width: 150px" class="btn btn-primary mr-2"
+                    tooltip="Submit comment" theme="light" placement="bottom">
+                    <!-- show the spinner icon in the "Submit" button -->
+                    <i *ngIf="showSpinner" class="fas fa-spinner fa-spin"></i>
+                    <!-- Change label button "Submit" to "Submitting.." -->
+                    <span *ngIf="showSpinner">Submitting...</span>
+                    <!-- after submit finished then re-changes the button to "Submit"  -->
+                    <span *ngIf="!showSpinner">Submit</span>
+                </button>
+
+                <!-- the "Cancel" button -->
+                <!-- go back to the "ticket-list" page -->
+                <button class="btn btn-dark" routerLink="/ticket-list" style="width: 150px"
+                    tooltip="Cancel and go back to the 'Ticket list' screen" theme="light"
+                    placement="bottom">Cancel</button>
+            </div>
+        </div>
+
+
+        <!-- comment -->
+        <div class="row">
+
+            <!-- the "Comment" column -->
+            <div class="col-md-6">
+
+                <div class="container-fluid">
+
+                    <!-- rich text editor -->
+                    <div class="row mb-3">
+                        <!-- label -->
+                        <div class="col-3">
+                            <label class="col-form-label" for="content">Comment<small
+                                    class="text-danger">*</small></label>
+                        </div>
+
+                        <!-- editor -->
+                        <div class="col-9" id="commentDescription">
+
+                            <div class="NgxEditor__Wrapper" tooltip="Comment description" theme="light" placement="top">
+                                <!-- menu -->
+                                <ngx-editor-menu [editor]="commentEditor" [toolbar]="toolbar">
+                                </ngx-editor-menu>
+                                <!-- editor -->
+                                <ngx-editor [editor]="commentEditor" formControlName="commentDescription"
+                                    [placeholder]="'Enter your comment here...'">
+                                </ngx-editor>
+                            </div>
+                            <!-- error messages -->
+                            <div class="text-danger" *ngFor="let e of errorMessages.commentDescription">
+                                <div
+                                    *ngIf="commentForm.get('commentDescription').hasError(e.type) && 
+                                    (commentForm.get('commentDescription').dirty || commentForm.get('commentDescription').touched)">
+
+                                    <small>{{e.message}}</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- the "Comment file" column -->
+            <div class="col-md-6">
+
+                <div class="container-fluid">
+
+                    <!-- Choose 'Comment' file -->
+                    <div class="row mb-3">
+                        <!-- label -->
+                        <div class="col-3">
+                            <!-- (max file size <=10 MB) -->
+                            <label class="col-form-label" for="attachment">File(&lt;={{((maxFileSize/1024)/1024) |
+                                number: '.0-2'}} MB) </label>
+                        </div>
+
+                        <!-- file browser -->
+                        <div class="col-9">
+
+                            <!-- Choose File -->
+                            <input type="file" ng2FileSelect [uploader]="uploader" (change)="changeFile($event)"
+                                style="width:100%" />
+
+                            <!-- only display progress bar if (there is file to upload) and (file size is valid) and   -->
+                            <!-- (progress > 0)   -->
+                            <div *ngIf="commentForm.get('hasAttachedCommentFile').value && !exceedMaxFileSize &&
+                        uploader.queue[lastIndex]?.progress> 0">
+                                <!-- progress bar -->
+                                <div class="progress-bar progress-bar-info" role="progressbar"
+                                    attr.aria-valuenow="{{ uploader.queue[lastIndex]?.progress }}" aria-valuemin="0"
+                                    aria-valuemax="100"
+                                    [ngStyle]="{ 'width': uploader.queue[lastIndex]?.progress + '%' }">
+                                    Loaded {{ uploader.queue[lastIndex]?.progress}}%
+                                </div>
+                            </div>
+                            <!-- error messages -->
+                            <!-- if file size exceeds max allowed file size -->
+                            <div class="text-danger" *ngIf="exceedMaxFileSize">
+                                <small>File size is too large(={{((actualFileSize/1024)/1024) | number: '.0-2'}}
+                                    MB). This file will not be uploaded to server. Please choose a file that its
+                                    size &lt;= {{((maxFileSize/1024)/1024) | number: '.0-2'}} MB. </small>
+                            </div>
+
+                            <!--  -->
+                            <!-- hidden fields -->
+                            <!--  -->
+
+                            <!-- these 2 fields only help to disable "Submit" button  -->
+                            <!-- while the upload file is in progress(not yet completed)  -->
+                            <div>
+                                <!-- check whether user attachs file or not -->
+                                <input type="checkbox" class="form-check-input" id="hasAttachedCommentFile"
+                                    formControlName="hasAttachedCommentFile" hidden>
+                                <!-- customFilename -->
+                                <input class="form-control" type="text" formControlName="commentCustomFilename"
+                                    id="commentCustomFilename" hidden>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -268,6 +399,7 @@
         <!-- all comments -->
         <div class="container-fluid">
 
+            <!-- show all comments by ticket id -->
             <div class="card mb-3" *ngFor="let e of commentReponses">
                 <!-- commenter -->
                 <div class="card-header" style="background-color: #e9ecef;">Commented by
@@ -283,14 +415,14 @@
 
                 <!-- comment description -->
                 <div class="card-body">
-                    <p class="card-text" [innerHtml]="e.commentDescription" tooltip="Comment description" theme="light"
-                        placement="bottom"></p>
+                    <p class="card-text" [innerHtml]="e.commentDescription"
+                        tooltip="Comment description(comment content)" theme="light" placement="bottom"></p>
                 </div>
 
                 <!-- comment file + comment id -->
                 <div class="card-footer bg-transparent">
 
-                    <!-- download comment file -->
+                    <!-- download 'comment' file -->
                     <a (click)="downloadFile(e?.commentCustomFilename)" style="cursor: pointer;"
                         tooltip="Click on <b>{{ e?.originalFilename }}</b> to download file" theme="light"
                         placement="bottom">{{ e?.originalFilename }}
@@ -300,18 +432,6 @@
                 </div>
             </div>
         </div>
-
-        <!-- buttons -->
-        <div class="d-flex justify-content-center mb-3">
-            <div>
-                <!-- the "Close" button -->
-                <!-- re-direct to the "ticket-list" page -->
-                <button class="btn btn-primary" routerLink="/ticket-list" style="width: 150px"
-                    tooltip="Close and go back to the 'Ticket list' screen" theme="light"
-                    placement="right">Close</button>
-            </div>
-        </div>
-
-    </form> <!-- end of ticketForm -->
+    </form> <!-- end of commentForm -->
 
 </div>

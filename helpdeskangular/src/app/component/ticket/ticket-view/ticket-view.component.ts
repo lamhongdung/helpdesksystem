@@ -38,7 +38,7 @@ export class TicketViewComponent {
   // ticketid
   ticketid: number;
 
-  // all ticket status
+  // all comments by ticket id
   commentReponses: CommentResponse[] = [];
 
   // response data from backend
@@ -123,7 +123,7 @@ export class TicketViewComponent {
     // tooltip for "ticketStatusid" control
     this.tooltips.set("ticketStatusid", "- Ticket status.<br>- <b>Open</b>: <i>ticket has not yet assigned to supporter</i>.<br>- <b>Assigned</b>: <i>ticket has been assigned to supporter</i>.<br>- <b>Resolved</b>: <i>ticket has been resolved</i>.<br>- <b>Closed</b>: <i>ticket has been closed</i>.<br>- <b>Cancel</b>: <i>ticket has been canceled</i>.");
 
-    // get ticket id from params of active route(from address path).
+    // get ticket id from params of active route(from address bar).
     // and then get ticket based on ticket id from database
     this.activatedRoute.paramMap.subscribe({
 
