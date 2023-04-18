@@ -28,12 +28,8 @@ public interface TeamRepository extends JpaRepository<Team, Long> {
             "           when 'A' then 'Auto' " +
             "           else 'Manual' " +
             "        end as assignmentMethod, " +
-//            "        a.calendarid as calendarid, " + // calendarid
-//            "        COALESCE(b.name, '') as calendarName, " + // calendarName
             "        a.status as status " + // team status
             " from team a " +
-//            "   left join calendar b on a.calendarid = b.id " +
-//            " where concat(a.id,' ', a.name,' ', COALESCE(b.name, '')) like %:searchTerm% and " + // searchTerm
             " where concat(a.id,' ', a.name) like %:searchTerm% and " + // searchTerm
             "       ( " +
             "         case :assignmentMethod " + // assignmentMethod
@@ -62,8 +58,6 @@ public interface TeamRepository extends JpaRepository<Team, Long> {
     @Query(value = "" +
             " select count(a.id) as totalOfTeams " + // total of teams
             " from team a " +
-//            "   left join calendar b on a.calendarid = b.id " +
-//            " where concat(a.id,' ', a.name, ' ', COALESCE(b.name, '')) like %:searchTerm% and " + // searchTerm
             " where concat(a.id,' ', a.name) like %:searchTerm% and " + // searchTerm
             "       ( " +
             "         case :assignmentMethod " + // assignmentMethod
@@ -124,5 +118,20 @@ public interface TeamRepository extends JpaRepository<Team, Long> {
             " where teamid = :teamid "
             , nativeQuery = true)
     void deleteTeamSupporter(@Param("teamid") long teamid);
+
+    //
+    // get teams.
+    //
+    // parameters:
+    // - status:
+    //      = 0: all teams(active + inactive) + 1 dummy
+    //      = 1: active teams + 1 dummy
+    //      = 2: inactive teams + 1 dummy
+    // return:
+    //  - id
+    //  - description = id + name + assignment method
+    @Query(value = "{call sp_getTeamsByStatus(:status)}"
+            ,nativeQuery = true)
+    public List<DropdownResponse> getTeams(@Param("status") long status);
 
 }

@@ -44,6 +44,7 @@ import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
 import { QuillModule } from 'ngx-quill';
 import { NgxEditorModule } from 'ngx-editor';
 import { CommentAddComponent } from './component/ticket/comment-add/comment-add.component';
+import { WorkloadReportComponent } from './component/report/workload-report/workload-report.component';
 
 @NgModule({
   declarations: [
@@ -74,6 +75,7 @@ import { CommentAddComponent } from './component/ticket/comment-add/comment-add.
     TicketEditComponent,
     TicketViewComponent,
     CommentAddComponent,
+    WorkloadReportComponent,
   ],
   imports: [
     NgMultiSelectDropDownModule.forRoot(),

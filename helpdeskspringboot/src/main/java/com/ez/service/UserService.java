@@ -1,6 +1,7 @@
 package com.ez.service;
 
 import com.ez.payload.ChangePassword;
+import com.ez.payload.DropdownResponse;
 import com.ez.payload.EditProfile;
 import com.ez.exception.*;
 import com.ez.entity.User;
@@ -51,4 +52,17 @@ public interface UserService {
     // change password
     public void changePassword(ChangePassword changePassword) throws MessagingException, EntityNotFoundException, BadDataException, BadDataException;
 
+    //
+    // get supporters + 1 dummy
+    //
+    // parameters:
+    //  - status:
+    //      =0: all supporters(active + inactive) + 1 dummy
+    //      =1: active supporters + 1 dummy
+    //      =2: inactive supporters + 1 dummy
+    //
+    // return:
+    //  - id
+    //  - description = id + fullname + status
+    public List<DropdownResponse> getSupporters(long status);
 }

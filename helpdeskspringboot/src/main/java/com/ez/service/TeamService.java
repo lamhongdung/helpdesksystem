@@ -59,6 +59,24 @@ public class TeamService {
         return teamRepository.getActiveSupporters();
     }
 
+    //
+    // get teams.
+    //
+    // parameters:
+    // - status:
+    //      = 0: all teams(active + inactive) + 1 dummy
+    //      = 1: active teams + 1 dummy
+    //      = 2: inactive teams + 1 dummy
+    // return:
+    //  - id
+    //  - description = id + name + assignment method
+    public List<DropdownResponse> getTeams(long status) {
+
+        LOGGER.info("get teams");
+
+        return teamRepository.getTeams(status);
+    }
+
     // create a new team.
     // save team in both tables: team and teamSupporter
     // note:

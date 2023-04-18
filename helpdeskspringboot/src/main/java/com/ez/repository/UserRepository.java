@@ -1,6 +1,7 @@
 package com.ez.repository;
 
 import com.ez.entity.User;
+import com.ez.payload.DropdownResponse;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -73,5 +74,20 @@ public interface UserRepository extends JpaRepository<User, Long> {
     public long getTotalOfUsers(@Param("searchTerm") String searchTerm,
                                 @Param("role") String role,
                                 @Param("status") String status);
+
+    //
+    // get supporters + 1 dummy
+    //
+    // parameters:
+    // - status:
+    //      = 0: all supporters(active + inactive) + 1 dummy
+    //      = 1: active supporters + 1 dummy
+    //      = 2: inactive supporters + 1 dummy
+    // return:
+    //  - id
+    //  - description = id + fullname + status
+    @Query(value = "{call sp_getSupportersByStatus(:status)}"
+            ,nativeQuery = true)
+    public List<DropdownResponse> getSupporters(@Param("status") long status);
 
 }

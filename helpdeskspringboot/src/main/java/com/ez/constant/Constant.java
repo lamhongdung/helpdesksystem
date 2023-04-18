@@ -3,6 +3,13 @@ package com.ez.constant;
 public class Constant {
 
     //
+    // common constants
+    //
+    public static final long SEARCH_STATUS_ALL = 0;
+    public static final long SEARCH_STATUS_ACTIVE = 1;
+    public static final long SEARCH_STATUS_INACTIVE = 2;
+
+    //
     // security constants
     //
     public static final long EXPIRATION_TIME = 432_000_000; // 5 days expressed in milliseconds
@@ -17,10 +24,8 @@ public class Constant {
     public static final String ACCESS_DENIED_MESSAGE = "You do not have permission to access this page";
     public static final String OPTIONS_HTTP_METHOD = "OPTIONS";
 
-//    public static final String[] PUBLIC_URLS = { "/login", "/reset-password", "/files/**"};
-//    public static final String[] PUBLIC_URLS = { "**" };
-//    public static final String[] PUBLIC_URLS = { "/login", "/reset-password", "/api/files/**"};
-    public static final String[] PUBLIC_URLS = { "/login", "/reset-password","/download/**"};
+    //    public static final String[] PUBLIC_URLS = { "**" };
+    public static final String[] PUBLIC_URLS = {"/login", "/reset-password", "/download/**"};
 
     //
     // email constants

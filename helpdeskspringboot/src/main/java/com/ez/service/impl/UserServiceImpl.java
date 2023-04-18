@@ -1,6 +1,7 @@
 package com.ez.service.impl;
 
 import com.ez.payload.ChangePassword;
+import com.ez.payload.DropdownResponse;
 import com.ez.payload.EditProfile;
 import com.ez.entity.*;
 import com.ez.exception.*;
@@ -329,6 +330,24 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         User user = findUserByEmail(email);
 
         return (user != null);
+    }
+
+    //
+    // get supporters + 1 dummy
+    //
+    // parameters:
+    // - status:
+    //      = 0: all supporters(active + inactive) + 1 dummy
+    //      = 1: active supporters + 1 dummy
+    //      = 2: inactive supporters + 1 dummy
+    // return:
+    //  - id
+    //  - description = id + fullname + status
+    public List<DropdownResponse> getSupporters(long status) {
+
+        LOGGER.info("get supporters");
+
+        return userRepository.getSupporters(status);
     }
 
     // encode password

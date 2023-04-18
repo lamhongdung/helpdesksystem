@@ -11,6 +11,8 @@ use helpdesk;
 -- Table `user`
 -- -----------------------------------------------------
 
+set foreign_key_checks = 0;
+
 drop table if exists `user`;
 
 create table `user` (
@@ -72,9 +74,13 @@ insert into `user`(id, email, password, firstName, lastName, phone, address, rol
 -- (32,'nguoihotro@proton.me','$2a$12$CR0useg0GQlwrYMvylhHROZg0Vq5nr7jRILz14lc.ArB9iuw1wsEC','Thu Hiền','Đinh','0555555552','','ROLE_SUPPORTER','Active'),
 -- (33,'khachhang_hd@proton.me','$2a$12$CR0useg0GQlwrYMvylhHROZg0Vq5nr7jRILz14lc.ArB9iuw1wsEC','Ngọc Duyên','Trần','0555555553','','ROLE_CUSTOMER','Active');
 
+set foreign_key_checks = 1;
+
 -- -----------------------------------------------------
 -- Table `category`
 -- -----------------------------------------------------
+
+set foreign_key_checks = 0;
 
 drop table if exists `category`;
 
@@ -99,9 +105,13 @@ insert into `category`(id, name, status) values
 (8, 'Seat', 'Active'),
 (9, 'Other', 'Active');
 
+set foreign_key_checks = 1;
+
 -- -----------------------------------------------------
 -- Table `priority`
 -- -----------------------------------------------------
+
+set foreign_key_checks = 0;
 
 drop table if exists `priority`;
 
@@ -123,9 +133,13 @@ insert into `priority`(id, name, resolveIn, status) values
 (2, 'Normal', 24, 'Active'),
 (3, 'Low', 36, 'Active');
 
+set foreign_key_checks = 1;
+
 -- -----------------------------------------------------
 -- Table `team`
 -- -----------------------------------------------------
+
+set foreign_key_checks = 0;
 
 drop table if exists `team`;
 
@@ -147,9 +161,13 @@ create table `team` (
 insert into `team`(id, name, assignmentMethod, status) values 
 (1, 'Pepsi', 'A', 'Active');
 
+set foreign_key_checks = 1;
+
 -- -----------------------------------------------------
 -- Table `teamSupporter`
 -- -----------------------------------------------------
+
+set foreign_key_checks = 0;
 
 drop table if exists `teamSupporter`;
 
@@ -173,9 +191,13 @@ insert into `teamSupporter`(teamid, supporterid) values
 (1, 11),
 (1, 12);
 
+set foreign_key_checks = 1;
+
 -- -----------------------------------------------------
 -- Table `ticketStatus`
 -- -----------------------------------------------------
+
+set foreign_key_checks = 0;
 
 drop table if exists `ticketStatus`;
 
@@ -195,11 +217,13 @@ insert into `ticketStatus`(statusid, name) values
 (4,'Closed'),
 (5,'Cancel');
 
+set foreign_key_checks = 1;
 
 -- -----------------------------------------------------
 -- Table `ticket`
 -- -----------------------------------------------------
-SET foreign_key_checks = 0;
+
+set foreign_key_checks = 0;
 
 drop table if exists `ticket`;
 
@@ -245,10 +269,13 @@ insert into `ticket`(ticketid, subject, categoryid, creatorid, teamid, priorityi
 (5,'Xin cài phần mềm Visio cho laptop',6,1,1,2,11,5,'Nhờ IT cài phần mềm Visio cho máy laptop cá nhân',null,'2023-03-29 10:40:00','2023-03-29 11:00:00',1),
 (6,'Nhờ reset password email account: abc@xyz.com',5,2,1,2,10,2,'Nhờ IT reset password cho email account abc@xyz.com. Cảm ơn IT nhiều!',null,'2023-03-30 21:30:00','2023-03-31 10:00:00',2);
 
+set foreign_key_checks = 1;
 
 -- -----------------------------------------------------
 -- Table `comment`
 -- -----------------------------------------------------
+
+set foreign_key_checks = 0;
 
 drop table if exists `comment`;
 
@@ -275,9 +302,13 @@ insert into `comment`(ticketid, commentid, commentDescription, commenterid, comm
 (1, 2, 'Ok cảm ơn nhiều', 1 , '2023-04-19 18:30:00', ''),
 (3, 3, 'Vui lòng khởi động lại laptop sau đó kết nối lại wifi', 11 , '2023-03-26 13:30:00', '');
 
+set foreign_key_checks = 1;
+
 -- -----------------------------------------------------
 -- Table `fileStorage`
 -- -----------------------------------------------------
+
+set foreign_key_checks = 0;
 
 drop table if exists `fileStorage`;
 
@@ -293,7 +324,7 @@ create table `fileStorage` (
       
 ) engine=InnoDB default charset=utf8mb4 collate=utf8mb4_0900_ai_ci;
 
-SET foreign_key_checks = 1;
+set foreign_key_checks = 1;
 
 
 

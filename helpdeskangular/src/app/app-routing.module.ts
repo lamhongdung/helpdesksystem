@@ -26,6 +26,7 @@ import { UserListComponent } from './component/user/user-list/user-list.componen
 import { UserViewComponent } from './component/user/user-view/user-view.component';
 import { AuthGuard } from './guard/auth.guard';
 import { CommentAddComponent } from './component/ticket/comment-add/comment-add.component';
+import { WorkloadReportComponent } from './component/report/workload-report/workload-report.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '/login', pathMatch: 'full' },
@@ -177,6 +178,18 @@ const routes: Routes = [
     path: 'tickets/:ticketid/comment-add', component: CommentAddComponent, canActivate: [AuthGuard],
     data: {
       roles: ['ROLE_CUSTOMER', 'ROLE_SUPPORTER', 'ROLE_ADMIN']
+    }
+  },
+
+  //
+  // reports
+  //
+
+  // workload report
+  {
+    path: 'report-workload', component: WorkloadReportComponent, canActivate: [AuthGuard],
+    data: {
+      roles: ['ROLE_SUPPORTER', 'ROLE_ADMIN']
     }
   },
   // if paths are not in the above list then redirects to path '/users-list'

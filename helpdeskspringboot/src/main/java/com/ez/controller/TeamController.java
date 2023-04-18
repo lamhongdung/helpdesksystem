@@ -19,6 +19,8 @@ import javax.persistence.EntityNotFoundException;
 import javax.validation.Valid;
 import java.util.List;
 
+import static com.ez.constant.Constant.SEARCH_STATUS_ACTIVE;
+import static com.ez.constant.Constant.SEARCH_STATUS_ALL;
 import static org.springframework.http.HttpStatus.OK;
 
 @RestController
@@ -155,6 +157,29 @@ public class TeamController {
         Team currentTeam = teamService.updateTeam(teamRequest);
 
         return new ResponseEntity<>(currentTeam, OK);
+    }
+
+    //
+    // get teams.
+    //
+    // parameters:
+    //  - status:
+    //      =0: all teams(active + inactive) + 1 dummy
+    //      =1: active teams + 1 dummy
+    //      =2: inactive teams + 1 dummy
+    //
+    // return:
+    //  - id
+    //  - description = id + name + assignment method
+    //
+    // all authenticated users can access this resource.
+    @GetMapping("/team-status")
+    public ResponseEntity<List<DropdownResponse>> getTeams(@RequestParam long status) {
+
+        // get teams
+        List<DropdownResponse> teams = teamService.getTeams(status);
+
+        return new ResponseEntity<>(teams, OK);
     }
 
 }

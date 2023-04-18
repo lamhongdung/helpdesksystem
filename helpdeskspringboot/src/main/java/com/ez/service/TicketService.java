@@ -7,16 +7,12 @@ import com.ez.repository.TicketRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.validation.BindException;
 
 import javax.persistence.EntityNotFoundException;
 import java.util.List;
 
 import static com.ez.constant.Constant.*;
-import static org.springframework.http.HttpStatus.NOT_FOUND;
 import static org.springframework.http.HttpStatus.OK;
 
 @Service
@@ -142,11 +138,11 @@ public class TicketService {
     }
 
     // calculate total of tickets based on the search criteria
-    public long getTotalOfTickets(long userid,
-                                  String searchTerm, String fromDate, String toDate,
-                                  String categoryid, String priorityid, String creatorid,
-                                  String teamid, String assigneeid, String sla,
-                                  String ticketStatusid) {
+    public long getTotalOfWorkloads(long userid,
+                                    String searchTerm, String fromDate, String toDate,
+                                    String categoryid, String priorityid, String creatorid,
+                                    String teamid, String assigneeid, String sla,
+                                    String ticketStatusid) {
 
         LOGGER.info("get total of tickets");
 

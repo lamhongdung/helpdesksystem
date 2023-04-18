@@ -237,6 +237,29 @@ public class UserController extends ExceptionHandling {
 
     }
 
+    //
+    // get supporters + 1 dummy
+    //
+    // parameters:
+    //  - status:
+    //      =0: all supporters(active + inactive) + 1 dummy
+    //      =1: active supporters + 1 dummy
+    //      =2: inactive supporters + 1 dummy
+    //
+    // return:
+    //  - id
+    //  - description = id + fullname + status
+    //
+    // all authenticated users can access this resource.
+    @GetMapping("/user-supporter-status")
+    public ResponseEntity<List<DropdownResponse>> getSupporters(@RequestParam long status) {
+
+        // get supporters + 1 dummy
+        List<DropdownResponse> supporters = userService.getSupporters(status);
+
+        return new ResponseEntity<>(supporters, OK);
+    }
+
     // create new instance HttpResponse
     private ResponseEntity<HttpResponse> response(HttpStatus httpStatus, String message) {
 

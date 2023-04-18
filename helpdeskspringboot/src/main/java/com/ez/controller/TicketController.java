@@ -1,6 +1,5 @@
 package com.ez.controller;
 
-import com.ez.entity.Ticket;
 import com.ez.exception.BadDataException;
 import com.ez.payload.*;
 import com.ez.service.TicketService;
@@ -224,7 +223,7 @@ public class TicketController {
                                                   @RequestParam String ticketStatusid) {
 
         // calculate total of tickets based on the search criteria
-        long totalOfTickets = ticketService.getTotalOfTickets(userid,
+        long totalOfTickets = ticketService.getTotalOfWorkloads(userid,
                 searchTerm, fromDate, toDate,
                 categoryid, priorityid, creatorid,
                 teamid, assigneeid, sla,
