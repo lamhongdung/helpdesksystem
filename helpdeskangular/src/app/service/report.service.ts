@@ -23,8 +23,8 @@ export class ReportService {
     private shareService: ShareService
   ) { }
 
-  // view report by page and based on the filter criteria
-  viewReport(pageNumber: number, fromDate: string, toDate: string, teamid: string, supporterid: string):
+  // view 'workload report' by page and based on the filter criteria
+  viewWorkloadReport(pageNumber: number, fromDate: string, toDate: string, teamid: string, supporterid: string):
     Observable<WorkloadReportResponse[]> {
 
     return this.http.get<WorkloadReportResponse[]>(
@@ -32,13 +32,12 @@ export class ReportService {
       `${this.shareService.host}/report-workload?pageNumber=${pageNumber}&pageSize=${this.shareService.pageSize}&fromDate=${fromDate}&toDate=${toDate}&teamid=${teamid}&supporterid=${supporterid}`
     )
 
-  } // end of viewReport()
+  } // end of viewWorkloadReport()
 
   // calculate total of records for counting total pages
   getTotalOfWorkloads(fromDate: string, toDate: string, teamid: string, supporterid: string):
     Observable<number> {
 
-    // ex: http://localhost:8080/total-of-tickets?userid=20&searchTerm=&fromDate=2023-01-01&toDate=2023-03-28&categoryid=0&priorityid=0&creatorid=0&teamid=0&assigneeid=0&sla=&ticketStatusid=0
     return this.http.get<number>(
       `${this.shareService.host}/total-of-workloads?fromDate=${fromDate}&toDate=${toDate}&teamid=${teamid}&supporterid=${supporterid}`
     );
@@ -46,7 +45,7 @@ export class ReportService {
   } // end of getTotalOfWorkloads()
 
 
-  // get all teams + 1 dummy
+  // get active teams + 1 dummy
   getTeams(status: number): Observable<DropdownResponse[]> {
 
     return this.http.get<DropdownResponse[]>(

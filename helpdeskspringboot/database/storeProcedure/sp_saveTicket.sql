@@ -100,18 +100,23 @@ end if;
 if assignmentMethod = 'A' then
     
 	--
-	-- get active supporters belong to teamid
+	-- create temporary '_workload' table.
+    -- This temporary '_workload' table contains number of tickets of each [teamid, supporterid]
+    -- on current date.
+    -- 
+    -- "_workload" = [teamid, teamStatus, supporterid, supporterStatus, createDate, numOfTickets]
 	--
+    call sp_workload(cast(now() as date), cast(now() as date));
     
 	-- drop the temporary "_activeSupportersBelongTeam" table if it exists
 	drop temporary table if exists _activeSupportersBelongTeam;
 
+	-- get active supporters and their number of tickets
 	create temporary table _activeSupportersBelongTeam
-	select a.supporterid
-	from teamSupporter a
-		inner join user b on a.supporterid = b.id and b.status = 'Active'
-	where a.teamid = in_teamid;
-
+	select a.supporterid, a.numOfTickets
+	from _workload a
+	where a.teamid = in_teamid and a.supporterStatus = 'Active';
+    
 	-- -------------------------------------------------
 	-- Case 2: could not find any active supporters because although supporters belong team
     -- 			but their status may be 'Inactive'
@@ -192,41 +197,26 @@ if assignmentMethod = 'A' then
     -- 		to team that customer logged ticket to.
 	-- ----------------------------------------------------------------------------  
 
-	--
-	-- get number of tickets belong to specific team of each active supporter on current date
-	--
-	-- drop the temporary "_activeSupportersNumOfTicket" table if it exists
-	drop temporary table if exists _activeSupportersNumOfTicket;
-
-	create temporary table _activeSupportersNumOfTicket
-	select 	a.supporterid,
-			count(coalesce(b.ticketid, null)) as numOfTickets
-	from _activeSupportersBelongTeam a
-		left join ticket b on 	b.teamid = in_teamid and
-								a.supporterid = b.assigneeid and
-								-- only consider on current date
-								left(coalesce(b.createDatetime,''),10) = left(now(),10)
-	group by a.supporterid;
-
 	-- get minimum of tickets belong to specific team
 	set minNumOfTickets = (	select min(numOfTickets) 
-							from _activeSupportersNumOfTicket a
+							from _activeSupportersBelongTeam a
 							);
 
-	-- drop the temporary "_activeSupportersMinNumOfTicket" table if it exists
-	drop temporary table if exists _activeSupportersMinNumOfTicket;
+	-- drop the temporary "_activeSupporters_min_numOfTicket" table if it exists
+	drop temporary table if exists _activeSupporters_min_numOfTicket;
 
-	create temporary table _activeSupportersMinNumOfTicket
     -- get active supporters who have the same at least number of tickets on current date
-	select a.*
-	from _activeSupportersNumOfTicket a
+	create temporary table _activeSupporters_min_numOfTicket
+	select 	a.supporterid,
+			a.numOfTickets
+	from _activeSupportersBelongTeam a
 	where a.numOfTickets = minNumOfTickets;
 
 	-- get only 1 supporter who has at least tickets in specific team on current date.
 	-- in case there are many supporters who have the same at least tickets 
 	-- then get random 1 supporter of them
 	set assigneeid = (	select a.supporterid
-						from _activeSupportersMinNumOfTicket a
+						from _activeSupporters_min_numOfTicket a
 						order by rand()
 						limit 1
 						);

@@ -1,6 +1,6 @@
---------------
--- database --
---------------
+-- -------------
+-- database   --
+-- -------------
 drop database if exists helpdesk;
 
 create database helpdesk;

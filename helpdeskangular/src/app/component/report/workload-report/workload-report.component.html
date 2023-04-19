@@ -1,7 +1,7 @@
-{{reportForm.value | json}}
+<!-- {{reportForm.value | json}} -->
 
-<!-- the "Supporter workload" report -->
-<div class="container-fluid">
+<!-- "Workload report" -->
+<div class="container">
 
   <!-- title -->
   <div>
@@ -10,7 +10,7 @@
   </div>
 
   <!-- filter -->
-  <div class="container-fluid">
+  <div class="container">
 
     <!-- Report Form -->
     <form [formGroup]="reportForm" (ngSubmit)="ngOnInit()">
@@ -89,13 +89,12 @@
   </div>
 
   <!-- "There are x records" message -->
-  <div class="container-fluid">
+  <div class="container">
 
     <div class="d-flex">
 
       <!-- mr-auto: push the "There are x records" to the right-end -->
       <div class="mr-auto">
-
       </div>
 
       <!-- display the number of records found. -->
@@ -106,7 +105,7 @@
   </div>
 
   <!-- table -->
-  <div class="container-fluid scroll-x">
+  <div class="container">
 
     <!-- table -->
     <!-- <table class="table table-hover table-striped table-bordered text-nowrap text-truncate"> -->
@@ -117,21 +116,27 @@
 
           <!-- Order -->
           <!-- scope="col": specifies that the cell is a header for a column -->
-          <th scope="col" style="width: 10%" tooltip="Order" theme="light" placement="bottom">
+          <th scope="col" style="width: 7%" tooltip="Order" theme="light" placement="bottom">
             Ord
           </th>
 
           <!-- Team = id + name + assignement method -->
-          <th scope="col" style="width: 35%" tooltip="- Team.<br>Values include: id + name + assignment method"
+          <th scope="col" style="width: 33%" tooltip="- Team.<br>Values include: id + name + assignment method"
             theme="light" placement="bottom">Team</th>
 
           <!-- Supporter -->
-          <th scope="col" style="width: 40%" tooltip="- Supporter.<br>- Values include: id + fullname" theme="light"
+          <th scope="col" style="width: 30%" tooltip="- Supporter.<br>- Values include: id + fullname" theme="light"
             placement="bottom">Supporter
           </th>
 
+          <!-- SupporterStatus -->
+          <th scope="col" style="width: 15%" tooltip="- Supporter status." theme="light" placement="bottom">Supporter
+            status
+          </th>
+
           <!-- Number of tickets -->
-          <th scope="col" style="width: 15%" tooltip="- Number of tickets" theme="light" placement="bottom">
+          <th scope="col" style="width: 15%" tooltip="- Number of tickets from date to date" theme="light"
+            placement="bottom">
             Number of tickets</th>
 
         </tr>
@@ -151,6 +156,9 @@
 
           <!-- column: Supporter -->
           <td style="text-align: left">{{rpt.supporter}}</td>
+
+          <!-- column: SupporterStatus -->
+          <td style="text-align: left">{{rpt.supporterStatus}}</td>
 
           <!-- column: Number of tickets -->
           <td style="text-align: left">

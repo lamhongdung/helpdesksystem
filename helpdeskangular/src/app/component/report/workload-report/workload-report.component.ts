@@ -36,17 +36,17 @@ export class WorkloadReportComponent {
   pageSize: number;
 
   // current date(ex: Vietnam local time).
-  // ex: Vietname time: 10:08 a.m , 21-Mar-2023
+  // ex: Vietname time: 10:08 a.m, 21-Mar-2023
   // => new Date() = Tue Mar 21 2023 10:08:29 GMT+0700 (Indochina Time)
   currentDate = new Date();
 
-  // fromDate = current date(local) in format "yyyy-MM-dd"
+  // fromDate = current date(local time) in format "yyyy-MM-dd"
   fromDate = formatDate(this.currentDate.toLocaleString(), "yyyy-MM-dd", "en-US");
 
-  // toDate = current date(local) in format "yyyy-MM-dd"
+  // toDate = current date(local time) in format "yyyy-MM-dd"
   toDate = formatDate(this.currentDate.toLocaleString(), "yyyy-MM-dd", "en-US");
 
-  // all teams + 1 dummy
+  // all active teams + 1 dummy
   teams: DropdownResponse[] = [];
 
   // all Supporters + 1 dummy
@@ -70,7 +70,7 @@ export class WorkloadReportComponent {
   tooltipNextPage: string;
   tooltipLastPage: string;
 
-  // the "report" form
+  // the "reportForm"(filter form)
   reportForm = this.formBuilder.group({
 
     // current date
@@ -89,7 +89,6 @@ export class WorkloadReportComponent {
     private shareService: ShareService,
     private reportService: ReportService,
     private formBuilder: FormBuilder,
-    private router: Router,
     private notificationService: NotificationService
   ) {
 
@@ -113,10 +112,11 @@ export class WorkloadReportComponent {
     // tooltips
     this.loadTooltip();
 
-    // initial default values for all form controls
+    // initial values for 2 dropdowns Team and Supporter
     this.loadDropdownValues();
 
     // show first page of 'workload report'.
+    // 0: mean first page.
     this.viewReport(0, this.reportForm.value.fromDate, this.reportForm.value.toDate,
       this.reportForm.value.teamid, this.reportForm.value.supporterid);
 
@@ -132,13 +132,15 @@ export class WorkloadReportComponent {
       //
       // get reports
       //
-      this.reportService.viewReport(pageNumber, fromDate, toDate, teamid, supporterid)
+      this.reportService.viewWorkloadReport(pageNumber, fromDate, toDate, teamid, supporterid)
 
         .subscribe({
 
           // get 'workload' report from database successful.
           next: (data: WorkloadReportResponse[]) => {
+
             return this.workloadReportResponses = data
+
           },
 
           // there are some errors when get 'workload report' from database
@@ -164,10 +166,13 @@ export class WorkloadReportComponent {
 
           // get 'total of workloads' from database successful
           next: (data: number) => {
+
             // total of workloads
             this.totalOfWorkloads = data;
+
             // total pages
             this.totalPages = this.shareService.calculateTotalPages(this.totalOfWorkloads, this.pageSize);
+
           },
 
           // there are some errors when get total of workloads from database
@@ -184,29 +189,29 @@ export class WorkloadReportComponent {
   // load posible values for 2 dropdowns 'Team' and 'Supporter'
   loadDropdownValues() {
 
-    // load all teams(+1 dummy) into the "Team" dropdown
-    this.loadAllTeams();
+    // load all active teams(+1 dummy) into the "Team" dropdown
+    this.loadTeams();
 
     // load all supporters(+ 1 dummy) into the "Supporter" dropdown
-    this.loadAllSupporters();
+    this.loadSupporters();
 
   } // end of loadDropdownValues()
 
-  // load all teams + 1 dummy
-  loadAllTeams() {
+  // load all active teams + 1 dummy
+  loadTeams() {
 
     // push into the subscriptions array to unsubscibe them easily later
     this.subscriptions.push(
 
-      // get all teams + 1 dummy
-      this.reportService.getTeams(SearchStatus.ALL)
+      // get all active teams + 1 dummy
+      this.reportService.getTeams(SearchStatus.ACTIVE)
 
         .subscribe({
 
-          // get teams successful
+          // get all active teams successful
           next: (data: DropdownResponse[]) => {
 
-            // all teams + 1 dummy
+            // all active teams + 1 dummy
             this.teams = data;
 
           },
@@ -224,25 +229,26 @@ export class WorkloadReportComponent {
   } // end of loadAllTeams()
 
   // load all supporters + 1 dummy
-  loadAllSupporters() {
+  loadSupporters() {
 
     // push into the subscriptions array to unsubscibe them easily later
     this.subscriptions.push(
 
-      // get all supporters + 1 dummy
+      // get all supporters + 1 dummy.
+      // SearchStatus.ALL = Active + Inactive
       this.reportService.getSupporters(SearchStatus.ALL)
 
         .subscribe({
 
-          // get all teams(+ 1 dummy) successful
+          // get all supporters(+ 1 dummy) successful
           next: (data: DropdownResponse[]) => {
 
-            // all teams(+ 1 dummy)
+            // all supporters(+ 1 dummy)
             this.supporters = data;
 
           },
 
-          // there are some errors when get teams
+          // there are some errors when get supporters
           error: (errorResponse: HttpErrorResponse) => {
 
             // show the error message to user
@@ -252,7 +258,7 @@ export class WorkloadReportComponent {
         })
     );
 
-  } // end of loadAllTeams()
+  } // end of loadSupporters()
 
   // load tooltips
   loadTooltip() {
@@ -265,6 +271,7 @@ export class WorkloadReportComponent {
     this.tooltips.set("toDate", "- To ticket date(mm/dd/yyyy).<br>- Default value is current date");
     this.tooltips.set("teamid", "- Team.<br>- 'All' means all teams.<br>- Values include: team id + team name + assignment method.");
     this.tooltips.set("supporterid", "- Supporter.<br>- 'All' means all supporters.<br>- Values include: Supporter id + fullname + status.");
+    this.tooltips.set("viewButton", "View report");
 
     //
     // tooltips for the "pagination"

@@ -5,10 +5,13 @@ export class WorkloadReportResponse {
         // team = id + name + assignment method
         public team: string,
 
-        // id + fullname + status
+        // supporter id + fullname
         public supporter: string,
 
-        // number of tickets per supporter and team
+        // supporter status
+        public supporterStatus: string,
+
+        // number of tickets from fromDate to toDate of each [teamid, supporterid]
         public numOfTickets: number
 
     ) {
