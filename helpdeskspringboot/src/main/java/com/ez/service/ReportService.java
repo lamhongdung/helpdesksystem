@@ -17,14 +17,14 @@ public class ReportService {
     private ReportRepository reportRepository;
 
     // get number of tickets from fromDate to toDate of each [teamid, supporterid]
-    public List<WorkloadReportResponse> viewReport(long pageNumber, long pageSize,
-                                                   String fromDate, String toDate,
-                                                   String teamid, String supporterid
+    public List<WorkloadReportResponse> viewWorkloadReport(long pageNumber, long pageSize,
+                                                           String fromDate, String toDate,
+                                                           String teamid, String supporterid
     ) {
 
         LOGGER.info("get total of tickets from fromDate to toDate of each [teamid, supporterid]");
 
-        return reportRepository.viewReport(pageNumber, pageSize, fromDate, toDate, teamid, supporterid);
+        return reportRepository.viewWorkloadReport(pageNumber, pageSize, fromDate, toDate, teamid, supporterid);
     }
 
     // calculate number of supporters based on filter criteria
@@ -34,6 +34,38 @@ public class ReportService {
 
         return reportRepository.getTotalOfWorkloads(fromDate, toDate, teamid, supporterid);
 
+    }
+
+    // get number of tickets between fromDate and toDate by user id and based on
+    // team filter and group by [priority, team]
+    public List<SlaReportDetail> viewSlaReportDetail(long userid, long pageNumber, long pageSize,
+                                                     String fromDate, String toDate, String teamid
+    ) {
+
+        LOGGER.info("get number of tickets between fromDate and toDate by user id and based on");
+        LOGGER.info("team filter and group by [priority, team]");
+
+        return reportRepository.viewSlaReportDetail(userid, pageNumber, pageSize, fromDate, toDate, teamid);
+    }
+
+    // get 'total of tickets', 'total of ontime tickets', 'total of lated tickets' and SLA percentage
+    // by user id and based on filter criteria[fromDate, toDate, team]
+    public SlaReportHeader viewSlaReportHeader(
+            long userid, String fromDate, String toDate, String teamid
+    ) {
+
+        LOGGER.info("get 'total of tickets', 'total of ontime tickets', 'total of lated tickets' and 'SLA percentage'");
+        LOGGER.info("by user id and based on filter criteria[fromDate, toDate, team]");
+
+        return reportRepository.viewSlaReportHeader(userid, fromDate, toDate, teamid);
+    }
+
+    // count total of SLA records by user id and based on filter criteria[team] for pagination
+    public long getTotalOfSla(long userid, String fromDate, String toDate, String teamid) {
+
+        LOGGER.info("count total of SLA records by user id and based on filter criteria[team] for pagination");
+
+        return reportRepository.getTotalOfSla(userid, fromDate, toDate, teamid);
     }
 
 }

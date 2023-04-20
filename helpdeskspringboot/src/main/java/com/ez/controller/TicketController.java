@@ -223,7 +223,7 @@ public class TicketController {
                                                   @RequestParam String ticketStatusid) {
 
         // calculate total of tickets based on the search criteria
-        long totalOfTickets = ticketService.getTotalOfWorkloads(userid,
+        long totalOfTickets = ticketService.getTotalOfTickets(userid,
                 searchTerm, fromDate, toDate,
                 categoryid, priorityid, creatorid,
                 teamid, assigneeid, sla,

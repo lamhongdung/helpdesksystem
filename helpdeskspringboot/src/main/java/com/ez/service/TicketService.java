@@ -138,7 +138,7 @@ public class TicketService {
     }
 
     // calculate total of tickets based on the search criteria
-    public long getTotalOfWorkloads(long userid,
+    public long getTotalOfTickets(long userid,
                                     String searchTerm, String fromDate, String toDate,
                                     String categoryid, String priorityid, String creatorid,
                                     String teamid, String assigneeid, String sla,

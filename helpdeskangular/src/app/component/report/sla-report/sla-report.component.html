@@ -1,0 +1,265 @@
+<!-- {{reportForm.value | json}} -->
+
+<!-- "SLA report" -->
+<div class="container">
+
+  <!-- title -->
+  <div>
+    <h2 style="text-align: center">SLA report</h2>
+    <hr width="100%">
+  </div>
+
+  <!-- filter -->
+  <div class="container">
+
+    <!-- Report Form -->
+    <form [formGroup]="reportForm" (ngSubmit)="ngOnInit()">
+
+      <!-- the "Report form"-->
+      <div class="search row d-flex justify-content-md-end mb-4">
+
+        <!-- fromDate -->
+        <div class="col-md-3 form-group" style="text-align: center">
+
+          <!-- label -->
+          <label for="fromDate">From date</label>
+
+          <!-- date -->
+          <!-- default value = first day of current month(ex: 2023-04-01) -->
+          <input id="fromDate" class="form-control" type="date" formControlName="fromDate"
+            [tooltip]="tooltips.get('fromDate')" theme="light" placement="top">
+        </div>
+
+        <!-- toDate -->
+        <div class="col-md-3 form-group" style="text-align: center">
+
+          <!-- label -->
+          <label for="toDate">To date</label>
+
+          <!-- date. -->
+          <!-- default value = current date(ex: 2023-04-18) -->
+          <input id="toDate" class="form-control" type="date" formControlName="toDate"
+            [tooltip]="tooltips.get('toDate')" theme="light" placement="top">
+        </div>
+
+        <!-- team = team id + name -->
+        <div class="col-md-3 form-group" style="text-align: center">
+
+          <!-- label -->
+          <label for="teamid">Team</label>
+
+          <!-- dropdown -->
+          <select id="teamid" class="form-control" formControlName="teamid" [tooltip]="tooltips.get('teamid')"
+            theme="light" placement="top">
+            <!-- default value = 0(All)(is set in the typescript code) -->
+            <option *ngFor="let e of teams" [value]="e.id">
+              {{e.description}}</option>
+          </select>
+        </div>
+
+        <!-- the "View" button -->
+        <div class="col-md-3">
+          <!-- break a line(insert a line break(carriage-return)) -->
+          <br>
+          <!-- "View button" -->
+          <!-- mt-md-2: align the "View" button with other controls in horizontal -->
+          <button id="viewButton" class="btn btn-primary mt-md-2" style="width: 100%"
+            [tooltip]="tooltips.get('viewButton')" theme="light" placement="bottom">
+            <i class="fa fa-search"></i>
+            View
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+
+  <!-- 2nd horizontal -->
+  <div>
+    <hr width="100%">
+  </div>
+
+  <div class="container">
+
+    <!-- table -->
+    <!-- <div class="container"> -->
+
+      <!-- table1: summary table -->
+      <table class="table-sm">
+        <!-- table1(summary) header -->
+        <thead style="text-align: center;">
+          <tr>
+            <!-- total of tickets -->
+            <th class="headerTable1" scope="col">Total of tickets </th>
+
+            <!-- total of ontime tickets -->
+            <th class="headerTable1" scope="col">Ontime tickets</th>
+
+            <!-- total of lated tickets -->
+            <th class="headerTable1" scope="col">Lated tickets</th>
+
+            <!-- Number of tickets -->
+            <th class="headerTable1" scope="col">% SLA</th>
+
+          </tr>
+        </thead>
+
+        <!-- table1(summary) detail -->
+        <tbody style="text-align: center">
+
+          <tr class="detailTable1">
+
+            <!-- total of tickets -->
+            <td tooltip="Total of tickets between 'From date' and 'To date', and based on team filter" theme="light"
+              placement="bottom"> {{slaReportHeader?.numOfTickets}}</td>
+
+            <!-- total of ontime tickets -->
+            <td tooltip="Total of on time tickets between 'From date' and 'To date', and based on team filter"
+              theme="light" placement="bottom"> {{slaReportHeader?.numOfOntimeTickets}}</td>
+
+            <!-- total of lated tickets -->
+            <td tooltip="Total of lated tickets between 'From date' and 'To date', and based on team filter"
+              theme="light" placement="bottom"> {{slaReportHeader?.numOfLatedTickets}}</td>
+
+            <!-- SLA percentage -->
+            <td tooltip="SLA percentage = ('Ontime tickets'/'Total of tickets')" theme="light" placement="bottom">
+              {{slaReportHeader?.slaPercent | percent:'1.0-1'}}</td>
+          </tr>
+        </tbody>
+      </table>
+    <!-- </div> -->
+
+    <!-- table2 -->
+    <!-- <div class="container"> -->
+
+      <!-- table2 -->
+      <table class="table table-hover table-striped table-bordered">
+        <!-- table2 header -->
+        <thead>
+          <tr class="bg-table-header">
+
+            <!-- Order -->
+            <!-- scope="col": specifies that the cell is a header for a column -->
+            <th scope="col" style="width: 5%" tooltip="Order" theme="light" placement="bottom">
+              Ord
+            </th>
+
+            <!-- Priority = id + name + resolveIn(hours) -->
+            <th scope="col" style="width: 23%"
+              tooltip="- Priority.<br>- Values include: id + name + number of hours to resolve ticket" theme="light"
+              placement="bottom">Priority</th>
+
+            <!-- team = id + name -->
+            <th scope="col" style="width: 20%" tooltip="- Team.<br>- Values include: id + name" theme="light"
+              placement="bottom">Team
+            </th>
+
+            <!-- number of tickets -->
+            <th scope="col" style="width: 15%"
+              tooltip="Number of tickets between 'From date' and 'To date' of each [Priority, Team]" theme="light"
+              placement="bottom">Number of tickets
+            </th>
+
+            <!-- Number of ontime tickets -->
+            <th scope="col" style="width: 13%" tooltip="Number of on time tickets from 'from date' to 'to date'"
+              theme="light" placement="bottom">
+              Ontime tickets</th>
+
+            <!-- Number of lated tickets -->
+            <th scope="col" style="width: 11%" tooltip="Number of lated tickets from 'from date' to 'to date'"
+              theme="light" placement="bottom"> Lated tickets</th>
+
+            <!-- SLA percentage -->
+            <th scope="col" style="width: 8%" tooltip="SLA(Service Level Agreement) percentage" theme="light"
+              placement="bottom">
+              % SLA</th>
+
+          </tr>
+        </thead>
+
+        <!-- table2 detail -->
+        <tbody style="text-align: center">
+
+          <tr *ngFor="let rpt of slaReportDetails, index as i">
+
+            <!-- column: order(line number) -->
+            <td style="text-align: right">
+              {{indexBasedPage(pageSize, currentPage, i)}}</td>
+
+            <!-- column: Priority = id + name + resolveIn(hours) -->
+            <td style="text-align: left">{{rpt.priority}} </td>
+
+            <!-- column: Team = id + name -->
+            <td style="text-align: left">{{rpt.team}} </td>
+
+            <!-- column: Number of tickets -->
+            <td style="text-align: right"> {{rpt.numOfTickets}}</td>
+
+            <!-- column: Number of ontime tickets -->
+            <td style="text-align: right"> {{rpt.numOfOntimeTickets}}</td>
+
+            <!-- column: Number of lated tickets -->
+            <td style="text-align: right"> {{rpt.numOfLatedTickets}}</td>
+
+            <!-- column: SLA percentage -->
+            <!-- '1.0-1': means: -->
+            <!--    - at least 1 digit on the left of '.' and -->
+            <!--    - from zero to 1 digit on the right of '.' -->
+            <td style="text-align: right"> {{rpt.slaPercent | percent:'1.0-1'}}</td>
+
+          </tr>
+        </tbody>
+      </table>
+    <!-- </div> -->
+
+    <!-- pagination -->
+
+    <!-- only display the pagination when totalPages > 0 -->
+    <div class="container mt-3" *ngIf="totalPages > 0">
+      <nav aria-label="Page navigation">
+        <ul class="pagination d-flex justify-content-md-end justify-content-center">
+
+          <!-- move to the "first page" -->
+          <li class="page-item"><button class="page-link" (click)="moveFirst()" [disabled]="currentPage==1"
+              [tooltip]="tooltipFirstPage" theme="light" placement="bottom">First</button>
+          </li>
+
+          <!-- move to the "previous page" -->
+          <li class="page-item"><button class="page-link" (click)="movePrevious()" [disabled]="currentPage==1"
+              [tooltip]="tooltipPreviousPage" theme="light" placement="bottom">Previous</button></li>
+
+          <!--  -->
+          <li class="page-item col-md-1 col-2 px-0">
+            <div class="input-group">
+              <!-- textbox to input the Page number -->
+              <!-- rounded-0: have no round at corners -->
+              <input type="number" min="1" [max]="totalPages" class="form-control rounded-0"
+                aria-describedby="basic-addon1" [value]="currentPage"
+                (change)="changePageNumber($any($event.target).value)" [tooltip]="tooltipCurrentPage" theme="light"
+                placement="bottom">
+              <!-- total pages -->
+              <div class="input-group-prepend">
+                <span class="input-group-text" id="basic-addon1" [tooltip]="tooltipTotalPages" theme="light"
+                  placement="bottom">/{{totalPages}}</span>
+              </div>
+            </div>
+          </li>
+
+          <!-- the "Go" button -->
+          <!-- rounded-0: have no round at corners -->
+          <li class="page-item">
+            <button class="btn btn-primary rounded-0" (click)="goPage()" onmouseover="this.style.cursor='pointer'"
+              [tooltip]="tooltipGoPage" theme="light" placement="bottom">Go</button>
+          </li>
+
+          <!-- the "Next" button -->
+          <li class="page-item"><button class="page-link" (click)="moveNext()" [disabled]="currentPage==totalPages"
+              [tooltip]="tooltipNextPage" theme="light" placement="bottom">Next</button></li>
+
+          <!-- the "Last" button -->
+          <li class="page-item"><button class="page-link" (click)="moveLast()" [disabled]="currentPage==totalPages"
+              [tooltip]="tooltipLastPage" theme="light" placement="bottom">Last</button></li>
+
+        </ul>
+      </nav>
+    </div>
+  </div>

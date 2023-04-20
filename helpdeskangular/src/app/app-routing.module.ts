@@ -27,6 +27,7 @@ import { UserViewComponent } from './component/user/user-view/user-view.componen
 import { AuthGuard } from './guard/auth.guard';
 import { CommentAddComponent } from './component/ticket/comment-add/comment-add.component';
 import { WorkloadReportComponent } from './component/report/workload-report/workload-report.component';
+import { SlaReportComponent } from './component/report/sla-report/sla-report.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '/login', pathMatch: 'full' },
@@ -190,6 +191,13 @@ const routes: Routes = [
     path: 'report-workload', component: WorkloadReportComponent, canActivate: [AuthGuard],
     data: {
       roles: ['ROLE_SUPPORTER', 'ROLE_ADMIN']
+    }
+  },
+  // SLA report
+  {
+    path: 'report-sla', component: SlaReportComponent, canActivate: [AuthGuard],
+    data: {
+      roles: ['ROLE_CUSTOMER','ROLE_SUPPORTER', 'ROLE_ADMIN']
     }
   },
   // if paths are not in the above list then redirects to path '/users-list'

@@ -5,6 +5,8 @@ import { ShareService } from './share.service';
 import { WorkloadReportResponse } from '../payload/WorkloadReportReponse';
 import { Observable } from 'rxjs';
 import { DropdownResponse } from '../payload/DropdownResponse';
+import { SlaReportDetail } from '../payload/SlaReportDetail';
+import { SlaReportHeader } from '../payload/SlaReportHeader';
 
 @Injectable({
   providedIn: 'root'
@@ -22,6 +24,10 @@ export class ReportService {
     private http: HttpClient,
     private shareService: ShareService
   ) { }
+
+  //
+  // 'Workload report'
+  //
 
   // view 'workload report' by page and based on the filter criteria
   viewWorkloadReport(pageNumber: number, fromDate: string, toDate: string, teamid: string, supporterid: string):
@@ -63,5 +69,45 @@ export class ReportService {
 
   } // end of getSupporters()
 
+  //
+  // 'SLA report'
+  //
+
+
+  // get number of tickets between fromDate and toDate by user id and based on
+  // team filter and group by [priority, team]
+  viewSlaReportDetail(userid: number, pageNumber: number, fromDate: string, toDate: string, teamid: string):
+    Observable<SlaReportDetail[]> {
+
+    return this.http.get<SlaReportDetail[]>(
+
+      `${this.shareService.host}/report-sla-detail?userid=${userid}&pageNumber=${pageNumber}&pageSize=${this.shareService.pageSize}&fromDate=${fromDate}&toDate=${toDate}&teamid=${teamid}`
+    )
+
+  } // end of viewSlaReportDetail()
+
+  // get 'total of tickets', 'total of ontime tickets', 'total of lated tickets' and SLA percentage
+  // by user id and based on filter criteria[fromDate, toDate, team]
+  viewSlaReportHeader(userid: number, fromDate: string, toDate: string, teamid: string):
+    Observable<SlaReportHeader> {
+
+    // console.log(`${this.shareService.host}/report-sla-header?userid=${userid}&fromDate=${fromDate}&toDate=${toDate}&teamid=${teamid}`);
+
+    return this.http.get<SlaReportHeader>(
+
+      `${this.shareService.host}/report-sla-header?userid=${userid}&fromDate=${fromDate}&toDate=${toDate}&teamid=${teamid}`
+    )
+
+  } // end of viewSlaReportHeader()
+
+  // count total of SLA records by user id and based on filter criteria[team] for pagination.
+  getTotalOfSla(userid: number, fromDate: string, toDate: string, teamid: string):
+    Observable<number> {
+
+    return this.http.get<number>(
+      `${this.shareService.host}/total-of-sla?userid=${userid}&fromDate=${fromDate}&toDate=${toDate}&teamid=${teamid}`
+    );
+
+  } // end of getTotalOfSla()
 
 } // end of class ReportService

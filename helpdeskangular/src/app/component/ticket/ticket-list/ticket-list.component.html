@@ -328,8 +328,10 @@
 
           <!-- column: Subject -->
           <!-- navigate to the "/ticket-view/{ticketid}" when user clicks on the table(except the column "Action") -->
-          <td style="text-align: left" class="pointer-link" (click)="viewTicket(ticket.ticketid)"
+          <!-- <td style="text-align: left" class="pointer-link" (click)="viewTicket(ticket.ticketid)"
             [tooltip]="ticket.content" theme="light" placement="bottom">{{ticket.subject}}
+          </td> -->
+          <td style="text-align: left" class="pointer-link" (click)="viewTicket(ticket.ticketid)">{{ticket.subject}}
           </td>
 
           <!-- column: Creator Name. -->
@@ -365,8 +367,8 @@
             <!-- all authenticated users can see the "Add comment" button. -->
             <!-- if ticketStatusid is '4'(Closed) or '5'(Cancel) then disables these 2 buttons -->
             <a [ngClass]="(ticket.ticketStatusid===4 || ticket.ticketStatusid===5)? 'disabled-link btn btn-secondary mr-1' : 'btn btn-info mr-1'"
-              [routerLink]="['/tickets/', ticket.ticketid,'comment-add']" tooltip="Add comment" theme="light" placement="bottom"><i
-                class="fa fa-plus"></i></a>
+              [routerLink]="['/tickets/', ticket.ticketid,'comment-add']" tooltip="Add comment" theme="light"
+              placement="bottom"><i class="fa fa-plus"></i></a>
           </td>
 
           <!-- column: SLA -->

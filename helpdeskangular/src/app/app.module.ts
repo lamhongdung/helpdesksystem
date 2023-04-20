@@ -45,6 +45,7 @@ import { QuillModule } from 'ngx-quill';
 import { NgxEditorModule } from 'ngx-editor';
 import { CommentAddComponent } from './component/ticket/comment-add/comment-add.component';
 import { WorkloadReportComponent } from './component/report/workload-report/workload-report.component';
+import { SlaReportComponent } from './component/report/sla-report/sla-report.component';
 
 @NgModule({
   declarations: [
@@ -76,6 +77,7 @@ import { WorkloadReportComponent } from './component/report/workload-report/work
     TicketViewComponent,
     CommentAddComponent,
     WorkloadReportComponent,
+    SlaReportComponent,
   ],
   imports: [
     NgMultiSelectDropDownModule.forRoot(),
