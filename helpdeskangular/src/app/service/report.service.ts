@@ -111,12 +111,10 @@ export class ReportService {
 
   } // end of getTotalOfSla()
 
-  // get 'total of tickets', 'total of ontime tickets', 'total of lated tickets' and SLA percentage
-  // by user id and based on filter criteria[fromDate, toDate, team]
+  // get new tickets last 7 days by user id and report date
   viewLast7DaysReport(userid: number, reportDate: string):
-    Observable<Last7DaysReportResponse[]> {
 
-    // console.log(`${this.shareService.host}/report-sla-header?userid=${userid}&fromDate=${fromDate}&toDate=${toDate}&teamid=${teamid}`);
+    Observable<Last7DaysReportResponse[]> {
 
     return this.http.get<Last7DaysReportResponse[]>(
 

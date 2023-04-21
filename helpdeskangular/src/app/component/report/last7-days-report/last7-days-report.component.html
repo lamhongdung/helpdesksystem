@@ -16,22 +16,23 @@
         <form [formGroup]="reportForm" (ngSubmit)="ngOnInit()">
 
             <!-- the "Report form"-->
-            <div class="search row d-flex justify-content-md-end mb-4">
+            <!-- <div class="search row d-flex justify-content-md-end mb-4"> -->
+            <div class="search row d-flex justify-content-md-center mb-4">
 
                 <!-- ReportDate -->
-                <div class="col-md-2 form-group" style="text-align: center">
+                <div class="col-md-3 form-group" style="text-align: center">
 
                     <!-- label -->
-                    <label for="reportDate">Report date</label>
+                    <label for="reportDate">Report date(mm/dd/yyyy)</label>
 
                     <!-- date -->
                     <!-- default value = current date(ex: 2023-04-21) -->
                     <input id="reportDate" class="form-control" type="date" formControlName="reportDate"
-                        [tooltip]="tooltips.get('reportDate')" theme="light" placement="top">
+                        [tooltip]="tooltips.get('reportDate')" theme="light" placement="top" (change)="ngOnInit()">
                 </div>
 
                 <!-- the "View" button -->
-                <div class="col-md-2">
+                <div class="col-md-3">
                     <!-- break a line(insert a line break(carriage-return)) -->
                     <br>
                     <!-- "View button" -->
@@ -50,57 +51,93 @@
     <hr width="100%">
 
     <div class="container">
+        <div class="row mt-5">
 
-        <!-- summary table -->
-        <table class="table-sm">
-            <!-- header of summary table -->
-            <thead style="text-align: center;">
-                <tr>
-                    <!-- total of new tickets -->
-                    <th class="headerTable1" scope="col">New tickets </th>
+            <!-- the "Left" column -->
+            <div class="col-md-5">
+                <div class="container">
 
-                    <!-- total of solved tickets -->
-                    <th class="headerTable1" scope="col">Solved tickets</th>
+                    <!-- summary table -->
+                    <table class="table-sm">
+                        <!-- header of summary table -->
+                        <thead style="text-align: center;">
+                            <tr>
+                                <!-- total of new tickets -->
+                                <th class="headerTable1" scope="col">New tickets </th>
 
-                    <!-- total of closed tickets -->
-                    <th class="headerTable1" scope="col">Closed tickets</th>
+                                <!-- total of solved tickets -->
+                                <th class="headerTable1" scope="col">Solved tickets</th>
 
-                    <!-- Average solved time -->
-                    <th class="headerTable1" scope="col">Average solved time</th>
+                            </tr>
+                        </thead>
 
-                </tr>
-            </thead>
+                        <!-- detail of summary table -->
+                        <tbody style="text-align: center">
 
-            <!-- detail of summary table -->
-            <tbody style="text-align: center">
+                            <tr class="detailTable1">
 
-                <tr class="detailTable1">
+                                <!-- total of new tickets last 7 days -->
+                                <td tooltip="Total of new tickets last 7 days" theme="light" placement="bottom">
+                                    {{totalOfNewTickets}}</td>
 
-                    <!-- total of new tickets -->
-                    <td tooltip="Total of new tickets last 7 days" theme="light" placement="bottom">
-                        {{totalOfNewTickets}}</td>
+                                <!-- total of solved tickets last 7 days -->
+                                <td tooltip="Total of solved tickets last 7 days" theme="light" placement="bottom">
+                                    {{totalOfSolvedTickets}}</td>
 
-                    <!-- total of solved tickets -->
-                    <td tooltip="Total of solved tickets last 7 days" theme="light" placement="bottom">
-                        {{totalOfSolvedTickets}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
 
-                    <!-- total of lated tickets -->
-                    <td tooltip="Total of lated tickets between 'From date' and 'To date', and based on team filter"
-                        theme="light" placement="bottom"> {{totalOfClosedTickets}}</td>
+                    <!-- summary table -->
+                    <table class="table-sm">
+                        <!-- header of summary table -->
+                        <thead style="text-align: center;">
+                            <tr>
 
-                    <!-- SLA percentage -->
-                    <td tooltip="SLA percentage = ('Ontime tickets'/'Total of tickets')" theme="light"
-                        placement="bottom">
-                        {{this.secondsToDhms(avgSolvedTime)}}</td>
-                </tr>
-            </tbody>
-        </table>
+                                <!-- total of closed tickets -->
+                                <th class="headerTable1" scope="col">Closed tickets</th>
 
-        <!-- bar chart -->
-        <div class="container">
-            <div style="display: block; width: 800px; height: 300px;">
-                <canvas baseChart [data]="salesData" [type]="'bar'" [options]="chartOptions">
-                </canvas>
+                                <!-- Average time to resolve 'Resolved'/'Closed' tickets -->
+                                <th class="headerTable1" scope="col">Average solved time</th>
+
+                            </tr>
+                        </thead>
+
+                        <!-- detail of summary table -->
+                        <tbody style="text-align: center">
+
+                            <tr class="detailTable1">
+
+                                <!-- total of closed tickets last 7 days -->
+                                <td tooltip="Total of closed tickets last 7 days" theme="light" placement="bottom">
+                                    {{totalOfClosedTickets}}</td>
+
+                                <!-- average spent time for 'Resolved'/'Closed' tickets  -->
+                                <td tooltip="- Average spent time for 'Resolved'/'Closed' tickets.<br>- 'Average solved time' = (spent time for 'solved'/'closed') / (number of solved tickets + number of closed tickets).<br>- Format result is in 'x days y hours z minutes'"
+                                    theme="light" placement="bottom">
+                                    {{this.displayAvgSolvedTime(avgSolvedHour)}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                </div>
+            </div>
+
+            <!-- the "Right" column -->
+            <div class="col-md-7">
+                <!-- bar chart -->
+                <div class="container">
+                    <div style="display: block; width: 500px; height: 290px;">
+                        <canvas baseChart [data]="last7DaysData" [type]="'bar'" [options]="chartOptions">
+                        </canvas>
+                    </div>
+
+                </div>
             </div>
 
         </div>
+
+
+
+    </div>
+</div>

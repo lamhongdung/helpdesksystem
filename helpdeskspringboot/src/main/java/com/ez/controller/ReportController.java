@@ -123,8 +123,7 @@ public class ReportController {
 
     }
 
-    // get number of tickets between fromDate and toDate by user id and based on
-    // team filter and group by [priority, team]
+    // get number of new tickets 'last 7 days' by user id
     //
     // all authenticated users can access this resource.
     @GetMapping("/report-last7days")
@@ -133,8 +132,7 @@ public class ReportController {
             @RequestParam String reportDate
     ) {
 
-        // get number of tickets between fromDate and toDate by user id and based on
-        // team filter and group by [priority, team]
+        // get number of new tickets 'last 7 days' by user id
         List<Last7DaysReportResponse> last7DaysReport =
                 reportService.viewLast7DaysReport(userid, reportDate);
 

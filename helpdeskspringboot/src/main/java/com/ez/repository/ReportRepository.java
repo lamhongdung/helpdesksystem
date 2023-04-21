@@ -100,8 +100,7 @@ public interface ReportRepository extends JpaRepository<Ticket, Long> {
                                 @Param("toDate") String toDate,
                                 @Param("teamid") String teamid);
 
-    // get number of tickets between fromDate and toDate by user id and based on
-    // team filter and group by [priority, team]
+    // get number of new tickets 'last 7 days' by user id
     @Query(value = "" +
             " {call sp_last7DaysReport( " +
             "                        :userid, " +

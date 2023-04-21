@@ -2,21 +2,20 @@ export class Last7DaysReportResponse {
 
     constructor(
 
-        // priority = id + name + resolveIn(hours)
+        // weekday + day + month. ex: Fri-21/4
         public dayMonth: string,
 
-        // team = id + name + assignment method
+        // number of new tickets
         public numOfNewTickets: number,
 
-        // number of tickets from fromDate to toDate of each [priorityid, teamid]
+        // number of solved tickets
         public numOfSolvedTickets: number,
 
-        // number of ontime tickets
+        // number of closed tickets
         public numOfClosedTickets: number,
 
-        // number of lated tickets
+        // total spent hours for 'Resolved'/'Closed' tickets
         public totalSpentHour: number
-
 
 
     ) {

@@ -68,14 +68,12 @@ public class ReportService {
         return reportRepository.getTotalOfSla(userid, fromDate, toDate, teamid);
     }
 
-    // get number of tickets between fromDate and toDate by user id and based on
-    // team filter and group by [priority, team]
-    public List<Last7DaysReportResponse> viewLast7DaysReport(
-            long userid, String reportDate
+    // get number of new tickets 'last 7 days' by user id
+    public List<Last7DaysReportResponse> viewLast7DaysReport(long userid,
+                                                             String reportDate
     ) {
 
-        LOGGER.info("get number of tickets between fromDate and toDate by user id and based on");
-        LOGGER.info("team filter and group by [priority, team]");
+        LOGGER.info("get number of new tickets 'last 7 days' by user id");
 
         return reportRepository.viewLast7DaysReport(userid, reportDate);
     }
