@@ -1,0 +1,21 @@
+/* header of 'summary' table */
+.headerTable1{
+
+    /* unbold font */
+    font-weight: normal;
+    width: 160px;
+}
+
+/* detail of 'summary' table */
+.detailTable1{
+    font-weight: bold;
+
+    /* extra large font size */
+    /* font-size: xx-large; */
+    font-size: x-large;
+
+    /* clear background corlor */
+    background-color: transparent !important;
+}
+
+

@@ -91,9 +91,9 @@ public class ReportController {
     // all authenticated users can access this resource.
     @GetMapping("/report-sla-header")
     public ResponseEntity<SlaReportHeader> viewSlaReportHeader(@RequestParam long userid,
-                                                                 @RequestParam String fromDate,
-                                                                 @RequestParam String toDate,
-                                                                 @RequestParam String teamid
+                                                               @RequestParam String fromDate,
+                                                               @RequestParam String toDate,
+                                                               @RequestParam String teamid
     ) {
 
         // get 'total of tickets', 'total of ontime tickets',
@@ -121,6 +121,24 @@ public class ReportController {
 
         return new ResponseEntity<>(totalOfSla, HttpStatus.OK);
 
+    }
+
+    // get number of tickets between fromDate and toDate by user id and based on
+    // team filter and group by [priority, team]
+    //
+    // all authenticated users can access this resource.
+    @GetMapping("/report-last7days")
+    public ResponseEntity<List<Last7DaysReportResponse>> viewLast7DaysReport(
+            @RequestParam long userid,
+            @RequestParam String reportDate
+    ) {
+
+        // get number of tickets between fromDate and toDate by user id and based on
+        // team filter and group by [priority, team]
+        List<Last7DaysReportResponse> last7DaysReport =
+                reportService.viewLast7DaysReport(userid, reportDate);
+
+        return new ResponseEntity<>(last7DaysReport, OK);
     }
 
 }

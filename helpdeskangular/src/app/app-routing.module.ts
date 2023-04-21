@@ -28,6 +28,7 @@ import { AuthGuard } from './guard/auth.guard';
 import { CommentAddComponent } from './component/ticket/comment-add/comment-add.component';
 import { WorkloadReportComponent } from './component/report/workload-report/workload-report.component';
 import { SlaReportComponent } from './component/report/sla-report/sla-report.component';
+import { Last7DaysReportComponent } from './component/report/last7-days-report/last7-days-report.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '/login', pathMatch: 'full' },
@@ -197,7 +198,14 @@ const routes: Routes = [
   {
     path: 'report-sla', component: SlaReportComponent, canActivate: [AuthGuard],
     data: {
-      roles: ['ROLE_CUSTOMER','ROLE_SUPPORTER', 'ROLE_ADMIN']
+      roles: ['ROLE_CUSTOMER', 'ROLE_SUPPORTER', 'ROLE_ADMIN']
+    }
+  },
+  // SLA report
+  {
+    path: 'report-last7days', component: Last7DaysReportComponent, canActivate: [AuthGuard],
+    data: {
+      roles: ['ROLE_CUSTOMER', 'ROLE_SUPPORTER', 'ROLE_ADMIN']
     }
   },
   // if paths are not in the above list then redirects to path '/users-list'

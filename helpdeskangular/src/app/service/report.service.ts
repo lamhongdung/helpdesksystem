@@ -7,6 +7,7 @@ import { Observable } from 'rxjs';
 import { DropdownResponse } from '../payload/DropdownResponse';
 import { SlaReportDetail } from '../payload/SlaReportDetail';
 import { SlaReportHeader } from '../payload/SlaReportHeader';
+import { Last7DaysReportResponse } from '../payload/Last7DaysReportResponse';
 
 @Injectable({
   providedIn: 'root'
@@ -109,5 +110,19 @@ export class ReportService {
     );
 
   } // end of getTotalOfSla()
+
+  // get 'total of tickets', 'total of ontime tickets', 'total of lated tickets' and SLA percentage
+  // by user id and based on filter criteria[fromDate, toDate, team]
+  viewLast7DaysReport(userid: number, reportDate: string):
+    Observable<Last7DaysReportResponse[]> {
+
+    // console.log(`${this.shareService.host}/report-sla-header?userid=${userid}&fromDate=${fromDate}&toDate=${toDate}&teamid=${teamid}`);
+
+    return this.http.get<Last7DaysReportResponse[]>(
+
+      `${this.shareService.host}/report-last7days?userid=${userid}&reportDate=${reportDate}`
+    )
+
+  } // end of viewLast7DaysReport()
 
 } // end of class ReportService

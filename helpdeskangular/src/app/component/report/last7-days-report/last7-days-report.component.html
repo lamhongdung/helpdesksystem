@@ -1,0 +1,106 @@
+<!-- {{reportForm.value | json}} -->
+
+<!-- "Last 7 days report" -->
+<div class="container">
+
+    <!-- title -->
+    <div>
+        <h2 style="text-align: center">Last 7 days report</h2>
+        <hr width="100%">
+    </div>
+
+    <!-- filter -->
+    <div class="container">
+
+        <!-- Report Form -->
+        <form [formGroup]="reportForm" (ngSubmit)="ngOnInit()">
+
+            <!-- the "Report form"-->
+            <div class="search row d-flex justify-content-md-end mb-4">
+
+                <!-- ReportDate -->
+                <div class="col-md-2 form-group" style="text-align: center">
+
+                    <!-- label -->
+                    <label for="reportDate">Report date</label>
+
+                    <!-- date -->
+                    <!-- default value = current date(ex: 2023-04-21) -->
+                    <input id="reportDate" class="form-control" type="date" formControlName="reportDate"
+                        [tooltip]="tooltips.get('reportDate')" theme="light" placement="top">
+                </div>
+
+                <!-- the "View" button -->
+                <div class="col-md-2">
+                    <!-- break a line(insert a line break(carriage-return)) -->
+                    <br>
+                    <!-- "View button" -->
+                    <!-- mt-md-2: align the "View" button with other controls in horizontal -->
+                    <button id="viewButton" class="btn btn-primary mt-md-2" style="width: 100%"
+                        [tooltip]="tooltips.get('viewButton')" theme="light" placement="bottom">
+                        <i class="fa fa-search"></i>
+                        View
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <!-- 2nd horizontal -->
+    <hr width="100%">
+
+    <div class="container">
+
+        <!-- summary table -->
+        <table class="table-sm">
+            <!-- header of summary table -->
+            <thead style="text-align: center;">
+                <tr>
+                    <!-- total of new tickets -->
+                    <th class="headerTable1" scope="col">New tickets </th>
+
+                    <!-- total of solved tickets -->
+                    <th class="headerTable1" scope="col">Solved tickets</th>
+
+                    <!-- total of closed tickets -->
+                    <th class="headerTable1" scope="col">Closed tickets</th>
+
+                    <!-- Average solved time -->
+                    <th class="headerTable1" scope="col">Average solved time</th>
+
+                </tr>
+            </thead>
+
+            <!-- detail of summary table -->
+            <tbody style="text-align: center">
+
+                <tr class="detailTable1">
+
+                    <!-- total of new tickets -->
+                    <td tooltip="Total of new tickets last 7 days" theme="light" placement="bottom">
+                        {{totalOfNewTickets}}</td>
+
+                    <!-- total of solved tickets -->
+                    <td tooltip="Total of solved tickets last 7 days" theme="light" placement="bottom">
+                        {{totalOfSolvedTickets}}</td>
+
+                    <!-- total of lated tickets -->
+                    <td tooltip="Total of lated tickets between 'From date' and 'To date', and based on team filter"
+                        theme="light" placement="bottom"> {{totalOfClosedTickets}}</td>
+
+                    <!-- SLA percentage -->
+                    <td tooltip="SLA percentage = ('Ontime tickets'/'Total of tickets')" theme="light"
+                        placement="bottom">
+                        {{this.secondsToDhms(avgSolvedTime)}}</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <!-- bar chart -->
+        <div class="container">
+            <div style="display: block; width: 800px; height: 300px;">
+                <canvas baseChart [data]="salesData" [type]="'bar'" [options]="chartOptions">
+                </canvas>
+            </div>
+
+        </div>

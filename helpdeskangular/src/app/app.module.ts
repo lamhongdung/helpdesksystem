@@ -46,6 +46,8 @@ import { NgxEditorModule } from 'ngx-editor';
 import { CommentAddComponent } from './component/ticket/comment-add/comment-add.component';
 import { WorkloadReportComponent } from './component/report/workload-report/workload-report.component';
 import { SlaReportComponent } from './component/report/sla-report/sla-report.component';
+import { Last7DaysReportComponent } from './component/report/last7-days-report/last7-days-report.component';
+import { NgChartsModule } from 'ng2-charts';
 
 @NgModule({
   declarations: [
@@ -78,6 +80,7 @@ import { SlaReportComponent } from './component/report/sla-report/sla-report.com
     CommentAddComponent,
     WorkloadReportComponent,
     SlaReportComponent,
+    Last7DaysReportComponent,
   ],
   imports: [
     NgMultiSelectDropDownModule.forRoot(),
@@ -92,7 +95,8 @@ import { SlaReportComponent } from './component/report/sla-report/sla-report.com
     FileUploadModule,
     CKEditorModule,
     QuillModule.forRoot(),
-    NgxEditorModule
+    NgxEditorModule,
+    NgChartsModule
   ],
   providers: [NotificationService, AuthGuard, AuthService, UserService,
     { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },

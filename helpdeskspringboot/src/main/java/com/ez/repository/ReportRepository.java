@@ -1,6 +1,7 @@
 package com.ez.repository;
 
 import com.ez.entity.Ticket;
+import com.ez.payload.Last7DaysReportResponse;
 import com.ez.payload.SlaReportDetail;
 import com.ez.payload.SlaReportHeader;
 import com.ez.payload.WorkloadReportResponse;
@@ -98,5 +99,17 @@ public interface ReportRepository extends JpaRepository<Ticket, Long> {
                                 @Param("fromDate") String fromDate,
                                 @Param("toDate") String toDate,
                                 @Param("teamid") String teamid);
+
+    // get number of tickets between fromDate and toDate by user id and based on
+    // team filter and group by [priority, team]
+    @Query(value = "" +
+            " {call sp_last7DaysReport( " +
+            "                        :userid, " +
+            "                        :reportDate " +
+            "                        )} "
+            , nativeQuery = true)
+    public List<Last7DaysReportResponse> viewLast7DaysReport(@Param("userid") long userid,
+                                                             @Param("reportDate") String fromDate
+    );
 
 }
