@@ -98,7 +98,7 @@
                                 <th class="headerTable1" scope="col">Closed tickets</th>
 
                                 <!-- Average time to resolve 'Resolved'/'Closed' tickets -->
-                                <th class="headerTable1" scope="col">Average solved time</th>
+                                <th class="headerTable1" scope="col" *ngIf="totalOfSolvedTickets > 0 || totalOfClosedTickets > 0">Average solved time</th>
 
                             </tr>
                         </thead>

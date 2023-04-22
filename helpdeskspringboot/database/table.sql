@@ -68,11 +68,6 @@ insert into `user`(id, email, password, firstName, lastName, phone, address, rol
 (27,'dunglh+admin7@gmail.com','$2a$12$CR0useg0GQlwrYMvylhHROZg0Vq5nr7jRILz14lc.ArB9iuw1wsEC','Tiến Linh','Nguyễn','0333333337','','ROLE_ADMIN','Active'),
 (28,'dunglh+admin8@gmail.com','$2a$12$CR0useg0GQlwrYMvylhHROZg0Vq5nr7jRILz14lc.ArB9iuw1wsEC','Thành Chung','Nguyễn','0333333338','','ROLE_ADMIN','Active'),
 (29,'dunglh+admin9@gmail.com','$2a$12$CR0useg0GQlwrYMvylhHROZg0Vq5nr7jRILz14lc.ArB9iuw1wsEC','Hoàng Việt Anh','Bùi','0333333339','','ROLE_ADMIN','Active');
--- other
--- (30,'nguoiquantri@proton.me','$2a$12$CR0useg0GQlwrYMvylhHROZg0Vq5nr7jRILz14lc.ArB9iuw1wsEC','Văn Khiêm','Tô','0555555550','','ROLE_ADMIN','Active'),
--- (31,'dunglh@gmail.com','$2a$12$CR0useg0GQlwrYMvylhHROZg0Vq5nr7jRILz14lc.ArB9iuw1wsEC','Hồng Dũng','Lâm','0555555551','','ROLE_ADMIN','Active'),
--- (32,'nguoihotro@proton.me','$2a$12$CR0useg0GQlwrYMvylhHROZg0Vq5nr7jRILz14lc.ArB9iuw1wsEC','Thu Hiền','Đinh','0555555552','','ROLE_SUPPORTER','Active'),
--- (33,'khachhang_hd@proton.me','$2a$12$CR0useg0GQlwrYMvylhHROZg0Vq5nr7jRILz14lc.ArB9iuw1wsEC','Ngọc Duyên','Trần','0555555553','','ROLE_CUSTOMER','Active');
 
 set foreign_key_checks = 1;
 
@@ -95,15 +90,12 @@ create table `category` (
 ) engine=InnoDB auto_increment=101 default charset=utf8mb4 collate=utf8mb4_0900_ai_ci;
 
 insert into `category`(id, name, status) values 
-(1, 'Laptop', 'Active'),
-(2, 'PC', 'Active'),
-(3, 'Printer', 'Active'),
-(4, 'Networking', 'Active'),
-(5, 'Office365', 'Active'),
-(6, 'Software', 'Active'),
-(7, 'Access card', 'Active'),
-(8, 'Seat', 'Active'),
-(9, 'Other', 'Active');
+(1, 'Hardward(Laptop / PC / Printer)', 'Active'),
+(2, 'Networking', 'Active'),
+(3, 'Software(Office365 / Microsoft project / Visio)', 'Active'),
+(4, 'Access office(access card / face recognition)', 'Active'),
+(5, 'Business trip', 'Active'),
+(6, 'Other', 'Active');
 
 set foreign_key_checks = 1;
 
@@ -159,7 +151,9 @@ create table `team` (
 ) engine=InnoDB auto_increment=101 default charset=utf8mb4 collate=utf8mb4_0900_ai_ci;
 
 insert into `team`(id, name, assignmentMethod, status) values 
-(1, 'Pepsi', 'A', 'Active');
+(1, 'Information technology', 'A', 'Active'),
+(2, 'Human resource', 'A', 'Active'),
+(3, 'Finance', 'A', 'Active');
 
 set foreign_key_checks = 1;
 
@@ -178,10 +172,10 @@ create table `teamSupporter` (
 
 	primary key (`teamid`, `supporterid`),
 
-	constraint `FK_teamid_teamSupporter` foreign key(`teamid`) references `team` (`id`) 
+	constraint `fk_teamid_teamSupporter` foreign key(`teamid`) references `team` (`id`) 
 	on delete no action on update no action,
 
-	constraint `FK_supporterid_teamSupporter` foreign key (`supporterid`) references `user` (`id`) 
+	constraint `fk_supporterid_teamSupporter` foreign key (`supporterid`) references `user` (`id`) 
 	on delete no action on update no action
   
 ) engine=InnoDB auto_increment=101 default charset=utf8mb4 collate=utf8mb4_0900_ai_ci;
@@ -189,7 +183,10 @@ create table `teamSupporter` (
 insert into `teamSupporter`(teamid, supporterid) values 
 (1, 10),
 (1, 11),
-(1, 12);
+(1, 12),
+(2, 13),
+(3, 14);
+
 
 set foreign_key_checks = 1;
 
@@ -238,36 +235,33 @@ create table `ticket` (
 	`assigneeid` int default null,
 	`ticketStatusid` int not null,
 	`content` text not null,
+    
+    -- customFilename = timestamp + UUID + extension(ex: .jpg)
 	`customFilename` varchar(255) default null,
+    
 	`createDatetime` datetime not null,
 	`lastUpdateDatetime` datetime not null,
 	`lastUpdateByUserid` int not null,
     
 	primary key (`ticketid`),
     
-	key `FK_categoryid_ticket` (`categoryid`),
-	key `FK_creatorid_ticket` (`creatorid`),
-	key `FK_teamid_ticket` (`teamid`),
-	key `FK_priorityid_ticket` (`priorityid`),
-	key `FK_ticketStatusid_ticket` (`ticketStatusid`),
-	key `FK_lastUpdateByUserid_ticket` (`lastUpdateByUserid`),
+	key `fk_categoryid_ticket` (`categoryid`),
+	key `fk_creatorid_ticket` (`creatorid`),
+	key `fk_teamid_ticket` (`teamid`),
+	key `fk_priorityid_ticket` (`priorityid`),
+	key `fk_ticketStatusid_ticket` (`ticketStatusid`),
+	key `fk_lastUpdateByUserid_ticket` (`lastUpdateByUserid`),
     
-	constraint `FK_categoryid_ticket` foreign key (`categoryid`) references `category` (`id`),
-	constraint `FK_creatorid_ticket` foreign key (`creatorid`) references `user` (`id`),
-	constraint `FK_priorityid_ticket` foreign key (`priorityid`) references `priority` (`id`),
-	constraint `FK_teamid_ticket` foreign key (`teamid`) references `team` (`id`),
-	constraint `FK_ticketStatusid_ticket` foreign key (`ticketStatusid`) references `ticketstatus` (`statusid`),
-	constraint `FK_lastUpdateByUserid_ticket` foreign key (`lastUpdateByUserid`) references `user` (`id`)
+	constraint `fk_categoryid_ticket` foreign key (`categoryid`) references `category` (`id`),
+	constraint `fk_creatorid_ticket` foreign key (`creatorid`) references `user` (`id`),
+	constraint `fk_priorityid_ticket` foreign key (`priorityid`) references `priority` (`id`),
+	constraint `fk_teamid_ticket` foreign key (`teamid`) references `team` (`id`),
+	constraint `fk_ticketStatusid_ticket` foreign key (`ticketStatusid`) references `ticketstatus` (`statusid`),
+	constraint `fk_lastUpdateByUserid_ticket` foreign key (`lastUpdateByUserid`) references `user` (`id`)
   
 ) engine=InnoDB auto_increment=101 default charset=utf8mb4 collate=utf8mb4_0900_ai_ci;
 
-insert into `ticket`(ticketid, subject, categoryid, creatorid, teamid, priorityid, assigneeid, ticketStatusid, content, customFilename, createDatetime, lastUpdateDatetime, lastUpdateByUserid) values 
-(1,'Laptop bị hỏng',1,1,1,1,10,3,'Laptop bị hỏng. Vui lòng thay laptop mới',null,'2023-03-18 08:30:00','2023-03-18 11:30:00',1),
-(2,'Máy in bị hết mực',3,1,1,1,null,1,'Máy in bị hết mực. Đề nghị thay mực máy in',null,'2023-03-23 22:05:00','2023-03-23 22:05:00',1),
-(3,'Không thể kết nối mạng wifi',4,2,1,2,11,3,'Không tìm thấy mạng wifi nên không thể kết nối internet qua wifi',null,'2023-03-26 11:18:00','2023-03-27 15:18:00',2),
-(4,'Không thể xuất báo cáo từ phần mềm',6,2,1,3,11,4,'Không thể xuất báo cáo từ phần. Nhờ đợi kỹ thuật kiểm tra giúp',null,'2023-03-28 08:00:00','2023-03-28 10:00:00',2),
-(5,'Xin cài phần mềm Visio cho laptop',6,1,1,2,11,5,'Nhờ IT cài phần mềm Visio cho máy laptop cá nhân',null,'2023-03-29 10:40:00','2023-03-29 11:00:00',1),
-(6,'Nhờ reset password email account: abc@xyz.com',5,2,1,2,10,2,'Nhờ IT reset password cho email account abc@xyz.com. Cảm ơn IT nhiều!',null,'2023-03-30 21:30:00','2023-03-31 10:00:00',2);
+INSERT INTO `ticket` VALUES (101,'Laptop bị hỏng nhờ IT thay laptop mới dùm',1,1,1,1,10,4,'<p>Dear phòng IT,</p><p>Laptop của mình bị hỏng. Nhờ phòng IT kiểm tra và thay laptop mới dùm.</p><p>Cảm ơn nhiều.</p>','20230422145436_e42c2cc4-0d0b-44ec-8734-de7d27b7d4e0.jpg','2023-04-22 14:54:40','2023-04-22 15:08:56',10);
 
 set foreign_key_checks = 1;
 
@@ -286,21 +280,20 @@ create table `comment` (
 	`commentDescription` text not null,
 	`commenterid` int not null,
 	`commentDatetime` datetime not null,
+    
+	-- commentCustomFilename = timestamp + UUID + extension(ex: .jpg)
 	`commentCustomFilename` varchar(255) default null,
     
 	PRIMARY key (`commentid`),
     
-	key `FK_ticketid_comment` (`ticketid`),
-	key `FK_commenterid_comment` (`commenterid`),
-	constraint `FK_commenterid_comment` foreign key (`commenterid`) references `user` (`id`),
-	constraint `FK_ticketid_comment` foreign key (`ticketid`) references `ticket` (`ticketid`)
+	key `fk_ticketid_comment` (`ticketid`),
+	key `fk_commenterid_comment` (`commenterid`),
+	constraint `fk_commenterid_comment` foreign key (`commenterid`) references `user` (`id`),
+	constraint `fk_ticketid_comment` foreign key (`ticketid`) references `ticket` (`ticketid`)
   
 ) engine=InnoDB auto_increment=101 default charset=utf8mb4 collate=utf8mb4_0900_ai_ci;
 
-insert into `comment`(ticketid, commentid, commentDescription, commenterid, commentDatetime, commentCustomFilename) values 
-(1, 1, 'Sẽ thay laptop mới cho bạn', 10 , '2023-03-19 08:30:00', '20230413161647_f1f239a9-6fed-48ff-a84b-43cea7ffde88.jpg'),
-(1, 2, 'Ok cảm ơn nhiều', 1 , '2023-04-19 18:30:00', ''),
-(3, 3, 'Vui lòng khởi động lại laptop sau đó kết nối lại wifi', 11 , '2023-03-26 13:30:00', '');
+INSERT INTO `comment` VALUES (101,101,'<p>Chào bạn,</p><p>Bạn vui lòng mang laptop lên phòng IT để chúng tôi kiểm tra nhé.</p><p>Cảm ơn bạn nhiều.</p>',10,'2023-04-22 14:56:29',''),(101,102,'<p>Chào bạn,</p><p>Phòng IT đã thay laptop mới cho bạn.</p><p>Cần hỗ trợ gì thêm thì bạn vui lòng liên hệ phòng IT nhé.</p><p>Cảm ơn bạn nhiều.</p>',10,'2023-04-22 14:59:05',''),(101,103,'<p>Cảm ơn phòng IT nhiều nhé!</p>',1,'2023-04-22 15:08:22','');
 
 set foreign_key_checks = 1;
 
@@ -315,14 +308,22 @@ drop table if exists `fileStorage`;
 create table `fileStorage` (
 
 	`id` int not null auto_increment,
+    
+    -- customFilename = timestamp + UUID + extension(ex: .jpg)
 	`customFilename` varchar(255) not null,
+    
+    -- ex: abc.jpg
     `originalFilename` varchar(255) not null,
+    
+    -- ex: 'image/jpeg', 'text/plain'
 	`fileType` varchar(255) not null,
     
 	PRIMARY key (`id`),
     unique (`customFilename`)
       
 ) engine=InnoDB default charset=utf8mb4 collate=utf8mb4_0900_ai_ci;
+
+INSERT INTO `filestorage` VALUES (1,'20230422145436_e42c2cc4-0d0b-44ec-8734-de7d27b7d4e0.jpg','beach4.jpg','image/jpeg');
 
 set foreign_key_checks = 1;
 

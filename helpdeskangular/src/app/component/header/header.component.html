@@ -91,11 +91,11 @@
               Reports
             </a>
             <ul class="dropdown-menu" aria-labelledby="navbarReport">
+              <li><a class="dropdown-item" routerLink="/report-last7days">Last 7 days report</a></li>
+              <li><a class="dropdown-item" routerLink="/report-sla">SLA report</a></li>
               <li><a class="dropdown-item" routerLink="/report-workload"
                   *ngIf="['ROLE_SUPPORTER'].indexOf(loggedInRole)!==-1 || ['ROLE_ADMIN'].indexOf(loggedInRole)!==-1">
                   Workload report</a></li>
-              <li><a class="dropdown-item" routerLink="/report-last7days">Last 7 days report</a></li>
-              <li><a class="dropdown-item" routerLink="/report-sla">SLA report</a></li>
             </ul>
           </li>
         </ul>

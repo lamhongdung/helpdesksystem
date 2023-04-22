@@ -17,7 +17,7 @@ delimiter $$
 -- 		if (report date = '') then consider 'report date' = current date.
 -- -----------------------------------------------------
 
--- customer: 	call sp_last7DaysReport(1,'2023-04-21')
+-- customer: 	call sp_last7DaysReport(1,'2023-04-22')
 -- customer: 	call sp_last7DaysReport(1,'')
 
 -- supporter: 	call sp_last7DaysReport(10,'2023-04-21')
