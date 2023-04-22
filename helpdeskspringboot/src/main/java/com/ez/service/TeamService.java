@@ -2,7 +2,7 @@ package com.ez.service;
 
 import com.ez.payload.DropdownResponse;
 import com.ez.payload.Supporter;
-import com.ez.payload.TeamRequest;
+import com.ez.payload.TeamDTO;
 import com.ez.payload.TeamResponse;
 import com.ez.entity.Team;
 import com.ez.repository.TeamRepository;
@@ -81,16 +81,14 @@ public class TeamService {
     // save team in both tables: team and teamSupporter
     // note:
     //  - class Team: not include supporters
-    //  - class TeamRequest: include supporters
-    public Team createTeam(TeamRequest teamRequest) {
+    //  - class TeamDTO: include supporters
+    public Team createTeam(TeamDTO teamDTO) {
 
         LOGGER.info("create a new team");
-        LOGGER.info("Team is sent from client: " + teamRequest.toString());
+        LOGGER.info("Team is sent from client: " + teamDTO.toString());
 
         // create a new team without supporters
-//        Team newTeam = new Team(teamRequest.getName(), teamRequest.getAssignmentMethod(),
-//                teamRequest.getCalendarid(), teamRequest.getStatus());
-        Team newTeam = new Team(teamRequest.getName(), teamRequest.getAssignmentMethod(), teamRequest.getStatus());
+        Team newTeam = new Team(teamDTO.getName(), teamDTO.getAssignmentMethod(), teamDTO.getStatus());
 
         // save the new team into the "team" table in database.
         // after saving successful then the newTeam will have its id
@@ -98,8 +96,8 @@ public class TeamService {
         LOGGER.info("new team after saved: " + newTeam.toString());
 
         // save (teamid and supporterid) in the "teamSupporter" table in database.
-        // loop through all supporters in the teamRequest
-        teamRequest.getSupporters().forEach(supporter -> teamRepository.saveTeamSupporter(newTeam.getId(), supporter.getId()));
+        // loop through all supporters in the teamDTO
+        teamDTO.getSupporters().forEach(supporter -> teamRepository.saveTeamSupporter(newTeam.getId(), supporter.getId()));
 
         // return team without supporters
         return newTeam;
@@ -108,17 +106,17 @@ public class TeamService {
     // find team by team id.
     // note:
     //  - class Team: not include supporters
-    //  - class TeamRequest: include supporters
+    //  - class TeamDTO: include supporters
     //  - interface DropdownResponse: include 2 columns:
     //      id(getId()) and description(getDescription() = "id" + "lastName" + "firstName" + "email" + "status")
     //  - class Supporter: include 2 columns: id and description
-    public TeamRequest findById(Long id) throws EntityNotFoundException {
+    public TeamDTO findById(Long id) throws EntityNotFoundException {
 
         // team without supporters
         Team team;
 
         // team includes supporters
-        TeamRequest teamRequest = new TeamRequest();
+        TeamDTO teamDTO = new TeamDTO();
 
         //  interface Supporter: include 2 columns: id(getId()) and description(getDescription()).
         //  selected(assigned) supporters
@@ -149,20 +147,19 @@ public class TeamService {
                 supporters.add(new Supporter(selectedSupporter.getId(), selectedSupporter.getDescription())));
 
         //
-        // convert "team(without supporters) + supporters" to teamRequest(includes supporters)
+        // convert "team(without supporters) + supporters" to teamDTO(includes supporters)
         //
-        teamRequest.setId(team.getId());
-        teamRequest.setName(team.getName());
-        teamRequest.setAssignmentMethod(team.getAssignmentMethod());
-//        teamRequest.setCalendarid(team.getCalendarid());
-        teamRequest.setStatus(team.getStatus());
+        teamDTO.setId(team.getId());
+        teamDTO.setName(team.getName());
+        teamDTO.setAssignmentMethod(team.getAssignmentMethod());
+        teamDTO.setStatus(team.getStatus());
 
-        // add supporters to the "teamRequest".
+        // add supporters to the "teamDTO".
         // note: supporters = list of {id, description}
-        teamRequest.setSupporters(supporters);
+        teamDTO.setSupporters(supporters);
 
-        // return teamRequest(include supporters)
-        return teamRequest;
+        // return teamDTO(include supporters)
+        return teamDTO;
     }
 
     // update existing team.
@@ -171,21 +168,20 @@ public class TeamService {
     //  - table teamSupporter: contains 2 columns (teamid, supporterid)
     // note:
     //  - class Team: not include supporters
-    //  - class TeamRequest: include supporters
-    public Team updateTeam(TeamRequest teamRequest) throws EntityNotFoundException {
+    //  - class TeamDTO: include supporters
+    public Team updateTeam(TeamDTO teamDTO) throws EntityNotFoundException {
 
         LOGGER.info("Update team");
-        LOGGER.info("Team is sent from client: " + teamRequest.toString());
+        LOGGER.info("Team is sent from client: " + teamDTO.toString());
 
         // get existing team(persistent)
-        Team existingTeam = teamRepository.findById(teamRequest.getId())
-                .orElseThrow(() -> new EntityNotFoundException(NO_TEAM_FOUND_BY_ID + teamRequest.getId()));
+        Team existingTeam = teamRepository.findById(teamDTO.getId())
+                .orElseThrow(() -> new EntityNotFoundException(NO_TEAM_FOUND_BY_ID + teamDTO.getId()));
 
         // set new values to existing team
-        existingTeam.setName(teamRequest.getName());
-        existingTeam.setAssignmentMethod(teamRequest.getAssignmentMethod());
-//        existingTeam.setCalendarid(teamRequest.getCalendarid());
-        existingTeam.setStatus(teamRequest.getStatus());
+        existingTeam.setName(teamDTO.getName());
+        existingTeam.setAssignmentMethod(teamDTO.getAssignmentMethod());
+        existingTeam.setStatus(teamDTO.getStatus());
 
         // update existing team without supporters
         teamRepository.save(existingTeam);
@@ -195,14 +191,14 @@ public class TeamService {
         //
 
         // delete old data by teamid in the "teamSupporter" table
-        teamRepository.deleteTeamSupporter(teamRequest.getId());
+        teamRepository.deleteTeamSupporter(teamDTO.getId());
 
         //
         // save relation between team and supporters into the "teamSupporter" table.
         //
 
-        // loop through all supporters in the teamRequest.
-        teamRequest.getSupporters().forEach(supporter -> teamRepository.saveTeamSupporter(teamRequest.getId(), supporter.getId()));
+        // loop through all supporters in the teamDTO.
+        teamDTO.getSupporters().forEach(supporter -> teamRepository.saveTeamSupporter(teamDTO.getId(), supporter.getId()));
 
         return existingTeam;
     }

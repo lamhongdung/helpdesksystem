@@ -10,8 +10,6 @@ export class Team {
         public name: string,
         public assignmentMethod: string,
 
-        // public calendarid: number,
-
         // active supporters
         // public supporters: Supporter[] = [],
         public supporters: DropdownResponse[] = [],

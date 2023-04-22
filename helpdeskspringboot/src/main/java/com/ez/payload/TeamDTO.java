@@ -10,9 +10,8 @@ import java.util.List;
 @ToString
 @Getter
 @Setter
-// this class contains data is sent from client when creating team.
-// TeamRequest = Team + supporters.
-public class TeamRequest {
+// TeamDTO = Team + supporters.
+public class TeamDTO {
 
     private Long id;
 
@@ -21,9 +20,6 @@ public class TeamRequest {
 
     @Pattern(regexp = "A|M", message = "Value of the assignment method must be 'A' or 'M'")
     private String assignmentMethod;
-
-//    @Min(value = 1, message = "Value of calendarid must be greater than or equal to 1")
-//    private long calendarid;
 
     @Size(min = 1, message = "Team must have at least 1 supporter")
     private List<Supporter> supporters;

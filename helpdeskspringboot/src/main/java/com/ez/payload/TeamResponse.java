@@ -12,12 +12,6 @@ public interface TeamResponse {
     // "assignmentMethod" column
     String getAssignmentMethod();
 
-//    // "calendarid" column
-//    long getCalendarid();
-//
-//    // "calendarName" column
-//    String getCalendarName();
-
     // "status" column
     String getStatus();
 
