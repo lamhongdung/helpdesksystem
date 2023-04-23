@@ -93,9 +93,10 @@ insert into `category`(id, name, status) values
 (1, 'Hardward(Laptop / PC / Printer)', 'Active'),
 (2, 'Networking', 'Active'),
 (3, 'Software(Office365 / Microsoft project / Visio)', 'Active'),
-(4, 'Access office(access card / face recognition)', 'Active'),
-(5, 'Business trip', 'Active'),
-(6, 'Other', 'Active');
+(4, 'Annual leave', 'Active'),
+(5, 'Access office(access card / face recognition)', 'Active'),
+(6, 'Business trip', 'Active'),
+(7, 'Other', 'Active');
 
 set foreign_key_checks = 1;
 
@@ -152,7 +153,7 @@ create table `team` (
 
 insert into `team`(id, name, assignmentMethod, status) values 
 (1, 'Information technology', 'A', 'Active'),
-(2, 'Human resource', 'A', 'Active'),
+(2, 'Human resource', 'M', 'Active'),
 (3, 'Finance', 'A', 'Active');
 
 set foreign_key_checks = 1;
@@ -261,7 +262,7 @@ create table `ticket` (
   
 ) engine=InnoDB auto_increment=101 default charset=utf8mb4 collate=utf8mb4_0900_ai_ci;
 
-INSERT INTO `ticket` VALUES (101,'Laptop bị hỏng nhờ IT thay laptop mới dùm',1,1,1,1,10,4,'<p>Dear phòng IT,</p><p>Laptop của mình bị hỏng. Nhờ phòng IT kiểm tra và thay laptop mới dùm.</p><p>Cảm ơn nhiều.</p>','20230422145436_e42c2cc4-0d0b-44ec-8734-de7d27b7d4e0.jpg','2023-04-22 14:54:40','2023-04-22 15:08:56',10);
+INSERT INTO `ticket` VALUES (101,'Laptop bị hỏng nhờ IT thay laptop mới dùm',1,1,1,1,10,4,'<p>Dear phòng IT,</p><p>Laptop của mình bị hỏng. Nhờ phòng IT kiểm tra và thay laptop mới dùm.</p><p>Cảm ơn nhiều.</p>','20230422145436_e42c2cc4-0d0b-44ec-8734-de7d27b7d4e0.jpg','2023-04-22 14:54:40','2023-04-22 15:08:56',10),(102,'Laptop không thể kết nối wifi được',2,1,1,1,11,4,'<p>Dear IT,</p><p>Laptop mình không thể kết nối wifi được.</p><p>Nhờ IT kiểm tra giúp.</p><p>Cảm ơn.</p>','20230423102047_ad43fa70-2701-4095-86fa-b284631a3205.jpg','2023-04-23 10:20:52','2023-04-23 10:39:46',11),(103,'Xin nghỉ phép năm',4,1,2,2,13,4,'<p>Dear phòng HR,</p><p>Do có việc cá nhân nên xin phép phòng HR cho mình nghỉ phép ngày 25/4 nhé.</p><p>Cảm ơn nhiều.</p>','','2023-04-23 15:16:08','2023-04-23 15:22:50',13);
 
 set foreign_key_checks = 1;
 
@@ -293,7 +294,7 @@ create table `comment` (
   
 ) engine=InnoDB auto_increment=101 default charset=utf8mb4 collate=utf8mb4_0900_ai_ci;
 
-INSERT INTO `comment` VALUES (101,101,'<p>Chào bạn,</p><p>Bạn vui lòng mang laptop lên phòng IT để chúng tôi kiểm tra nhé.</p><p>Cảm ơn bạn nhiều.</p>',10,'2023-04-22 14:56:29',''),(101,102,'<p>Chào bạn,</p><p>Phòng IT đã thay laptop mới cho bạn.</p><p>Cần hỗ trợ gì thêm thì bạn vui lòng liên hệ phòng IT nhé.</p><p>Cảm ơn bạn nhiều.</p>',10,'2023-04-22 14:59:05',''),(101,103,'<p>Cảm ơn phòng IT nhiều nhé!</p>',1,'2023-04-22 15:08:22','');
+INSERT INTO `comment` VALUES (101,101,'<p>Chào bạn,</p><p>Bạn vui lòng mang laptop lên phòng IT để chúng tôi kiểm tra nhé.</p><p>Cảm ơn bạn nhiều.</p>',10,'2023-04-22 14:56:29',''),(101,102,'<p>Chào bạn,</p><p>Phòng IT đã thay laptop mới cho bạn.</p><p>Cần hỗ trợ gì thêm thì bạn vui lòng liên hệ phòng IT nhé.</p><p>Cảm ơn bạn nhiều.</p>',10,'2023-04-22 14:59:05',''),(101,103,'<p>Cảm ơn phòng IT nhiều nhé!</p>',1,'2023-04-22 15:08:22',''),(102,104,'<p>Chào bạn,</p><p>Bạn vui lòng làm theo hình đính kèm ở đây thử xem nhé!</p><p>Nếu không được nữa thì đem máy lên phòng IT để mình kiểm tra cho nhé!</p><p>Cảm ơn nhiều.</p>',11,'2023-04-23 10:36:01','20230423103516_41bae1e6-6352-4faa-a58e-7e9222b367ea.jpg'),(102,105,'<p>Chào IT,</p><p>Mình đã kết nối wifi được rồi.</p><p>Cảm ơn bạn nhiều nhé!</p>',1,'2023-04-23 10:38:13',''),(103,106,'<p>OK. phòng HR ghi nhận nhé!</p>',13,'2023-04-23 15:18:59','');
 
 set foreign_key_checks = 1;
 
@@ -323,7 +324,7 @@ create table `fileStorage` (
       
 ) engine=InnoDB default charset=utf8mb4 collate=utf8mb4_0900_ai_ci;
 
-INSERT INTO `filestorage` VALUES (1,'20230422145436_e42c2cc4-0d0b-44ec-8734-de7d27b7d4e0.jpg','beach4.jpg','image/jpeg');
+INSERT INTO `filestorage` VALUES (1,'20230422145436_e42c2cc4-0d0b-44ec-8734-de7d27b7d4e0.jpg','beach4.jpg','image/jpeg'),(2,'20230423102047_ad43fa70-2701-4095-86fa-b284631a3205.jpg','leaf1.jpg','image/jpeg'),(3,'20230423103516_41bae1e6-6352-4faa-a58e-7e9222b367ea.jpg','ketnoiwifi.jpg','image/jpeg');
 
 set foreign_key_checks = 1;
 

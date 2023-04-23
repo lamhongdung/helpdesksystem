@@ -1,4 +1,5 @@
 import { AbstractControl } from "@angular/forms";
+import { TicketStatus } from "../enum/TicketStatus";
 
 //------------------------------
 // Change password
@@ -48,6 +49,25 @@ export function validTicketFile(control: AbstractControl): { [key: string]: bool
 
     // in case there is attached file
     return (customFilename !== '') ? null : { 'validTicketFile': true };
+
+}
+
+//------------------------------
+// edit ticket
+//------------------------------
+
+// validate whether ticket status is valid or not.
+export function validTicketStatus(control: AbstractControl): { [key: string]: boolean } | null {
+
+    // get value of "assigneeid"
+    const assigneeid = control.get("assigneeid").value;
+
+    // get value of "ticketStatusid"
+    const ticketStatusid = control.get("ticketStatusid").value;
+
+    // if ticket was already assigned to a supporter and 
+    // ticket status is still 'Open' then inform error to user
+    return (assigneeid >= 1 && ticketStatusid == TicketStatus.Open) ? { 'validTicketStatus': true } : null;
 
 }
 

@@ -139,10 +139,10 @@ public class TicketService {
 
     // calculate total of tickets based on the search criteria
     public long getTotalOfTickets(long userid,
-                                    String searchTerm, String fromDate, String toDate,
-                                    String categoryid, String priorityid, String creatorid,
-                                    String teamid, String assigneeid, String sla,
-                                    String ticketStatusid) {
+                                  String searchTerm, String fromDate, String toDate,
+                                  String categoryid, String priorityid, String creatorid,
+                                  String teamid, String assigneeid, String sla,
+                                  String ticketStatusid) {
 
         LOGGER.info("get total of tickets");
 
@@ -183,43 +183,68 @@ public class TicketService {
     public HttpResponse updateTicket(TicketEditRequest ticketEditRequest)
             throws EntityNotFoundException, BadDataException {
 
+        long nextTicketStatusid;
+
         LOGGER.info("Update ticket");
         LOGGER.info("Ticket is sent from client: " + ticketEditRequest.toString());
+        LOGGER.info("Ticket id: " + ticketEditRequest.getTicketid());
 
         // get existing team(persistent)
         Ticket existingTicket = ticketRepository.findById(ticketEditRequest.getTicketid())
                 .orElseThrow(() -> new EntityNotFoundException(NO_TICKET_FOUND_BY_ID + ticketEditRequest.getTicketid()));
 
+        LOGGER.info("Existing ticket:" + existingTicket.toString());
+
         // do not allow user modifies the 'Closed' tickets
-        if (existingTicket.getTicketStatusid() == TICKET_STATUS_CLOSED){
+        if (existingTicket.getTicketStatusid() == TICKET_STATUS_CLOSED) {
             throw new BadDataException("Ticket status is 'Closed', so you cannot modify this ticket.");
         }
 
         // do not allow user modifies the 'Cancel' tickets
-        if (existingTicket.getTicketStatusid() == TICKET_STATUS_CANCEL){
+        if (existingTicket.getTicketStatusid() == TICKET_STATUS_CANCEL) {
             throw new BadDataException("Ticket status is 'Cancel', so you cannot modify this ticket.");
         }
 
         // set new values to existing ticket
-//        existingTicket.setLastUpdateByUserid(ticketEditRequest.getLastUpdateByUserid());
-//        existingTicket.setCategoryid(ticketEditRequest.getCategoryid());
-//        existingTicket.setPriorityid(ticketEditRequest.getPriorityid());
-//        existingTicket.setAssigneeid(ticketEditRequest.getAssigneeid());
-//        existingTicket.setTicketStatusid(ticketEditRequest.getTicketStatusid());
-//        ticketRepository.save(existingTicket);
+        existingTicket.setCategoryid(ticketEditRequest.getCategoryid());
+        existingTicket.setPriorityid(ticketEditRequest.getPriorityid());
+        existingTicket.setAssigneeid(ticketEditRequest.getAssigneeid());
 
-        // save changes of ticket
-        ticketRepository.updateTicket(
-                ticketEditRequest.getTicketid(),
-                ticketEditRequest.getCategoryid(),
-                ticketEditRequest.getPriorityid(),
-                ticketEditRequest.getAssigneeid(),
-                ticketEditRequest.getTicketStatusid(),
-                ticketEditRequest.getToBeUpdatedByUserid()
-        );
+        //
+        // next ticket status id
+        //
+
+        // if ticket was alreasy assigned to a certain supporter
+        if (ticketEditRequest.getAssigneeid() >= 1) {
+
+            // next ticket status cannot be 'Open'. next ticket status must be greater than 'Open'
+            nextTicketStatusid = ticketEditRequest.getTicketStatusid() > TICKET_STATUS_ASSIGNED ?
+                    ticketEditRequest.getTicketStatusid() : TICKET_STATUS_ASSIGNED;
+
+        }else{ // ticket has not yet assigned to a certain supporter
+            nextTicketStatusid = TICKET_STATUS_OPEN;
+        }
+
+//        existingTicket.setTicketStatusid(ticketEditRequest.getTicketStatusid());
+        existingTicket.setTicketStatusid(nextTicketStatusid);
+        existingTicket.setLastUpdateByUserid(ticketEditRequest.getToBeUpdatedByUserid());
+
+        ticketRepository.save(existingTicket);
+
+        LOGGER.info("ticketEditRequest.getAssigneeid():" + ticketEditRequest.getAssigneeid());
+
+//        // save changes of ticket
+//        ticketRepository.updateTicket(
+//                ticketEditRequest.getTicketid(),
+//                ticketEditRequest.getCategoryid(),
+//                ticketEditRequest.getPriorityid(),
+//                ticketEditRequest.getAssigneeid(),
+//                ticketEditRequest.getTicketStatusid(),
+//                ticketEditRequest.getToBeUpdatedByUserid()
+//        );
 
         return new HttpResponse(OK.value(),
-                "Ticket '" + ticketEditRequest.getTicketid() + "' is updated successful.");
+                "Ticket '" + ticketEditRequest.getTicketid() + "' was updated successful.");
 
     }
 

@@ -296,6 +296,11 @@
                                     <small>{{e.message}}</small>
                                 </div>
                             </div>
+                            <!-- Ticket was assigned to supporter. So ticket status cannot be 'Open' -->
+                            <div *ngIf="ticketForm.errors?.validTicketStatus"
+                                class="text-danger">
+                                <small>Ticket was assigned to supporter. So ticket status cannot be 'Open'</small>
+                            </div>
                         </div>
                     </div>
 

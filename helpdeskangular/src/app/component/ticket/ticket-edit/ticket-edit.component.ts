@@ -3,7 +3,7 @@ import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 import { Editor, Toolbar } from 'ngx-editor';
-import { Observable, Subscription } from 'rxjs';
+import { Subscription } from 'rxjs';
 import { CustomHttpResponse } from 'src/app/payload/CustomHttpResponse';
 import { TicketEditViewResponse } from 'src/app/payload/TicketEditViewResponse';
 import { NotificationType } from 'src/app/enum/NotificationType.enum';
@@ -18,6 +18,7 @@ import { AuthService } from 'src/app/service/auth.service';
 import { ShareService } from 'src/app/service/share.service';
 import { CommentService } from 'src/app/service/comment.service';
 import { CommentResponse } from 'src/app/payload/CommentResponse';
+import { validTicketStatus } from 'src/app/validator/validator';
 
 @Component({
   selector: 'app-ticket-edit',
@@ -120,44 +121,50 @@ export class TicketEditComponent {
     // 
     this.editor = new Editor();
 
-    this.ticketForm = this.formBuilder.group({
+    this.ticketForm = this.formBuilder.group(
+      {
 
-      ticketid: [''],
-      // creator id + creator fullname
-      creator: [''],
+        ticketid: [''],
+        // creator id + creator fullname
+        creator: [''],
 
-      creatorPhone: [''],
-      creatorEmail: [''],
-      subject: [''],
+        creatorPhone: [''],
+        creatorEmail: [''],
+        subject: [''],
 
-      // disable ticket content(rich text editor)
-      content: [{ value: '', disabled: true }],
+        // disable ticket content(rich text editor)
+        content: [{ value: '', disabled: true }],
 
-      // team id + team name + assignment method 
-      team: [''],
-      // ticket was created on this datetime
-      createDatetime: [''],
-      // last time ticket was updated
-      lastUpdateDatetime: [''],
-      // user id + fullname
-      lastUpdateByUser: [''],
-      // spent hours + SLA.
-      // ex: "29 days 5 hours 46 minutes  --> Late"
-      spentHour: [''],
-      // required and value must be >= 1
-      priorityid: ['', [Validators.required, Validators.min(1)]],
-      // required and value must be >= 1
-      categoryid: ['', [Validators.required, Validators.min(1)]],
-      // required and value must be >= 1
-      assigneeid: ['', [Validators.required, Validators.min(1)]],
-      // required and value must be >= 1
-      ticketStatusid: ['', [Validators.required, Validators.min(1)]],
+        // team id + team name + assignment method 
+        team: [''],
+        // ticket was created on this datetime
+        createDatetime: [''],
+        // last time ticket was updated
+        lastUpdateDatetime: [''],
+        // user id + fullname
+        lastUpdateByUser: [''],
+        // spent hours + SLA.
+        // ex: "29 days 5 hours 46 minutes  --> Late"
+        spentHour: [''],
+        // required and value must be >= 1
+        priorityid: ['', [Validators.required, Validators.min(1)]],
+        // required and value must be >= 1
+        categoryid: ['', [Validators.required, Validators.min(1)]],
+        // required and value must be >= 1
+        assigneeid: ['', [Validators.required, Validators.min(1)]],
+        // required and value must be >= 1
+        ticketStatusid: ['', [Validators.required, Validators.min(1)]],
 
-      // user id who will update ticket.
-      // value must be >= 1.
-      toBeUpdatedByUserid: [this.authService.getIdFromLocalStorage(), [Validators.min(1)]]
+        // user id who will update ticket.
+        // value must be >= 1.
+        toBeUpdatedByUserid: [this.authService.getIdFromLocalStorage(), [Validators.min(1)]]
 
-    }); // end of initial values for "ticketForm" form
+      },
+      {
+        // if ticket was already assigned to supporter then ticket status cannot be 'Open'
+        validators: [validTicketStatus]
+      }
+    ); // end of initial values for "ticketForm" form
 
     // tooltip for "ticketStatusid" control
     this.tooltips.set("ticketStatusid", "- Ticket status.<br>- <b>Open</b>: <i>ticket has not yet assigned to supporter</i>.<br>- <b>Assigned</b>: <i>ticket has been assigned to supporter</i>.<br>- <b>Resolved</b>: <i>ticket has been resolved</i>.<br>- <b>Closed</b>: <i>ticket has been closed</i>.<br>- <b>Cancel</b>: <i>ticket has been canceled</i>.");

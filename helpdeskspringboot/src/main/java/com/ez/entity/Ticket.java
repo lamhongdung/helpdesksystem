@@ -42,8 +42,11 @@ public class Ticket implements Serializable {
     // - assigneeid = null: if assignment method = 'M'(manual).
     // - assigneeid = supporterid(userid): if assignment method = 'A'(Auto).
     // when ticket has just modified:
-    // - assigneeid = supporterid
-    private long assigneeid;
+    // - assigneeid = supporterid.
+    //
+    // note: must use type "Long"(not "long" primitives).
+    // Because type "long" primitives does not accept NULL value.
+    private Long assigneeid;
 
     // ticketStatusid:
     // - 1(Open): if assigneeid = null
@@ -68,18 +71,20 @@ public class Ticket implements Serializable {
     private String customFilename;
 
     // ticket is created on this datetime
-//    @CreationTimestamp
+    @CreationTimestamp
     private Date createDatetime;
 
     // last date time ticket is updated
-//    @UpdateTimestamp
+    @UpdateTimestamp
     private Date lastUpdateDatetime;
 
     @Min(value = 1, message = "User id of last person has updated the ticket must be greater than or equal to 1")
     private long lastUpdateByUserid;
 
-    public Ticket(String subject, long categoryid, long creatorid, long teamid, long priorityid,
-                  long ticketStatusid, String content, String customFilename, long lastUpdateByUserid) {
+    public Ticket(String subject, long categoryid, long creatorid,
+                  long teamid, long priorityid, long ticketStatusid,
+                  String content, String customFilename,
+                  long lastUpdateByUserid) {
 
         this.subject = subject;
         this.categoryid = categoryid;
