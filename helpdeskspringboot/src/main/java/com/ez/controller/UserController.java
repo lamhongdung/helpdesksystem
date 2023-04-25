@@ -215,6 +215,7 @@ public class UserController extends ExceptionHandling {
         return response(OK, RESET_PASSWORD + resetPassword.getEmail());
     }
 
+    // change user password
     @PutMapping("/change-password")
     @PreAuthorize("hasAnyRole('ROLE_CUSTOMER','ROLE_SUPPORTER','ROLE_ADMIN')")
     public ResponseEntity<HttpResponse> changePassword(@RequestBody @Valid ChangePassword changePassword, BindingResult bindingResult)

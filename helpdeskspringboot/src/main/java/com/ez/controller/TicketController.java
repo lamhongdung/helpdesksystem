@@ -133,7 +133,7 @@ public class TicketController {
 
     // get all active categories.
     // for loading categories in the "Category" dropdown control
-    // in the "Ticket list", "Edit ticket" screens.
+    // in the "Edit ticket" screens.
     //
     // all authenticated users can access this resource.
     @GetMapping("/active-categories")

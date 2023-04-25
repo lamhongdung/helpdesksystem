@@ -3,13 +3,6 @@ package com.ez.constant;
 public class Constant {
 
     //
-    // common constants
-    //
-    public static final long SEARCH_STATUS_ALL = 0;
-    public static final long SEARCH_STATUS_ACTIVE = 1;
-    public static final long SEARCH_STATUS_INACTIVE = 2;
-
-    //
     // security constants
     //
 //    public static final long EXPIRATION_TIME = 432_000_000; // 5 days expressed in milliseconds
@@ -25,6 +18,7 @@ public class Constant {
     public static final String ACCESS_DENIED_MESSAGE = "You do not have permission to access this page";
     public static final String OPTIONS_HTTP_METHOD = "OPTIONS";
 
+    // these end points do not authenticate
     //    public static final String[] PUBLIC_URLS = { "**" };
     public static final String[] PUBLIC_URLS = {"/login", "/reset-password", "/download/**"};
 
@@ -60,11 +54,6 @@ public class Constant {
     public static final String NO_PRIORITY_FOUND_BY_ID = "No priority found for id: ";
 
     //
-    // calendar constants
-    //
-    public static final String NO_CALENDAR_FOUND_BY_ID = "No calendar found for id: ";
-
-    //
     // team constants
     //
     public static final String NO_TEAM_FOUND_BY_ID = "No team found for id: ";
@@ -78,6 +67,5 @@ public class Constant {
     public static final long TICKET_STATUS_CLOSED = 4;
     public static final long TICKET_STATUS_CANCEL = 5;
     public static final String NO_TICKET_FOUND_BY_ID = "No ticket found for id: ";
-
 
 }
