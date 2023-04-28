@@ -1,7 +1,6 @@
 package com.ez.repository;
 
 import com.ez.payload.DropdownResponse;
-import com.ez.payload.FileResponse;
 import com.ez.payload.TicketEditViewResponse;
 import com.ez.payload.TicketSearchResponse;
 import com.ez.entity.Ticket;

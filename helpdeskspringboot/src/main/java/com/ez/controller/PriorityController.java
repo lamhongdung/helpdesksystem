@@ -24,7 +24,7 @@ public class PriorityController {
     private Logger LOGGER = LoggerFactory.getLogger(getClass());
 
     @Autowired
-    PriorityService priorityService;
+    private PriorityService priorityService;
 
     //
     // search priorities by pageNumber and based on the search criteria

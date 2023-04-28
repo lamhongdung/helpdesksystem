@@ -20,7 +20,7 @@ public class ReportController {
     private Logger LOGGER = LoggerFactory.getLogger(getClass());
 
     @Autowired
-    ReportService reportService;
+    private ReportService reportService;
 
     // get 'workload report' based on the filter criteria
     // for loading report in table in the "Workload report" screen.

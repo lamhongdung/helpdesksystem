@@ -4,15 +4,15 @@ package com.ez.payload;
 public interface TeamResponse {
 
     // "id" column
-    Long getId();
+    public Long getId();
 
     // "name" column
-    String getName();
+    public String getName();
 
     // "assignmentMethod" column
-    String getAssignmentMethod();
+    public String getAssignmentMethod();
 
     // "status" column
-    String getStatus();
+    public String getStatus();
 
 }

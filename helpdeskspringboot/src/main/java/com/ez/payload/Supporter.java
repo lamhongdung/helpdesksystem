@@ -10,9 +10,9 @@ import lombok.*;
 public class Supporter {
 
     // supporter id
-    long id;
+    private long id;
 
     // description = id + fullname(lastName + firstName) + email + status
-    String description;
+    private String description;
 
 }

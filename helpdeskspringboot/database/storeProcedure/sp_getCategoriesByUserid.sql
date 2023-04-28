@@ -5,7 +5,7 @@ drop procedure if exists sp_getCategoriesByUserid;
 delimiter $$
 
 -- -----------------------------------------------------
--- Get categories have tickets by userid.
+-- Get categories which have tickets by userid.
 --
 -- This store procedure is used for loading categories in 
 -- the dropdown "category" in the "Ticket list" screen.

@@ -25,7 +25,7 @@ public class TicketController {
     private Logger LOGGER = LoggerFactory.getLogger(getClass());
 
     @Autowired
-    TicketService ticketService;
+    private TicketService ticketService;
 
     // get all ticket status
     // for loading ticket status in the "Status" dropdown control in the "Ticket list" screen

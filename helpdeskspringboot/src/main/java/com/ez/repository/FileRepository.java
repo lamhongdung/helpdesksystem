@@ -1,7 +1,6 @@
 package com.ez.repository;
 
 import com.ez.entity.FileStorage;
-import com.ez.payload.FileResponse;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;

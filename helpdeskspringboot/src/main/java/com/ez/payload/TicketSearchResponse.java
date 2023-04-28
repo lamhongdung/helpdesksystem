@@ -5,63 +5,63 @@ import java.util.Date;
 public interface TicketSearchResponse {
 
     // "ticketid" column
-    Long getTicketid();
+    public Long getTicketid();
 
     // "subject" column
-    String getSubject();
+    public String getSubject();
 
     // "creatorName" column
-    String getCreatorName();
+    public String getCreatorName();
 
     // "assigneeName" column
-    String getAssigneeName();
+    public String getAssigneeName();
 
     // "createDatetime" column
-    Date getCreateDatetime();
+    public Date getCreateDatetime();
 
     // "ticketStatusName" column
-    String getTicketStatusName();
+    public String getTicketStatusName();
 
     // "sla" column
-    String getSla();
+    public String getSla();
 
     // "lastUpdateDatetime" column
-    Date getLastUpdateDatetime();
+    public Date getLastUpdateDatetime();
 
     // "spentHour" column
     // ex: 1.5 (hours)
-    float getSpentHour();
+    public float getSpentHour();
 
     // -- count spent 'days-hours-minutes'.
     // ex: spentDayHhmm = '3 days 15 hours 22 minutes'
-    String getSpentDayHhmm();
+    public String getSpentDayHhmm();
 
     // "creatorPhone" column
-    String getCreatorPhone();
+    public String getCreatorPhone();
 
     // "creatorEmail" column
-    String getCreatorEmail();
+    public String getCreatorEmail();
 
     // "teamName" column
-    String getTeamName();
+    public String getTeamName();
 
     // "categoryName" column
-    String getCategoryName();
+    public String getCategoryName();
 
     // "priorityName" column
-    String getPriorityName();
+    public String getPriorityName();
 
     // "content" column
-    String getContent();
+    public String getContent();
 
     // "resolveIn" column.
     // limit hours to resolve a ticket
-    String getResolveIn();
+    public String getResolveIn();
 
     // "currentDatetime" column
-    Date getCurrentDatetime();
+    public Date getCurrentDatetime();
 
     // "ticketStatusid" column
-    long getTicketStatusid();
+    public long getTicketStatusid();
 
 }

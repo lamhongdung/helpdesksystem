@@ -24,7 +24,7 @@ public class CategoryController {
     private Logger LOGGER=LoggerFactory.getLogger(getClass());
 
     @Autowired
-    CategoryService categoryService;
+    private CategoryService categoryService;
 
     //
     // search categories by pageNumber based on the search criteria

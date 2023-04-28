@@ -26,7 +26,7 @@ public class TeamController {
     private Logger LOGGER = LoggerFactory.getLogger(getClass());
 
     @Autowired
-    TeamService teamService;
+    private TeamService teamService;
 
     //
     // search teams by pageNumber and based on the search criteria

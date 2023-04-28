@@ -26,7 +26,7 @@ public class CommentController {
     private Logger LOGGER = LoggerFactory.getLogger(getClass());
 
     @Autowired
-    CommentService commentService;
+    private CommentService commentService;
 
     // get all comments by ticket id.
     @GetMapping("/{ticketid}/comments")

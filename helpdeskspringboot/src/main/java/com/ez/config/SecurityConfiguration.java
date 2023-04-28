@@ -49,11 +49,13 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
     }
 
+    // authentication
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(userDetailsService).passwordEncoder(bCryptPasswordEncoder);
     }
 
+    // authorization
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable().cors().and()
