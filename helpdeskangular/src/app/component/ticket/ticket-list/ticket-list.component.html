@@ -355,12 +355,12 @@
           <!-- navigate to the "/ticket-view/{ticketid}" when user clicks on the table(except the column "Action") -->
           <td class="pointer-link" (click)="viewTicket(ticket.ticketid)">{{ticket.ticketStatusName}}</td>
 
-          <!-- the "Edit" & "Add comment" button -->
+          <!-- the "Edit ticket" & "Add comment" button -->
           <td class="text-center">
             <!-- only display the "Edit" button if user role is "supporter" or "admin". -->
             <!-- if ticketStatusid is '4'(Closed) or '5'(Cancel) then disables these 2 buttons -->
             <a [ngClass]="(ticket.ticketStatusid===4 || ticket.ticketStatusid===5)? 'disabled-link btn btn-secondary mr-1' : 'btn btn-primary mr-1'"
-              [routerLink]="['/ticket-edit', ticket.ticketid]" [tooltip]="'Edit team'" theme="light" placement="bottom"
+              [routerLink]="['/ticket-edit', ticket.ticketid]" [tooltip]="'Edit ticket'" theme="light" placement="bottom"
               *ngIf="(loggedInRole === 'ROLE_SUPPORTER' || loggedInRole === 'ROLE_ADMIN')"><i
                 class="fa fa-edit"></i></a>
 

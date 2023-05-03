@@ -253,7 +253,7 @@ export class TicketListComponent {
       //
       // get total of tickets and total pages
       //
-      this.ticketService.getTotalOfWorkloads(
+      this.ticketService.getTotalOfTickets(
         userid,
         searchTerm,
         fromDate,

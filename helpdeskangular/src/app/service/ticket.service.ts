@@ -51,7 +51,7 @@ export class TicketService {
   } // end of searchTickets()
 
   // calculate total of tickets for counting total pages
-  getTotalOfWorkloads(
+  getTotalOfTickets(
     userid: number,
     searchTerm: string,
     fromDate: string,
