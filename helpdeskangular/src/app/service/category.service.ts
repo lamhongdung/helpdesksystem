@@ -22,6 +22,7 @@ export class CategoryService {
   searchCategories(pageNumber: number, searchTerm: string, status: string): Observable<Category[]> {
 
     // ex: url = http://localhost:8080/category-search?pageNumber=0&pageSize=5&searchTerm=""&status=""
+    // console.log(`${this.host}/category-search?pageNumber=${pageNumber}&pageSize=${this.pageSize}&searchTerm=${searchTerm}&status=${status}`)
     return this.http.get<Category[]>(
       `${this.host}/category-search?pageNumber=${pageNumber}&pageSize=${this.pageSize}&searchTerm=${searchTerm}&status=${status}`
     )

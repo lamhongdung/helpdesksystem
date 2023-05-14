@@ -275,7 +275,7 @@ public class TicketController {
     @PutMapping("/ticket-edit")
     // only the ROLE_SUPPORTER or ROLE_ADMIN can access this address
     @PreAuthorize("hasAnyRole('ROLE_SUPPORTER','ROLE_ADMIN')")
-    public ResponseEntity<HttpResponse> editTeam(
+    public ResponseEntity<HttpResponse> editTicket(
             @RequestBody @Valid TicketEditRequest ticketEditRequest, BindingResult bindingResult)
             throws EntityNotFoundException, BindException, BadDataException {
 
