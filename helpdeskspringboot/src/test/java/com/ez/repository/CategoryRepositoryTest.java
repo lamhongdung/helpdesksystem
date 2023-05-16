@@ -5,20 +5,15 @@ import static org.assertj.core.api.Assertions.assertThat;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.test.annotation.Rollback;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.jdbc.JdbcTestUtils;
 
 import java.util.List;
 
-//@ExtendWith(SpringExtension.class)
 @DataJpaTest
 // use real database for test
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
@@ -50,8 +45,8 @@ public class CategoryRepositoryTest {
 
     }
 
-    // JUnit test for creating new category
-    @DisplayName("JUnit test for creating new category")
+    // JUnit test for creating new category - CategoryRepository.save()
+    @DisplayName("CategoryRepository.save() - JUnit test for creating new category")
     @Test
 //    @Rollback(value = false)
     public void whenCreateNewCategory_thenReturnIdGreaterZero() {
@@ -66,8 +61,8 @@ public class CategoryRepositoryTest {
 
     }
 
-    // JUnit test for update existing category
-    @DisplayName("JUnit test for update existing category")
+    // JUnit test for update existing category - CategoryRepository.save()
+    @DisplayName("CategoryRepository.save() - JUnit test for update existing category")
     @Test
     public void whenUpdateCategory_thenReturnCategoryIsUpdated() {
 
@@ -86,8 +81,8 @@ public class CategoryRepositoryTest {
 
     }
 
-    // JUnit test for searching category
-    @DisplayName("JUnit test for searching category")
+    // JUnit test for searching category - CategoryRepository.searchCategories()
+    @DisplayName("CategoryRepository.searchCategories() - JUnit test for searching category")
     @Test
     public void whenSearchCategory_thenReturnCategoryList() {
 
@@ -106,8 +101,8 @@ public class CategoryRepositoryTest {
 
     }
 
-    // JUnit test for getting total of categories
-    @DisplayName("JUnit test for getting total of categories")
+    // JUnit test for getting total of categories - CategoryRepository.getTotalOfCategories()
+    @DisplayName("CategoryRepository.getTotalOfCategories() - JUnit test for getting total of categories")
     @Test
     public void whenGetTotalCategories_thenReturnTotalCategories() {
 
