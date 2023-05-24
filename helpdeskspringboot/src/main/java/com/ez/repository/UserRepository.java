@@ -17,7 +17,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
     // get user by email
     public User findUserByEmail(String email);
 
-    // check whether an user is inactive or not?
+    // check whether a user is inactive or not?
     // return:
     //  - not null: inactive user
     //  - null: not inactive user
