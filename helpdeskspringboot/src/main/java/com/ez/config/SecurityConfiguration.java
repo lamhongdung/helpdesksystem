@@ -59,14 +59,18 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable().cors().and()
+                // stateless: no use session, because we used JWT and in JWT has expired time
                 .sessionManagement().sessionCreationPolicy(STATELESS)
                 // do not need to authenticate for PUBLIC_URLs
                 .and().authorizeRequests().antMatchers(PUBLIC_URLS).permitAll()
                 .anyRequest().authenticated()
                 .and()
+                // return 401 - Unauthorized value
                 .exceptionHandling().accessDeniedHandler(jwtAccessDeniedHandler)
+                // return 403 - Forbidden
                 .authenticationEntryPoint(jwtAuthenticationEntryPoint)
                 .and()
+                // run filter jwtAuthorizationFilter --> and then filter UsernamePasswordAuthenticationFilter
                 .addFilterBefore(jwtAuthorizationFilter, UsernamePasswordAuthenticationFilter.class);
 
     }
