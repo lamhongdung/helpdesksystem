@@ -32,6 +32,8 @@ public class ExceptionHandling implements ErrorController {
     private static final String INTERNAL_SERVER_ERROR_MSG = "An error occurred while processing the request";
     private static final String EMAIL_OR_PASSWORD_IS_NOT_CORRECT = "Email or password is not correct. Please try again";
     private static final String NOT_ENOUGH_PERMISSION = "You do not have enough permission";
+
+    // handle error of "Whitelabel error page"
     public static final String ERROR_PATH = "/error";
 
     @ExceptionHandler(BadCredentialsException.class)
@@ -110,14 +112,17 @@ public class ExceptionHandling implements ErrorController {
 
     }
 
-    // handle for bad URL
+    // handle for bad URL(error of "Whitelabel error page")
     @RequestMapping(ERROR_PATH)
     public ResponseEntity<HttpResponse> notFound404() {
         return createHttpResponse(NOT_FOUND, "There is no mapping for this URL");
     }
 
+    //
+    // handle error of "Whitelabel error page".
+    //
     // this getErrorPath() method belongs to interface ErrorController.
-    // when user access wrong URL then return path = ERROR_PATH(/error)
+    // when user access wrong URL then redirect to ERROR_PATH(value = "/error")
     @Override
     public String getErrorPath() {
         return ERROR_PATH;

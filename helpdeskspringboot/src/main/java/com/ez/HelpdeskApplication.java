@@ -39,6 +39,7 @@ public class HelpdeskApplication {
 		return new CorsFilter(urlBasedCorsConfigurationSource);
 	}
 
+	// note: beanid = method name(= bCryptPasswordEncoder)
 	@Bean
 	public BCryptPasswordEncoder bCryptPasswordEncoder() {
 		return new BCryptPasswordEncoder();
