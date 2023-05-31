@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-// map User to UserPrincipal of Spring security
+// map User to UserPrincipal
 public class UserPrincipal implements UserDetails {
     private User user;
 
